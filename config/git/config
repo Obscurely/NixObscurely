@@ -1,0 +1,58 @@
+[user]
+	name = Henrik Lissner
+	email = git@henrik.io
+	signingKey = FA1FADD9440B688CAA75A057B60957CA074D39A3
+[commit]
+	gpgSign = true
+[tag]
+	gpgSign = true
+[core]
+	whitespace = trailing-space
+[init]
+	defaultBranch = main
+[github]
+	user = hlissner
+[gitlab]
+	user = hlissner
+[push]
+	autoSquash = true
+[push]
+	default = current
+	gpgSign = if-asked
+[pull]
+	rebase = true
+[alias]
+	unadd = reset HEAD
+	# data analysis
+	ranked-authors = !git authors | sort | uniq -c | sort -n
+	emails = !git log --format="%aE" | sort -u
+	email-domains = !git log --format="%aE" | awk -F'@' '{print $2}' | sort -u
+[filter "lfs"]
+	required = true
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	clean = git-lfs clean -- %f
+[url "https://github.com/"]
+    insteadOf = gh:
+[url "git@github.com:"]
+    insteadOf = ssh+gh:
+[url "git@github.com:hlissner/"]
+    insteadOf = gh:/
+[url "https://gitlab.com/"]
+    insteadOf = gl:
+[url "https://gist.github.com/"]
+    insteadOf = gist:
+[url "https://bitbucket.org/"]
+    insteadOf = bb:
+[url "https://git.henrik.io"]
+    insteadOf = my:
+[diff "lisp"]
+	xfuncname = "^(((;;;+ )|\\(|([ \t]+\\(((cl-|el-patch-)?def(un|var|macro|method|custom)|gb/))).*)$"
+[diff "org"]
+	xfuncname = "^(\\*+ +.*)$"
+[credential "https://github.com"]
+	helper =
+	helper = !gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !gh auth git-credential

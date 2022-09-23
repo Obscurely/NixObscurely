@@ -25,6 +25,8 @@ in {
         gdb
         cmake
         llvmPackages.libcxx
+        autoconf
+        libsForQt5.milou # arm build system
       ];
     })
 

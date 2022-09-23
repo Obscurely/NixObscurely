@@ -20,6 +20,8 @@ in {
 
     environment.systemPackages = with pkgs; [
       easyeffects
+      alsa-plugins
+      alsa-utils
     ];
 
     # HACK Prevents ~/.esd_auth files by disabling the esound protocol module

@@ -17,7 +17,7 @@ in {
     tools.enable   = mkBoolOpt true;
     raster.enable  = mkBoolOpt true;
     vector.enable  = mkBoolOpt true;
-    sprites.enable = mkBoolOpt true;
+    video.enable   = mkBoolOpt true;
     models.enable  = mkBoolOpt false;
   };
 
@@ -26,6 +26,7 @@ in {
       (if cfg.tools.enable then [
         font-manager   # so many damned fonts...
         imagemagick    # for image manipulation from the shell
+        flameshot # cool utility for taking screen shots
       ] else []) ++
 
       # replaces illustrator & indesign
@@ -36,13 +37,13 @@ in {
       # Replaces photoshop
       (if cfg.raster.enable then [
         krita
-        gimp
+        gimp-with-plugins
         gimpPlugins.resynthesizer  # content-aware scaling in gimp
       ] else []) ++
 
-      # Sprite sheets & animation
-      (if cfg.sprites.enable then [
-        aseprite-unfree
+      # Replaces photoshop
+      (if cfg.video.enable then [
+        libsForQt5.kdenlive
       ] else []) ++
 
       # 3D modelling

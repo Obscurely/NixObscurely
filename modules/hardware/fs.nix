@@ -21,6 +21,12 @@ in {
         exfat     # Windows drives
         ntfs3g    # Windows drives
         hfsprogs  # MacOS drives
+        btrfs-progs
+        exfat
+        exfatprogs
+        fuseiso
+        gvfs
+        gptfdisk # gpt cli util
       ];
     }
 

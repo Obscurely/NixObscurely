@@ -28,17 +28,18 @@ in {
       xclip
       xdotool
       xorg.xwininfo
-      libqalculate  # calculator cli w/ currency conversion
-      (makeDesktopItem {
-        name = "scratch-calc";
-        desktopName = "Calculator";
-        icon = "calc";
-        exec = ''scratch "${tmux}/bin/tmux new-session -s calc -n calc qalc"'';
-        categories = [ "Development" ];
-      })
+      xorg.xinit
+      xorg.libXcomposite
+      xorg.libXinerama
       qgnomeplatform        # QPlatformTheme for a better Qt application inclusion in GNOME
       libsForQt5.qtstyleplugin-kvantum # SVG-based Qt5 theme engine plus a config tool and extra theme
-      neofetch
+      dialog # display dialog boxes from shell
+      gnome-keyring # gnome's keyring
+      newt
+      lxde.lxsession # lightweight session manager
+      sqlite # database
+      usbutils # usb utilities
+      xdg-user-dirs # create xdg user dirs
     ];
 
     fonts = {
@@ -46,13 +47,45 @@ in {
       enableGhostscriptFonts = true;
       fonts = with pkgs; [
         ubuntu_font_family
-        dejavu_fonts
         symbola
+        corefonts
+        liberation_ttf
+        ttf_bitstream_vera
+        dejavu_fonts
+        terminus_font
+        bakoma_ttf
+        clearlyU
+        cm_unicode
+        andagii
+        freefont_ttf
+        bakoma_ttf
+        inconsolata
+        gentium
+        source-sans-pro
+        wineWowPackages.fonts
+        source-code-pro
+        noto-fonts
+        powerline-fonts
+        fira-code
+        font-awesome
+        hack-font
+        roboto
+        xorg.fontxfree86type1 
+        noto-fonts-emoji
+        nerdfonts
+        SDL_ttf
       ];
     };
 
     ## Apps/Services
     services.xserver.displayManager.lightdm.greeters.mini.user = config.user.name;
+
+    programs.thunar = {
+      enable = true;
+      plugins = with.pkgs.xfce [ "thunar-archive-plugin" "thunar-volman" ]
+    };
+    programs.htop.enable = true;
+    programs.java.enable = true;
 
     services.picom = {
       backend = "glx";
@@ -71,10 +104,6 @@ in {
         "100:class_g = 'Rofi'"
         "100:class_g = 'Peek'"
         "99:_NET_WM_STATE@:32a = '_NET_WM_STATE_FULLSCREEN'"
-      ];
-      shadowExclude = [
-        # Put shadows on notifications, the scratch popup and rofi only
-        "! name~='(rofi|scratch|Dunst)$'"
       ];
       settings = {
         blur-background-exclude = [

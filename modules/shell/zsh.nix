@@ -38,7 +38,9 @@ in {
 
     user.packages = with pkgs; [
       zsh
+      zsh-syntax-highlighting
       nix-zsh-completions
+      zsh-autosuggestions
       bat
       exa
       fasd
@@ -47,6 +49,7 @@ in {
       jq
       ripgrep
       tldr
+      autojump
     ];
 
     env = {

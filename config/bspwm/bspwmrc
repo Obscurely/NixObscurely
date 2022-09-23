@@ -1,35 +1,54 @@
 #!/usr/bin/env bash
 
-# case $HOSTNAME in
-#   kuro)  export LAN=eno1   ;;
-#   shiro) export LAN=wlp3s0 ;;
-# esac
+bspc monitor DP-0 -d I II III IV V
+bspc monitor DVI-D-0 -d VI VII VIII IX X
 
-export MONITOR=$(xrandr -q | grep primary | cut -d' ' -f1)
-export MONITORS=( $(xrandr -q | grep ' connected' | cut -d' ' -f1) )
-MONITOR=${MONITOR:-${MONITORS[0]}}
+bspc rule -a Chromium		        desktop='^3'	follow=on
+bspc rule -a Waterfox		        desktop='^3'	follow=on
+bspc rule -a discord            desktop='^6'	follow=off
+bspc rule -a Thunar 		        desktop='^7'	follow=on
+bspc rule -a Lxappearance	      desktop='^10'	follow=off
+bspc rule -a kitty			        desktop='^1'	follow=on
+bspc rule -a Bitwarden 		      desktop='^8'	follow=on
+bspc rule -a Lutris			        desktop='^4'	follow=on
+bspc rule -a Postman		        desktop='^9'	follow=on
+bspc rule -a Notepadqq		      desktop='^2' 	follow=on
+bspc rule -a xfce-settings	    desktop='^10'	follow=on # doesn't work (for some reason)
+bspc rule -a Gimp			          desktop='^5'	follow=on	state=floating # doesn't work (for some reason)
+bspc rule -a Grub-customizer    desktop='^10' follow=on
+bspc rule -a BleachBit 		      desktop='^10'	follow=on
+bspc rule -a gnome-calculator   desktop='^9'	follow=on
+bspc rule -a Clementine		      desktop='^5'	follow=on
+bspc rule -a Haruna			        desktop='^5'	follow=on # doesn't work (for some reason)
+bspc rule -a code-oss 		      desktop='^2' 	follow=on
+bspc rule -a easyeffects	      desktop='^10' follow=on
+bspc rule -a GParted		        desktop='^10'	follow=on
+bspc rule -a kdenlive		        desktop='^5'	follow=on
+bspc rule -a obs			          desktop='^5'	follow=on
+bspc rule -a DesktopEditors	    desktop='^9'	follow=on
+bspc rule -a Pavucontrol	      desktop='^10'	follow=on
+bspc rule -a Nvidia-settings    desktop='^10'	follow=on
+bspc rule -a Ristretto		      desktop='^5'	follow=on
+bspc rule -a Steam			        desktop='^4'	follow=on
+bspc rule -a Virt-manager	      desktop='^5'	follow=on
+bspc rule -a Zoom			          desktop='^9'	follow=on # doesn't work (for some reason)
+bspc rule -a qBittorrent	      desktop='^8' 	follow=on
+bspc rule -a NeoVim 		        desktop='^2' 	follow=on # Open the NeoVim terminal window done by keybinds super + v on the second desktop
+bspc rule -a Sonixd 		        desktop='^5' 	follow=on
 
-# Only have workspaces for primary monitor
-for monitor in $MONITORS; do
-  bspc monitor $monitor -d 0
-done
-bspc monitor $MONITOR -d {1,2,3,4,5}
+# Set resolution
+xrandr --output DVI-D-0 --mode 1920x1080 --rate 144
+xrandr --output DP-0 --mode 2560x1440 --rate 165
+xrandr --output DP-0 --primary --left-of DVI-D-0
 
-bspc config remove_disabled_monitors true
-bspc config remove_unplugged_monitors true
+# Disable mouse acceleration
+xset m 1/1 0
+xinput --set-prop 22 'libinput Accel Speed' -1
 
-
-# Rules
-bspc rule -r '*'
-
-bspc rule -a Pinentry state=floating center=on
-bspc rule -a Emacs split_ratio=0.28 state=tiled
-bspc rule -a Firefox split_ratio=0.32
-bspc rule -a feh state=fullscreen
-bspc rule -a 'Emacs:org*' state=floating
-bspc rule -a 'Emacs:scratch' state=floating
-bspc rule -a 'Emacs:emacs-everywhere' state=floating sticky=on
-bspc rule -a '*:scratch' state=floating sticky=on border=off rectangle=1000x460+480+620
+# Auto-Start
+bspc desktop -f ^1
+lxpolkit & # prompt to enter sudo password daemon
+flameshot &
 
 #
 for file in $XDG_CONFIG_HOME/bspwm/rc.d/*; do

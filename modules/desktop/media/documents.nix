@@ -8,17 +8,11 @@ let cfg = config.modules.desktop.media.documents;
 in {
   options.modules.desktop.media.documents = {
     enable = mkBoolOpt false;
-    pdf.enable = mkBoolOpt false;
-    ebook.enable = mkBoolOpt false;
   };
 
   config = mkIf cfg.enable {
     user.packages = with pkgs; [
-      (mkIf cfg.ebook.enable calibre)
-      (mkIf cfg.pdf.enable   evince)
-      # zathura
+      onlyoffice-bin
     ];
-
-    # TODO calibre/evince/zathura dotfiles
   };
 }

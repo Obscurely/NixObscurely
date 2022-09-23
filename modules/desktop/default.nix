@@ -34,12 +34,13 @@ in {
       qgnomeplatform        # QPlatformTheme for a better Qt application inclusion in GNOME
       libsForQt5.qtstyleplugin-kvantum # SVG-based Qt5 theme engine plus a config tool and extra theme
       dialog # display dialog boxes from shell
-      gnome-keyring # gnome's keyring
+      gnome.gnome-keyring # gnome's keyring
       newt
       lxde.lxsession # lightweight session manager
       sqlite # database
       usbutils # usb utilities
       xdg-user-dirs # create xdg user dirs
+      kitty # terminal emulator
     ];
 
     fonts = {
@@ -72,7 +73,6 @@ in {
         roboto
         xorg.fontxfree86type1 
         noto-fonts-emoji
-        nerdfonts
         SDL_ttf
       ];
     };
@@ -82,7 +82,7 @@ in {
 
     programs.thunar = {
       enable = true;
-      plugins = [ "pkgs.xfce.thunar-archive-plugin" "pkgs.xfce.thunar-volman" ];
+      plugins = with pkgs.xfce; [ thunar-archive-plugin thunar-volman ];
     };
     programs.htop.enable = true;
     programs.java.enable = true;

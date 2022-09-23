@@ -7,9 +7,9 @@
 with lib;
 with lib.my;
 let devCfg = config.modules.dev;
-    cfg = devCfg.cc;
+    cfg = devCfg.go;
 in {
-  options.modules.dev.cc = {
+  options.modules.dev.go = {
     enable = mkBoolOpt false;
   };
 

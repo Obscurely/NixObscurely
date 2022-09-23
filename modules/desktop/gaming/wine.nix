@@ -4,7 +4,7 @@ with lib;
 with lib.my;
 let cfg = config.modules.desktop.gaming.wine;
 in {
-  options.modules.desktop.gaming.steam = with types; {
+  options.modules.desktop.gaming.wine = with types; {
     enable = mkBoolOpt false;
   };
 

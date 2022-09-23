@@ -15,7 +15,7 @@ in {
   config = mkIf cfg.enable {
     user.packages = with pkgs; [
       bleachbit # clean up computer utility
-      gnome-calculator # calculator
+      gnome.gnome-calculator # calculator
       gparted # partition manager
       lxappearance # appearance customization tool
       notepadqq # notepad++ but for linux

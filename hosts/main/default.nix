@@ -62,7 +62,7 @@
     };
     hardware = {
       audio.enable = true;
-      fs {
+      fs = {
         enable = true;
         ssd.enable = true;
       };

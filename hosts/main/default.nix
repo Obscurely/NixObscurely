@@ -11,7 +11,8 @@
       bspwm.enable = true;
       apps = {
         rofi.enable = true;
-        # godot.enable = true;
+        bitwarden.enable = true;
+        utils.enable = true;
       };
       browsers = {
         default = "firefox";
@@ -21,8 +22,9 @@
       };
       gaming = {
         steam.enable = true;
-        # emulators.enable = true;
-        # emulators.psx.enable = true;
+        legendary.enable = true;
+        lutris.enable = true;
+        wine.enable = true;
       };
       media = {
         daw.enable = true;
@@ -30,42 +32,48 @@
         graphics.enable = true;
         mpv.enable = true;
         recording.enable = true;
-        spotify.enable = true;
+        audio.enable = true;
       };
       term = {
         default = "xst";
         st.enable = true;
       };
       vm = {
-        qemu.enable = true;
+        virtd.enable = true;
       };
     };
     dev = {
+      cc.enable = true;
       node.enable = true;
       rust.enable = true;
       python.enable = true;
     };
     editors = {
-      default = "nvim";
-      #emacs.enable = true;
+      default = "vim";
       vim.enable = true;
     };
     shell = {
-      adl.enable = true;
-      vaultwarden.enable = true;
       direnv.enable = true;
       git.enable    = true;
       gnupg.enable  = true;
       tmux.enable   = true;
       zsh.enable    = true;
+      utils.enable = true;
+    };
+    hardware = {
+      audio.enable = true;
+      fs {
+        enable = true;
+        ssd.enable = true;
+      };
     };
     services = {
       ssh.enable = true;
-      docker.enable = true;
+      # docker.enable = true;
       # Needed occasionally to help the parental units with PC problems
       # teamviewer.enable = true;
     };
-    theme.active = "alucard";
+    theme.active = "main";
   };
 
 

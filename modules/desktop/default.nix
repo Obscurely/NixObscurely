@@ -82,7 +82,7 @@ in {
 
     programs.thunar = {
       enable = true;
-      plugins = with.pkgs.xfce [ "thunar-archive-plugin" "thunar-volman" ]
+      plugins = [ "pkgs.xfce.thunar-archive-plugin" "pkgs.xfce.thunar-volman" ];
     };
     programs.htop.enable = true;
     programs.java.enable = true;

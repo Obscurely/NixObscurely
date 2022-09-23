@@ -118,11 +118,11 @@ super + {Left,Down,Up,Right}
 
 # open rofi app launcher
 super + F12
-	$DOTFILES_BIN/rofi/launchers/misc/launcher.sh
+	$DOTFILES/modules/themes/main/rofi/launchers/misc/launcher.sh
 
 # open quick app launcher (rofi applet)
 super + F11
-	$DOTFILES_BIN/rofi/applets/android/apps.sh
+	$DOTFILES/modules/themes/main/rofi/applets/android/apps.sh
 
 # open rofi window switcher (classic)
 alt + Tab
@@ -130,7 +130,7 @@ alt + Tab
 
 # open rofi time
 super + F1
-	$DOTFILES_BIN/rofi/applets/applets/time.sh
+	$DOTFILES/modules/themes/main/rofi/applets/applets/time.sh
 
 # toggle polybar bar show
 super + alt + s
@@ -150,7 +150,7 @@ super + shift + b
 
 # start polybar
 super + alt + b
-	$DOTFILES_BIN/polybar/run.sh
+	$DOTFILES/modules/themes/main/polybar/run.sh
 
 # open thunar
 super + e

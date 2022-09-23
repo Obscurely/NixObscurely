@@ -4,7 +4,7 @@
 ## Everyone is permitted to copy and distribute copies of this file under GNU-GPL3
 
 ## Files and Directories
-DIR="$DOTFILES_BIN/polybar"
+DIR="$DOTFILES/modules/themes/main/polybar"
 
 ## Launch Polybar with selected style
 STYLE="default"

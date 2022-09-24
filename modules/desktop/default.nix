@@ -74,6 +74,7 @@ in {
         xorg.fontxfree86type1 
         noto-fonts-emoji
         SDL_ttf
+        (nerdfonts.override { fonts = [ "FiraCode" "FiraMono" "DroidSansMono" "Hack" "Inconsolata" "Iosevka" "JetBrainsMono" "Meslo" "RobotoMono" ]; })
       ];
     };
 

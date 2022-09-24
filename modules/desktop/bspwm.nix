@@ -25,11 +25,11 @@ in {
     ];
 
     services = {
-      picom = {
-        enable = true;
-        #experimentalBackends = true;
-        backend = "glx";
-      };
+      # picom = {
+      #   enable = true;
+      #   #experimentalBackends = true;
+      #   backend = "glx";
+      # };
       redshift.enable = true;
       xserver = {
         enable = true;

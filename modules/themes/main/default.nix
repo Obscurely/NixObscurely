@@ -113,6 +113,7 @@ in {
         }
         (mkIf desktop.bspwm.enable {
           "bspwm/rc.d/00-theme".source = ./config/bspwmrc;
+          "bspwm/rc.d/90-picom".source  = "./config/picom/run.sh";
           "bspwm/rc.d/95-polybar".source = ./config/polybar/run.sh;
         })
         (mkIf desktop.apps.rofi.enable {

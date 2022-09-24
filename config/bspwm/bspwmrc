@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# start picom
+#picom --experimental-backend --config ~/.config/picom.conf &
+picom --config ~/.config/picom/picom.conf &
+
 bspc monitor DP-0 -d I II III IV V
 bspc monitor DVI-D-0 -d VI VII VIII IX X
 

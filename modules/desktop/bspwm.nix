@@ -27,7 +27,7 @@ in {
     services = {
       picom = {
         enable = true;
-        experimentalBackends = true;
+        #experimentalBackends = true;
         backend = "glx";
       };
       redshift.enable = true;

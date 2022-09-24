@@ -25,7 +25,11 @@ in {
     ];
 
     services = {
-      picom.enable = true;
+      picom = {
+        enable = true;
+        experimentalBackends = true;
+        backend = "glx";
+      };
       redshift.enable = true;
       xserver = {
         enable = true;
@@ -45,6 +49,7 @@ in {
         source = "${configDir}/bspwm";
         recursive = true;
       };
+      "picom".source = "${configDir}/picom";
     };
   };
 }

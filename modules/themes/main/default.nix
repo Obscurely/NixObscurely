@@ -13,9 +13,9 @@ in {
         theme = {
           wallpaper = mkDefault ./config/wallpaper.png;
           gtk = {
-            theme = "Orchis";
+            theme = "Orchis-Dark";
             iconTheme = "Papirus-Dark";
-            cursorTheme = "Capitaine";
+            cursorTheme = "Capitaine Cursors";
           };
           fonts = {
             sans.name = "Fira Sans";
@@ -78,24 +78,24 @@ in {
       };
 
       # Compositor
-      services.picom = {
-        fade = true;
-        fadeDelta = 1;
-        fadeSteps = [ 0.01 0.012 ];
-        shadow = true;
-        shadowOffsets = [ (-10) (-10) ];
-        shadowOpacity = 0.22;
-        # activeOpacity = "1.00";
-        # inactiveOpacity = "0.92";
-        settings = {
-          shadow-radius = 12;
-          # blur-background = true;
-          # blur-background-frame = true;
-          # blur-background-fixed = true;
-          blur-kern = "7x7box";
-          blur-strength = 320;
-        };
-      };
+      # services.picom = {
+      #   fade = false;
+      #   fadeDelta = 1;
+      #   fadeSteps = [ 0.01 0.012 ];
+      #   shadow = true;
+      #   shadowOffsets = [ (-10) (-10) ];
+      #   shadowOpacity = 0.22;
+      #   # activeOpacity = "1.00";
+      #   # inactiveOpacity = "0.92";
+      #   settings = {
+      #     shadow-radius = 12;
+      #     # blur-background = true;
+      #     # blur-background-frame = true;
+      #     # blur-background-fixed = true;
+      #     blur-kern = "7x7box";
+      #     blur-strength = 320;
+      #   };
+      # };
 
       # Login screen theme
       services.xserver.displayManager.lightdm.greeters.mini.extraConfig = ''
@@ -120,13 +120,13 @@ in {
         })
         (mkIf (desktop.bspwm.enable) {
           "polybar" = { source = ./config/polybar; recursive = true; };
-          "Dracula-purple-solid-kvantum" = {
+          "Orchis-Dark-kvantum" = {
             recursive = true;
-            source = "${pkgs.unstable.dracula-theme}/share/themes/Dracula/kde/kvantum/Dracula-purple-solid";
-            target = "Kvantum/Dracula-purple-solid";
+            source = "${pkgs.unstable.orchis-theme}/share/themes/Orchis-Dark/kde/kvantum/Orchis-Dark";
+            target = "Kvantum/Orchis-Dark";
           };
           "kvantum.kvconfig" = {
-            text = "theme=Fluent-Dark";
+            text = "theme=Orchis-Dark";
             target = "Kvantum/kvantum.kvconfig";
           };
         })

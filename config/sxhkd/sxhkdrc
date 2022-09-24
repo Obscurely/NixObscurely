@@ -130,7 +130,7 @@ alt + Tab
 
 # open rofi time
 super + F1
-	$DOTFILES/modules/themes/main/config/rofi/applets/applets/time.sh
+	$DOTFILES_BIN/rofi/time
 
 # toggle polybar bar show
 super + alt + s

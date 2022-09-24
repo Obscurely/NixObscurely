@@ -40,7 +40,6 @@ in {
       sqlite # database
       usbutils # usb utilities
       xdg-user-dirs # create xdg user dirs
-      kitty # terminal emulator
       picom # compositor
     ];
 

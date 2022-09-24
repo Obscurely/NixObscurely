@@ -118,11 +118,11 @@ super + {Left,Down,Up,Right}
 
 # open rofi app launcher
 super + F12
-	$DOTFILES/modules/themes/main/config/rofi/launchers/misc/launcher.sh
+	$DOTFILES_BIN/rofi/launcher
 
 # open quick app launcher (rofi applet)
 super + F11
-	$DOTFILES/modules/themes/main/config/rofi/applets/android/apps.sh
+	$DOTFILES_BIN/rofi/quick
 
 # open rofi window switcher (classic)
 alt + Tab

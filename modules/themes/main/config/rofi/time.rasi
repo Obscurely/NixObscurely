@@ -14,7 +14,7 @@ configuration {
 	sidebar-mode: 					false;
 }
 
-@import "adapta-nokto.rasi"
+@import "./styles/adapta-nokto.rasi"
 
 * {
     background-color:               @background;

@@ -47,10 +47,10 @@ if [[ $TERM != dumb ]]; then
   setopt appendhistory
 
   # Basic auto/tab complete:
-  autoload -Uz compinit
+  autoload -U compinit
   zstyle ':completion:*' menu select
   zmodload zsh/complist
-  compinit -u -d $ZSH_CACHE/zcompdump
+  compinit
   _comp_options+=(globdots)               # Include hidden files.
 
   source $ZDOTDIR/keybinds.zsh
@@ -62,7 +62,6 @@ if [[ $TERM != dumb ]]; then
   # If you have host-local configuration, put it here
   _source $ZDOTDIR/local.zshrc
  
-
   _cache fasd --init posix-alias zsh-{hook,{c,w}comp{,-install}}
   autopair-init
 fi

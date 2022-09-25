@@ -76,7 +76,7 @@ in {
         SDL_ttf
         comfortaa
         (nerdfonts.override { 
-          fonts = [ "FiraCode" "FiraMono" "DroidSansMono" "Hack" "Inconsolata" "Iosevka" "JetBrainsMono" "Meslo" "RobotoMono" "FantasqueSansMono" "Hurmit" ];
+          fonts = [ "FiraCode" "FiraMono" "DroidSansMono" "Hack" "Inconsolata" "Iosevka" "JetBrainsMono" "Meslo" "RobotoMono" "FantasqueSansMono" ];
         })
       ];
     };

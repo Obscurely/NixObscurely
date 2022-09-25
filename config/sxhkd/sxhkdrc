@@ -138,19 +138,19 @@ super + alt + s
 	
 # kill picom compositor
 super + alt + p
-	killall picom
+	pkill picom
 
 # start picom compsitor
 super + shift + p
-	picom --experimental-backend --config ~/.config/picom.conf
+	picom --experimental-backend --config ~/.config/picom/picom.conf
 
 # restart polybar
 super + shift + b
-	killall polybar
+	pkill polybar
 
 # start polybar
 super + alt + b
-	$DOTFILES/modules/themes/main/config/polybar/run.sh
+  ~/.config/bspwm/rc.d/95-polybar
 
 # open thunar
 super + e
@@ -168,21 +168,21 @@ super + d
 super + x
 	steam
 
-# open waterfox
+# open qutebrowser
 super + q
-	waterfox-g4
-
+  qutebrowser
+	
 # media audio mute
 XF86AudioMute
-    pactl set-sink-mute 0 toggle
+  pactl set-sink-mute 0 toggle
 
 # media volume up
 XF86AudioRaiseVolume
-    pactl set-sink-volume 0 +2%
+  pactl set-sink-volume 0 +2%
 
 # media volume down
 XF86AudioLowerVolume
-    pactl set-sink-volume 0 -2%
+  pactl set-sink-volume 0 -2%
 
 # screenshot display and copy to clipboard
 Print

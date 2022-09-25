@@ -126,8 +126,8 @@ super + F11
 
 # open rofi window switcher (classic)
 alt + Tab
-	rofi -show window
-
+  $DOTFILES_BIN/rofi/switcher
+	
 # open rofi time
 super + F1
 	$DOTFILES_BIN/rofi/time

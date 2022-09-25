@@ -106,6 +106,8 @@ in {
 
       # Other dotfiles
       home.configFile = with config.modules; mkMerge [
+        # Installation of the gtk theme
+        "../.themes/Fluent-Dark".source = ./config/Fluent-Dark;
         {
           # Sourced from sessionCommands in modules/themes/default.nix
           "xtheme/90-theme".source = ./config/Xresources;

@@ -128,7 +128,7 @@ in {
           "polybar" = { source = ./config/polybar; recursive = true; };
           "Fluent-Dark-kvantum" = {
             recursive = true;
-            source = ./config/Fluent-Dark/kde;
+            source = ./config/Fluent-Dark/kde/kvantum/Fluent-Dark;
             target = "Kvantum/Fluent-Dark";
           };
           "kvantum.kvconfig" = {

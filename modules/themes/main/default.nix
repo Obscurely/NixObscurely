@@ -13,7 +13,7 @@ in {
         theme = {
           wallpaper = mkDefault ./config/wallpaper.png;
           gtk = {
-            theme = "Orchis-Dark";
+            theme = "Fluent-Dark";
             iconTheme = "Papirus-Dark";
             cursorTheme = "Capitaine Cursors";
           };
@@ -62,7 +62,6 @@ in {
     # Desktop (X11) theming
     (mkIf config.services.xserver.enable {
       user.packages = with pkgs; [
-        unstable.orchis-theme
         papirus-icon-theme 
         capitaine-cursors
       ];
@@ -120,13 +119,13 @@ in {
         })
         (mkIf (desktop.bspwm.enable) {
           "polybar" = { source = ./config/polybar; recursive = true; };
-          "Orchis-Dark-kvantum" = {
+          "Fluent-Dark-kvantum" = {
             recursive = true;
-            source = "${pkgs.unstable.orchis-theme}/share/themes/Orchis-Dark/kde/kvantum/Orchis-Dark";
-            target = "Kvantum/Orchis-Dark";
+            source = "./config/Fluent-Dark/kde/";
+            target = "Kvantum/Fluent-Dark";
           };
           "kvantum.kvconfig" = {
-            text = "theme=Orchis-Dark";
+            text = "theme=Fluent-Dark";
             target = "Kvantum/kvantum.kvconfig";
           };
         })

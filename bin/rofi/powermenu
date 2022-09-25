@@ -8,7 +8,7 @@ rofi_command="rofi -theme theme/powermenu"
 shutdown="襤"
 reboot=""
 lock=""
-suspend=""
+suspend="⏾"
 logout=""
 
 # Confirmation
@@ -17,7 +17,7 @@ confirm_exit() {
 		-i\
 		-no-fixed-num-lines\
 		-p "Are You Sure? : "\
-		-theme $dir/confirm.rasi
+		-theme theme/confirm.rasi
 }
 
 # Message

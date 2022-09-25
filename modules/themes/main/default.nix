@@ -15,7 +15,7 @@ in {
           gtk = {
             theme = "Fluent-Dark";
             iconTheme = "Papirus-Dark";
-            cursorTheme = "Volantes Cursors";
+            cursorTheme = "volantes_cursors";
           };
           fonts = {
             sans.name = "Fira Sans";
@@ -63,7 +63,6 @@ in {
     (mkIf config.services.xserver.enable {
       user.packages = with pkgs; [
         papirus-icon-theme 
-        capitaine-cursors
       ];
       fonts = {
         fonts = with pkgs; [

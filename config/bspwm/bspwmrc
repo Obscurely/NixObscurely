@@ -53,6 +53,9 @@ xinput --set-prop 22 'libinput Accel Speed' -1
 bspc desktop -f ^1
 lxpolkit & # prompt to enter sudo password daemon
 flameshot &
+lxappearance & # Fix cursor not showing on desktop (background)
+sleep 3
+pkill lxappearance # Fix cursor not showing on desktop (background)
 
 #
 for file in $XDG_CONFIG_HOME/bspwm/rc.d/*; do

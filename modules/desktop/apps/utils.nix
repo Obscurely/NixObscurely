@@ -24,6 +24,7 @@ in {
       qbittorrent # torrent downloader utility
       xfce.ristretto # photo viewer
       zoom-us # video conference app
+      libsForQt5.ark # imo best linux archive manager
     ];
   };
 }

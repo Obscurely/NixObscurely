@@ -132,8 +132,8 @@ in {
             target = "Kvantum/Fluent-Dark";
           };
           "kvantum.kvconfig" = {
-            text = "theme=Fluent-Dark";
-            target = "kde/kvantum.kvconfig";
+            source = ./config/Fluent-Dark/kde/kvantum/Fluent-Dark/Fluent-Dark.kvconfig;
+            target = "Kvantum/kvantum.kvconfig";
           };
         })
         (mkIf desktop.media.graphics.vector.enable {

@@ -1,12 +1,12 @@
 rofi_command="rofi -theme theme/quick.rasi"
 
 # Links
-terminal=""
-files=""
-editor=""
-browser=""
-music=""
-settings=""
+lutris=""
+calculator=""
+easyeffects="蓼"
+chromium=""
+sonixd=""
+vaultwarden=""
 
 # Error msg
 msg() {
@@ -14,26 +14,26 @@ msg() {
 }
 
 # Variable passed to rofi
-options="$terminal\n$files\n$editor\n$browser\n$music\n$settings"
+options="$lutris\n$calculator\n$easyeffects\n$chromium\n$sonixd\n$vaultwarden"
 
 chosen="$(echo -e "$options" | $rofi_command -p "Most Used" -dmenu -selected-row 0)"
 case $chosen in
-    $terminal)
-		kitty &
+    $lutris)
+		lutris &
         ;;
-    $files)
-		thunar &
+    $calculator)
+		gnome-calculator &
         ;;
-    $editor)
-		~/.config/bspwm/nvim.sh & 
+    $easyeffects)
+		easyeffects & 
         ;;
-    $browser)
+    $chromium)
 		chromium --ignore-certificate-errors &
         ;;
-    $music)
+    $sonixd)
 		sonixd
         ;;
-    $settings)
+    $vaultwarden)
 		bitwarden-desktop
         ;;
 esac

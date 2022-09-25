@@ -36,22 +36,7 @@ fi
 
 ## Bootstrap interactive sessions
 if [[ $TERM != dumb ]]; then
-  # Enable colors and change prompt:
-  autoload -U colors && colors
-  PS1="%B%{$fg[red]%}[%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%~%{$fg[red]%}]%{$reset_color%}$%b "
-
-  # History in cache directory:
-  HISTSIZE=10000
-  SAVEHIST=10000
-  HISTFILE=~/.cache/zshhistory
-  setopt appendhistory
-
-  # Basic auto/tab complete:
-  autoload -U compinit
-  zstyle ':completion:*' menu select
-  zmodload zsh/complist
-  compinit
-  _comp_options+=(globdots)               # Include hidden files.
+  autoload -Uz compinit && compinit -u -d $ZSH_CACHE/zcompdump
 
   source $ZDOTDIR/keybinds.zsh
   source $ZDOTDIR/completion.zsh
@@ -61,7 +46,7 @@ if [[ $TERM != dumb ]]; then
   _source $ZDOTDIR/extra.zshrc
   # If you have host-local configuration, put it here
   _source $ZDOTDIR/local.zshrc
- 
+
   _cache fasd --init posix-alias zsh-{hook,{c,w}comp{,-install}}
   autopair-init
 fi

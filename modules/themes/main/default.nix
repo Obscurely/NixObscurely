@@ -132,7 +132,7 @@ in {
             target = "Kvantum/Fluent-Dark";
           };
           "kvantum.kvconfig" = {
-            source = ./config/Fluent-Dark/kde/kvantum/Fluent-Dark/Fluent-Dark.kvconfig;
+            source = ./config/Fluent-Dark/kde/kvantum.kvconfig;
             target = "Kvantum/kvantum.kvconfig";
           };
         })

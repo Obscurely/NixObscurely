@@ -1,15 +1,15 @@
 #!/usr/bin/env sh
 
-uptime=$(uptime -p | sed -e 's/up //g')
+uptime=$(uptime -p | awk '{$1=$1};1' | sed -e 's/ .*//g')
 
 rofi_command="rofi -theme theme/powermenu"
 
 # Options
-shutdown=""
-reboot=""
-lock=""
-suspend=""
-logout=""
+shutdown=""
+reboot=""
+lock=""
+suspend=""
+logout=""
 
 # Confirmation
 confirm_exit() {

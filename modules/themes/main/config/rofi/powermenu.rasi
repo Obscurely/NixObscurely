@@ -22,7 +22,7 @@ window {
     transparency:                   "real";
     background-color:               @background;
     text-color:                     @foreground;
-    border-radius:                  0%;
+    border-radius:                  0px;
     height:                         28.5%;
     width:                          50%;
     location:                       center;
@@ -50,8 +50,8 @@ inputbar {
     background-color:               @background-alt;
     text-color:                     @foreground;
     expand:                         false;
-    border:                  		0% 0% 0.2% 0.2%;
-    border-radius:                  1%;
+    border:                  		0% 0.2% 0.2% 0%;
+    border-radius:                  0% 100% 100% 100%;
     border-color:                  	@border;
     margin:                         0% 21.3% 0% 0%;
     padding:                        0.5%;
@@ -78,7 +78,7 @@ element {
     background-color:               @background-alt;
     text-color:                     @foreground;
     orientation:                    horizontal;
-    border-radius:                  4%;
+    border-radius:                  100%;
 }
 
 element-text {
@@ -107,8 +107,8 @@ element alternate.active {
 element selected {
     background-color:               @selected;
     text-color:                     @foreground;
-    border:                  		0% 0% 0.2% 0.2%;
-    border-radius:                  4%;
+    border:                  		0% 0.2% 0.2% 0%;
+    border-radius:                  100%;
     border-color:                  	@border;
 }
 

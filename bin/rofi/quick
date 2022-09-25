@@ -1,11 +1,11 @@
 rofi_command="rofi -theme theme/quick.rasi"
 
 # Links
-lutris=""
+lutris=""
 calculator=""
-easyeffects="蓼"
+easyeffects="墳"
 chromium=""
-sonixd=""
+sonixd=""
 vaultwarden=""
 
 # Error msg

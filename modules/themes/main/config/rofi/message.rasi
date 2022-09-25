@@ -1,6 +1,6 @@
 /* Confirm Dialog */
 
-@import "colors.rasi"
+@import "./styles/adapta-nokto.rasi"
 
 * {
     background-color:       @background;

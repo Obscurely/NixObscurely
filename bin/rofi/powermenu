@@ -1,11 +1,11 @@
 #!/usr/bin/env sh
 
-uptime=$(uptime -p | awk '{$1=$1};1' | sed -e 's/ .*//g')
+uptime=$(uptime | awk '{$1=$1};1' | sed -e 's/ .*//g')
 
 rofi_command="rofi -theme theme/powermenu"
 
 # Options
-shutdown=""
+shutdown="襤"
 reboot=""
 lock=""
 suspend=""

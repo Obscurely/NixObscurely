@@ -15,7 +15,7 @@ in {
           gtk = {
             theme = "Fluent-Dark";
             iconTheme = "Papirus-Dark";
-            cursorTheme = "Capitaine Cursors";
+            cursorTheme = "Volantes Cursors";
           };
           fonts = {
             sans.name = "Fira Sans";
@@ -106,10 +106,14 @@ in {
 
       # Other dotfiles
       home.configFile = with config.modules; mkMerge [
-	{
-	  # Installation of the gtk theme
+	      {
+	        # Installation of the gtk theme
           "../.themes/Fluent-Dark".source = ./config/Fluent-Dark;
-	}
+	      }
+        {
+          # Installation of the cursor theme
+          "../.icons/volantes_cursors".source = ./config/volantes_cursors;
+        }
         {
           # Sourced from sessionCommands in modules/themes/default.nix
           "xtheme/90-theme".source = ./config/Xresources;

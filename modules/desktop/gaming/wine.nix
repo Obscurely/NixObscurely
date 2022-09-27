@@ -21,7 +21,6 @@ in {
       libdbusmenu
       openldap
       winetricks
-
       dxvk
       mangohud
       gnome.zenity

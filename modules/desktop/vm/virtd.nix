@@ -23,5 +23,11 @@ in {
       virt-viewer
       libvirt
     ];
+
+    virtualisation.libvirtd = {
+      enable = true;
+      qemu.swtpm.enable = true;
+      qemu.runAsRoot = true;
+    };
   };
 }

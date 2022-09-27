@@ -110,6 +110,10 @@ in {
           "../.themes/Fluent-Dark".source = ./config/Fluent-Dark;
 	      }
         {
+          # Make gtk themes work with libadwaita
+          "gtk-4.0".source = ./config/Fluent-Dark/gtk-4.0;
+        }
+        {
           # Installation of the cursor theme
           "../.icons/volantes_cursors".source = ./config/volantes_cursors;
         }

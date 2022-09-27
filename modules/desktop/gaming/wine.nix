@@ -21,6 +21,7 @@ in {
       libdbusmenu
       openldap
       winetricks
+
       dxvk
       mangohud
       gnome.zenity
@@ -30,6 +31,14 @@ in {
       earlyoom
       ananicy
       vaapiVdpau
+      libgpg-error
+      libgcrypt
+      ncurses
+      libva
+      vulkan-tools
+      vulkan-loader
+      khronos-ocl-icd-loader
+      libjpeg
     ];
   };
 }

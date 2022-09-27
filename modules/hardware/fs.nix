@@ -27,8 +27,10 @@ in {
         dosfstools
         f2fs-tools
         xfsprogs
+        fuse3
         fuseiso
         gvfs
+        gf
         gptfdisk # gpt cli util
       ];
     }

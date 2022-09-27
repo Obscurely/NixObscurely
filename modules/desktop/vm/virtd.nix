@@ -21,6 +21,7 @@ in {
       vde2
       virt-manager
       virt-viewer
+      libvirt
     ];
   };
 }

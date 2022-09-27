@@ -66,10 +66,6 @@
         enable = true;
         ssd.enable = true;
       };
-      ucode = {
-        enable = true;
-        amd.enable = true;
-      };
     };
     services = {
       ssh.enable = true;

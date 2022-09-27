@@ -43,7 +43,7 @@ with lib.my;
       in {
         inherit name;
         description = "The primary user account";
-        extraGroups = [ "wheel" ];
+        extraGroups = [ "wheel" "libvirtd" ];
         isNormalUser = true;
         home = "/home/${name}";
         group = "users";

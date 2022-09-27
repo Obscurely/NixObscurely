@@ -8,7 +8,7 @@ rofi_command="rofi -theme theme/powermenu"
 shutdown="襤"
 reboot=""
 lock=""
-suspend="⏾"
+suspend=""
 logout=""
 
 # Confirmation

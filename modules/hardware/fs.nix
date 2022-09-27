@@ -24,6 +24,9 @@ in {
         btrfs-progs
         exfat
         exfatprogs
+        dosfstools
+        f2fs-tools
+        xfsprogs
         fuseiso
         gvfs
         gptfdisk # gpt cli util

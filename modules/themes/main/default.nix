@@ -5,6 +5,7 @@
 with lib;
 with lib.my;
 let cfg = config.modules.theme;
+    configDir = config.dotfiles.configDir;
 in {
   config = mkIf (cfg.active == "main") (mkMerge [
     # Desktop-agnostic configuration

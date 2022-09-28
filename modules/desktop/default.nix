@@ -3,6 +3,7 @@
 with lib;
 with lib.my;
 let cfg = config.modules.desktop;
+    configDir = config.dotfiles.configDir;
 in {
   config = mkIf config.services.xserver.enable {
     assertions = [

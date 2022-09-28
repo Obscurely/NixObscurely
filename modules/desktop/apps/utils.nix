@@ -7,6 +7,7 @@
 with lib;
 with lib.my;
 let cfg = config.modules.desktop.apps.utils;
+    configDir = config.dotfiles.configDir;
 in {
   options.modules.desktop.apps.utils = {
     enable = mkBoolOpt false;

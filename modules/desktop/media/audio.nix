@@ -3,6 +3,7 @@
 with lib;
 with lib.my;
 let cfg = config.modules.desktop.media.audio;
+    configDir = config.dotfiles.configDir;
 in {
   options.modules.desktop.media.audio = {
     enable = mkBoolOpt false;

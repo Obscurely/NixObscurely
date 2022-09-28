@@ -9,12 +9,9 @@ with lib;
   i18n.extraLocaleSettings = {
 	  LC_TIME = "en_US.UTF-8";
   };
-  // fake location for the sake of it
+  # fake location for the sake of it
   location = {
     latitude = 43.70011;
     longitude = -79.4163;
   };
-
-  # So the vaultwarden CLI knows where to find my server.
-  #modules.shell.vaultwarden.config.server = "vault.lissner.net";
 }

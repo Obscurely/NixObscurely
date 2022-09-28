@@ -63,7 +63,7 @@
     "net.core.rmem_default" = 1048576;
     "net.core.rmem_max" = 16777216;
     "net.core.wmem_default" = 1048576;
-    "net.core.wmem_max" = m6777216;
+    "net.core.wmem_max" = 6777216;
     "net.core.optmem_max" = 65536;
     "net.ipv4.tcp_rmem" = "4096 1048576 2097152";
     "net.ipv4.tcp_wmem" = "4096 65536 16777216";

@@ -42,6 +42,7 @@ in {
       usbutils # usb utilities
       xdg-user-dirs # create xdg user dirs
       picom # compositor
+      flameshot # cool utility for taking screen shots
     ];
 
     fonts = {
@@ -101,6 +102,23 @@ in {
       # GTK2_RC_FILES must be available to the display manager.
       export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc"
     '';
+
+    # Some crucial dotfiles
+    home.configFile = with config.modules; mkMerge [
+      {
+        # Flameshot
+        "flameshot".source = "${configDir}/flameshot";
+      }
+      {
+        # Mimeapps list
+        "mimeapps.list".source = "${configDir}/mimeapps.list";
+      }
+      {
+        # User dir config
+        "user-dirs.dirs".source = "${configDir}/user-dirs/user-dirs.dirs";
+        "user-dirs.locale".source = "${configDir}/user-dirs/user-dirs.locale";
+      }
+    ];
 
     # Clean up leftovers, as much as we can
     system.userActivationScripts.cleanupHome = ''

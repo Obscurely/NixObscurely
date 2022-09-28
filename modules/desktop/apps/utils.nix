@@ -25,6 +25,23 @@ in {
       xfce.ristretto # photo viewer
       zoom-us # video conference app
       libsForQt5.ark # imo best linux archive manager
+      xfce.xfce4-settings # setting manager
+    ];
+
+    # Get in dotfiles for utils
+    home.configFile = with config.modules; mkMerge [
+      {
+        # Dconf 
+        "dconf".source = "${configDir}/dconf";
+      }
+      {
+        # Notepadqq
+        "Notepadqq".source = "${configDir}/Notepadqq";
+      }
+      {
+        # xfce4 settings
+        "xfce4".source = "${configDir}/xfce4";
+      }
     ];
   };
 }

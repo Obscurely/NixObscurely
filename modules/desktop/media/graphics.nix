@@ -26,7 +26,6 @@ in {
       (if cfg.tools.enable then [
         font-manager   # so many damned fonts...
         imagemagick    # for image manipulation from the shell
-        flameshot # cool utility for taking screen shots
       ] else []) ++
 
       # replaces illustrator & indesign

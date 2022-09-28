@@ -128,11 +128,6 @@ in {
           "xtheme/90-theme".source = ./config/Xresources;
         }
         {
-          # Make sure gtk theme is in use
-          "gtk-2.0".source = ./config/gtk-2.0;
-          "gtk-3.0".source = ./config/gtk-3.0;
-        } 
-        {
           # Haruna theme
           "harunarc".source = ./config/harunarc;
         }

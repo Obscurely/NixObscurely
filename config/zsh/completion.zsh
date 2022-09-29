@@ -26,7 +26,7 @@ unsetopt COMPLETE_ALIASES  # Completion for aliases
 unsetopt CASE_GLOB
 
 # Fuzzy match mistyped completions.
-zstyle ':completion:*' completer _complete _list _match _approximate
+zstyle ':completion:*' menu select _complete _list _match _approximate
 zstyle ':completion:*:match:*' original only
 zstyle ':completion:*:approximate:*' max-errors 1 numeric
 # Increase the number of errors based on the length of the typed word.

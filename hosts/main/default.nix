@@ -52,6 +52,7 @@
       default = "vim";
       vim.enable = true;
     };
+    compression = true;
     shell = {
       direnv.enable = true;
       git.enable    = true;

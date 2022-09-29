@@ -41,7 +41,7 @@
       vm = {
         virtd.enable = true;
       };
-      compression = true;
+      compression.enable = true;
     };
     dev = {
       cc.enable = true;

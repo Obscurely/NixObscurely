@@ -2,9 +2,9 @@
 
 with lib;
 with lib.my;
-let cfg = config.modules.compression;
+let cfg = config.modules.desktop.compression;
 in {
-  options.modules.compression= with types; {
+  options.modules.desktop.compression= with types; {
     enable = mkBoolOpt false;
   };
 

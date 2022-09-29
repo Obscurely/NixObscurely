@@ -41,6 +41,7 @@
       vm = {
         virtd.enable = true;
       };
+      compression = true;
     };
     dev = {
       cc.enable = true;
@@ -52,7 +53,6 @@
       default = "vim";
       vim.enable = true;
     };
-    compression = true;
     shell = {
       direnv.enable = true;
       git.enable    = true;

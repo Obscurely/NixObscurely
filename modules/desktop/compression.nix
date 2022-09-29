@@ -4,7 +4,7 @@ with lib;
 with lib.my;
 let cfg = config.modules.desktop.compression;
 in {
-  options.modules.desktop.compression= with types; {
+  options.modules.desktop.compression= {
     enable = mkBoolOpt false;
   };
 

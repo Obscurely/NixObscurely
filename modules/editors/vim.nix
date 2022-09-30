@@ -6,6 +6,7 @@
 with lib;
 with lib.my;
 let cfg = config.modules.editors.vim;
+    configDir = config.dotfiles.configDir;
 in {
   options.modules.editors.vim = {
     enable = mkBoolOpt false;

@@ -29,7 +29,7 @@ in {
     # Copy in config
     home.configFile = with config.modules; mkMerge [
       {
-        "nvim".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/nvim";
+        "nvim".source = config.lib.file.mkOutOfStoreSymlink /etc/dotfiles/config/nvim;
       }
     ];
   };

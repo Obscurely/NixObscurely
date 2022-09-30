@@ -21,7 +21,7 @@ in {
 
   config = mkMerge [
     (mkIf cfg.enable {
-      user.packages = [ pkgs.rustup ];
+      user.packages = [ pkgs.rustup pkgs.rust-analyzer pkgs.taplo-cli ];
       env.PATH = [ "$(${pkgs.yarn}/bin/yarn global bin)" ];
       environment.shellAliases = {
         rs  = "rustc";

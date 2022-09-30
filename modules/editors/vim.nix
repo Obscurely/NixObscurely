@@ -16,17 +16,10 @@ in {
     user.packages = with pkgs; [
       editorconfig-core-c
       unstable.neovim
+      # Language servers (for nvim config)
     ];
 
     # This is for non-neovim, so it loads my nvim config
     # env.VIMINIT = "let \\$MYVIMRC='\\$XDG_CONFIG_HOME/nvim/init.vim' | source \\$MYVIMRC";
-
-    environment.shellAliases = {
-      vim = "nvim";
-      v   = "nvim";
-    };
-
-    # Copy in config
-    home.folder."nvim".source = config.lib.folder.mkOutOfStoreSymlink /etc/dotfiles/config/nvim;
   };
 }

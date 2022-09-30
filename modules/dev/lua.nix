@@ -23,6 +23,8 @@ in {
       user.packages = with pkgs; [
         lua
         luaPackages.moonscript
+        sumneko-lua-language-server
+        nodePackages.lua-fmt
         (mkIf cfg.love2D.enable love2d)
       ];
     })

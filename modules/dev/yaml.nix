@@ -1,4 +1,4 @@
-# modules/dev/go.nix --- GO lang
+# modules/dev/yaml.nix --- yaml lang
 #
 # For when really needed
 
@@ -7,17 +7,16 @@
 with lib;
 with lib.my;
 let devCfg = config.modules.dev;
-    cfg = devCfg.go;
+    cfg = devCfg.yaml;
 in {
-  options.modules.dev.go = {
+  options.modules.dev.yaml = {
     enable = mkBoolOpt false;
   };
 
   config = mkMerge [
     (mkIf cfg.enable {
       user.packages = with pkgs; [
-        go
-        gopls
+        nodePackages.yaml-language-server
       ];
     })
   ];

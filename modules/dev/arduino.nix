@@ -1,4 +1,4 @@
-# modules/dev/go.nix --- GO lang
+# modules/dev/arudino.nix --- arduino lang
 #
 # For when really needed
 
@@ -7,17 +7,16 @@
 with lib;
 with lib.my;
 let devCfg = config.modules.dev;
-    cfg = devCfg.go;
+    cfg = devCfg.arduino ;
 in {
-  options.modules.dev.go = {
+  options.modules.dev.arduino = {
     enable = mkBoolOpt false;
   };
 
   config = mkMerge [
     (mkIf cfg.enable {
       user.packages = with pkgs; [
-        go
-        gopls
+        arduino-cli
       ];
     })
   ];

@@ -1,4 +1,4 @@
-# modules/dev/go.nix --- GO lang
+# modules/dev/jav.nix --- java lang
 #
 # For when really needed
 
@@ -7,17 +7,17 @@
 with lib;
 with lib.my;
 let devCfg = config.modules.dev;
-    cfg = devCfg.go;
+    cfg = devCfg.java;
 in {
-  options.modules.dev.go = {
+  options.modules.dev.java= {
     enable = mkBoolOpt false;
   };
 
   config = mkMerge [
     (mkIf cfg.enable {
+      programs.java.enable = true;
       user.packages = with pkgs; [
-        go
-        gopls
+        java-language-server
       ];
     })
   ];

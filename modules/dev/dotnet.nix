@@ -1,4 +1,4 @@
-# modules/dev/go.nix --- GO lang
+# modules/dev/dotnet.nix --- dotnet
 #
 # For when really needed
 
@@ -7,17 +7,17 @@
 with lib;
 with lib.my;
 let devCfg = config.modules.dev;
-    cfg = devCfg.go;
+    cfg = devCfg.dotnet;
 in {
-  options.modules.dev.go = {
+  options.modules.dev.dotnet = {
     enable = mkBoolOpt false;
   };
 
   config = mkMerge [
     (mkIf cfg.enable {
       user.packages = with pkgs; [
-        go
-        gopls
+        dotnet-sdk
+        vscode-extensions.ms-dotnettools.csharp
       ];
     })
   ];

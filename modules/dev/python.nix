@@ -26,6 +26,8 @@ in {
         python310Packages.setuptools
         python310Packages.pylint
         python310Packages.poetry
+        nodePackages.pyright
+        black
       ];
 
       environment.shellAliases = {

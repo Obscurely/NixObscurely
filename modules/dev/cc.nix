@@ -24,6 +24,7 @@ in {
         bear
         gdb
         cmake
+        cmake-language-server
         llvmPackages.libcxx
         autoconf
         libsForQt5.milou # arm build system

@@ -92,7 +92,6 @@ in {
       plugins = with pkgs.xfce; [ thunar-archive-plugin thunar-volman ];
     };
     programs.htop.enable = true;
-    programs.java.enable = true;
 
     # Try really hard to get QT to respect my GTK theme.
     env.GTK_DATA_PREFIX = [ "${config.system.path}" ];

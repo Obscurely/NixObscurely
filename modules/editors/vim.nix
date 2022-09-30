@@ -24,5 +24,12 @@ in {
       vim = "nvim";
       v   = "nvim";
     };
+
+    # Copy in config
+    home.configFile = with config.modules; mkMerge [
+      {
+        "nvim".source = "${configDir}/nvim";
+      }
+    ];
   };
 }

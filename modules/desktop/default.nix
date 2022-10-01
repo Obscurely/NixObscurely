@@ -120,7 +120,7 @@ in {
       }
       {
         # Xorg fix
-        "/etc/X11/xorg.conf.d/52-resolution-fix.conf".source = "${configDir}/xorg/52-resolution-fix.conf";
+        "../../../etc/X11/xorg.conf.d/52-resolution-fix.conf".source = "${configDir}/xorg/52-resolution-fix.conf";
       }
     ];
 

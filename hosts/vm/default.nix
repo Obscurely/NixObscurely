@@ -9,9 +9,11 @@
   modules = {
     desktop = {
       bspwm.enable = true;
+      compression.enable = true;
       apps = {
-        rofi.enable = true;
         bitwarden.enable = true;
+        discord.enable = true;
+        rofi.enable = true;
         utils.enable = true;
       };
       browsers = {
@@ -21,45 +23,43 @@
         qutebrowser.enable = true;
       };
       gaming = {
-        steam.enable = true;
         legendary.enable = true;
         lutris.enable = true;
+        steam.enable = true;
         wine.enable = true;
       };
       media = {
-        daw.enable = true;
+        audio.enable = true;
         documents.enable = true;
         graphics.enable = true;
         mpv.enable = true;
         recording.enable = true;
-        audio.enable = true;
       };
       term = {
-        default = "xst";
-        st.enable = true;
+        default = "xterm";
+        kitty.enable = true;
       };
       vm = {
         virtd.enable = true;
       };
-      compression.enable = true;
     };
     dev = {
+      arduino.enable = true;
       cc.enable = true;
+      dotnet.enable = true;
+      go.enable = true;
+      java.enable = true;
+      lua.enable = true;
       node.enable = true;
-      rust.enable = true;
       python.enable = true;
+      rust.enable = true;
+      shell.enable = true;
+      web.enable = true;
+      yaml.enable = true;
     };
     editors = {
-      default = "vim";
-      vim.enable = true;
-    };
-    shell = {
-      direnv.enable = true;
-      git.enable    = true;
-      gnupg.enable  = true;
-      kitty.enable   = true;
-      zsh.enable    = true;
-      utils.enable = true;
+      default = "nvim";
+      nvim.enable = true;
     };
     hardware = {
       audio.enable = true;
@@ -67,20 +67,19 @@
         enable = true;
         ssd.enable = true;
       };
+      nvidia.enable = true;
+      razer.enable = true;
+      sensors.enable = true;
     };
-    services = {
-      ssh.enable = true;
-      # docker.enable = true;
-      # Needed occasionally to help the parental units with PC problems
-      # teamviewer.enable = true;
+    shell = {
+      direnv.enable = true;
+      git.enable    = true;
+      gnupg.enable  = true;
+      utils.enable = true;
+      zsh.enable    = true;
     };
     theme.active = "main";
   };
-
-
-  ## Local config
-  programs.ssh.startAgent = true;
-  services.openssh.startWhenNeeded = true;
 
   networking.networkmanager.enable = true;
 }

@@ -39,12 +39,13 @@ with lib.my;
   config = {
     user =
       let user = builtins.getEnv "USER";
-          name = if elem user [ "" "root" ] then "hlissner" else user;
+          name = if elem user [ "" "root" ] then "netrunner" else user;
       in {
         inherit name;
         description = "The primary user account";
         extraGroups = [ "wheel" "libvirtd" ];
         isNormalUser = true;
+        hashedPassword = "$6$1NsZKTu22hR3MUfN$bZ6cnMbwDIB6pe2B.L8Kh5E9hAFjXkOWE0GUQ0SULiozrAepK3U9Ae5V9RPphitHGZ5emFtYwSsTbZbre/syc0";
         home = "/home/${name}";
         group = "users";
         uid = 1000;
@@ -76,6 +77,9 @@ with lib.my;
         };
       };
     };
+
+    # Make user accounts immutable
+    users.mutableUsers = false;
 
     users.users.${config.user.name} = mkAliasDefinitions options.user;
 

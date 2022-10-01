@@ -5,10 +5,10 @@
 
 with lib;
 with lib.my;
-let cfg = config.modules.editors.vim;
+let cfg = config.modules.editors.nvim;
     configDir = config.dotfiles.configDir;
 in {
-  options.modules.editors.vim = {
+  options.modules.editors.nvim = {
     enable = mkBoolOpt false;
   };
 

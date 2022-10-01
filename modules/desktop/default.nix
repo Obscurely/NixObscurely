@@ -118,6 +118,10 @@ in {
         "user-dirs.dirs".source = "${configDir}/user-dirs/user-dirs.dirs";
         "user-dirs.locale".source = "${configDir}/user-dirs/user-dirs.locale";
       }
+      {
+        # Xorg fix
+        "/etc/X11/xorg.conf.d/52-resolution-fix.conf".source = "${configDir}/xorg/52-resolution-fix.conf";
+      }
     ];
 
     # Clean up leftovers, as much as we can

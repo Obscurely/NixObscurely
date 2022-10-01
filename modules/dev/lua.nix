@@ -15,7 +15,6 @@ in {
   options.modules.dev.lua = {
     enable = mkBoolOpt false;
     xdg.enable = mkBoolOpt devCfg.enableXDG;
-    love2D.enable = mkBoolOpt false;
   };
 
   config = mkMerge [
@@ -25,7 +24,6 @@ in {
         luaPackages.moonscript
         sumneko-lua-language-server
         nodePackages.lua-fmt
-        (mkIf cfg.love2D.enable love2d)
       ];
     })
 

@@ -1,7 +1,7 @@
 [user]
-	name = Henrik Lissner
-	email = git@henrik.io
-	signingKey = FA1FADD9440B688CAA75A057B60957CA074D39A3
+	name = Obscurely
+	email = adrian.obscurely@protonmail.com
+	signingKey = A9DF255D7520538A801DFF252F59576ED38964AF
 [commit]
 	gpgSign = true
 [tag]
@@ -11,9 +11,9 @@
 [init]
 	defaultBranch = main
 [github]
-	user = hlissner
+	user = Obscurely
 [gitlab]
-	user = hlissner
+	user = Obscurely
 [push]
 	autoSquash = true
 [push]
@@ -36,7 +36,7 @@
     insteadOf = gh:
 [url "git@github.com:"]
     insteadOf = ssh+gh:
-[url "git@github.com:hlissner/"]
+[url "git@github.com:Obscurely/"]
     insteadOf = gh:/
 [url "https://gitlab.com/"]
     insteadOf = gl:

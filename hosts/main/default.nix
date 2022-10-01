@@ -35,8 +35,8 @@
         audio.enable = true;
       };
       term = {
-        default = "xst";
-        st.enable = true;
+        default = "xterm";
+        kitty.enable = true;
       };
       vm = {
         virtd.enable = true;
@@ -50,14 +50,13 @@
       python.enable = true;
     };
     editors = {
-      default = "vim";
+      default = "nvim";
       vim.enable = true;
     };
     shell = {
       direnv.enable = true;
       git.enable    = true;
       gnupg.enable  = true;
-      kitty.enable   = true;
       zsh.enable    = true;
       utils.enable = true;
     };

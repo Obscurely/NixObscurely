@@ -50,6 +50,7 @@ in {
       ripgrep
       tldr
       autojump
+      npm
     ];
 
     env = {

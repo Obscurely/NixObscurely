@@ -67,9 +67,9 @@
         enable = true;
         ssd.enable = true;
       };
-      nvidia.enable = true;
-      razer.enable = true;
-      sensors.enable = true;
+      #nvidia.enable = true;
+      #razer.enable = true;
+      #sensors.enable = true;
     };
     shell = {
       direnv.enable = true;

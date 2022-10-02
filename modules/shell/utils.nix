@@ -21,6 +21,13 @@ in {
       aria # fast cli downloader
       mat2 # utility for removing metadata from files
       netdiscover # discovering devices in local network
+      ffmpeg # convert media files
+      gifsicle # optimize gifs
+      optipng # optimize png
+      pngquant # optimize png
+      jpegoptim # optimize jpeg
+      ghostscript # optimize pdf
+      aspell # spell checker
     ];
   };
 }

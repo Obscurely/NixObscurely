@@ -27,7 +27,6 @@ in {
       pngquant # optimize png
       jpegoptim # optimize jpeg
       ghostscript # optimize pdf
-      aspell # spell checker
     ];
   };
 }

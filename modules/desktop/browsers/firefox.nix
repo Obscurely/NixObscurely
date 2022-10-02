@@ -60,7 +60,7 @@ in {
         # Enable userContent.css and userChrome.css for our theme modules
         "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
         # Stop creating ~/Downloads!
-        "browser.download.dir" = "${config.user.home}/downloads";
+        "browser.download.dir" = "${config.user.home}/Downloads";
         # Don't use the built-in password manager. A nixos user is more likely
         # using an external one (you are using one, right?).
         "signon.rememberSignons" = false;
@@ -195,6 +195,26 @@ in {
         "extensions.formautofill.creditCards.available" = false;
         "extensions.formautofill.creditCards.enabled" = false;
         "extensions.formautofill.heuristics.enabled" = false;
+
+        # Disable first run intro
+        "app.normandy.first_run" = false;
+
+        # Disable smooth scrolling (hate this feature on web browsers)
+        "general.smoothScroll" = false;
+
+        # Other privacy focused settings
+        "accessibility.force_disabled" = 1;
+        "accessibility.typeaheadfind.flashBar" = 0;
+        "browser.search.suggest.enabled" = false;
+        "browser.search.update" = false;
+        "privacy.trackingprotection.enabled" = true;
+        "privacy.trackingprotection.socialtracking.enabled" = true;
+        "places.history.enabled" = false;
+        "privacy.history.custom" = true;
+        "privacy.clearOnShutdown.history" = true;
+        "privacy.cpd.history" = true;
+        "dom.security.https_only_mode" = true;
+        "dom.security.https_only_mode_ever_enabled" = true;
       };
 
       # Use a stable profile name so we can target it in themes

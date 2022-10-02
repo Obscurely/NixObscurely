@@ -30,7 +30,6 @@ in {
       #   #experimentalBackends = true;
       #   backend = "glx";
       # };
-      redshift.enable = true;
       xserver = {
         enable = true;
         displayManager = {

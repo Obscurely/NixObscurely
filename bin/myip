@@ -1,4 +1,5 @@
 #!/usr/bin/env zsh
+# This script is from hlissner/dotfiles
 # Echos your local or WAN IP
 
 if [[ $1 == -w ]]; then

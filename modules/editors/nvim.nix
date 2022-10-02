@@ -1,5 +1,5 @@
-# When I'm stuck in the terminal or don't have access to Emacs, (neo)vim is my
-# go-to. I am a vimmer at heart, after all.
+# Neovim: the second love of my life
+# For me all other text editors are trash against my configured neovim.
 
 { config, options, lib, pkgs, ... }:
 

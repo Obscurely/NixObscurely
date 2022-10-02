@@ -1,8 +1,4 @@
 # modules/desktop/media/recording.nix
-#
-# OBS to capture footage/stream, audacity for audio, handbrake to encode it all.
-# This, paired with DaVinci Resolve for video editing (on my Windows system) and
-# I have what I need for youtube videos and streaming.
 
 { config, options, lib, pkgs, ... }:
 

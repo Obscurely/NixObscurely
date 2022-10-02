@@ -1,5 +1,6 @@
 #!/usr/bin/env zsh
 
+# This script is from hlissner/dotfiles
 # Optimize image files (losslessly by default)
 #
 # Examples:

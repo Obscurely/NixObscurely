@@ -36,7 +36,7 @@
         recording.enable = true;
       };
       term = {
-        default = "xterm";
+        default = "xterm-kitty";
         kitty.enable = true;
       };
       vm = {

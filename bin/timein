@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# This script is from hlissner/dotfiles
 
 open=open
 [[ $OSTYPE == linux* ]] && open=xdg-open

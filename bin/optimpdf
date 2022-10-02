@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # Compress pdf files using ghostscript.
+# This script is from hlissner/dotfiles
 #
 # Defaults to 72 dpi.
 #

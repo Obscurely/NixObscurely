@@ -29,10 +29,11 @@ in {
         xfsprogs
         fuse3
         fuseiso
-        gvfs
         gf
         gptfdisk # gpt cli util
       ];
+
+        services.gvfs.enable = true;
     }
 
     (mkIf (!cfg.zfs.enable && cfg.ssd.enable) {

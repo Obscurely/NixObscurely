@@ -14,6 +14,8 @@
 	user = Obscurely
 [gitlab]
 	user = Obscurely
+[gitea]
+  user = netrunner
 [push]
 	autoSquash = true
 [push]
@@ -44,15 +46,13 @@
     insteadOf = gist:
 [url "https://bitbucket.org/"]
     insteadOf = bb:
-[url "https://git.henrik.io"]
-    insteadOf = my:
 [diff "lisp"]
 	xfuncname = "^(((;;;+ )|\\(|([ \t]+\\(((cl-|el-patch-)?def(un|var|macro|method|custom)|gb/))).*)$"
 [diff "org"]
 	xfuncname = "^(\\*+ +.*)$"
 [credential "https://github.com"]
-	helper =
-	helper = !gh auth git-credential
+	helper = store
 [credential "https://gist.github.com"]
-	helper =
-	helper = !gh auth git-credential
+	helper = store
+[credential "https://gitea.server.com"]
+	helper = store

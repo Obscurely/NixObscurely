@@ -92,9 +92,9 @@ mount "/dev/sdb1" /mnt/extra     # mounts extra
 swapon "/dev/nvme0n1p2"          # turns swap on
 sleep 3                               # make sure everything is mounted, without can be buggy some times
 
-echo "--------------------------------------------------"
-echo "-      Generating and installing system...       -"
-echo "--------------------------------------------------"
+echo "-------------------------------------------------"
+echo "-   Done, please run run_in_nix_shell.sh now!   -"
+echo "-------------------------------------------------"
 
-# get git and flakes in current shell
-echo "please run and follow wiki: nix-shell -p git nixVersions.stable"
+# Enter a nix shell with git and nixVersions.stable (nixFlakes, got renamed for some reason)
+nix-shell -p git nixVersions.stable

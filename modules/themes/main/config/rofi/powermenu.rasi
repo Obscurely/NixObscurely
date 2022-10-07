@@ -8,7 +8,7 @@
  */
 
 configuration {
-	font:							"FantasqueSansMono Nerd Font 16";
+	font:							"FantasqueSansMono Nerd Font 12";
     show-icons:                     false;
 	icon-theme: 					"Papirus-Dark";
     drun-display-format:            "{name}";

@@ -128,7 +128,7 @@ in {
 
     # Disable mouse acceleration
     services.xserver.libinput.mouse.accelProfile = "flat";
-    services.xserver.libinput.mouse.accelSpeed = "-1";
+    services.xserver.libinput.mouse.accelSpeed = "0";
 
     # Clean up leftovers, as much as we can
     system.userActivationScripts.cleanupHome = ''

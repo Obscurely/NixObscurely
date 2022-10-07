@@ -120,6 +120,9 @@ in {
       }
     ];
 
+    # Disable ssh askpass
+    programs.ssh.enableAskPassword = false;
+
     # Enable libinput
     services.xserver.libinput.enable
 

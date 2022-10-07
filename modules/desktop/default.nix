@@ -120,6 +120,9 @@ in {
       }
     ];
 
+    # Enable libinput
+    services.xserver.libinput.enable
+
     # Disable mouse acceleration
     services.xserver.libinput.mouse.accelProfile = "flat";
     services.xserver.libinput.mouse.accelSpeed = "-1";

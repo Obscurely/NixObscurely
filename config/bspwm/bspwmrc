@@ -46,10 +46,6 @@ xrandr --output DVI-D-0 --mode 1920x1080 --rate 144
 xrandr --output DP-0 --mode 2560x1440 --rate 165
 xrandr --output DP-0 --primary --left-of DVI-D-0
 
-# Disable mouse acceleration
-# xset m 1/1 0
-# xinput --set-prop 22 'libinput Accel Speed' -1
-
 # Auto-Start
 bspc desktop -f ^1
 lxpolkit & # prompt to enter sudo password daemon

@@ -1,9 +1,3 @@
-echo "**************************************************"
-echo "*          Beginning Installation...             *"
-echo "**************************************************"
-
-echo # New line
-
 echo "--------------------------------------------------"
 echo "-             Formatting disks...                -"
 echo "--------------------------------------------------"
@@ -104,9 +98,3 @@ echo "--------------------------------------------------"
 
 # get git and flakes in current shell
 echo "please run and follow wiki: nix-shell -p git nixVersions.stable"
-
-echo "
-################################################
-#     Done - Please Eject Media and Reboot     #
-################################################
-"

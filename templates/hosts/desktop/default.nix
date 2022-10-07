@@ -9,69 +9,77 @@
   modules = {
     desktop = {
       bspwm.enable = true;
+      compression.enable = true;
       apps = {
+        bitwarden.enable = true;
+        discord.enable = true;
         rofi.enable = true;
-        # godot.enable = true;
+        utils.enable = true;
       };
       browsers = {
-        default = "brave";
-        brave.enable = true;
+        default = "firefox";
+        chromium.enable = true;
         firefox.enable = true;
         qutebrowser.enable = true;
       };
       gaming = {
+        legendary.enable = true;
+        lutris.enable = true;
         steam.enable = true;
-        # emulators.enable = true;
-        # emulators.psx.enable = true;
+        wine.enable = true;
       };
       media = {
-        daw.enable = true;
+        audio.enable = true;
         documents.enable = true;
         graphics.enable = true;
         mpv.enable = true;
         recording.enable = true;
-        spotify.enable = true;
       };
       term = {
-        default = "xst";
-        st.enable = true;
+        default = "xterm-kitty";
+        kitty.enable = true;
       };
       vm = {
-        qemu.enable = true;
+        virtd.enable = true;
       };
     };
     dev = {
+      arduino.enable = true;
+      cc.enable = true;
+      dotnet.enable = true;
+      go.enable = true;
+      java.enable = true;
+      lua.enable = true;
       node.enable = true;
-      rust.enable = true;
       python.enable = true;
+      rust.enable = true;
+      shell.enable = true;
+      web.enable = true;
+      yaml.enable = true;
     };
     editors = {
       default = "nvim";
-      emacs.enable = true;
-      vim.enable = true;
+      nvim.enable = true;
+    };
+    hardware = {
+      audio.enable = true;
+      fs = {
+        enable = true;
+        ssd.enable = true;
+      };
+      nvidia.enable = true;
+      razer.enable = true;
+      sensors.enable = true;
     };
     shell = {
-      adl.enable = true;
-      vaultwarden.enable = true;
       direnv.enable = true;
       git.enable    = true;
       gnupg.enable  = true;
-      tmux.enable   = true;
+      utils.enable = true;
       zsh.enable    = true;
     };
-    services = {
-      ssh.enable = true;
-      docker.enable = true;
-      # Needed occasionally to help the parental units with PC problems
-      # teamviewer.enable = true;
-    };
-    theme.active = "alucard";
+    theme.active = "main";
   };
-
-
-  ## Local config
-  programs.ssh.startAgent = true;
-  services.openssh.startWhenNeeded = true;
 
   networking.networkmanager.enable = true;
 }

@@ -120,6 +120,10 @@ in {
       }
     ];
 
+    # Disable mouse acceleration
+    services.xserver.libinput.mouse.accelProfile = "flat";
+    services.xserver.libinput.mouse.accelSpeed = "-1";
+
     # Clean up leftovers, as much as we can
     system.userActivationScripts.cleanupHome = ''
       pushd "${config.user.home}"

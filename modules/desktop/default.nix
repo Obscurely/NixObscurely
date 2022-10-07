@@ -124,7 +124,7 @@ in {
     programs.ssh.enableAskPassword = false;
 
     # Enable libinput
-    services.xserver.libinput.enable
+    services.xserver.libinput.enable = true;
 
     # Disable mouse acceleration
     services.xserver.libinput.mouse.accelProfile = "flat";

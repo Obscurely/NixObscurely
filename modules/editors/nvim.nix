@@ -17,5 +17,12 @@ in {
       editorconfig-core-c
       unstable.neovim
     ];
+
+    # enable wakapi config
+    home.configFile = with config.modules; mkMerge [
+      {
+        "../.wakatime.cfg".source = "${configDir}/wakapi/.wakatime.cfg";
+      }
+    ];
   };
 }

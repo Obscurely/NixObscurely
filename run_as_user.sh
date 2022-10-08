@@ -10,6 +10,7 @@ xdg-user-dirs-update
 # Create screenshots dir for flameshot
 echo "Create screenshots dir for flameshot"
 mkdir -p ~/Pictures/screenshots
+mkdir ~/Code
 
 # Add xorg resolution fix (for lightdm)
 echo "Add xorg resolution fix (for lightdm)"

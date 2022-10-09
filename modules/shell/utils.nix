@@ -27,6 +27,7 @@ in {
       pngquant # optimize png
       jpegoptim # optimize jpeg
       ghostscript # optimize pdf
+      libheif # to view .heic files
     ];
   };
 }

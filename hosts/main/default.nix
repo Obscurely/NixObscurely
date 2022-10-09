@@ -70,6 +70,7 @@
       nvidia.enable = true;
       razer.enable = true;
       sensors.enable = true;
+      wifi.enable = false;
     };
     shell = {
       direnv.enable = true;

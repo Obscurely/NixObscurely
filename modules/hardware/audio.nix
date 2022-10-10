@@ -23,6 +23,7 @@ in {
       easyeffects
       alsa-plugins
       alsa-utils
+      alsa-lib
     ];
 
     # Easyeffects config 

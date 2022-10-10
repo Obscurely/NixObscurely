@@ -44,6 +44,7 @@ in {
       xdg-user-dirs # create xdg user dirs
       picom # compositor
       flameshot # cool utility for taking screen shots
+      pkg-config # a tool for pkgs to find info about other pkgs
     ];
 
     fonts = {

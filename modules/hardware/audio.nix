@@ -24,6 +24,7 @@ in {
       alsa-plugins
       alsa-utils
       alsa-lib
+      alsa-tools
     ];
 
     # Easyeffects config 

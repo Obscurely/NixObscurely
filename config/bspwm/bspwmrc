@@ -40,6 +40,7 @@ bspc rule -a qBittorrent	      desktop='^8' 	follow=on
 bspc rule -a NeoVim 		        desktop='^2' 	follow=on # Open the NeoVim terminal window done by keybinds super + v on the second desktop
 bspc rule -a Sonixd 		        desktop='^5' 	follow=on
 bspc rule -a qutebrowser        desktop='^3'  follow=on
+bspc rule -a Ark                desktop='^7'  follow=on
 
 # Set resolution
 xrandr --output DVI-D-0 --mode 1920x1080 --rate 144

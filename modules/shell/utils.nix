@@ -29,6 +29,7 @@ in {
       ghostscript # optimize pdf
       libheif # to view .heic files
       openssl # cryptographic library
+      protonup # for managing proton ge
     ];
   };
 }

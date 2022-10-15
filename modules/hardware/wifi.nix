@@ -20,6 +20,16 @@ in {
       };
     };
 
+    networking.wireless = {
+      enable = true;
+      interfaces = "wlan0"
+    };
+
+    networking.networkmanager.wifi = {
+      backend = "iwd";
+      dhcp = "dhcpcd";
+    };
+
     user.packages = [ pkgs.iwgtk ];
   };
 }

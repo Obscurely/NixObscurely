@@ -19,5 +19,7 @@ in {
         };
       };
     };
+
+    user.packages = [ iwgtk ];
   };
 }

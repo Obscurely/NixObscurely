@@ -25,8 +25,8 @@ in {
       interfaces = "wlan0";
     };
 
-    networking.networkmanager.wifi = {
-      backend = "iwd";
+    networking.networkmanager = {
+      wifi.backend = "iwd";
       dhcp = "dhcpcd";
     };
 

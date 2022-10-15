@@ -20,6 +20,6 @@ in {
       };
     };
 
-    user.packages = [ iwgtk ];
+    user.packages = [ pkgs.iwgtk ];
   };
 }

@@ -22,7 +22,7 @@ in {
 
     networking.wireless = {
       enable = true;
-      interfaces = "wlan0"
+      interfaces = "wlan0";
     };
 
     networking.networkmanager.wifi = {

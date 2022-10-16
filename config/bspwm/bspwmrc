@@ -39,9 +39,9 @@ bspc rule -a Sonixd 		          desktop='^5' 	follow=on
 bspc rule -a qutebrowser          desktop='^3'  follow=on
 bspc rule -a ark                  desktop='^7'  follow=on
 bspc rule -a Audacity             desktop='^5'  follow=on
-bspc rule -a ghb                  desktop='^5'  follow=on # ghb is hand brake
+bspc rule -a Ghb                  desktop='^5'  follow=on # ghb is hand brake
 bspc rule -a mpv                  desktop='^5'  follow=on
-bspc rule -a goverlay             desktop='^4'  follow=on
+bspc rule -a GOverlay             desktop='^4'  follow=on
 bspc rule -a Inkscape             desktop='^5'  follow=on
 bspc rule -a krita                desktop='^5'  follow=on
 

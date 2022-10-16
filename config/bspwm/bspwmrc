@@ -7,7 +7,7 @@ picom --experimental-backend --config ~/.config/picom/picom.conf &
 bspc monitor DP-0 -d I II III IV V
 bspc monitor DVI-D-0 -d VI VII VIII IX X
 
-bspc rule -a chromium		        desktop='^3'	follow=on
+bspc rule -a chromium-unwrapped desktop='^3'	follow=on
 bspc rule -a Waterfox		        desktop='^3'	follow=on
 bspc rule -a discord            desktop='^6'	follow=off
 bspc rule -a Thunar 		        desktop='^7'	follow=on

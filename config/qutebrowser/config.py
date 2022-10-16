@@ -6,7 +6,7 @@ config.load_autoconfig()
 
 ## General config
 c.content.default_encoding = 'utf-8'
-c.content.javascript.enabled = True
+c.content.javascript.enabled = False
 c.content.local_storage = True
 c.content.plugins = True
 

@@ -77,6 +77,7 @@
       git.enable    = true;
       gnupg.enable  = true;
       utils.enable = true;
+      vaultwarden.enable = true;
       zsh.enable    = true;
     };
     theme.active = "main";

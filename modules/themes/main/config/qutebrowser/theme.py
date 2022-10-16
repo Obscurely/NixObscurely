@@ -34,6 +34,7 @@ padding = {
 #      loads. This can break sites with no explicit background, so I rely on the
 #      let-there-be-light.user.js greasemonkey script to "reset" the background.
 c.colors.webpage.bg = palette['background']
+c.colors.webpage.preferred_color_scheme = 'dark'
 
 ## UI
 # Scrollbar style; much less intrusive than the default

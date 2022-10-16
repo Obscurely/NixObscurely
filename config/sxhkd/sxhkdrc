@@ -171,6 +171,10 @@ super + x
 # open qutebrowser
 super + q
   qutebrowser
+
+# open vaultwarden menu
+super + p
+	$DOTFILES_BIN/rofi/bwmenu
 	
 # media audio mute
 XF86AudioMute

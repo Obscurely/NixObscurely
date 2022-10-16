@@ -17,7 +17,7 @@ in {
 
     user.packages = with pkgs;
       # for recording and remastering audio
-      (if cfg.audio.enable then [ unstable.audacity-gtk3 ] else []) ++
+      (if cfg.audio.enable then [ unstable.audacity ] else []) ++
       # for longer term streaming/recording the screen
       (if cfg.video.enable then [ unstable.obs-studio unstable.handbrake ] else []);
   };

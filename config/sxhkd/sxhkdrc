@@ -173,7 +173,7 @@ super + q
   qutebrowser
 
 # open vaultwarden menu
-super + p
+super + shift + v
 	$DOTFILES_BIN/rofi/bwmenu
 	
 # media audio mute

@@ -35,6 +35,8 @@ padding = {
 #      let-there-be-light.user.js greasemonkey script to "reset" the background.
 c.colors.webpage.bg = palette['background']
 c.colors.webpage.preferred_color_scheme = 'dark'
+c.colors.webpage.darkmode.enabled = True
+c.colors.webpage.darkmode.policy.images = 'never' # tends to do more damage than help nowdays
 
 ## UI
 # Scrollbar style; much less intrusive than the default

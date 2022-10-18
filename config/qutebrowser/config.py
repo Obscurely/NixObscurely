@@ -12,9 +12,6 @@ c.content.plugins = True
 
 c.editor.encoding = 'utf-8'
 
-## Security & privacy
-c.content.autoplay = False   # don't autoplay videos
-
 ## Adblocking
 # Use (superior) Brave adblock if available, or fall back to host blocking
 c.content.blocking.method = "both"
@@ -52,7 +49,7 @@ c.url.start_pages = 'https://searx.server.com/preferences?preferences=eJx1VkuT2z
 # I have this options because I use a reverse proxy on a dns rewrite for my home server (so I don't have to pay anything)
 # If you don't know what this means or are not exprienced enough browsing, please disable this as it poses a very high security risk.
 c.content.tls.certificate_errors = 'load-insecurely'
-c.content.prefers_reduced_motion = False # I don't like animations
+c.content.prefers_reduced_motion = True # I don't like animations
 c.input.media_keys = True # Should be enabled by default, but just in case
 c.scrolling.smooth = False # Should be disabled by default, but just because I hate smooth scrolling... (except half page scroll in neovim)
 
@@ -60,6 +57,7 @@ c.scrolling.smooth = False # Should be disabled by default, but just because I h
 c.content.cookies.accept = 'no-3rdparty' # blocking 3rdparty cookies doesn't generally block anything
 c.content.geolocation = False
 c.content.headers.do_not_track = True
+c.content.autoplay = False   # don't autoplay videos
 
 #
 ## Keybindings
@@ -91,9 +89,6 @@ config.bind(";pu", 'spawn -u qute-bwmenu --field username')
 config.bind(";ps", 'spawn -u qute-bwmenu --field password')
 config.bind(";po", 'spawn -u qute-bwmenu --field otp')
 config.bind(";pl", 'spawn -u qute-bwmenu --last')
-
-## Ex-commands
-
 
 ## Bindings for normal mode
 # config.bind("'", 'enter-mode jump_mark')

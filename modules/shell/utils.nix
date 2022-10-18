@@ -30,6 +30,7 @@ in {
       libheif # to view .heic files
       openssl # cryptographic library
       protonup # for managing proton ge
+      fontconfig # a dependency for some stuff
     ];
   };
 }

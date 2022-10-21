@@ -21,6 +21,7 @@
         chromium.enable = true;
         firefox.enable = true;
         qutebrowser.enable = true;
+        torbrowser.enable = true;
       };
       gaming = {
         legendary.enable = true;

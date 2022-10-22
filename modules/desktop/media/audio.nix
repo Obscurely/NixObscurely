@@ -13,6 +13,8 @@ in {
     user.packages = with pkgs; [
       sonixd # frontend for subsonic compatible servers
       clementine
+      sox # sample rate converter and spectrograms generator
+      easytag # view and edit tags for various audio files
     ];
   };
 }

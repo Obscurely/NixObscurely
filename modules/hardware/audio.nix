@@ -30,7 +30,10 @@ in {
     # Easyeffects config 
     home.configFile = with config.modules; mkMerge [
       {
-        "easyeffects".source = "${configDir}/easyeffects";
+        "easyeffects/rnnoise".source = "${configDir}/easyeffects/rnnoise";
+        "easyeffects/Default.json".source = "${configDir}/easyeffects/Default.json";
+        "easyeffects/Discord and Record.json".source = "${configDir}/easyeffects/Discord and Record.json";
+        "easyeffects/Main.json".source = "${configDir}/easyeffects/Main.json";
       }
     ];
 

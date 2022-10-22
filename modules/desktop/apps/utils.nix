@@ -37,7 +37,7 @@ in {
       }
       {
         # Notepadqq
-        "Notepadqq".source = "${configDir}/Notepadqq";
+        "Notepadqq/Notepadqq.ini".source = "${configDir}/Notepadqq/Notepadqq.ini";
       }
       {
         # xfce4 settings

@@ -39,6 +39,7 @@ in {
         };
         windowManager.bspwm.enable = true;
       };
+      tumbler.enable = true; # get thumbnails in ristretto
     };
 
     # link recursively so other modules can link files in their folders

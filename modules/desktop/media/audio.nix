@@ -20,8 +20,8 @@ in {
         desktopName = "EasyTAG";
         genericName = "Open EasyTAG in home dir.";
         icon = "easytag";
-        exec = "${easytag}/bin/easytag ~/";
-        categories = [ "Audio" ];
+        exec = "${easytag}/bin/easytag /";
+        categories = [ "AudioVideo" ];
       })
     ];
   };

@@ -166,7 +166,7 @@ super + d
 
 # open discord in browser, move it to the 6th desktop and tile it (the result looks the same as the app)
 super + shift + d
-  chromium-browser --start-fullscreen --start-maximized https://discord.com/channels/@me & sleep 1.5 && id=$(bspc query -N -n); bspc node -d '^6'; bspc node -f ${id}; bspc desktop -f '^6'; bspc node -t tiled
+  chromium-browser --ignore-certificate-errors --new-window --start-fullscreen --start-maximized https://discord.com/channels/@me & sleep 1.5 && id=$(bspc query -N -n); bspc node -d '^6'; bspc node -f ${id}; bspc desktop -f '^6'; bspc node -t tiled
 
 # open steam
 super + x

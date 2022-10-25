@@ -37,7 +37,6 @@ in {
       qgnomeplatform        # QPlatformTheme for a better Qt application inclusion in GNOME
       libsForQt5.qtstyleplugin-kvantum # SVG-based Qt5 theme engine plus a config tool and extra theme
       dialog # display dialog boxes from shell
-      gnome.gnome-keyring # gnome's keyring
       newt
       lxde.lxsession # lightweight session manager
       sqlite # database
@@ -131,6 +130,9 @@ in {
     # Disable mouse acceleration
     services.xserver.libinput.mouse.accelProfile = "flat";
     services.xserver.libinput.mouse.accelSpeed = "0";
+
+    # Enable gnome keyring service
+    services.gnome.gnome-keyring.enable = true;
 
     # Clean up leftovers, as much as we can
     system.userActivationScripts.cleanupHome = ''

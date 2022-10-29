@@ -47,7 +47,7 @@ in {
     home.configFile = {
       "sxhkd".source = "${configDir}/sxhkd";
       "bspwm" = {
-        source = "${configDir}/${cfg.host}";
+        source = "${configDir}/bspwm/${cfg.host}";
         recursive = true;
       };
       "picom".source = "${configDir}/picom";

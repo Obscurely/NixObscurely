@@ -8,7 +8,10 @@
   ## Modules
   modules = {
     desktop = {
-      bspwm.enable = true;
+      bspwm = {
+          enable = true;
+          host = "main";
+      };
       compression.enable = true;
       apps = {
         bitwarden.enable = true;

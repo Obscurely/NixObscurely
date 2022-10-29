@@ -7,6 +7,7 @@ let cfg = config.modules.desktop.bspwm;
 in {
   options.modules.desktop.bspwm = {
     enable = mkBoolOpt false;
+    host = mkOpt (with types; nullOr str) null;
   };
 
   config = mkIf cfg.enable {
@@ -46,7 +47,7 @@ in {
     home.configFile = {
       "sxhkd".source = "${configDir}/sxhkd";
       "bspwm" = {
-        source = "${configDir}/bspwm";
+        source = "${configDir}/${cfg.host}";
         recursive = true;
       };
       "picom".source = "${configDir}/picom";

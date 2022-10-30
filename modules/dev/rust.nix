@@ -17,27 +17,28 @@ in {
   config = mkMerge [
     (mkIf cfg.enable {
       user.packages = [ 
-        pkgs.rustup
-        pkgs.rust-analyzer
-        pkgs.taplo-cli
         pkgs.llvmPackages_latest.llvm
         pkgs.llvmPackages_latest.bintools
         pkgs.zlib.out
         pkgs.xorriso
         pkgs.grub2
         pkgs.llvmPackages_latest.lld
+        pkgs.rust-analyzer
+        pkgs.taplo-cli
+        pkgs.rustc
+        pkgs.cargo
+        pkgs.rustfmt
+        pkgs.clippy
       ];
 
       env.PATH = [ "$(${pkgs.yarn}/bin/yarn global bin)" ];
       environment.shellAliases = {
         rs  = "rustc";
-        rsp = "rustup";
         ca  = "cargo";
       };
     })
 
     (mkIf cfg.xdg.enable {
-      env.RUSTUP_HOME = "$XDG_DATA_HOME/rustup";
       env.CARGO_HOME = "$XDG_DATA_HOME/cargo";
       env.PATH = [ "$CARGO_HOME/bin" ];
     })

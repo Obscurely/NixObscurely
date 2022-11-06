@@ -35,7 +35,7 @@ USER=netrunner nixos-install --root /mnt --no-root-passwd --impure --flake .#mai
 # move dotfiles to mounted host
 echo "Move dotfiles to the mounted host"
 
-mv /etc/dotfiles /mnt/etc/dotfiles
+cp -r /etc/dotfiles /mnt/etc/dotfiles
 
 echo "------------------------------------------------------------"
 echo "-  Done, please reboot and run as the user run_as_user.sh  -"

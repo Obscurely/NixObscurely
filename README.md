@@ -46,13 +46,13 @@
   ./format_mount.sh
   ```
 #### Manually
-* Format your partitions as desired, a few utils and command that might intrest you:
+* Format your partitions as desired, a few utils and command that might interest you:
   * ```sgdisk -Z /dev/sdX``` to zap a drive (deltes all partitions)
   * ```sgdisk -a 2048 -o /dev/sdX``` to make a new gpt partition table
   * ```cfdisk /dev/sdX``` to do your partitioning
   * ```mkfs.FS -f /dev/sdXN``` (FS is a placeholder for the actual file system)
   * Also just take a look at the [format_mount.sh](format_mount.sh) script
-* After doing your partitions mount them to ```/mnt``` example:
+* After doing your partitions mount them to ```/mnt```, example:
   ```sh
   # Mount root
   mount /dev/sdX /mnt
@@ -68,6 +68,14 @@
   Again, just take a look at the [format_mount.sh](format_mount.sh) script.
   
 ### Phase 2 (installing the system)
+#### **Please Read** before going any further
+* The users are immutable, meaning it is automatically created on install and set a fixed password. Currently the config has a set password (hashed) and an user
+called netrunner. In order to change this, follow the next steps:
+  * With your favorite text editior open the file ```modules/options.nix```
+  * First replace _netrunner_ with your desired username
+  * Second where you see hashedPassword and inside the quotes a hash, replace that hash with the one of your desired password. In order to get a hash run the 
+  following command in your terminal ```mkpasswd -m sha-512```, and after inputing your password it will give you the hash.
+
 #### Automatic
 * Run [run_in_nix_shell.sh](run_in_nix_shell.sh) script (example script for my main pc, change accordingly)
   ```sh
@@ -81,9 +89,8 @@
   # Set USER to your desired username (defaults to netrunner)
   USER=...
   
-  mkdir -p /etc/dotfiles/
   cd ..
-  mv NixObscurely/. /etc/dotfiles/.
+  cp -r NixObscurely/ /etc/dotfiles/
   
   # cd into that the dotfiles dir
   cd /etc/dotfiles/
@@ -97,10 +104,10 @@
   git add hosts/$HOST
 
   # Installing NixOS
-  USER=$USER nixos-install --root /mnt --impure --flake .#$HOST
+  USER=$USER nixos-install --root /mnt --no-root-passwd --impure --flake .#$HOST
 
   # move dotfiles to the mounted host
-  mv /etc/dotfiles /mnt/etc/dotfiles
+  cp -r /etc/dotfiles /mnt/etc/dotfiles
   
   # Reboot system
   reboot
@@ -154,26 +161,26 @@ Options:
 * [NixOS Manual](https://nixos.org/manual/nixos/unstable) great resource to get started fast.
 * [NixOS Options](https://search.nixos.org/options) being able to search for an option it's really useful and helped me a ton.
 * [hlissner's dotfiles](https://github.com/hlissner/dotfiles) without this guy's dotfiles I wouldn't have ever switched to NixOS because
-is has a very steep learning curve (understanding how to setup flakes and home manager with how little resources are available is a nightmare), 
+it has a very steep learning curve (understanding how to setup flakes and home manager with how little resources are available is a nightmare), 
 luckily I found these, which after looking at a lot of other configs they were the perfect fit for me. I only used them as a very basic base, the structure
 and for a script or two. Most of the config (90%+) is my work, but it wouldn't have been possible without his work.
 
-## Frequently asked questions (mostly copyed from hlissner's readme file)
+## Frequently asked questions (mostly copied from hlissner's readme file)
 
 + **Why NixOS?**
 
-  Well, for a few reasons. First I have a tendency for formatting and reinstalling my OSes on my main computer quite often which until now has been done
+  Well, for a few reasons. First I have a tendency of formatting and reinstalling my OSes on my main computer quite often which until now has been done
   by using a very handy set of scripts i wrote for Arch Linux ([ArchObscurely](https://github.com/Obscurely/ArchObscurely)). Problem is every so often
   there would be a problem, changes, or simply random (one time) errors that will take a lot of my time to debug and restart the install. By using NixOS
   this is solved since as long as the flakes aren't updated this will always install.</br>
   Second there is no way, no matter how configured your system is, that at one point you will not find a new useful program, make some changes to your
   system, and with NixOS this ain't a problem make the changes, rebuild the config, push the changes to your git cloud and done, they are saved. When
   I was using Arch I always had to remember to back up my dotfiles, to remember to make the adjusments to the scripts which was just a pain.</br>
-  Third I don't only use a computer, I use a couple and being able to easily have the same config, same software across all of them, easily syncable is 
+  Third I don't only use a computer, I use a couple and being able to easily have the same config, same software across all of them, easily syncable is a
   must for me.</br>
-  Forth, because of the nature of NixOS and the way you configure it, it makes it more configurable than other distros (imo), while also sort helping
+  Fourth, because of the nature of NixOS and the way you configure it, it makes it more configurable than other distros (imo), while also sort of helping
   you configure it right.</br>
-  Fifth, being able to go back at a previous configuration in case an update broke something and continue on with my critical (must do now) work, then 
+  Fifth, being able to go back to a previous configuration in case an update broke something and continue on with my critical (must do now) work, then 
   take the time to fix it is a life changer.
 
 + **Should I use NixOS?**
@@ -214,7 +221,7 @@ and for a script or two. Most of the config (90%+) is my work, but it wouldn't h
  
 + **How 2 flakes?**
     
-    I only used the NixOS official documentation and hlissner's dotfiles as a base. I learned flakes but playing around with the config which for me
+    I only used the NixOS official documentation and hlissner's dotfiles as a base. I learned flakes by playing around with the config which for me
     wasn't a problem. But if you want to learn more about flakes I will leave here the resources hlissner left too in his readme.
   
   + [A three-part tweag article that everyone's read.](https://www.tweag.io/blog/2020-05-25-flakes/)

@@ -7,6 +7,8 @@
 <span><img src="/screenshots/main/sidebyside.png" height="178" /></span>
 </p>
 
+(see screenshots dir for more)
+
 ------
 
 |                |                                                          |

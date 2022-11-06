@@ -8,7 +8,10 @@
   ## Modules
   modules = {
     desktop = {
-      bspwm.enable = true;
+      bspwm = {
+          enable = true;
+          host = "main";
+      };
       compression.enable = true;
       apps = {
         bitwarden.enable = true;
@@ -21,6 +24,7 @@
         chromium.enable = true;
         firefox.enable = true;
         qutebrowser.enable = true;
+        torbrowser.enable = true;
       };
       gaming = {
         legendary.enable = true;
@@ -77,6 +81,7 @@
       git.enable    = true;
       gnupg.enable  = true;
       utils.enable = true;
+      vaultwarden.enable = true;
       zsh.enable    = true;
     };
     theme.active = "main";

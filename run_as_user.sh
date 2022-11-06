@@ -5,11 +5,18 @@ echo "-----------------------------------------------------------------------"
 
 # Create xdg-user-dirs
 echo "Create xdg user dirs"
-xdg-user-dirs-update
+mkdir Desktop
+mkdir Documents
+mkdir Downloads
+mkdir Music
+mkdir Pictures
+mkdir Videos
 
 # Create screenshots dir for flameshot
 echo "Create screenshots dir for flameshot"
 mkdir -p ~/Pictures/screenshots
+
+# Create Code dir for programming
 mkdir ~/Code
 
 # Add xorg resolution fix (for lightdm)

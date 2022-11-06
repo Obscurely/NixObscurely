@@ -4,11 +4,11 @@ echo "-  Running commands inside nix-shell  -"
 echo "---------------------------------------"
 
 # make dir for dotfiles
-echo "Make dir to move dotfiles to."
+echo "Move dotfiles to new root."
 
-mkdir -p /etc/dotfiles/
 cd ..
-mv NixObscurely/. /etc/dotfiles/.
+cp -r NixObscurely/ /etc/dotfiles/
+
 # cd into that dir
 cd /etc/dotfiles/
 
@@ -30,7 +30,7 @@ echo "----------------------"
 echo "-  Installing NixOS  -"
 echo "----------------------"
 
-"USER=netrunner nixos-install --root /mnt --impure --flake .#main"
+USER=netrunner nixos-install --root /mnt --no-root-passwd --impure --flake .#main
 
 # move dotfiles to mounted host
 echo "Move dotfiles to the mounted host"

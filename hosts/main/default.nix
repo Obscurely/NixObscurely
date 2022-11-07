@@ -88,4 +88,20 @@
   };
 
   networking.networkmanager.enable = true;
+
+  ## Extra fix for resolution and monitor placement
+  environment.etc = {
+    "X11/xorg.conf.d/52-resolution-fix.conf".text = ''
+      Section "Monitor"
+          Identifier "DP-0"
+          Option "PreferredMode" "2560x1440"
+          Option "Primary" "1"
+      EndSection
+      Section "Monitor"
+          Identifier "DVI-D-0"
+          Option "PreferredMode" "1920x1080"
+          Option "RightOf" "DP-0"
+      EndSection
+    '';
+  };
 }

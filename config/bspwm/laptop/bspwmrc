@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 # start picom
-#picom --experimental-backend --config ~/.config/picom.conf &
 picom --experimental-backend --config ~/.config/picom/picom.conf &
 
 bspc monitor eDP1 -d I II III IV V VI VII VIII IX X

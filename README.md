@@ -114,17 +114,7 @@ called netrunner. In order to change this, follow the next steps:
   # Reboot system
   reboot
   ```
-  
-### Phase 3 (very little configuration, that I can't get done in .nix files)
-#### Automatic
-* Run [run_as_user.sh](run_as_user.sh) script:
-  ```sh
-  ./run_as_user.sh
-  ```
-  This just creates the xdg-dirs and a screenshot dir needed for flameshot, add an xorg res settings for lightdm and install my neovim dotfiles.
-  No point in doing this manually.
-  
-### Phase 4 (final)
+### Phase 3 (final)
 * Start being productive already god damn it! you already wasted hours reconfiguring your system!!!
 
 ## Management

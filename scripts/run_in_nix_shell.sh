@@ -37,6 +37,6 @@ echo "Move dotfiles to the mounted host"
 
 cp -r /etc/dotfiles /mnt/etc/dotfiles
 
-echo "------------------------------------------------------------"
-echo "-  Done, please reboot and run as the user run_as_user.sh  -"
-echo "------------------------------------------------------------"
+echo "------------------------------"
+echo "-  Done, you can now reboot!  "
+echo "------------------------------"

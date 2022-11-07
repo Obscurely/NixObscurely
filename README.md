@@ -43,9 +43,9 @@
 
 ### Phase 1 (partitioning)
 #### Automatic
-* Run [format_mount.sh](format_mount.sh) script (example script for my main pc, change accordingly)
+* Run [format_mount.sh](scripts/format_mount.sh) script (example script for my main pc, change accordingly)
   ```sh
-  ./format_mount.sh
+  ./scripts/format_mount.sh
   ```
 #### Manually
 * Format your partitions as desired, a few utils and command that might interest you:
@@ -53,7 +53,7 @@
   * ```sgdisk -a 2048 -o /dev/sdX``` to make a new gpt partition table
   * ```cfdisk /dev/sdX``` to do your partitioning
   * ```mkfs.FS -f /dev/sdXN``` (FS is a placeholder for the actual file system)
-  * Also just take a look at the [format_mount.sh](format_mount.sh) script
+  * Also just take a look at the [format_mount.sh](scripts/format_mount.sh) script
 * After doing your partitions mount them to ```/mnt```, example:
   ```sh
   # Mount root
@@ -67,7 +67,7 @@
   # Turn on swap
   swapon /dev/nvme0n1pX
   ```
-  Again, just take a look at the [format_mount.sh](format_mount.sh) script.
+  Again, just take a look at the [format_mount.sh](scripts/format_mount.sh) script.
   
 ### Phase 2 (installing the system)
 #### **Please Read** before going any further
@@ -79,9 +79,9 @@ called netrunner. In order to change this, follow the next steps:
   following command in your terminal ```mkpasswd -m sha-512```, and after inputing your password it will give you the hash.
 
 #### Automatic
-* Run [run_in_nix_shell.sh](run_in_nix_shell.sh) script (example script for my main pc, change accordingly)
+* Run [run_in_nix_shell.sh](scripts/run_in_nix_shell.sh) script (example script for my main pc, change accordingly)
   ```sh
-  ./run_in_nix_shell.sh
+  ./scripts/run_in_nix_shell.sh
   ```
   
 #### Manually

@@ -135,14 +135,9 @@ in {
     services.gnome.gnome-keyring.enable = true;
 
     # Run activation scripts
-    system.userActivationScripts = {
-      setupUser = {
-        text = ''
-          /etc/dotfiles/scripts/setup_user.sh
-        '';
-        deps = [];
-      };
-    }
+    system.userActivationScripts.setupUser = ''
+      /etc/dotfiles/scripts/setup_user.sh
+    '';
 
     # Clean up leftovers, as much as we can
     system.userActivationScripts.cleanupHome = ''

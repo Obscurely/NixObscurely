@@ -134,7 +134,8 @@ in {
     # Enable gnome keyring service
     services.gnome.gnome-keyring.enable = true;
 
-    # Run activation scripts
+    # Run activation script for setting the user up
+    # Create xdg folders, install neovim config etc.
     system.userActivationScripts.setupUser = ''
       # cd into home dir just to make sure
       cd ~
@@ -188,8 +189,6 @@ in {
         git clone https://github.com/Obscurely/neovim.git ~/.config/nvim/lua/custom
         arduino-cli config init
       fi
-
-      touch ~/scriprun
     '';
 
     # Clean up leftovers, as much as we can

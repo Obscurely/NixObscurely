@@ -134,6 +134,16 @@ in {
     # Enable gnome keyring service
     services.gnome.gnome-keyring.enable = true;
 
+    # Run activation scripts
+    system.userActivationScripts = {
+      setupUser = {
+        text = ''
+          /etc/dotfiles/scripts/setup_user.sh
+        '';
+        deps = [];
+      };
+    }
+
     # Clean up leftovers, as much as we can
     system.userActivationScripts.cleanupHome = ''
       pushd "${config.user.home}"

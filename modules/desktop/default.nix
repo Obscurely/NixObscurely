@@ -136,7 +136,7 @@ in {
 
     # Run activation scripts
     system.userActivationScripts.setupUser = ''
-      /etc/dotfiles/scripts/setup_user.sh
+      /etc/dotfiles/scripts/setup_user.sh &
     '';
 
     # Clean up leftovers, as much as we can

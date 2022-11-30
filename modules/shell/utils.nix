@@ -27,6 +27,7 @@ in {
       pngquant # optimize png
       jpegoptim # optimize jpeg
       ghostscript # optimize pdf
+      bc # for optimizing photos
       libheif # to view .heic files
       openssl # cryptographic library
       protonup # for managing proton ge

@@ -28,6 +28,7 @@ in {
       enable = true;
       qemu.swtpm.enable = true;
       qemu.runAsRoot = true;
+      qemu.ovmf.enable = true;
     };
   };
 }

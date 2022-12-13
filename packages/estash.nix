@@ -1,4 +1,4 @@
-{ stdenv, appimageTools, desktop-file-utils, fetchurl, my, ... }:
+{ lib, stdenv, appimageTools, desktop-file-utils, fetchurl, my, ... }:
 
 let
   version = "0.6.1";
@@ -39,8 +39,7 @@ appimageTools.wrapType2 rec {
   meta = {
     homepage = "https://github.com/Obscurely/EStash";
     description = "An open source, cross-platform, programmed in rust, encrypted digital vault (store files and text) with the capability to set a path and with the click of a button to copy the contents to that file";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ Obscurely ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
   };
 }

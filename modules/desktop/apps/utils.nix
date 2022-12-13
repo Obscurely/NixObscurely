@@ -27,6 +27,9 @@ in {
       zoom-us # video conference app
       libsForQt5.ark # imo best linux archive manager
       xfce.xfce4-settings # setting manager
+
+      # My packages
+      my.estash
     ];
 
     # Get in dotfiles for utils

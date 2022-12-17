@@ -216,7 +216,7 @@ in {
       };
 
       # Use a stable profile name so we can target it in themes
-      home.file = let cfgPath = ".mozilla/librewolf"; in {
+      home.file = let cfgPath = ".librewolf"; in {
         "${cfgPath}/profiles.ini".text = ''
           [Profile0]
           Name=default

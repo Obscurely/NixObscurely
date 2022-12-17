@@ -1656,7 +1656,7 @@ style "menubar" {
   fg[NORMAL]      = mix(0.7, @titlebar_fg_color, @titlebar_bg_color)
   fg[PRELIGHT]    = @titlebar_fg_color
   fg[INSENSITIVE] = mix(0.3, @titlebar_fg_color, @titlebar_bg_color)
-  # Needed to fix Firefox's menubar text
+  # Needed to fix Librewolf's menubar text
   bg[SELECTED]    = mix(0.12, @titlebar_fg_color, @titlebar_bg_color)
   fg[SELECTED]    = @titlebar_fg_color
 }

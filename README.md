@@ -19,7 +19,7 @@
 | **Editor:**    | [neovim][neovim]                                         |
 | **Terminal:**  | kitty                                                    |
 | **Launcher:**  | rofi                                                     |
-| **Browser:**   | Qutebrowser, Firefox and Chromium                        |
+| **Browser:**   | Qutebrowser, Librewolf and Chromium                        |
 | **GTK Theme:** | [Fluent Dark](https://github.com/vinceliuice/Fluent-gtk-theme) |
 
 -----

@@ -7,7 +7,7 @@ bspc monitor DP-0 -d I II III IV V
 bspc monitor DVI-D-0 -d VI VII VIII IX X
 
 bspc rule -a Chromium-browser     desktop='^3'	follow=on
-bspc rule -a firefox		          desktop='^3'	follow=on
+bspc rule -a librewolf            desktop='^3'	follow=on
 bspc rule -a discord              desktop='^6'	follow=off
 bspc rule -a Thunar 		          desktop='^7'	follow=on
 bspc rule -a Lxappearance	        desktop='^10'	follow=off

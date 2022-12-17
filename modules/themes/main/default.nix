@@ -47,8 +47,8 @@ in {
         };
 
         desktop.browsers = {
-          firefox.userChrome = concatMapStringsSep "\n" readFile [
-            ./config/firefox/userChrome.css
+          librewolf.userChrome = concatMapStringsSep "\n" readFile [
+            ./config/librewolf/userChrome.css
           ];
           qutebrowser.userStyles = concatMapStringsSep "\n" readFile
             (map toCSSFile [

@@ -21,9 +21,9 @@
         utils.enable = true;
       };
       browsers = {
-        default = "firefox";
+        default = "librewolf";
         chromium.enable = true;
-        firefox.enable = true;
+        librewolf.enable = true;
         qutebrowser.enable = true;
         torbrowser.enable = true;
       };

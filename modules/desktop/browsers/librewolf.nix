@@ -1,40 +1,38 @@
-# modules/browser/firefox.nix --- https://www.mozilla.org/en-US/firefox
+# modules/browser/librewolf.nix --- https://librewolf.net/
 #
-# Oh Firefox, gateway to the interwebs, devourer of ram. Give onto me your
-# infinite knowledge and shelter me from ads, but bless my $HOME with
-# directories nobody needs and live long enough to turn into Chrome.
+# A custom version of Firefox, focused on privacy, security and freedom.
 
 { options, config, lib, pkgs, ... }:
 
 with lib;
 with lib.my;
-let cfg = config.modules.desktop.browsers.firefox;
+let cfg = config.modules.desktop.browsers.librewolf;
 in {
-  options.modules.desktop.browsers.firefox = with types; {
+  options.modules.desktop.browsers.librewolf = with types; {
     enable = mkBoolOpt false;
     profileName = mkOpt types.str config.user.name;
 
     settings = mkOpt' (attrsOf (oneOf [ bool int str ])) {} ''
-      Firefox preferences to set in <filename>user.js</filename>
+      Librewolf preferences to set in <filename>user.js</filename>
     '';
     extraConfig = mkOpt' lines "" ''
       Extra lines to add to <filename>user.js</filename>
     '';
 
-    userChrome  = mkOpt' lines "" "CSS Styles for Firefox's interface";
+    userChrome  = mkOpt' lines "" "CSS Styles for Librewolf's interface";
     userContent = mkOpt' lines "" "Global CSS Styles for websites";
   };
 
   config = mkIf cfg.enable (mkMerge [
     {
       user.packages = with pkgs; [
-        unstable.firefox-bin
+        unstable.librewolf
         (makeDesktopItem {
-          name = "firefox-private";
-          desktopName = "Firefox (Private)";
-          genericName = "Open a private Firefox window";
-          icon = "firefox";
-          exec = "${unstable.firefox-bin}/bin/firefox --private-window";
+          name = "librewolf-private";
+          desktopName = "Librewolf (Private)";
+          genericName = "Open a private Librewolf window";
+          icon = "librewolf";
+          exec = "${unstable.librewolf}/bin/librewolf --private-window";
           categories = [ "Network" ];
         })
       ];
@@ -43,19 +41,19 @@ in {
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1082717
       env.XDG_DESKTOP_DIR = "$HOME/";
 
-      modules.desktop.browsers.firefox.settings = {
+      modules.desktop.browsers.librewolf.settings = {
         # Default to dark theme in DevTools panel
         "devtools.theme" = "dark";
-        # Enable ETP for decent security (makes firefox containers and many
+        # Enable ETP for decent security (makes librewolf containers and many
         # common security/privacy add-ons redundant).
         "browser.contentblocking.category" = "strict";
         "privacy.donottrackheader.enabled" = true;
         "privacy.donottrackheader.value" = 1;
         "privacy.purge_trackers.enabled" = true;
         # Your customized toolbar settings are stored in
-        # 'browser.uiCustomization.state'. This tells firefox to sync it between
+        # 'browser.uiCustomization.state'. This tells librewolf to sync it between
         # machines. WARNING: This may not work across OSes. Since I use NixOS on
-        # all the machines I use Firefox on, this is no concern to me.
+        # all the machines I use Librewolf on, this is no concern to me.
         "services.sync.prefs.sync.browser.uiCustomization.state" = true;
         # Enable userContent.css and userChrome.css for our theme modules
         "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
@@ -64,7 +62,7 @@ in {
         # Don't use the built-in password manager. A nixos user is more likely
         # using an external one (you are using one, right?).
         "signon.rememberSignons" = false;
-        # Do not check if Firefox is the default browser
+        # Do not check if Librewolf is the default browser
         "browser.shell.checkDefaultBrowser" = false;
         # Disable the "new tab page" feature and show a blank tab instead
         # https://wiki.mozilla.org/Privacy/Reviews/New_Tab
@@ -72,7 +70,7 @@ in {
         "browser.newtabpage.enabled" = false;
         "browser.newtab.url" = "about:blank";
         # Disable Activity Stream
-        # https://wiki.mozilla.org/Firefox/Activity_Stream
+        # https://wiki.mozilla.org/Librewolf/Activity_Stream
         "browser.newtabpage.activity-stream.enabled" = false;
         "browser.newtabpage.activity-stream.telemetry" = false;
         # Disable new tab tile ads & preload
@@ -87,7 +85,7 @@ in {
         "browser.newtabpage.directory.ping" = "";
         "browser.newtabpage.directory.source" = "data:text/plain,{}";
         # Reduce search engine noise in the urlbar's completion window. The
-        # shortcuts and suggestions will still work, but Firefox won't clutter
+        # shortcuts and suggestions will still work, but Librewolf won't clutter
         # its UI with reminders that they exist.
         "browser.urlbar.suggest.searches" = false;
         "browser.urlbar.shortcuts.bookmarks" = false;
@@ -103,8 +101,8 @@ in {
         # Show whole URL in address bar
         "browser.urlbar.trimURLs" = false;
         # Disable some not so useful functionality.
-        "browser.disableResetPrompt" = true;       # "Looks like you haven't started Firefox in a while."
-        "browser.onboarding.enabled" = false;      # "New to Firefox? Let's get started!" tour
+        "browser.disableResetPrompt" = true;       # "Looks like you haven't started Librewolf in a while."
+        "browser.onboarding.enabled" = false;      # "New to Librewolf? Let's get started!" tour
         "browser.aboutConfig.showWarning" = false; # Warning when opening about:config
         "media.videocontrols.picture-in-picture.video-toggle.enabled" = false;
         "extensions.pocket.enabled" = false;
@@ -129,7 +127,7 @@ in {
         "extensions.getAddons.showPane" = false;  # uses Google Analytics
         "browser.discovery.enabled" = false;
         # Reduce File IO / SSD abuse
-        # Otherwise, Firefox bombards the HD with writes. Not so nice for SSDs.
+        # Otherwise, Librewolf bombards the HD with writes. Not so nice for SSDs.
         # This forces it to write every 30 minutes, rather than 15 seconds.
         "browser.sessionstore.interval" = "1800000";
         # Disable battery API
@@ -218,7 +216,7 @@ in {
       };
 
       # Use a stable profile name so we can target it in themes
-      home.file = let cfgPath = ".mozilla/firefox"; in {
+      home.file = let cfgPath = ".mozilla/librewolf"; in {
         "${cfgPath}/profiles.ini".text = ''
           [Profile0]
           Name=default

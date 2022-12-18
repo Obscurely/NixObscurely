@@ -7,6 +7,7 @@
 with lib;
 with lib.my;
 let cfg = config.modules.desktop.browsers.librewolf;
+    configDir = config.dotfiles.configDir;
 in {
   options.modules.desktop.browsers.librewolf = with types; {
     enable = mkBoolOpt false;
@@ -317,6 +318,16 @@ in {
         "${cfgPath}/${cfg.profileName}.default/chrome/userContent.css" =
           mkIf (cfg.userContent != "") {
             text = cfg.userContent;
+          };
+
+        "${cfgPath}/${cfg.profileName}.default/extensions.json" = {
+            source = "${configDir}/librewolf/extensions.json";
+          };
+        "${cfgPath}/${cfg.profileName}.default/extensions-settings.json" = {
+            source = "${configDir}/librewolf/extensions-settings.json";
+          };
+        "${cfgPath}/${cfg.profileName}.default/extensions-preferences.json" = {
+            source = "${configDir}/librewolf/extensions-preferences.json";
           };
       };
     }

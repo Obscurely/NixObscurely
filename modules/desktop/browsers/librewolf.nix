@@ -209,7 +209,7 @@ in {
 
         # Disable tailored performance settings and enable hw accel
         "browser.preferences.defaultPerformanceSettings.enabled" = false;
-        layers.acceleration.disabled = false;
+        "layers.acceleration.disabled" = false;
 
         # Set homepage to selfhosted Bento and new tab to homepage
         "browser.startup.homepage" = "https://start.server.com/";

@@ -323,6 +323,9 @@ in {
             text = cfg.userContent;
           };
 
+        "${cfgPath}/${cfg.profileName}.default/extensions.json" = {
+            source = "${configDir}/librewolf/extensions.json";
+          };
         "${cfgPath}/${cfg.profileName}.default/extension-settings.json" = {
             source = "${configDir}/librewolf/extension-settings.json";
           };

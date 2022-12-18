@@ -44,6 +44,11 @@ in {
       modules.desktop.browsers.librewolf.settings = {
         # Default to dark theme in DevTools panel
         "devtools.theme" = "dark";
+        # Set browser to dark theme
+        "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org";
+        # Set browser font to Roboto
+        "font.name.serif.x-western" = "Roboto";
+        "font.size.variable.x-western" = 18;
         # Enable ETP for decent security (makes librewolf containers and many
         # common security/privacy add-ons redundant).
         "browser.contentblocking.category" = "strict";
@@ -179,6 +184,8 @@ in {
         "datareporting.healthreport.uploadEnabled" = false;
         "datareporting.healthreport.service.enabled" = false;
         "datareporting.policy.dataSubmissionEnabled" = false;
+        # Disable proxy
+        "network.proxy.type" = 0;
 
         # Disable crash reports
         "breakpad.reportURL" = "";
@@ -200,6 +207,38 @@ in {
         # Disable smooth scrolling (hate this feature on web browsers)
         "general.smoothScroll" = false;
 
+        # Disable tailored performance settings and enable hw accel
+        "browser.preferences.defaultPerformanceSettings.enabled" = false;
+        layers.acceleration.disabled = false;
+
+        # Set homepage to selfhosted Bento and new tab to homepage
+        "browser.startup.homepage" = "https://start.server.com/";
+
+        # Disable search suggestions
+        "browser.urlbar.suggest.history" = false;
+        "browser.urlbar.suggest.bookmark" = false;
+        "browser.urlbar.suggest.openpage" = false;
+        "browser.urlbar.suggest.topsites" = false;
+
+        # Default permissions
+        "permissions.default.geo" = 2;
+        "permissions.default.camera" = 2;
+        "permissions.default.microphone" = 2;
+        "permissions.default.desktop-notification" = 2;
+        "permissions.default.xr" = 2;
+
+        # Disable middle click paste, just don't like the option
+        "middlemouse.paste" = false;
+
+        # Disable ipv6 since my ISP doesn't use it
+        "network.dns.disableIPv6" = true;
+
+        # Set cookie behaviour
+        "network.cookie.cookieBehavior" = 5;
+
+        # Disable drm
+        "media.eme.enabled" = false;
+
         # Other privacy focused settings
         "accessibility.force_disabled" = 1;
         "accessibility.typeaheadfind.flashBar" = 0;
@@ -209,10 +248,41 @@ in {
         "privacy.trackingprotection.socialtracking.enabled" = true;
         "places.history.enabled" = false;
         "privacy.history.custom" = true;
-        "privacy.clearOnShutdown.history" = true;
         "privacy.cpd.history" = true;
         "dom.security.https_only_mode" = true;
         "dom.security.https_only_mode_ever_enabled" = true;
+        "layout.spellcheckDefault" = 0;
+        "dom.event.clipboardevents.enabled" = false;
+        "browser.safebrowsing.phishing.enabled" = false;
+        "browser.safebrowsing.malware.enabled" = false;
+        "network.http.sendRefererHeader" = 0; # Might break some sites such as WordPress
+        "security.pki.crlite_mode" = 2; # advance ssl certificate check
+        "network.http.referer.XOriginPolicy" = 2; # send hostnames when there is a full match
+        "privacy.clearOnShutdown.cache" = true; # clear cache on shutdown
+        "privacy.clearOnShutdown.history" = true;
+        "privacy.clearOnShutdown.downloads" = true;
+        "privacy.clearOnShutdown.formdata" = true;
+        "privacy.clearOnShutdown.sessions" = true;
+        "privacy.clearOnShutdown.cookies" = false; # don't clear so we stay logged in
+        "privacy.clearOnShutdown.offlineApps" = false; # don't clear so we stay logged in
+
+        # Performance
+        "network.dns.disablePrefetch" = true;
+        "network.prefetch-next" = false;
+
+        # Mitigate fingerprinting
+        "media.peerconnection.enabled " = false;
+        "geo.enabled" = false;
+        "privacy.firstparty.isolate" = true;
+        "media.navigator.enabled" = false; # this block websites from getting your camera and mic status
+
+        # Security
+        "browser.download.always_ask_before_handling_new_types" = true; # chose with what to open new file types
+
+        # Misc
+        "dom.event.contextmenu.enabled" = false; # don't allow websites to mess with context menu
+        "network.IDN_show_punycode" = true;
+        "dom.security.https_only_mode_send_http_background_request" = false; # disable https timeout
       };
 
       # Use a stable profile name so we can target it in themes

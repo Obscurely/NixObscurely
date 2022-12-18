@@ -266,6 +266,7 @@ in {
         "privacy.clearOnShutdown.sessions" = true;
         "privacy.clearOnShutdown.cookies" = false; # don't clear so we stay logged in
         "privacy.clearOnShutdown.offlineApps" = false; # don't clear so we stay logged in
+        "dom.push.enabled" = false; # I don't even know why you would want this.
 
         # Performance
         "network.dns.disablePrefetch" = true;

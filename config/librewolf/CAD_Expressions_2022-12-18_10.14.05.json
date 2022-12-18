@@ -1,0 +1,12 @@
+{
+  "default": [
+    {
+      "expression": "*.server.com",
+      "listType": "WHITE",
+      "storeId": "default",
+      "cleanSiteData": [],
+      "cookieNames": [],
+      "id": "Q35LUsB1D"
+    }
+  ]
+}

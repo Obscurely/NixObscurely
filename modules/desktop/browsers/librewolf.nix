@@ -284,6 +284,9 @@ in {
         "dom.event.contextmenu.enabled" = false; # don't allow websites to mess with context menu
         "network.IDN_show_punycode" = true;
         "dom.security.https_only_mode_send_http_background_request" = false; # disable https timeout
+
+        # Extensions
+        browser.policies.runOncePerModification.extensionsInstall = ["https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi", "https://addons.mozilla.org/firefox/downloads/latest/cookie-autodelete/latest.xpi", "https://addons.mozilla.org/firefox/downloads/latest/decentraleyes/latest.xpi", "https://addons.mozilla.org/firefox/downloads/latest/privacy-badger17/latest.xpi", "https://addons.mozilla.org/firefox/downloads/latest/uaswitcher/latest.xpi"];
       };
 
       # Use a stable profile name so we can target it in themes
@@ -320,9 +323,6 @@ in {
             text = cfg.userContent;
           };
 
-        "${cfgPath}/${cfg.profileName}.default/extensions.json" = {
-            source = "${configDir}/librewolf/extensions.json";
-          };
         "${cfgPath}/${cfg.profileName}.default/extension-settings.json" = {
             source = "${configDir}/librewolf/extension-settings.json";
           };

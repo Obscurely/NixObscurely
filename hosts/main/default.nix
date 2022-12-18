@@ -24,7 +24,6 @@
         default = "librewolf";
         chromium.enable = true;
         librewolf.enable = true;
-        qutebrowser.enable = true;
         torbrowser.enable = true;
       };
       gaming = {

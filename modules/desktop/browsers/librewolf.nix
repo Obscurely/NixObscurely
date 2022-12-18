@@ -323,10 +323,10 @@ in {
         "${cfgPath}/${cfg.profileName}.default/extensions.json" = {
             source = "${configDir}/librewolf/extensions.json";
           };
-        "${cfgPath}/${cfg.profileName}.default/extensions-settings.json" = {
+        "${cfgPath}/${cfg.profileName}.default/extension-settings.json" = {
             source = "${configDir}/librewolf/extension-settings.json";
           };
-        "${cfgPath}/${cfg.profileName}.default/extensions-preferences.json" = {
+        "${cfgPath}/${cfg.profileName}.default/extension-preferences.json" = {
             source = "${configDir}/librewolf/extension-preferences.json";
           };
       };

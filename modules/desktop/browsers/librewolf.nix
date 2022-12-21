@@ -50,8 +50,8 @@ in {
         # Set browser font to Roboto
         "font.name.serif.x-western" = "Roboto";
         "font.size.variable.x-western" = 18;
-        "font.name.monospace.x-western" =	FiraCode Nerd Font Mono;
-        "font.name.sans-serif.x-western"= Noto Sans;
+        "font.name.monospace.x-western" =	"FiraCode Nerd Font Mono";
+        "font.name.sans-serif.x-western"= "Noto Sans";
         "font.size.monospace.x-western" = 14;
         # Enable ETP for decent security (makes librewolf containers and many
         # common security/privacy add-ons redundant).

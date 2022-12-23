@@ -52,7 +52,7 @@ in {
         "font.name.monospace.x-western" =	"FiraCode Nerd Font Mono";
         "font.name.sans-serif.x-western"= "Noto Sans";
         # Fix dpi (I have a high res dispaly 1440p)
-        "layout.css.devPixelsPerPx" = 1.2;
+        "layout.css.devPixelsPerPx" = "1.2";
         # Enable ETP for decent security (makes librewolf containers and many
         # common security/privacy add-ons redundant).
         "browser.contentblocking.category" = "strict";

@@ -30,6 +30,9 @@ in {
 
       # My packages
       my.estash
+
+      # libs
+      xfce.exo # this is for xfce shortcuts like open terminal
     ];
 
     # Get in dotfiles for utils

@@ -32,6 +32,7 @@ in {
       openssl # cryptographic library
       protonup # for managing proton ge
       fontconfig # a dependency for some stuff
+      psmisc # a set of small utils like killall, fuser, pstree
     ];
   };
 }

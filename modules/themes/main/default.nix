@@ -85,9 +85,9 @@ in {
       '';
 
       # Get qt to look similar to the gtk apps
-      qt5.enable = true;
-      qt5.platformTheme = "gtk2";
-      qt5.style = "gtk2";
+      qt.enable = true;
+      qt.platformTheme = "gtk2";
+      qt.style = "gtk2";
 
       # Other dotfiles
       home.configFile = with config.modules; mkMerge [

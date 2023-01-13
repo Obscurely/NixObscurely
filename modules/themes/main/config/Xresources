@@ -11,11 +11,11 @@
 
 
 !! general
-st.scratch.font: Fira Code Medium Nerd Font Complete Mono:pixelsize=21.33
+st.scratch.font: monospace:pixelsize=16
 
 
 !! xst
-st.font: Fira Code Medium Nerd Font Complete Mono:pixelsize=21.33
+st.font: monospace:pixelsize=12
 st.borderpx: 10
 
 

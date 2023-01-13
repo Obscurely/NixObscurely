@@ -15,7 +15,7 @@ in {
     '';
 
     user.packages = [
-      inputs.st.packages.POSIX.st-snazzy # st + nice-to-have extensions
+      inputs.st.packages.${system}.st-snazzy # st + nice-to-have extensions
     ];
   };
 }

@@ -1,24 +1,3 @@
-!! Colors
-*.cursorColor: mag
-! greys
-*.color234: #1E2029
-*.color235: #282a36
-*.color236: #373844
-*.color237: #44475a
-*.color239: #565761
-*.color240: #6272a4
-*.color241: #b6b6b2
-
-
-!! general
-st.scratch.font: monospace:pixelsize=16
-
-
-!! xst
-st.font: monospace:pixelsize=12
-st.borderpx: 10
-
-
 !! urxvt
 URxvt*depth:                   32
 URxvt*.borderless:             1
@@ -38,3 +17,54 @@ URxvt.clipboard.autocopy:      true
 URxvt.iso14755:                false
 URxvt.iso14755_52:             false
 URxvt.perl-ext-common:         default,matcher
+
+!! st part
+Xft.antialias:	1
+Xft.hinting:	1
+Xft.autohint:	0
+Xft.hintstyle:	hintslight
+Xft.rgba:	rgb
+Xft.lcdfilter:	lcddefault
+
+st.font: Fira Code Medium Nerd Font Complete Mono:pixelsize=21.33 
+
+! window padding
+st.borderpx: 20
+
+!- 0.1 to 0.9 = transparency
+st.alpha: 0.5
+
+*background: #181f21
+*foreground: #dadada
+
+! Black + DarkGrey
+*color0:  #22292b
+*color8:  #575e60
+
+! DarkRed + Red
+*color1:  #e06e6e
+*color9:  #ef7d7d
+
+! DarkGreen + Green
+*color2:  #8ccf7e
+*color10: #9bdead
+
+! DarkYellow + Yellow
+*color3:  #e5c76b
+*color11: #f4d67a
+
+! DarkBlue + Blue
+*color4:  #67b0e8
+*color12: #6cb5ed
+
+! DarkMagenta + Magenta
+*color5:  #c47fd5
+*color13: #ce89df
+
+! DarkCyan + Cyan
+*color6:  #6da4cd
+*color14: #67cbe7
+
+! LightGrey + White
+*color7:  #b3b9b8
+*color15: #bdc3c2

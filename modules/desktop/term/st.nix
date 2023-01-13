@@ -1,4 +1,4 @@
-{ config, options, pkgs, lib, inputs, ... }:
+{ config, options, pkgs, lib, inputs, system, ... }:
 
 with lib;
 with lib.my;

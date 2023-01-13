@@ -42,7 +42,6 @@
       term = {
         default = "xterm-kitty";
         kitty.enable = true;
-        wezterm.enable = true;
       };
       vm = {
         virtd.enable = true;

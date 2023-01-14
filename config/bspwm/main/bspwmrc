@@ -11,7 +11,7 @@ bspc rule -a librewolf            desktop='^3'	follow=on
 bspc rule -a discord              desktop='^6'	follow=off
 bspc rule -a Thunar 		          desktop='^7'	follow=on
 bspc rule -a Lxappearance	        desktop='^10'	follow=off
-bspc rule -a kitty			          desktop='^1'	follow=on
+bspc rule -a xst  			          desktop='^1'	follow=on
 bspc rule -a Bitwarden 		        desktop='^8'	follow=on
 bspc rule -a Lutris			          desktop='^4'	follow=on
 bspc rule -a Postman		          desktop='^9'	follow=on

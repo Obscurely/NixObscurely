@@ -51,7 +51,7 @@ st.cwscale:           1.0
 st.cursorshape:       6
 
 ! thickness of underline and bar cursors
-st.cursorthickness:   1
+st.cursorthickness:   2
 
 ! 1: render most of the lines/blocks characters without using the font for
 ! perfect alignment between cells (U2500 - U259F except dashes/diagonals).

@@ -4,7 +4,7 @@
 
 # terminal emulator
 super + Return
-	xst
+	cd $HOME && xrdb -load $HOME/.config/xtheme/90-theme && xst -c xst -T xst -t xst 
 
 # make sxhkd reload its configuration files:
 super + Escape

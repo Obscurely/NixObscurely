@@ -17,7 +17,6 @@
       # Extras
       emacs-overlay.url  = "github:nix-community/emacs-overlay";
       nixos-hardware.url = "github:nixos/nixos-hardware";
-      st.url = "github:siduck/st";
     };
 
   outputs = inputs @ { self, nixpkgs, nixpkgs-unstable, ... }:

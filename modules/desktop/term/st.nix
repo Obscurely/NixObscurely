@@ -1,4 +1,4 @@
-{ config, options, pkgs, lib, inputs, system, ... }:
+{ options, config, lib, pkgs, ... }:
 
 with lib;
 with lib.my;
@@ -14,8 +14,16 @@ in {
       [ "$TERM" = xst-256color ] && export TERM=xterm-256color
     '';
 
-    user.packages = [
-      inputs.st.packages.${system}.st-snazzy # st + nice-to-have extensions
+    user.packages = with pkgs; [
+      xst  # st + nice-to-have extensions
+      (makeDesktopItem {
+        name = "xst";
+        desktopName = "Suckless Terminal";
+        genericName = "Default terminal";
+        icon = "utilities-terminal";
+        exec = "${xst}/bin/xst";
+        categories = [ "Development" "System" "Utility" ];
+      })
     ];
   };
 }

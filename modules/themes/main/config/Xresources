@@ -18,7 +18,7 @@ URxvt.iso14755:                false
 URxvt.iso14755_52:             false
 URxvt.perl-ext-common:         default,matcher
 
-!! st part
+!! st
 Xft.antialias:	1
 Xft.hinting:	1
 Xft.autohint:	0
@@ -26,45 +26,77 @@ Xft.hintstyle:	hintslight
 Xft.rgba:	rgb
 Xft.lcdfilter:	lcddefault
 
-st.font: FiraCode Nerd Font Mono:style=Medium,Regular:pixelsize=22
+st.font: FiraCode Nerd Font Mono:style=Medium,Regular:pixelsize=21.34:antialias=true
 
 ! window padding
 st.borderpx: 20
 
-!- 0.1 to 0.9 = transparency
-st.alpha: 0.5
+! Set to a non-zero value to disable window decorations (titlebar, etc) and go borderless.
+st.borderless:        1
 
-*background: #181f21
-*foreground: #dadada
+st.disablebold:         1
+st.disableitalics:         1
+st.disableroman:         1
+
+! Amount of lines scrolled
+st.scrollrate:  5
+
+! Kerning / character bounding-box height multiplier
+st.chscale:           1.0
+
+! Kerning / character bounding-box width multiplier
+st.cwscale:           1.0
+
+! 1: render most of the lines/blocks characters without using the font for
+! perfect alignment between cells (U2500 - U259F except dashes/diagonals).
+! Bold affects lines thickness if boxdraw_bold is not 0. Italic is ignored.
+! 0: disable (render all U25XX glyphs normally from the font).
+st.boxdraw: 0
+
+! (0|1) boxdraw(bold) enable toggle
+st.boxdraw_bold: 0
+
+! braille (U28XX):  1: render as adjacent "pixels",  0: use font
+st.boxdraw_braille: 0
+
+! set this to a non-zero value to force window depth
+st.depth: 0
+
+! opacity==255 means what terminal will be not transparent, 0 - fully transparent
+! (float values in range 0 to 1.0 may also be used)
+st.opacity:      0.5
+
+st.background: #181f21
+st.foreground: #dadada
 
 ! Black + DarkGrey
-*color0:  #22292b
-*color8:  #575e60
+st.color0:  #22292b
+st.color8:  #575e60
 
 ! DarkRed + Red
-*color1:  #e06e6e
-*color9:  #ef7d7d
+st.color1:  #e06e6e
+st.color9:  #ef7d7d
 
 ! DarkGreen + Green
-*color2:  #8ccf7e
-*color10: #9bdead
+st.color2:  #8ccf7e
+st.color10: #9bdead
 
 ! DarkYellow + Yellow
-*color3:  #e5c76b
-*color11: #f4d67a
+st.color3:  #e5c76b
+st.color11: #f4d67a
 
 ! DarkBlue + Blue
-*color4:  #67b0e8
-*color12: #6cb5ed
+st.color4:  #67b0e8
+st.color12: #6cb5ed
 
 ! DarkMagenta + Magenta
-*color5:  #c47fd5
-*color13: #ce89df
+st.color5:  #c47fd5
+st.color13: #ce89df
 
 ! DarkCyan + Cyan
-*color6:  #6da4cd
-*color14: #67cbe7
+st.color6:  #6da4cd
+st.color14: #67cbe7
 
 ! LightGrey + White
-*color7:  #b3b9b8
-*color15: #bdc3c2
+st.color7:  #b3b9b8
+st.color15: #bdc3c2

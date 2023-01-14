@@ -27,6 +27,7 @@ in {
       zoom-us # video conference app
       libsForQt5.ark # imo best linux archive manager
       xfce.xfce4-settings # setting manager
+      xplr # tui file manager
 
       # My packages
       my.estash

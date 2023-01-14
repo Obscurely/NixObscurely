@@ -4,7 +4,7 @@
 
 # terminal emulator
 super + Return
-	kitty
+	xst
 
 # make sxhkd reload its configuration files:
 super + Escape
@@ -158,7 +158,7 @@ super + e
 
 # Open kitty with custom settings in order to go well with NeoVim
 super + v
-	kitty -o font_size=16 -o window_margin_width=0 -d $HOME/Code --start-as maximized --class NeoVim --name NeoVim --detach
+  cd $HOME/Code && xrdb -load $HOME/.config/xtheme/90.b-theme && xst -c NeoVim -T NeoVim -t NeoVim && xrdb -load $HOME/.config/xtheme/90-theme
 
 # open discord
 super + d

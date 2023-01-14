@@ -47,6 +47,12 @@ st.chscale:           1.0
 ! Kerning / character bounding-box width multiplier
 st.cwscale:           1.0
 
+! Available cursor values: 2 4 6 7 = █ _ | ☃ ( 1 3 5 are blinking versions)
+st.cursorshape:       6
+
+! thickness of underline and bar cursors
+st.cursorthickness:   1
+
 ! 1: render most of the lines/blocks characters without using the font for
 ! perfect alignment between cells (U2500 - U259F except dashes/diagonals).
 ! Bold affects lines thickness if boxdraw_bold is not 0. Italic is ignored.

@@ -158,7 +158,7 @@ super + e
 
 # Open kitty with custom settings in order to go well with NeoVim
 super + v
-  cd $HOME/Code && xrdb -load $HOME/.config/xtheme/90.b-theme && xst -c NeoVim -T NeoVim -t NeoVim && xrdb -load $HOME/.config/xtheme/90-theme
+  cd $HOME/Code && xrdb -load $HOME/.config/xtheme/90.b-theme && xst -c NeoVim -T NeoVim -t NeoVim & xrdb -load $HOME/.config/xtheme/90-theme
 
 # open discord
 super + d

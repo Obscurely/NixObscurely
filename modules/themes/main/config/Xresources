@@ -76,33 +76,33 @@ st.background: #181f21
 st.foreground: #dadada
 
 ! Black + DarkGrey
-st.color0:  #22292b
-st.color8:  #575e60
+st.color0:  #151515
+st.color8:  #505050
 
 ! DarkRed + Red
-st.color1:  #e06e6e
-st.color9:  #ef7d7d
+st.color1:  #ac4142
+st.color9:  #ac4142
 
 ! DarkGreen + Green
-st.color2:  #8ccf7e
-st.color10: #9bdead
+st.color2:  #7e8d50
+st.color10: #7e8d50
 
 ! DarkYellow + Yellow
-st.color3:  #e5c76b
-st.color11: #f4d67a
+st.color3:  #e5b566
+st.color11: #e5b566
 
 ! DarkBlue + Blue
-st.color4:  #67b0e8
-st.color12: #6cb5ed
+st.color4:  #6c99ba
+st.color12: #6c99ba
 
 ! DarkMagenta + Magenta
-st.color5:  #c47fd5
-st.color13: #ce89df
+st.color5:  #9e4e85
+st.color13: #9e4e85
 
 ! DarkCyan + Cyan
-st.color6:  #6da4cd
-st.color14: #67cbe7
+st.color6:  #7dd5cf
+st.color14: #7dd5cf
 
 ! LightGrey + White
-st.color7:  #b3b9b8
-st.color15: #bdc3c2
+st.color7:  #d0d0d0
+st.color15: #f5f5f5

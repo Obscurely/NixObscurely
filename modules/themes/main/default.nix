@@ -108,6 +108,10 @@ in {
           "xtheme/90-theme".source = ./config/Xresources;
         }
         {
+          # Additional file to load when coding (to remove the borders in xst)
+          "xtheme/90.b-theme".source = ./config/Xresources_code;
+        }
+        {
           # Haruna theme
           "harunarc".source = ./config/harunarc;
         }

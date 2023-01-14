@@ -154,7 +154,7 @@ super + alt + b
 
 # open xplr
 super + e
-	xplr
+	xst -c xplr -T xplr -t xplr -e xplr
 
 # open thunar
 super + alt + e

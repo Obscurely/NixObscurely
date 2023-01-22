@@ -154,11 +154,11 @@ super + alt + b
 
 # open xplr
 super + e
-	xst -c xplr -T xplr -t xplr -e xplr
+	thunar
 
 # open thunar
 super + alt + e
-  thunar
+  xst -c xplr -T xplr -t xplr -e xplr
 
 # Open kitty with custom settings in order to go well with NeoVim
 super + v

@@ -160,6 +160,10 @@ super + e
 super + alt + e
   thunar
 
+# open thunar
+super + alt + e
+  xst -c xplr -T xplr -t xplr -e xplr
+
 # Open kitty with custom settings in order to go well with NeoVim
 super + v
   cd $HOME/Code && xrdb -load $HOME/.config/xtheme/90.b-theme && xst -c NeoVim -T NeoVim -t NeoVim & xrdb -load $HOME/.config/xtheme/90-theme

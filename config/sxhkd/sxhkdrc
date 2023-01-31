@@ -153,11 +153,11 @@ super + alt + b
   ~/.config/bspwm/rc.d/95-polybar
 
 # open xplr
-super + e
+super + alt + e
 	xst -c xplr -T xplr -t xplr -e xplr
 
 # open thunar
-super + alt + e
+super + e
   thunar
 
 # open thunar

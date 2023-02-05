@@ -9,7 +9,6 @@ let devCfg = config.modules.dev;
 in {
   options.modules.dev.lua = {
     enable = mkBoolOpt false;
-    xdg.enable = mkBoolOpt devCfg.enableXDG;
   };
 
   config = mkMerge [
@@ -20,10 +19,6 @@ in {
         sumneko-lua-language-server
         nodePackages.lua-fmt
       ];
-    })
-
-    (mkIf cfg.xdg.enable {
-      # TODO
     })
   ];
 }

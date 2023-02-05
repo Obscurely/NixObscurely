@@ -14,7 +14,6 @@ let devCfg = config.modules.dev;
 in {
   options.modules.dev.shell = {
     enable = mkBoolOpt false;
-    xdg.enable = mkBoolOpt devCfg.xdg.enable;
   };
 
   config = mkMerge [
@@ -25,10 +24,6 @@ in {
         nodePackages.prettier
         shfmt
       ];
-    })
-
-    (mkIf cfg.xdg.enable {
-      # TODO
     })
   ];
 }

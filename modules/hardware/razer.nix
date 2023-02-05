@@ -16,7 +16,7 @@ in {
     user.extraGroups = [ "plugdev" ];
 
     environment.systemPackages = with pkgs; [
-      # TODO Install polychromatic
+      polychromatic
     ];
   };
 }

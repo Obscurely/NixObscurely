@@ -36,7 +36,6 @@ in {
     onReload = mkOpt (attrsOf lines) {};
 
     fonts = {
-      # TODO Use submodules
       mono = {
         name = mkOpt str "Monospace";
         size = mkOpt int 12;

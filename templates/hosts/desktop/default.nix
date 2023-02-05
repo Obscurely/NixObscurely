@@ -24,7 +24,6 @@
         default = "librewolf";
         chromium.enable = true;
         librewolf.enable = true;
-        qutebrowser.enable = true;
         torbrowser.enable = true;
       };
       gaming = {
@@ -43,6 +42,7 @@
       term = {
         default = "xterm-kitty";
         kitty.enable = true;
+	st.enable = true;
       };
       vm = {
         virtd.enable = true;
@@ -55,9 +55,18 @@
       go.enable = true;
       java.enable = true;
       lua.enable = true;
-      node.enable = true;
-      python.enable = true;
-      rust.enable = true;
+      node = {
+        enable = true;
+        xdg.enable = true;
+      };
+      python = {
+        enable = true;
+        xdg.enable = true;
+      };
+      rust = {
+        enable = true;
+        xdg.enable = true;
+      };
       shell.enable = true;
       web.enable = true;
       yaml.enable = true;

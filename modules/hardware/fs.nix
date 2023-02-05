@@ -8,7 +8,6 @@ in {
     enable = mkBoolOpt false;
     zfs.enable = mkBoolOpt false;
     ssd.enable = mkBoolOpt false;
-    # TODO automount.enable = mkBoolOpt false;
   };
 
   config = mkIf cfg.enable (mkMerge [

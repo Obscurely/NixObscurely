@@ -9,6 +9,5 @@ in {
   };
 
   config = mkIf cfg.xdg.enable {
-    # TODO
   };
 }

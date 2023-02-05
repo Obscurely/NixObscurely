@@ -55,9 +55,18 @@
       go.enable = true;
       java.enable = true;
       lua.enable = true;
-      node.enable = true;
-      python.enable = true;
-      rust.enable = true;
+      node = {
+        enable = true;
+        xdg.enable = true;
+      };
+      python = {
+        enable = true;
+        xdg.enable = true;
+      };
+      rust = {
+        enable = true;
+        xdg.enable = true;
+      };
       shell.enable = true;
       web.enable = true;
       yaml.enable = true;

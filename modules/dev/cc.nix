@@ -9,7 +9,6 @@ let devCfg = config.modules.dev;
 in {
   options.modules.dev.cc = {
     enable = mkBoolOpt false;
-    xdg.enable = mkBoolOpt devCfg.xdg.enable;
   };
 
   config = mkMerge [
@@ -25,10 +24,6 @@ in {
         autoconf
         libsForQt5.milou # arm build system
       ];
-    })
-
-    (mkIf cfg.xdg.enable {
-      # TODO
     })
   ];
 }

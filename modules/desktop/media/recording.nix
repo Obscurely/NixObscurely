@@ -19,6 +19,6 @@ in {
       # for recording and remastering audio
       (if cfg.audio.enable then [ unstable.audacity ] else []) ++
       # for longer term streaming/recording the screen
-      (if cfg.video.enable then [ unstable.obs-studio ] else []); # TODO: once fixed add back unstable.handbrake
+      (if cfg.video.enable then [ unstable.obs-studio unstable.handbrake ] else []);
   };
 }

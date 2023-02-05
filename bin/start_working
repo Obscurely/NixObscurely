@@ -1,0 +1,56 @@
+#!/usr/bin/env zsh
+
+# Kill all the process of apps that I won't be using
+pkill -9 Discord &
+pkill -9 thunar &
+pkill -9 sonixd &
+pkill -9 xst
+pkill -9 librewolf &
+pkill -9 postman &
+pkill -9 audacity &
+pkill -9 ark &
+pkill -9 kitty &
+pkill -9 chromium &
+pkill -9 easytag &
+pkill -9 easyeffects &
+pkill -9 haruna &
+pkill -9 nvidia &
+pkill -9 bleachbit &
+pkill -9 bitwarden &
+pkill -9 estash &
+pkill -9 clementine &
+pkill -9 electron &
+pkill -9 gparted &
+pkill -9 goverlay &
+pkill -9 gimp &
+pkill -9 inkscape &
+pkill -9 gnome &
+pkill -9 krita &
+pkill -9 kdenlive &
+pkill -9 kvantum &
+pkill -9 lxappearance &
+pkill -9 mpv &
+pkill -9 tor &
+pkill -9 firefox &
+pkill -9 notepadqq &
+pkill -9 DesktopEditors &
+pkill -9 obs &
+pkill -9 lutris &
+pkill -9 steam &
+pkill -9 zoom &
+pkill -9 virt-manager &
+pkill -9 zenity &
+pkill -9 winetricks &
+pkill -9 ristretto &
+pkill -9 xterm &
+pkill -9 pavucontrol &
+
+# Open xst with custom settings for neovim
+cd "$HOME/Code" && xrdb -load "$HOME/.config/xtheme/90.b-theme" && xst -c NeoVim -T NeoVim -t NeoVim & xrdb -load "$HOME/.config/xtheme/90-theme" &
+
+# Open the browser
+librewolf "https://trilium.server.com/#root/M31xPyu71vtg-64ZC" "https://vikunja.server.com/lists/20/kanban" &
+
+# Play the background music. I am more of a metal head myself, but for working/learning this works better.
+clementine --load "$HOME/Music/Chill\ Lofi\ Mix.mp3" &
+

@@ -223,3 +223,7 @@ ctrl + Print
 # screenshot gui and save picture
 ctrl + super + Print
 	flameshot gui -p ~/Pictures/screenshots/
+
+# run start_working
+super + F2
+  start_working

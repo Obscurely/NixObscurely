@@ -1,3 +1,5 @@
+# PLEASE NOTE IF YOU USE NVIDIA CHANGE IN THE HARDWARE FILE TO VULKAN_BETA DRIVERS INSTEAD OF LEGACY470!
+
 <h1 align="center">NixOS home-manager + flakes config</h1>
 
 <img src="/screenshots/main/nvim.png" width="100%" />

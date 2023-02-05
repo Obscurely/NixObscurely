@@ -226,4 +226,4 @@ ctrl + super + Print
 
 # run start_working
 super + F2
-  start_working
+  $DOTFILES_BIN/start_working

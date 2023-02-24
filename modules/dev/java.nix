@@ -17,6 +17,7 @@ in {
     (mkIf cfg.enable {
       programs.java.enable = true;
       user.packages = with pkgs; [
+        jdk
         java-language-server
       ];
     })

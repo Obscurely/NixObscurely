@@ -30,6 +30,7 @@ in {
         pkgs.rustfmt
         pkgs.clippy
         pkgs.graphviz # this is for neovim rust-tools plugin
+        pkgs.lldb_15 # this if for neovim dap (debugger)
       ];
 
       env.PATH = [ "$(${pkgs.yarn}/bin/yarn global bin)" ];

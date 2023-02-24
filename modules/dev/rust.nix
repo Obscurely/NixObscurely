@@ -29,6 +29,7 @@ in {
         pkgs.cargo
         pkgs.rustfmt
         pkgs.clippy
+        pkgs.graphviz # this is for neovim rust-tools plugin
       ];
 
       env.PATH = [ "$(${pkgs.yarn}/bin/yarn global bin)" ];

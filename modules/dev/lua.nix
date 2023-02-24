@@ -17,7 +17,7 @@ in {
         lua
         luaPackages.moonscript
         sumneko-lua-language-server
-        nodePackages.lua-fmt
+        stylua
       ];
     })
   ];

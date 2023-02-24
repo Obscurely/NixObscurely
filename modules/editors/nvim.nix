@@ -16,6 +16,7 @@ in {
     user.packages = with pkgs; [
       editorconfig-core-c
       unstable.neovim
+      tree-sitter
     ];
 
     # enable wakapi config

@@ -1,8 +1,13 @@
-{ options, config, lib, pkgs, ... }:
-
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.hardware.nvidia;
+with lib.my; let
+  cfg = config.modules.hardware.nvidia;
 in {
   options.modules.hardware.nvidia = {
     enable = mkBoolOpt false;
@@ -15,7 +20,7 @@ in {
       driSupport32Bit = true;
     };
 
-    services.xserver.videoDrivers = [ "nvidia" ];
+    services.xserver.videoDrivers = ["nvidia"];
     #hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.vulkan_beta; # TODO: re-enable when it's fixed.
     hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
 

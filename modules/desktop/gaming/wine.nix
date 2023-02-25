@@ -1,8 +1,13 @@
-{ options, config, lib, pkgs, ... }:
-
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.desktop.gaming.wine;
+with lib.my; let
+  cfg = config.modules.desktop.gaming.wine;
 in {
   options.modules.desktop.gaming.wine = with types; {
     enable = mkBoolOpt false;

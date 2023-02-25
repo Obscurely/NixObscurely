@@ -1,6 +1,8 @@
-{ config, lib, ... }:
-
 {
+  config,
+  lib,
+  ...
+}: {
   ## System security tweaks
   # sets hidepid=2 on /proc (make process info visible only to owning user)
   # NOTE Was removed on nixpkgs-unstable because it doesn't do anything
@@ -73,7 +75,7 @@
     "net.ipv4.tcp_max_tw_buckets" = 2000000;
     "vm.swappiness" = 10;
   };
-  boot.kernelModules = [ "tcp_bbr" ];
+  boot.kernelModules = ["tcp_bbr"];
 
   # So we don't have to do this later...
   security.acme.acceptTerms = true;

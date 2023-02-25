@@ -1,13 +1,17 @@
-# modules/dev/utils.nix 
+# modules/dev/utils.nix
 #
-# Basic linux utilities for my needs 
-
-{ config, options, lib, pkgs, ... }:
-
+# Basic linux utilities for my needs
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.desktop.apps.utils;
-    configDir = config.dotfiles.configDir;
+with lib.my; let
+  cfg = config.modules.desktop.apps.utils;
+  configDir = config.dotfiles.configDir;
 in {
   options.modules.desktop.apps.utils = {
     enable = mkBoolOpt false;
@@ -37,19 +41,20 @@ in {
     ];
 
     # Get in dotfiles for utils
-    home.configFile = with config.modules; mkMerge [
-      {
-        # Dconf 
-        "dconf".source = "${configDir}/dconf";
-      }
-      {
-        # Notepadqq
-        "Notepadqq/Notepadqq.ini".source = "${configDir}/Notepadqq/Notepadqq.ini";
-      }
-      {
-        # xfce4 settings
-        "xfce4".source = "${configDir}/xfce4";
-      }
-    ];
+    home.configFile = with config.modules;
+      mkMerge [
+        {
+          # Dconf
+          "dconf".source = "${configDir}/dconf";
+        }
+        {
+          # Notepadqq
+          "Notepadqq/Notepadqq.ini".source = "${configDir}/Notepadqq/Notepadqq.ini";
+        }
+        {
+          # xfce4 settings
+          "xfce4".source = "${configDir}/xfce4";
+        }
+      ];
   };
 }

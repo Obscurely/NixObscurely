@@ -1,13 +1,17 @@
 # modules/dev/dotnet.nix --- dotnet
 #
 # For when really needed
-
-{ config, options, lib, pkgs, ... }:
-
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.my;
-let devCfg = config.modules.dev;
-    cfg = devCfg.dotnet;
+with lib.my; let
+  devCfg = config.modules.dev;
+  cfg = devCfg.dotnet;
 in {
   options.modules.dev.dotnet = {
     enable = mkBoolOpt false;

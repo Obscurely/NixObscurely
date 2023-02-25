@@ -1,10 +1,14 @@
 # modules/hardware/wifi.nix --- support for wifi
-
-{ options, config, lib, pkgs, ... }:
-
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.hardware.wifi;
+with lib.my; let
+  cfg = config.modules.hardware.wifi;
 in {
   options.modules.hardware.wifi = {
     enable = mkBoolOpt false;
@@ -25,6 +29,6 @@ in {
       dhcp = "dhcpcd";
     };
 
-    user.packages = [ pkgs.iwgtk ];
+    user.packages = [pkgs.iwgtk];
   };
 }

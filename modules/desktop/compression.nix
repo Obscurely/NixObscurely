@@ -1,8 +1,13 @@
-{ config, options, lib, pkgs, ... }:
-
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.desktop.compression;
+with lib.my; let
+  cfg = config.modules.desktop.compression;
 in {
   options.modules.desktop.compression = {
     enable = mkBoolOpt false;

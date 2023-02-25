@@ -1,11 +1,15 @@
 # modules/dev/nix.nix
-
-{ config, options, lib, pkgs, ... }:
-
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.my;
-let devCfg = config.modules.dev;
-    cfg = devCfg.nix;
+with lib.my; let
+  devCfg = config.modules.dev;
+  cfg = devCfg.nix;
 in {
   options.modules.dev.nix = {
     enable = mkBoolOpt false;

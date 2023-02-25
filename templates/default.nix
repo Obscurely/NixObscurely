@@ -1,5 +1,4 @@
 {
-
   minimal = {
     path = ./minimal;
     description = "A grossly incandescent and minimal nixos config";

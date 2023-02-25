@@ -1,8 +1,13 @@
-{ config, options, pkgs, lib, ... }:
-
+{
+  config,
+  options,
+  pkgs,
+  lib,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.shell.vaultwarden;
+with lib.my; let
+  cfg = config.modules.shell.vaultwarden;
 in {
   options.modules.shell.vaultwarden = with types; {
     enable = mkBoolOpt false;

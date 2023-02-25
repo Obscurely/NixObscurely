@@ -1,10 +1,15 @@
-{ options, config, lib, pkgs, ... }:
-
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.hardware.intel;
+with lib.my; let
+  cfg = config.modules.hardware.intel;
 in {
-  options.modules.hardware.intel= {
+  options.modules.hardware.intel = {
     enable = mkBoolOpt false;
   };
 
@@ -15,6 +20,6 @@ in {
       driSupport32Bit = true;
     };
 
-    services.xserver.videoDrivers = [ "intel" "nvidia" ];
+    services.xserver.videoDrivers = ["intel" "nvidia"];
   };
 }

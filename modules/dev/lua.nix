@@ -1,11 +1,15 @@
 # modules/dev/lua.nix --- https://www.lua.org/
-
-{ config, options, lib, pkgs, ... }:
-
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.my;
-let devCfg = config.modules.dev;
-    cfg = devCfg.lua;
+with lib.my; let
+  devCfg = config.modules.dev;
+  cfg = devCfg.lua;
 in {
   options.modules.dev.lua = {
     enable = mkBoolOpt false;

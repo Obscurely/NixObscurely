@@ -1,9 +1,14 @@
-{ config, options, lib, pkgs, ... }:
-
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.desktop;
-    configDir = config.dotfiles.configDir;
+with lib.my; let
+  cfg = config.modules.desktop;
+  configDir = config.dotfiles.configDir;
 in {
   config = mkIf config.services.xserver.enable {
     assertions = [
@@ -12,20 +17,22 @@ in {
         message = "Can't have more than one desktop environment enabled at a time";
       }
       {
-        assertion =
-          let srv = config.services;
-          in srv.xserver.enable ||
-             srv.sway.enable ||
-             !(anyAttrs
-               (n: v: isAttrs v &&
-                      anyAttrs (n: v: isAttrs v && v.enable))
-               cfg);
+        assertion = let
+          srv = config.services;
+        in
+          srv.xserver.enable
+          || srv.sway.enable
+          || !(anyAttrs
+            (n: v:
+              isAttrs v
+              && anyAttrs (n: v: isAttrs v && v.enable))
+            cfg);
         message = "Can't enable a desktop app without a desktop environment";
       }
     ];
 
     user.packages = with pkgs; [
-      feh       # image viewer
+      feh # image viewer
       xclip
       xdotool
       xorg.xwininfo
@@ -34,7 +41,7 @@ in {
       xorg.libXinerama
       xorg.libxcb
       xorg.xkill
-      qgnomeplatform        # QPlatformTheme for a better Qt application inclusion in GNOME
+      qgnomeplatform # QPlatformTheme for a better Qt application inclusion in GNOME
       libsForQt5.qtstyleplugin-kvantum # SVG-based Qt5 theme engine plus a config tool and extra theme
       dialog # display dialog boxes from shell
       newt
@@ -44,7 +51,7 @@ in {
       xdg-user-dirs # create xdg user dirs
       picom # compositor
       flameshot # cool utility for taking screen shots
-      pkg-config # a tool for pkgs to find info about other pkgs 
+      pkg-config # a tool for pkgs to find info about other pkgs
     ];
 
     fonts = {
@@ -75,12 +82,12 @@ in {
         font-awesome
         hack-font
         roboto
-        xorg.fontxfree86type1 
+        xorg.fontxfree86type1
         noto-fonts-emoji
         SDL_ttf
         comfortaa
-        (nerdfonts.override { 
-          fonts = [ "FiraCode" "FiraMono" "DroidSansMono" "Hack" "Inconsolata" "Iosevka" "JetBrainsMono" "Meslo" "RobotoMono" "FantasqueSansMono" "Hermit" ];
+        (nerdfonts.override {
+          fonts = ["FiraCode" "FiraMono" "DroidSansMono" "Hack" "Inconsolata" "Iosevka" "JetBrainsMono" "Meslo" "RobotoMono" "FantasqueSansMono" "Hermit"];
         })
       ];
     };
@@ -90,12 +97,12 @@ in {
 
     programs.thunar = {
       enable = true;
-      plugins = with pkgs.xfce; [ thunar-archive-plugin thunar-volman ];
+      plugins = with pkgs.xfce; [thunar-archive-plugin thunar-volman];
     };
     programs.htop.enable = true;
 
     # Try really hard to get QT to respect my GTK theme.
-    env.GTK_DATA_PREFIX = [ "${config.system.path}" ];
+    env.GTK_DATA_PREFIX = ["${config.system.path}"];
     env.QT_QPA_PLATFORMTHEME = "gnome";
     env.QT_STYLE_OVERRIDE = "kvantum";
 
@@ -105,21 +112,22 @@ in {
     '';
 
     # Some crucial dotfiles
-    home.configFile = with config.modules; mkMerge [
-      {
-        # Flameshot
-        "flameshot".source = "${configDir}/flameshot";
-      }
-      {
-        # Mimeapps list
-        "mimeapps.list".source = "${configDir}/mimeapps.list";
-      }
-      {
-        # User dir config
-        "user-dirs.dirs".source = "${configDir}/user-dirs/user-dirs.dirs";
-        "user-dirs.locale".source = "${configDir}/user-dirs/user-dirs.locale";
-      }
-    ];
+    home.configFile = with config.modules;
+      mkMerge [
+        {
+          # Flameshot
+          "flameshot".source = "${configDir}/flameshot";
+        }
+        {
+          # Mimeapps list
+          "mimeapps.list".source = "${configDir}/mimeapps.list";
+        }
+        {
+          # User dir config
+          "user-dirs.dirs".source = "${configDir}/user-dirs/user-dirs.dirs";
+          "user-dirs.locale".source = "${configDir}/user-dirs/user-dirs.locale";
+        }
+      ];
 
     # Disable ssh askpass
     programs.ssh.enableAskPassword = false;

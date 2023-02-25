@@ -1,5 +1,9 @@
-{ pkgs, config, lib, ... }:
 {
+  pkgs,
+  config,
+  lib,
+  ...
+}: {
   imports = [
     ../home.nix
     ./hardware-configuration.nix
@@ -9,8 +13,8 @@
   modules = {
     desktop = {
       bspwm = {
-          enable = true;
-          host = "main";
+        enable = true;
+        host = "main";
       };
       compression.enable = true;
       apps = {
@@ -42,7 +46,7 @@
       term = {
         default = "xterm-kitty";
         kitty.enable = true;
-	st.enable = true;
+        st.enable = true;
       };
       vm = {
         virtd.enable = true;
@@ -89,11 +93,11 @@
     };
     shell = {
       direnv.enable = true;
-      git.enable    = true;
-      gnupg.enable  = true;
+      git.enable = true;
+      gnupg.enable = true;
       utils.enable = true;
       vaultwarden.enable = true;
-      zsh.enable    = true;
+      zsh.enable = true;
     };
     theme.active = "main";
   };

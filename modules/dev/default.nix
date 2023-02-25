@@ -1,13 +1,19 @@
-{ config, options, lib, pkgs, ... }:
-
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.dev;
+with lib.my; let
+  cfg = config.modules.dev;
 in {
   options.modules.dev = {
     xdg.enable = mkBoolOpt true;
   };
 
-  config = mkIf cfg.xdg.enable {
-  };
+  config =
+    mkIf cfg.xdg.enable {
+    };
 }

@@ -1,12 +1,16 @@
 # modules/shell/utils.nix
 #
-# Handy cli tools I use 
-
-{ options, config, lib, pkgs, ... }:
-
+# Handy cli tools I use
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.shell.utils;
+with lib.my; let
+  cfg = config.modules.shell.utils;
 in {
   options.modules.shell.utils = {
     enable = mkBoolOpt false;
@@ -14,7 +18,7 @@ in {
 
   config = mkIf cfg.enable {
     user.packages = with pkgs; [
-      ncdu 
+      ncdu
       speedtest-cli # internet speed test in shell
       traceroute # trace ip address to initial ip
       neofetch

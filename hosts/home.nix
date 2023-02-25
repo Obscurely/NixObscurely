@@ -1,13 +1,15 @@
-{ config, lib, ... }:
-
-with builtins;
-with lib;
 {
+  config,
+  lib,
+  ...
+}:
+with builtins;
+with lib; {
   ## Location config -- since Toronto is my 127.0.0.1
   time.timeZone = mkDefault "Europe/Bucharest";
   i18n.defaultLocale = mkDefault "en_US.UTF-8";
   i18n.extraLocaleSettings = {
-	  LC_TIME = "en_US.UTF-8";
+    LC_TIME = "en_US.UTF-8";
   };
   # fake location for the sake of it
   location = {

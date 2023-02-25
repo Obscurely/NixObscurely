@@ -1,9 +1,14 @@
-{ config, options, lib, pkgs, ... }:
-
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.shell.git;
-    configDir = config.dotfiles.configDir;
+with lib.my; let
+  cfg = config.modules.shell.git;
+  configDir = config.dotfiles.configDir;
 in {
   options.modules.shell.git = {
     enable = mkBoolOpt false;
@@ -26,6 +31,6 @@ in {
       "git/attributes".source = "${configDir}/git/attributes";
     };
 
-    modules.shell.zsh.rcFiles = [ "${configDir}/git/aliases.zsh" ];
+    modules.shell.zsh.rcFiles = ["${configDir}/git/aliases.zsh"];
   };
 }

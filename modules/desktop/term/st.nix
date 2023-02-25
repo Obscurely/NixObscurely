@@ -1,8 +1,13 @@
-{ options, config, lib, pkgs, ... }:
-
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.desktop.term.st;
+with lib.my; let
+  cfg = config.modules.desktop.term.st;
 in {
   options.modules.desktop.term.st = {
     enable = mkBoolOpt false;
@@ -15,14 +20,14 @@ in {
     '';
 
     user.packages = with pkgs; [
-      xst  # st + nice-to-have extensions
+      xst # st + nice-to-have extensions
       (makeDesktopItem {
         name = "xst";
         desktopName = "Suckless Terminal";
         genericName = "Default terminal";
         icon = "utilities-terminal";
         exec = "${xst}/bin/xst";
-        categories = [ "Development" "System" "Utility" ];
+        categories = ["Development" "System" "Utility"];
       })
     ];
   };

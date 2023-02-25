@@ -1,8 +1,13 @@
-{ config, options, lib, pkgs, ... }:
-
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.desktop.media.mpv;
+with lib.my; let
+  cfg = config.modules.desktop.media.mpv;
 in {
   options.modules.desktop.media.mpv = {
     enable = mkBoolOpt false;
@@ -11,7 +16,7 @@ in {
   config = mkIf cfg.enable {
     user.packages = with pkgs; [
       mpv
-      mpvc  # CLI controller for mpv
+      mpvc # CLI controller for mpv
       haruna # a nicer, better front end for mpv
     ];
   };

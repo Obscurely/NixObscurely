@@ -1,10 +1,15 @@
-{ options, config, lib, pkgs, ... }:
-
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.desktop.gaming.lutris;
+with lib.my; let
+  cfg = config.modules.desktop.gaming.lutris;
 in {
-  options.modules.desktop.gaming.lutris= with types; {
+  options.modules.desktop.gaming.lutris = with types; {
     enable = mkBoolOpt false;
   };
 

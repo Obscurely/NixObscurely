@@ -4,13 +4,18 @@
 # that wasn't intended as a programming language. Alas, it is not for us mere
 # mortals to question the will of the ancient ones. If they want shell programs,
 # they get shell programs.
-
-{ config, options, lib, pkgs, my, ... }:
-
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  my,
+  ...
+}:
 with lib;
-with lib.my;
-let devCfg = config.modules.dev;
-    cfg = devCfg.shell;
+with lib.my; let
+  devCfg = config.modules.dev;
+  cfg = devCfg.shell;
 in {
   options.modules.dev.shell = {
     enable = mkBoolOpt false;

@@ -1,12 +1,16 @@
 # modules/browser/chromium.nix --- https://github.com/ungoogled-software/ungoogled-chromium
 #
 # Google Chromium, sans integration with google
-
-{ options, config, lib, pkgs, ... }:
-
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.desktop.browsers.chromium;
+with lib.my; let
+  cfg = config.modules.desktop.browsers.chromium;
 in {
   options.modules.desktop.browsers.chromium = {
     enable = mkBoolOpt false;
@@ -21,7 +25,7 @@ in {
         genericName = "Open a chromium tab";
         icon = "chromium";
         exec = "${brave}/bin/chromium --ignore-certificate-errors";
-        categories = [ "Network" ];
+        categories = ["Network"];
       })
     ];
   };

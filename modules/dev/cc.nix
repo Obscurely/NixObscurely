@@ -1,11 +1,15 @@
 # modules/dev/cc.nix --- C & C++
-
-{ config, options, lib, pkgs, ... }:
-
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.my;
-let devCfg = config.modules.dev;
-    cfg = devCfg.cc;
+with lib.my; let
+  devCfg = config.modules.dev;
+  cfg = devCfg.cc;
 in {
   options.modules.dev.cc = {
     enable = mkBoolOpt false;

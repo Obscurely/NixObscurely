@@ -1,9 +1,14 @@
-{ config, options, lib, pkgs, ... }:
-
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.desktop.media.audio;
-    configDir = config.dotfiles.configDir;
+with lib.my; let
+  cfg = config.modules.desktop.media.audio;
+  configDir = config.dotfiles.configDir;
 in {
   options.modules.desktop.media.audio = {
     enable = mkBoolOpt false;
@@ -21,7 +26,7 @@ in {
         genericName = "Open EasyTAG in home dir.";
         icon = "easytag";
         exec = "${easytag}/bin/easytag /";
-        categories = [ "AudioVideo" ];
+        categories = ["AudioVideo"];
       })
     ];
   };

@@ -1,5 +1,9 @@
-{ pkgs, config, lib, ... }:
 {
+  pkgs,
+  config,
+  lib,
+  ...
+}: {
   imports = [
     ../home.nix
     ./hardware-configuration.nix
@@ -9,8 +13,8 @@
   modules = {
     desktop = {
       bspwm = {
-          enable = true;
-          host = "laptop";
+        enable = true;
+        host = "laptop";
       };
       compression.enable = true;
       apps = {
@@ -79,10 +83,10 @@
     };
     shell = {
       direnv.enable = true;
-      git.enable    = true;
-      gnupg.enable  = true;
+      git.enable = true;
+      gnupg.enable = true;
       utils.enable = true;
-      zsh.enable    = true;
+      zsh.enable = true;
     };
     theme.active = "main";
   };

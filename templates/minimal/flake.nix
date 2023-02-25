@@ -5,7 +5,7 @@
     dotfiles.url = "github:hlissner/dotfiles";
   };
 
-  outputs = inputs @ { dotfiles, ... }: {
+  outputs = inputs @ {dotfiles, ...}: {
     nixosConfigurations = dotfiles.lib.mapHosts ./hosts {
       imports = [
         # If this is a linode machine

@@ -1,8 +1,13 @@
-{ options, config, lib, pkgs, ... }:
-
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.desktop.vm.virtd;
+with lib.my; let
+  cfg = config.modules.desktop.vm.virtd;
 in {
   options.modules.desktop.vm.virtd = {
     enable = mkBoolOpt false;

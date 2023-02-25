@@ -1,51 +1,78 @@
 # modules/desktop/media/graphics.nix
-
-{ config, options, lib, pkgs, ... }:
-
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.desktop.media.graphics;
-    configDir = config.dotfiles.configDir;
+with lib.my; let
+  cfg = config.modules.desktop.media.graphics;
+  configDir = config.dotfiles.configDir;
 in {
   options.modules.desktop.media.graphics = {
-    enable         = mkBoolOpt false;
-    tools.enable   = mkBoolOpt true;
-    raster.enable  = mkBoolOpt true;
-    vector.enable  = mkBoolOpt true;
-    video.enable   = mkBoolOpt true;
-    models.enable  = mkBoolOpt false;
+    enable = mkBoolOpt false;
+    tools.enable = mkBoolOpt true;
+    raster.enable = mkBoolOpt true;
+    vector.enable = mkBoolOpt true;
+    video.enable = mkBoolOpt true;
+    models.enable = mkBoolOpt false;
   };
 
   config = mkIf cfg.enable {
     user.packages = with pkgs;
-      (if cfg.tools.enable then [
-        imagemagick    # for image manipulation from the shell
-      ] else []) ++
-
+      (
+        if cfg.tools.enable
+        then [
+          imagemagick # for image manipulation from the shell
+        ]
+        else []
+      )
+      ++
       # replaces illustrator & indesign
-      (if cfg.vector.enable then [
-        unstable.inkscape
-      ] else []) ++
-
+      (
+        if cfg.vector.enable
+        then [
+          unstable.inkscape
+        ]
+        else []
+      )
+      ++
       # Replaces photoshop
-      (if cfg.raster.enable then [
-        krita
-        gimp # TODO: once fixed change to gimp-with-plugins
-        gimpPlugins.resynthesizer  # content-aware scaling in gimp
-      ] else []) ++
-
+      (
+        if cfg.raster.enable
+        then [
+          krita
+          gimp # TODO: once fixed change to gimp-with-plugins
+          gimpPlugins.resynthesizer # content-aware scaling in gimp
+        ]
+        else []
+      )
+      ++
       # Replaces photoshop
-      (if cfg.video.enable then [
-        libsForQt5.kdenlive
-      ] else []) ++
-
+      (
+        if cfg.video.enable
+        then [
+          libsForQt5.kdenlive
+        ]
+        else []
+      )
+      ++
       # 3D modelling
-      (if cfg.models.enable then [
-        blender
-      ] else []);
+      (
+        if cfg.models.enable
+        then [
+          blender
+        ]
+        else []
+      );
 
     home.configFile = mkIf cfg.raster.enable {
-      "GIMP/2.10" = { source = "${configDir}/gimp"; recursive = true; };
+      "GIMP/2.10" = {
+        source = "${configDir}/gimp";
+        recursive = true;
+      };
     };
   };
 }

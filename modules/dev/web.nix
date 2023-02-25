@@ -17,8 +17,10 @@ in {
     (mkIf cfg.enable {
       user.packages = with pkgs; [
         nodePackages.vscode-langservers-extracted
+        nodePackages_latest.vscode-html-languageserver-bin
         nodePackages.typescript
         nodePackages.typescript-language-server
+        marksman # language server for markdown
       ];
     })
   ];

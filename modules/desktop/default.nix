@@ -45,6 +45,7 @@ in {
       picom # compositor
       flameshot # cool utility for taking screen shots
       pkg-config # a tool for pkgs to find info about other pkgs
+      nil # nix language server, for obvious reasons sitting here.
     ];
 
     fonts = {

@@ -70,6 +70,7 @@
       shell.enable = true;
       web.enable = true;
       yaml.enable = true;
+      nix.enable = true;
     };
     editors = {
       default = "nvim";

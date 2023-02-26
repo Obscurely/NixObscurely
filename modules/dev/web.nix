@@ -29,6 +29,7 @@ in {
         alex # catches incosiderate writting
         mdl # markdown lint
         proselint # basically it checks your writting.
+        deno # fromat and other things
       ];
     })
   ];

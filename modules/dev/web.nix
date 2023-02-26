@@ -25,6 +25,10 @@ in {
         nodePackages.typescript
         nodePackages.typescript-language-server
         marksman # language server for markdown
+        html-tidy # diagnostics for web files
+        alex # catches incosiderate writting
+        mdl # markdown lint
+        proselint # basically it checks your writting.
       ];
     })
   ];

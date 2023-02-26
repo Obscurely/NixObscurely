@@ -27,6 +27,7 @@ in {
         llvmPackages.libcxx
         autoconf
         libsForQt5.milou # arm build system
+        cppcheck # does static analysis on code
       ];
     })
   ];

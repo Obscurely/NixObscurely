@@ -22,6 +22,7 @@ in {
       user.packages = with pkgs; [
         go
         gopls
+        gofumpt # formatter
       ];
     })
   ];

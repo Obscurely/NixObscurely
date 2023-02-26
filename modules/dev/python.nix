@@ -24,12 +24,15 @@ in {
   config = mkMerge [
     (mkIf cfg.enable {
       user.packages = with pkgs; [
-        python310
-        python310Packages.pip
-        python310Packages.ipython
-        python310Packages.black
-        python310Packages.setuptools
-        python310Packages.pylint
+        python311
+        python311Packages.pip
+        python311Packages.ipython
+        python311Packages.black
+        python311Packages.setuptools
+        python311Packages.pylint
+        python311Packages.flake8 # multiple code analysis tools
+        python311Packages.mypy # type checking
+        python311Packages.vulture # dead code analysis
         poetry
         nodePackages.pyright
         black

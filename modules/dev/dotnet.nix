@@ -22,6 +22,7 @@ in {
       user.packages = with pkgs; [
         dotnet-sdk
         vscode-extensions.ms-dotnettools.csharp
+        uncrustify # formats code (also for c++)
       ];
     })
   ];

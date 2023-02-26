@@ -37,6 +37,7 @@ in {
       protonup # for managing proton ge
       fontconfig # a dependency for some stuff
       psmisc # a set of small utils like killall, fuser, pstree
+      onefetch # information about repo in neofetch style
     ];
   };
 }

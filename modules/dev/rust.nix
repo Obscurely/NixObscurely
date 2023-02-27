@@ -20,21 +20,22 @@ in {
 
   config = mkMerge [
     (mkIf cfg.enable {
-      user.packages = [
-        pkgs.llvmPackages_latest.llvm
-        pkgs.llvmPackages_latest.bintools
-        pkgs.zlib.out
-        pkgs.xorriso
-        pkgs.grub2
-        pkgs.llvmPackages_latest.lld
-        pkgs.rust-analyzer
-        pkgs.taplo-cli
-        pkgs.rustc
-        pkgs.cargo
-        pkgs.rustfmt
-        pkgs.clippy
-        pkgs.graphviz # this is for neovim rust-tools plugin
-        pkgs.lldb_15 # this if for neovim dap (debugger)
+      user.packages = with pkgs [
+        llvmPackages_latest.llvm
+        llvmPackages_latest.bintools
+        zlib.out
+        xorriso
+        grub2
+        llvmPackages_latest.lld
+        rust-analyzer
+        taplo-cli
+        rustc
+        cargo
+        rustfmt
+        clippy
+        graphviz # this is for neovim rust-tools plugin
+        lldb_15 # this if for neovim dap (debugger)
+        cargo-audit # audit dependencies in order to scan for supply chain attacks 
       ];
 
       env.PATH = ["$(${pkgs.yarn}/bin/yarn global bin)"];

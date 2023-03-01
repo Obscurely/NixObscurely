@@ -20,7 +20,7 @@ in {
 
   config = mkMerge [
     (mkIf cfg.enable {
-      user.packages = with pkgs [
+      user.packages = with pkgs; [
         llvmPackages_latest.llvm
         llvmPackages_latest.bintools
         zlib.out

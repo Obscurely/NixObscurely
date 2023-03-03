@@ -23,7 +23,7 @@ in {
     # for recording and remastering audio
       (
         if cfg.audio.enable
-        then [unstable.audacity]
+        then [unstable.audacity unstable.ardour]
         else []
       )
       ++

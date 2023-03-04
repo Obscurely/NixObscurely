@@ -20,6 +20,7 @@
       apps = {
         bitwarden.enable = true;
         discord.enable = true;
+        element.enable = true;
         rofi.enable = true;
         utils.enable = true;
       };
@@ -27,7 +28,7 @@
         default = "librewolf";
         chromium.enable = true;
         librewolf.enable = true;
-        qutebrowser.enable = true;
+        torbrowser.enable = true;
       };
       gaming = {
         legendary.enable = true;
@@ -44,7 +45,7 @@
       };
       term = {
         default = "xterm-kitty";
-        kitty.enable = true;
+        st.enable = true;
       };
       vm = {
         virtd.enable = true;
@@ -57,12 +58,22 @@
       go.enable = true;
       java.enable = true;
       lua.enable = true;
-      node.enable = true;
-      python.enable = true;
-      rust.enable = true;
+      node = {
+        enable = true;
+        xdg.enable = true;
+      };
+      python = {
+        enable = true;
+        xdg.enable = true;
+      };
+      rust = {
+        enable = true;
+        xdg.enable = true;
+      };
       shell.enable = true;
       web.enable = true;
       yaml.enable = true;
+      nix.enable = true;
     };
     editors = {
       default = "nvim";
@@ -85,6 +96,7 @@
       git.enable = true;
       gnupg.enable = true;
       utils.enable = true;
+      vaultwarden.enable = true;
       zsh.enable = true;
     };
     theme.active = "main";

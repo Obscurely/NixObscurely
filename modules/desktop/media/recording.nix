@@ -9,6 +9,7 @@
 with lib;
 with lib.my; let
   cfg = config.modules.desktop.media.recording;
+  configDir = config.dotfiles.configDir;
 in {
   options.modules.desktop.media.recording = {
     enable = mkBoolOpt false;
@@ -33,5 +34,12 @@ in {
         then [unstable.obs-studio]
         else []
       ); # TODO: add back unstable.handbrake once fixed
+    home.configFile = with config.modules;
+      mkMerge [
+        {
+          # Template to mix the audio from my audio interface
+          "ardour7/templates/Main-Template".source = "${configDir}/ardour7/";
+        }
+      ];
   };
 }

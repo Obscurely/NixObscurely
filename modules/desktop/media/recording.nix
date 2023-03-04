@@ -38,7 +38,7 @@ in {
       mkMerge [
         {
           # Template to mix the audio from my audio interface
-          "ardour7/templates/Main-Template".source = "${configDir}/ardour7/";
+          "ardour7/templates/Main-Template/Main-Template.template".source = "${configDir}/ardour7/Main-Template.template";
         }
       ];
   };

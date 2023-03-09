@@ -21,8 +21,8 @@ in {
     };
 
     services.xserver.videoDrivers = ["nvidia"];
-    #hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.vulkan_beta; # TODO: re-enable when it's fixed.
-    hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
+    hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.vulkan_beta; # TODO: re-enable when it's fixed.
+    #hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
 
     environment.systemPackages = with pkgs; [
       # Respect XDG conventions, damn it!

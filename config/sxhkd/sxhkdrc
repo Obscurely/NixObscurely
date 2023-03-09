@@ -227,3 +227,7 @@ ctrl + super + Print
 # run start_working
 super + F2
   $DOTFILES_BIN/start_working
+
+# run xkill, the next cursor click kills the program under it.
+super + alt + w
+  xkill

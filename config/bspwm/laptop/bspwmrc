@@ -52,7 +52,6 @@ xrandr --output eDP1 --mode 1920x1080 --rate 60
 bspc desktop -f ^1
 lxpolkit & # prompt to enter sudo password daemon
 flameshot &
-ardour7 /home/netrunner/Documents/Ardour/Main/ & # I use this to mix the audio from interface.
 lxappearance & # Fix cursor not showing on desktop (background)
 sleep 3
 pkill lxappearance # Fix cursor not showing on desktop (background)

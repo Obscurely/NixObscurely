@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-uptime=$(uptime | awk '{$1=$1};1' | sed -e 's/ .*//g')
+uptime=$(uptime | sed 's/.*up//g' | awk '{print $1}' | sed 's/,//g')
 
 rofi_command="rofi -theme theme/powermenu"
 

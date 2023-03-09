@@ -56,11 +56,12 @@ xrandr --output DP-0 --primary --left-of DVI-D-0
 bspc desktop -f ^1
 lxpolkit & # prompt to enter sudo password daemon
 flameshot &
+
+for file in $XDG_CONFIG_HOME/bspwm/rc.d/*; do
+  source "$file" &
+done
+
+# run this last so it doesn't interupt other stuff.
 lxappearance & # Fix cursor not showing on desktop (background)
 sleep 3
 pkill lxappearance # Fix cursor not showing on desktop (background)
-
-#
-for file in $XDG_CONFIG_HOME/bspwm/rc.d/*; do
-  source "$file"
-done

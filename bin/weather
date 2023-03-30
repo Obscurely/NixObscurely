@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+IP=$(curl --silent "ipinfo.io/ip")
+CITY=$(curl --silent "ipinfo.io/$IP/city")
+
+curl --silent "wttr.in/$CITY"

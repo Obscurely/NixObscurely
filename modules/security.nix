@@ -79,4 +79,7 @@
 
   # So we don't have to do this later...
   security.acme.acceptTerms = true;
+
+  # Disable CPU mitigations, not required on a non-server machine
+  boot.kernelParams = ["mitigations=off"];
 }

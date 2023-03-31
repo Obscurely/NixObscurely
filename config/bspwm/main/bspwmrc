@@ -46,6 +46,7 @@ bspc rule -a Inkscape             desktop='^5'  follow=on
 bspc rule -a krita                desktop='^5'  follow=on
 bspc rule -a easytag              desktop='^5'  follow=on
 bspc rule -a Ardour               desktop='^10' follow=off
+bspc rule -a bottles              desktop='^4'  follow=on
 
 # Set resolution
 xrandr --output DVI-D-0 --mode 1920x1080 --rate 144

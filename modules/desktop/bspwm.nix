@@ -48,6 +48,9 @@ in {
       tumbler.enable = true; # get thumbnails in ristretto
     };
 
+    # this may be needed in some rare cases
+    programs.dconf.enable = true;
+
     # link recursively so other modules can link files in their folders
     home.configFile = {
       "sxhkd".source = "${configDir}/sxhkd";

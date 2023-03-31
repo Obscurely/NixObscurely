@@ -33,6 +33,7 @@
       gaming = {
         legendary.enable = true;
         lutris.enable = true;
+        bottles.enable = true;
         steam.enable = true;
         wine.enable = true;
       };

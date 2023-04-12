@@ -45,7 +45,7 @@ in {
       mkMerge [
         {
           # Dconf
-          "dconf/user".source = "${configDir}/dconf/user";
+          "dconf".source = "${configDir}/dconf";
         }
         {
           # Notepadqq

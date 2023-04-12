@@ -243,3 +243,4 @@ application/rdf+xml=notepadqq.desktop;
 application/rss+xml=notepadqq.desktop;
 audio/aac=org.clementine_player.Clementine.desktop;
 audio/x-ms-wma=org.clementine_player.Clementine.desktop;
+

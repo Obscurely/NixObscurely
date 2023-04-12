@@ -45,7 +45,7 @@ in {
         then [
           krita
           gimp # TODO: once fixed change to gimp-with-plugins
-          gimpPlugins.resynthesizer # content-aware scaling in gimp
+          #gimpPlugins.resynthesizer # content-aware scaling in gimp # Add back when fixed
         ]
         else []
       )

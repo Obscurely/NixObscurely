@@ -32,6 +32,7 @@
       };
       gaming = {
         legendary.enable = true;
+        heroic.enable = true;
         lutris.enable = true;
         bottles.enable = true;
         steam.enable = true;

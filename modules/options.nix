@@ -53,7 +53,7 @@ with lib.my; {
     in {
       inherit name;
       description = "The primary user account";
-      extraGroups = ["wheel" "libvirtd"];
+      extraGroups = ["wheel" "libvirtd" "adbusers"];
       isNormalUser = true;
       hashedPassword = "$6$1NsZKTu22hR3MUfN$bZ6cnMbwDIB6pe2B.L8Kh5E9hAFjXkOWE0GUQ0SULiozrAepK3U9Ae5V9RPphitHGZ5emFtYwSsTbZbre/syc0";
       home = "/home/${name}";

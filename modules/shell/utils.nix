@@ -39,5 +39,7 @@ in {
       psmisc # a set of small utils like killall, fuser, pstree
       onefetch # information about repo in neofetch style
     ];
+
+    programs.adb.enable = true;
   };
 }

@@ -9,4 +9,4 @@ YEAR="$(date +"%Y")"
 
 options="$DAY\n$MONTH\n$YEAR"
 
-chosen="$(echo -e "$options" | $rofi_command -p "   $DN, $TIME" -dmenu -selected-row 1)"
+chosen="$(echo -e "$options" | $rofi_command -p "󰅐  $DN, $TIME" -dmenu -selected-row 1)"

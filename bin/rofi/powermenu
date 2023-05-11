@@ -5,11 +5,11 @@ uptime=$(uptime | sed 's/.*up//g' | awk '{print $1}' | sed 's/,//g')
 rofi_command="rofi -theme theme/powermenu"
 
 # Options
-shutdown="襤"
+shutdown="󰐥"
 reboot=""
 lock=""
-suspend=""
-logout=""
+suspend=""
+logout="󰍃"
 
 # Confirmation
 confirm_exit() {

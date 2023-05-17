@@ -211,6 +211,7 @@ in {
 
         home.dataFile = mkIf (cfg.wallpaper != null) {
           "wallpaper".source = cfg.wallpaper;
+	  "lockscreen.jpg".source = ./main/config/lockscreen.jpg;
         };
       }))
 

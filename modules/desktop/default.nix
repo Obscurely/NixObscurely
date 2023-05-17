@@ -33,6 +33,7 @@ in {
 
     user.packages = with pkgs; [
       feh # image viewer
+      betterlockscreen # lockscreen
       xclip
       xdotool
       xorg.xwininfo
@@ -52,6 +53,7 @@ in {
       picom # compositor
       flameshot # cool utility for taking screen shots
       pkg-config # a tool for pkgs to find info about other pkgs
+      ruby # for hey tool
     ];
 
     fonts = {
@@ -197,6 +199,12 @@ in {
         git clone https://github.com/Obscurely/neovim.git ~/.config/nvim/lua/custom
         arduino-cli config init
       fi
+
+      # Load locckscreen image if there is one
+      if [ -d "$XDG_DATA_HOME/lockscreen.jpg" ]; then
+        betterlockscreen -u $XDG_DATA_HOME/lockscreen.jpg
+      fi
+
     '';
 
     # Clean up leftovers, as much as we can

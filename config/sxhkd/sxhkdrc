@@ -146,7 +146,7 @@ super + alt + p
 
 # start picom compsitor
 super + shift + p
-	picom --experimental-backend --config ~/.config/picom/picom.conf
+	picom --config ~/.config/picom/picom.conf
 
 # restart polybar
 super + shift + b

@@ -18,7 +18,8 @@ in {
 
   config = mkIf cfg.enable {
     user.packages = with pkgs; [
-      bitwarden
+      # TODO: uncomment when nodejs gets updated!!!!!!
+      # bitwarden
     ];
   };
 }

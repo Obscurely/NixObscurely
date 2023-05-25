@@ -23,7 +23,7 @@ in {
         dotnet-sdk
         vscode-extensions.ms-dotnettools.csharp
         uncrustify # formats code (also for c++)
-        # netcoredbg # debugger # TODO: re-enable once fixed
+        netcoredbg # debugger
       ];
     })
   ];

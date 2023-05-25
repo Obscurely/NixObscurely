@@ -31,9 +31,9 @@ in {
       # for longer term streaming/recording the screen
       (
         if cfg.video.enable
-        then [unstable.obs-studio]
+        then [unstable.obs-studio unstable.handbrake]
         else []
-      ); # TODO: add back unstable.handbrake once fixed
+      );
     home.configFile = with config.modules;
       mkMerge [
         {

@@ -44,8 +44,8 @@ in {
         if cfg.raster.enable
         then [
           krita
-          gimp # TODO: once fixed change to gimp-with-plugins
-          #gimpPlugins.resynthesizer # content-aware scaling in gimp # Add back when fixed
+          gimp-with-plugins
+          #gimpPlugins.resynthesizer # content-aware scaling in gimp # enable when gimp with plugins is broken :/
         ]
         else []
       )

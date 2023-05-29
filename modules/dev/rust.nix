@@ -36,6 +36,7 @@ in {
         graphviz # this is for neovim rust-tools plugin
         lldb_15 # this if for neovim dap (debugger)
         cargo-audit # audit dependencies in order to scan for supply chain attacks 
+        cargo-fuzz # fuzzing tool
       ];
 
       env.PATH = ["$(${pkgs.yarn}/bin/yarn global bin)"];

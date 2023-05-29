@@ -37,6 +37,7 @@ in {
         lldb_15 # this if for neovim dap (debugger)
         cargo-audit # audit dependencies in order to scan for supply chain attacks 
         cargo-fuzz # fuzzing tool
+        cargo-deny # tool to deny crates based on checks.
       ];
 
       env.PATH = ["$(${pkgs.yarn}/bin/yarn global bin)"];

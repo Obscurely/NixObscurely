@@ -21,6 +21,9 @@ in {
     (mkIf cfg.enable {
       user.packages = with pkgs; [
         nodePackages.yaml-language-server
+        yamlfmt
+        yamllint
+        actionlint # github actions linter
       ];
     })
   ];

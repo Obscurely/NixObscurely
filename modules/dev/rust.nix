@@ -38,6 +38,9 @@ in {
         cargo-audit # audit dependencies in order to scan for supply chain attacks 
         cargo-fuzz # fuzzing tool
         cargo-deny # tool to deny crates based on checks.
+        cargo-cross # cross compilation
+        cargo-edit # manage cargo dependencies
+        cargo-deb # pkg rust apps for debian
       ];
 
       env.PATH = ["$(${pkgs.yarn}/bin/yarn global bin)"];

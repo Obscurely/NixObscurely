@@ -45,7 +45,7 @@ in {
         then [
           krita
           gimp-with-plugins
-          #gimpPlugins.resynthesizer # content-aware scaling in gimp # enable when gimp with plugins is broken :/
+          gimpPlugins.resynthesizer # content-aware scaling in gimp
         ]
         else []
       )

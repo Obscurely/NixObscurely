@@ -46,6 +46,12 @@ in {
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1082717
       env.XDG_DESKTOP_DIR = "$HOME/";
 
+      # environment variable for hw accel
+      environment.variables = {
+        MOZ_DISABLE_RDD_SANDBOX = "1";
+        LIBVA_DRIVER_NAME = "nvidia";
+      };
+
       modules.desktop.browsers.librewolf.settings = {
         # Default to dark theme in DevTools panel
         "devtools.theme" = "dark";
@@ -226,6 +232,7 @@ in {
         "media.ffvpx.enabled" = false;
         "media.rdd-vpx.enabled" = false;
         "media.navigator.mediadatadecoder_vpx_enabled" = true;
+        "widget.dmabuf.force-enabled" = true;
 
         # Set homepage to selfhosted Bento and new tab to homepage
         "browser.startup.homepage" = "https://start.server.com/";

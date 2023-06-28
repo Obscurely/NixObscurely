@@ -25,6 +25,11 @@ in {
 
     services.xserver.videoDrivers = ["nvidia"];
     hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.vulkan_beta;
+    hardware.nvidia.modesetting.enable = true;
+    boot.kernelParams = ["nvidia-drm.modeset=1"];
+    environment.variables = {
+      NVD_BACKEND = "direct";
+    };
 
     environment.systemPackages = with pkgs; [
       # Respect XDG conventions, damn it!

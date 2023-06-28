@@ -18,6 +18,9 @@ in {
       enable = true;
       driSupport = true;
       driSupport32Bit = true;
+      extraPackages = with pkgs; [
+        nvidia-vaapi-driver 
+      ];
     };
 
     services.xserver.videoDrivers = ["nvidia"];

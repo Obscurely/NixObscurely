@@ -218,6 +218,14 @@ in {
         # Disable tailored performance settings and enable hw accel
         "browser.preferences.defaultPerformanceSettings.enabled" = false;
         "layers.acceleration.disabled" = false;
+        "layers.acceleration.force-enabled" = true;
+        "gfx.x11-egl.force-enabled" = true;
+        "media.ffmpeg.enabled" = true;
+        "media.rdd-ffmpeg.enabled" = true;
+        "media.ffmpeg.vaapi.enabled" = true;
+        "media.ffvpx.enabled" = false;
+        "media.rdd-vpx.enabled" = false;
+        "media.navigator.mediadatadecoder_vpx_enabled" = true;
 
         # Set homepage to selfhosted Bento and new tab to homepage
         "browser.startup.homepage" = "https://start.server.com/";

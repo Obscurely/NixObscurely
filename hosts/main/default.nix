@@ -93,7 +93,7 @@
       wifi.enable = false;
     };
     services = {
-      syncthing = true;
+      syncthing.enable = true;
     };
     shell = {
       direnv.enable = true;

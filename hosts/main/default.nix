@@ -92,6 +92,9 @@
       sensors.enable = true;
       wifi.enable = false;
     };
+    services = {
+      syncthing = true;
+    };
     shell = {
       direnv.enable = true;
       git.enable = true;

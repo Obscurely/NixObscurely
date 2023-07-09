@@ -31,7 +31,7 @@ in {
       # for longer term streaming/recording the screen
       (
         if cfg.video.enable
-        then [unstable.obs-studio ] # add unstable.handbrake when fixed
+        then [unstable.obs-studio unstable.handbrake] 
         else []
       );
     home.configFile = with config.modules;

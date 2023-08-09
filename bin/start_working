@@ -52,5 +52,5 @@ cd "$HOME/Code" && xrdb -load "$HOME/.config/xtheme/90.b-theme" && xst -c NeoVim
 librewolf "https://trilium.server.com/#root/M31xPyu71vtg-64ZC" "https://vikunja.server.com/lists/20/kanban" &
 
 # Play the background music. I am more of a metal head myself, but for working/learning this works better.
-clementine --load "$HOME/Music/Chill Lofi Mix.mp3" &
+clementine --load "$HOME/Music/Tsfh Mix.mp3" &
 

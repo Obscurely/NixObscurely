@@ -44,10 +44,6 @@ in {
     home.configFile = with config.modules;
       mkMerge [
         {
-          # Dconf
-          "dconf".source = "${configDir}/dconf";
-        }
-        {
           # Notepadqq
           "Notepadqq/Notepadqq.ini".source = "${configDir}/Notepadqq/Notepadqq.ini";
         }

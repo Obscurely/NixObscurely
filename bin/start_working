@@ -54,3 +54,8 @@ librewolf "https://trilium.server.com/#root/M31xPyu71vtg-64ZC" "https://vikunja.
 # Play the background music. I am more of a metal head myself, but for working/learning this works better.
 clementine --load "$HOME/Music/Tsfh Mix.mp3" &
 
+# Start pomodor timer
+gnome-pomodoro &
+sleep 2
+gnome-pomodoro --start
+

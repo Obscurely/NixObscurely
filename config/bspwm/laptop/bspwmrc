@@ -28,7 +28,7 @@ bspc rule -a DesktopEditors	      desktop='^9'	follow=on
 bspc rule -a Pavucontrol	        desktop='^10'	follow=on
 bspc rule -a Nvidia-settings      desktop='^10'	follow=on
 bspc rule -a Ristretto		        desktop='^5'	follow=on
-bspc rule -a Steam			          desktop='^4'	follow=on
+bspc rule -a steam			          desktop='^4'	follow=on
 bspc rule -a Virt-manager	        desktop='^5'	follow=on
 bspc rule -a zoom			            desktop='^9'	follow=on
 bspc rule -a qBittorrent	        desktop='^8' 	follow=on
@@ -45,6 +45,7 @@ bspc rule -a krita                desktop='^5'  follow=on
 bspc rule -a easytag              desktop='^5'  follow=on
 bspc rule -a Ardour               desktop='^10' follow=off
 bspc rule -a bottles              desktop='^4'  follow=on
+bspc rule -a Gnome-pomodoro       desktop='^10' follow=off
 
 # Set resolution
 xrandr --output eDP1 --mode 1920x1080 --rate 60

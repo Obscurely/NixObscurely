@@ -32,6 +32,7 @@ in {
       libsForQt5.ark # imo best linux archive manager
       xfce.xfce4-settings # setting manager
       xplr # tui file manager
+      gnome.pomodoro # pomodor style timer for taking breaks
 
       # My packages
       my.estash

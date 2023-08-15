@@ -49,9 +49,9 @@
         default = "xterm-kitty";
         st.enable = true;
       };
-      vm = {
-        virtd.enable = true;
-      };
+      #vm = {
+      #  virtd.enable = true; TODO: enable when fixed
+      #};
     };
     dev = {
       arduino.enable = true;

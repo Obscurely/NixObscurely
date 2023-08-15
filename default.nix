@@ -57,6 +57,9 @@ with lib.my; {
   # this default behavior here.
   networking.useDHCP = mkDefault false;
 
+  # Enable wake on lan
+  networking.interfaces.enp8s0.wakeOnLan.enable = true;
+
   # Use the latest kernel
   boot = {
     kernelPackages = mkDefault pkgs.linuxPackages_zen;

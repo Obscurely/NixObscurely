@@ -34,7 +34,7 @@ in {
         python311Packages.mypy # type checking
         python311Packages.vulture # dead code analysis
         python310Packages.debugpy # debugger
-        #poetry # TODO: add back when fixed
+        poetry
         nodePackages.pyright
         black
       ];

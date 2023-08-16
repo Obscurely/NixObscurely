@@ -23,7 +23,7 @@ in {
       gnome.gnome-calculator # calculator
       gparted # partition manager
       lxappearance # appearance customization tool
-      # notepadqq # notepad++ but for linux TODO: enable when fixed
+      notepadqq # notepad++ but for linux
       pavucontrol # audio control utility (universal)
       postman # http requests utility
       qbittorrent # torrent downloader utility

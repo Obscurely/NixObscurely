@@ -57,6 +57,8 @@ in {
         "devtools.theme" = "dark";
         # Set browser to dark theme
         "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org";
+        # set default perefered color scheme to dark
+        "layout.css.prefers-color-scheme.content-override" = 0;
         # Set browser font to Roboto
         "font.name.serif.x-western" = "Roboto";
         "font.name.monospace.x-western" = "FiraCode Nerd Font Mono";

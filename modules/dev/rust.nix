@@ -41,6 +41,7 @@ in {
         cargo-cross # cross compilation
         cargo-edit # manage cargo dependencies
         cargo-deb # pkg rust apps for debian
+        slint-lsp # language server for a UI framework
       ];
 
       env.PATH = ["$(${pkgs.yarn}/bin/yarn global bin)"];

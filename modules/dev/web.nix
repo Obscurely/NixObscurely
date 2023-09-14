@@ -30,6 +30,7 @@ in {
         mdl # markdown lint
         proselint # basically it checks your writting.
         deno # fromat and other things
+        hugo # backend developer's best friend for building frontends
       ];
     })
   ];

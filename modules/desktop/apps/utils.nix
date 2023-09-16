@@ -41,6 +41,9 @@ in {
       xfce.exo # this is for xfce shortcuts like open terminal
     ];
 
+    programs.weylus.enable = true;
+    programs.weylus.openFirewall = true;
+
     # Get in dotfiles for utils
     home.configFile = with config.modules;
       mkMerge [

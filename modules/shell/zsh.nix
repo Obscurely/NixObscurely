@@ -47,7 +47,7 @@ in {
       nix-zsh-completions
       zsh-autosuggestions
       bat
-      exa
+      eza
       fasd
       fd
       fzf

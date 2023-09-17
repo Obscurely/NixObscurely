@@ -12,13 +12,13 @@ alias wget='wget -c'
 alias shutdown='sudo shutdown'
 alias reboot='sudo reboot'
 
-if (( $+commands[exa] )); then
-  alias exa="exa --group-directories-first --git";
-  alias l="exa -blF";
-  alias ll="exa -abghilmu";
+if (( $+commands[eza] )); then
+  alias eza="eza --group-directories-first --git";
+  alias l="eza -blF";
+  alias ll="eza -abghilmu";
   alias llm='ll --sort=modified'
-  alias la="LC_COLLATE=C exa -ablF";
-  alias tree='exa --tree'
+  alias la="LC_COLLATE=C eza -ablF";
+  alias tree='eza --tree'
 fi
 
 if (( $+commands[fasd] )); then

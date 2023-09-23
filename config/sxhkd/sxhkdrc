@@ -156,17 +156,9 @@ super + shift + b
 super + alt + b
   ~/.config/bspwm/rc.d/95-polybar
 
-# open xplr
-super + alt + e
-	xst -c xplr -T xplr -t xplr -e xplr
-
 # open thunar
 super + e
   thunar
-
-# open thunar
-super + alt + e
-  xst -c xplr -T xplr -t xplr -e xplr
 
 # Open kitty with custom settings in order to go well with NeoVim
 super + v

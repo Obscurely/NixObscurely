@@ -53,6 +53,10 @@ in {
         {
           # xfce4 settings
           "xfce4".source = "${configDir}/xfce4";
+        } 
+        {
+          # Bleachbit settings
+          "bleachbit/bleachbit.ini".source = "${configDir}/bleachbit/bleachbit.ini";
         }
       ];
   };

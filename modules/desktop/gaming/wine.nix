@@ -44,5 +44,14 @@ in {
       khronos-ocl-icd-loader
       libjpeg
     ];
+
+    # Get in dotfiles
+    home.configFile = with config.modules;
+      mkMerge [
+        {
+          # VkBasalt settings
+          "goverlay/vkBasalt.conf".source = "${configDir}/goverlay/vkBasalt.conf";
+        }
+      ];
   };
 }

@@ -45,7 +45,7 @@
   in {
     lib = lib.my;
 
-    overlay = {
+    overlay = final: prev: {
       unstable = pkgs';
       my = self.packages."${system}";
     };

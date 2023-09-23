@@ -58,7 +58,7 @@ bspc desktop -f ^1
 lxpolkit & # prompt to enter sudo password daemon
 flameshot &
 
-for file in "$XDG_CONFIG_HOME"/bspwm/rc.d/*; do
+for file in $XDG_CONFIG_HOME/bspwm/rc.d/*; do
   source "$file" &
 done
 

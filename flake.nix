@@ -45,11 +45,13 @@
   in {
     lib = lib.my;
 
-    overlays.default = final: prev: {
-      self = import ./overlays { inherit inputs system; };
+    overlay = final: prev: {
       unstable = pkgs';
       my = self.packages."${system}";
     };
+
+    overlays =
+      mapModules ./overlays import;
 
     packages."${system}" =
       mapModules ./packages (p: pkgs.callPackage p {});

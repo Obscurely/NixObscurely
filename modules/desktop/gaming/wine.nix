@@ -8,6 +8,7 @@
 with lib;
 with lib.my; let
   cfg = config.modules.desktop.gaming.wine;
+  configDir = config.dotfiles.configDir;
 in {
   options.modules.desktop.gaming.wine = with types; {
     enable = mkBoolOpt false;

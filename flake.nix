@@ -71,11 +71,11 @@
           path = ./.;
           description = "A grossly incandescent nixos config";
         };
+        default = self.full;
       }
       // import ./templates;
-    defaultTemplate = self.templates.full;
 
-    defaultApp."${system}" = {
+    apps."${system}".default = {
       type = "app";
       program = ./bin/hey;
     };

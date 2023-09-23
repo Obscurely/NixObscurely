@@ -202,9 +202,8 @@ in {
 
       # Load locckscreen image if there is one
       if [ -f "$XDG_DATA_HOME/lockscreen.jpg" ]; then
-        betterlockscreen -u $XDG_DATA_HOME/lockscreen.jpg
+        betterlockscreen -u "$XDG_DATA_HOME/lockscreen.jpg" &
       fi
-
     '';
 
     # Clean up leftovers, as much as we can

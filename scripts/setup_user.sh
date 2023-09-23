@@ -55,4 +55,9 @@ if ! [ -d ".config/nvim/.git" ]; then
   arduino-cli config init
 fi
 
+# Load locckscreen image if there is one
+if [ -f "$XDG_DATA_HOME/lockscreen.jpg" ]; then
+  betterlockscreen -u "$XDG_DATA_HOME/lockscreen.jpg" &
+fi
+
 touch ~/scriprun

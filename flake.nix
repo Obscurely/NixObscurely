@@ -71,7 +71,7 @@
           path = ./.;
           description = "A grossly incandescent nixos config";
         };
-        default = self.full;
+        default = self.templates.full;
       }
       // import ./templates;
 

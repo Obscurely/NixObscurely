@@ -3,6 +3,7 @@
 # Basic linux utilities for my needs
 {
   config,
+  options,
   lib,
   pkgs,
   ...

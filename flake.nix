@@ -36,7 +36,7 @@
 
     lib =
       nixpkgs.lib.extend
-      (self: super: {
+      (self: {
         my = import ./lib {
           inherit pkgs inputs;
           lib = self;
@@ -45,7 +45,7 @@
   in {
     lib = lib.my;
 
-    overlay = final: prev: {
+    overlay = {
       unstable = pkgs';
       my = self.packages."${system}";
     };

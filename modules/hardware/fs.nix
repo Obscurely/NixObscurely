@@ -18,6 +18,8 @@ in {
   config = mkIf cfg.enable (mkMerge [
     {
       programs.udevil.enable = true;
+      # disable raid arrays
+      boot.swraid.enable = false;
 
       # Support for more filesystems, mostly to support external drives
       environment.systemPackages = with pkgs; [

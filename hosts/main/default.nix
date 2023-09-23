@@ -1,7 +1,4 @@
 {
-  pkgs,
-  config,
-  lib,
   ...
 }: {
   imports = [
@@ -51,7 +48,7 @@
       };
       vm = {
         virtd.enable = true;
-      };
+     };
     };
     dev = {
       arduino.enable = true;

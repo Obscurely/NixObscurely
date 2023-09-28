@@ -1,0 +1,8 @@
+map <C-d> scrollPageDown
+map <C-u> scrollPageUp
+unmap f
+map s LinkHints.activateMode
+unmap F
+map S LinkHints.activateModeToOpenInNewTab
+map K previousTab
+map J nextTab

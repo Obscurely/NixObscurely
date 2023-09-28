@@ -1,0 +1,36 @@
+{
+  "default": [
+    {
+      "expression": "*.proton.me",
+      "listType": "WHITE",
+      "storeId": "default",
+      "cleanSiteData": [],
+      "cookieNames": [],
+      "id": "y3sjJK6Y3"
+    },
+    {
+      "expression": "*.server.com",
+      "listType": "WHITE",
+      "storeId": "default",
+      "cleanSiteData": [],
+      "cookieNames": [],
+      "id": "Q35LUsB1D"
+    },
+    {
+      "expression": "cs.rin.ru",
+      "listType": "WHITE",
+      "storeId": "default",
+      "cleanSiteData": [],
+      "cookieNames": [],
+      "id": "nzfSfeTGs"
+    },
+    {
+      "expression": "monkeytype.com",
+      "listType": "WHITE",
+      "storeId": "default",
+      "cleanSiteData": [],
+      "cookieNames": [],
+      "id": "lrgPeEhR6"
+    }
+  ]
+}

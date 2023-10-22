@@ -29,6 +29,7 @@
         chromium.enable = true;
         librewolf.enable = true;
         torbrowser.enable = true;
+        firefox.enable = true;
       };
       gaming = {
         legendary.enable = true;

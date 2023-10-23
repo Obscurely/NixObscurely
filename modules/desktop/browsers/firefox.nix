@@ -18,8 +18,8 @@ in {
     programs.firefox.enable = true;
 
     programs.firefox.preferences = {
-      browser.eme.ui.enabled="true";
-      media.eme.enabled="true";
+      browser.eme.ui.enabled = true;
+      media.eme.enabled = true;
     };
   };
 }

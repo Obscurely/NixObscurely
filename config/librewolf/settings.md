@@ -2,6 +2,15 @@
 
 Do note all this extensions and settings are tailored to the experience I want and for my own setup, change accordingly.
 
+## Theme
+Some settings that are needed for the theme to be displayed properly
+
+- Right click on the toolbar and hit customize toolbar
+    - Enable the titler bar (left corner down)
+    - Remove the flexible space by the refresh button
+    - Click on manage themes (left corner down) and disable all themes, so that only system - auto remains
+- Right click on the toolbar, go to bookmarks toolbar and hit never show (the bookmarks can still be seen by pressing ctrl + b)
+
 ## Extensions
 
 ### Extensions List

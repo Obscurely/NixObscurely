@@ -96,6 +96,8 @@ in {
 
     ## Apps/Services
     services.xserver.displayManager.lightdm.greeters.mini.user = config.user.name;
+    services.printing.enable = true;
+    services.printing.drivers = with pkgs; [ epson-escpr ];
 
     programs.thunar = {
       enable = true;
@@ -194,7 +196,7 @@ in {
       fi
 
       if ! [ -d ".config/nvim/.git" ]; then
-        mkdir ~/.config/nvim # create nvim dir .config in case the installer didn't
+        mkdir -p ~/.config/nvim # create nvim dir .config in case the installer didn't
         git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
         git clone https://github.com/Obscurely/neovim.git ~/.config/nvim/lua/custom
         arduino-cli config init

@@ -29,10 +29,13 @@
         chromium.enable = true;
         librewolf.enable = true;
         torbrowser.enable = true;
+        firefox.enable = true;
       };
       gaming = {
         legendary.enable = true;
+        heroic.enable = true;
         lutris.enable = true;
+        bottles.enable = true;
         steam.enable = true;
         wine.enable = true;
       };
@@ -89,6 +92,9 @@
       razer.enable = true;
       sensors.enable = true;
       wifi.enable = false;
+    };
+    services = {
+      syncthing.enable = true;
     };
     shell = {
       direnv.enable = true;

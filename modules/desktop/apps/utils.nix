@@ -25,7 +25,7 @@ in {
       lxappearance # appearance customization tool
       notepadqq # notepad++ but for linux
       pavucontrol # audio control utility (universal)
-      postman # http requests utility
+      bruno # http requests utility
       qbittorrent # torrent downloader utility
       xfce.ristretto # photo viewer
       zoom-us # video conference app

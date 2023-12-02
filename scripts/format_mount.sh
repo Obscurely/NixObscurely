@@ -2,14 +2,8 @@ echo "--------------------------------------------------"
 echo "-             Formatting disks...                -"
 echo "--------------------------------------------------"
 
-echo # New line
-
-# switch to root account
-echo "First switch to root account"
-sudo su -
-
 # zap all drives
-echo "Second completly wipe all disks"
+echo "First completly wipe all disks"
 
 sgdisk -Z /dev/nvme0n1
 sgdisk -Z /dev/sda
@@ -32,7 +26,7 @@ sgdisk -n 3:0:+102400M /dev/nvme0n1 # partition 3 (ROOT), 50GB
 sgdisk -n 4:0:+204800M /dev/nvme0n1 # partition 4 (HOME), 200GB
 #sudo sgdisk -n 5:0:0 /dev/nvme0n1       # partition 5, the rest in case I want to install another OS, 100GB, not actually creating the partition
 # on /dev/sda (sata ssd)
-sgdisk -n 1:0:0 /dev/sda # partition 1 (DATA), all, about 930GB
+sgdisk -n 1:0:+600000M /dev/sda # partition 1 (DATA), about 600GB, rest for windows dual boot
 # on /dev/sdb (sshd)
 sgdisk -n 1:0:+1331200M /dev/sdb # partition 1 (EXTRA), 1.3Tib
 #sudo sgdisk -n 2:0:0 /dev/sdb # partition 2, the rest in case I want to install another OS, 500GB, not actaully creating the partition

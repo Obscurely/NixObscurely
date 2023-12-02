@@ -37,6 +37,12 @@
   # If you don't know how to boot an iso than NixOS is most likely not for you.
   ```
 
+- Switch to the root user (**very important**)
+  ```sh
+  sudo su
+  ```
+
+
 - Clone this repository
   ```sh
   nix-shell -p git

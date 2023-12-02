@@ -91,6 +91,7 @@
       nvidia.enable = true;
       razer.enable = true;
       sensors.enable = true;
+      printer.enable = true;
       wifi.enable = false;
     };
     services = {

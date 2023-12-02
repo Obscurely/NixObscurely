@@ -95,9 +95,7 @@ in {
     };
 
     ## Apps/Services
-    services.xserver.displayManager.lightdm.greeters.mini.user = config.user.name;
-    services.printing.enable = true;
-    services.printing.drivers = with pkgs; [ epson-escpr ];
+    services.xserver.displayManager.lightdm.greeters.mini.user = config.user.name; 
 
     programs.thunar = {
       enable = true;

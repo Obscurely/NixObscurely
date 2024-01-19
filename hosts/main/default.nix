@@ -60,6 +60,7 @@
       dotnet.enable = true;
       go.enable = true;
       java.enable = true;
+      kubernetes.enable = true;
       lua.enable = true;
       node = {
         enable = true;
@@ -95,6 +96,7 @@
       wifi.enable = false;
     };
     services = {
+      docker.enable = true;
       syncthing.enable = true;
     };
     shell = {

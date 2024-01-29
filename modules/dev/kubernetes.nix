@@ -19,7 +19,6 @@ in {
     (mkIf cfg.enable {
       user.packages = with pkgs; [
         kubectl # manage kubernetes clusters
-        minikube # 1 node kubernetes local environment
       ];
     })
   ];

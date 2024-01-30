@@ -55,6 +55,7 @@
       };
     };
     dev = {
+      aws.enable = true;
       arduino.enable = true;
       cc.enable = true;
       dotnet.enable = true;

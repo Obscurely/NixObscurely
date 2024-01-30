@@ -39,7 +39,6 @@ in {
       psmisc # a set of small utils like killall, fuser, pstree
       onefetch # information about repo in neofetch style
       wally-cli # tool to flash the firmware on my zsa moonlander keyboard
-      awscli2 # cli for aws
     ];
 
     programs.adb.enable = true;

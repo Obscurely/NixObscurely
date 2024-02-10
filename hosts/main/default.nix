@@ -104,6 +104,7 @@
       direnv.enable = true;
       git.enable = true;
       gnupg.enable = true;
+      tmux.enable = true;
       utils.enable = true;
       vaultwarden.enable = true;
       zsh.enable = true;

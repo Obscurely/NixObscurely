@@ -46,7 +46,7 @@ in {
       zsh-syntax-highlighting
       nix-zsh-completions
       zsh-autosuggestions
-      ba
+      bat
       eza
       fasd
       fd

@@ -56,3 +56,5 @@
 	helper = store
 [credential "https://gitea.server.com"]
 	helper = store
+[http "https://gitea.server.com"]
+	sslVerify = false

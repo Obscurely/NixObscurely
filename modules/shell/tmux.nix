@@ -22,7 +22,7 @@ in {
       pkgs.tmuxPlugins.prefix-highlight
       pkgs.tmuxPlugins.yank
       pkgs.tmuxPlugins.resurrect
-      pkgs.tmuxPlugins.onedark-theme
+      pkgs.tmuxPlugins.dracula
     ];
 
     modules.theme.onReload.tmux = "${pkgs.tmux}/bin/tmux source-file $TMUX_HOME/extraInit";
@@ -46,7 +46,7 @@ in {
           tmux run-shell '${pkgs.tmuxPlugins.prefix-highlight}/share/tmux-plugins/prefix-highlight/prefix_highlight.tmux'
           tmux run-shell '${pkgs.tmuxPlugins.yank}/share/tmux-plugins/yank/yank.tmux'
           tmux run-shell '${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/resurrect.tmux'
-          tmux run-shell '${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/onedark-theme/tmux-onedark-theme.tmux'
+          tmux run-shell '${pkgs.tmuxPlugins.dracula}/share/tmux-plugins/dracula/dracula.tmux'
         '';
         executable = true;
       };

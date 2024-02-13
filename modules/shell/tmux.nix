@@ -22,7 +22,7 @@ in {
       pkgs.tmuxPlugins.prefix-highlight
       pkgs.tmuxPlugins.yank
       pkgs.tmuxPlugins.resurrect
-      pkgs.tmuxPlugins.catppuccin
+      pkgs.tmuxPlugins.power-theme
       pkgs.tmuxPlugins.weather
     ];
 
@@ -47,8 +47,8 @@ in {
           tmux run-shell '${pkgs.tmuxPlugins.prefix-highlight}/share/tmux-plugins/prefix-highlight/prefix_highlight.tmux'
           tmux run-shell '${pkgs.tmuxPlugins.yank}/share/tmux-plugins/yank/yank.tmux'
           tmux run-shell '${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/resurrect.tmux'
-          tmux run-shell '${pkgs.tmuxPlugins.weather}/share/tmux-plugins/weather/weather.tmux'
-          tmux run-shell '${pkgs.tmuxPlugins.catppuccin}/share/tmux-plugins/catppuccin/catppuccin.tmux'
+          tmux run-shell '${pkgs.tmuxPlugins.weather}/share/tmux-plugins/weather/tmux-weather.tmux'
+          tmux run-shell '${pkgs.tmuxPlugins.catppuccin}/share/tmux-plugins/power-theme/tmux-power.tmux'
         '';
         executable = true;
       };

@@ -48,7 +48,7 @@ in {
           tmux run-shell '${pkgs.tmuxPlugins.yank}/share/tmux-plugins/yank/yank.tmux'
           tmux run-shell '${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/resurrect.tmux'
           tmux run-shell '${pkgs.tmuxPlugins.weather}/share/tmux-plugins/weather/tmux-weather.tmux'
-          tmux run-shell '${pkgs.tmuxPlugins.power-theme}/share/tmux-plugins/power-theme/tmux-power.tmux'
+          tmux run-shell '${pkgs.tmuxPlugins.power-theme}/share/tmux-plugins/power/tmux-power.tmux'
         '';
         executable = true;
       };

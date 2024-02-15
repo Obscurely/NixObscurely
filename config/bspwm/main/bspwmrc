@@ -58,6 +58,7 @@ bspc desktop -f ^1
 lxpolkit & # prompt to enter sudo password daemon
 flameshot &
 tmux new-session -d -s main & # for fast attach to tmux session
+tmux new-session -d -s code & # for fast attach to tmux session
 
 for file in $XDG_CONFIG_HOME/bspwm/rc.d/*; do
   source "$file" &

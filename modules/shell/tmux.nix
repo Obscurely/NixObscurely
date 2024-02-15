@@ -51,14 +51,12 @@ in {
     };
 
     systemd.user.services.tmux-start = {
-      Unit = {
-        Description = "Start the tmux server and create a new session ready to attach to.";
-      };
-      Install = {
-        WantedBy = [ "default.target" ];
-      };
-      Service = {
-        ExecStart = "tmux start-server && tmux new-session -d -s main";
+      enable = true;
+      description = "Start the tmux server and create a new session ready to attach to.";
+      wantedBy = [ "default.target" ];
+      serviceConfig = {
+        ExecStart = "${pkgs.tmux}/bin/tmux start-server && ${pkgs.tmux}/bin/tmux new-session -d -s main";
+        ExecStop = "${pkgs.tmux}/bin/tmux kill-server";
       };
     };
 

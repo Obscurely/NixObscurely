@@ -50,16 +50,6 @@ in {
       };
     };
 
-    systemd.user.services.tmux-start = {
-      enable = true;
-      description = "Start the tmux server and create a new session ready to attach to.";
-      wantedBy = [ "default.target" ];
-      serviceConfig = {
-        ExecStart = "${pkgs.tmux}/bin/tmux start-server && ${pkgs.tmux}/bin/tmux new-session -d -s main";
-        ExecStop = "${pkgs.tmux}/bin/tmux kill-server";
-      };
-    };
-
     env = {
       PATH = ["$TMUXIFIER/bin"];
       TMUX_HOME = "$XDG_CONFIG_HOME/tmux";

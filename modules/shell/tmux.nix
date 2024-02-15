@@ -22,7 +22,6 @@ in {
       pkgs.tmuxPlugins.prefix-highlight
       pkgs.tmuxPlugins.yank
       pkgs.tmuxPlugins.resurrect
-      pkgs.tmuxPlugins.continuum
     ];
 
     modules.theme.onReload.tmux = "${pkgs.tmux}/bin/tmux source-file $TMUX_HOME/extraInit";
@@ -46,9 +45,20 @@ in {
           tmux run-shell '${pkgs.tmuxPlugins.yank}/share/tmux-plugins/yank/yank.tmux'
           tmux run-shell '${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/resurrect.tmux'
           tmux run-shell '${pkgs.tmuxPlugins.prefix-highlight}/share/tmux-plugins/prefix-highlight/prefix_highlight.tmux'
-          tmux run-shell '${pkgs.tmuxPlugins.continuum}/share/tmux-plugins/continuum/continuum.tmux'
         '';
         executable = true;
+      };
+    };
+
+    systemd.user.services.tmux-start = {
+      Unit = {
+        Description = "Start the tmux server and create a new session ready to attach to.";
+      };
+      Install = {
+        WantedBy = [ "default.target" ];
+      };
+      Service = {
+        ExecStart = "tmux start-server && tmux new-session -d -s main";
       };
     };
 

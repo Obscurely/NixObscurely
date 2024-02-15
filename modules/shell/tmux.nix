@@ -22,7 +22,6 @@ in {
       pkgs.tmuxPlugins.prefix-highlight
       pkgs.tmuxPlugins.yank
       pkgs.tmuxPlugins.resurrect
-      pkgs.tmuxPlugins.weather
       pkgs.tmuxPlugins.continuum
     ];
 
@@ -46,7 +45,6 @@ in {
           tmux run-shell '${pkgs.tmuxPlugins.copycat}/share/tmux-plugins/copycat/copycat.tmux'
           tmux run-shell '${pkgs.tmuxPlugins.yank}/share/tmux-plugins/yank/yank.tmux'
           tmux run-shell '${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/resurrect.tmux'
-          tmux run-shell '${pkgs.tmuxPlugins.weather}/share/tmux-plugins/weather/tmux-weather.tmux'
           tmux run-shell '${pkgs.tmuxPlugins.prefix-highlight}/share/tmux-plugins/prefix-highlight/prefix_highlight.tmux'
           tmux run-shell '${pkgs.tmuxPlugins.continuum}/share/tmux-plugins/continuum/continuum.tmux'
         '';

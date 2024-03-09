@@ -27,6 +27,8 @@ in {
       virt-manager
       virt-viewer
       libvirt
+      quickemu # fast way to create optimzed vms
+      quickgui # gui for quickemu
     ];
 
     virtualisation.libvirtd = {

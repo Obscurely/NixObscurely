@@ -33,7 +33,7 @@ in {
         python311Packages.flake8 # multiple code analysis tools
         python311Packages.mypy # type checking
         python311Packages.vulture # dead code analysis
-        #python310Packages.debugpy # debugger TODO: uncomment when fixed
+        python311Packages.debugpy # debugger
         poetry
         nodePackages.pyright
         black

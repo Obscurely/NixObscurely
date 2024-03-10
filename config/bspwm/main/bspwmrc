@@ -57,6 +57,7 @@ xrandr --output DP-0 --primary --left-of DVI-D-0
 bspc desktop -f ^1
 lxpolkit & # prompt to enter sudo password daemon
 flameshot &
+easyeffects --gapplication-service & # easy effects for the eq for my headset
 tmux new-session -d -s main & # for fast attach to tmux session
 tmux new-session -d -s code & # for fast attach to tmux session
 

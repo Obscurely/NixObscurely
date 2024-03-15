@@ -36,7 +36,7 @@ in {
       qemu.swtpm.enable = true;
       qemu.runAsRoot = true;
       qemu.ovmf.enable = true;
-      qemu.ovmf.packages = [ pkgs.OVMFFull ];
+      qemu.ovmf.packages = [ pkgs.OVMFFull.fd ];
     };
   };
 }

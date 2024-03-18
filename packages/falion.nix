@@ -1,50 +1,45 @@
-{ lib, stdenv, fetchTarball, makeDesktopItem, makeWrapper }:
+{ lib, stdenv, appimageTools, desktop-file-utils, fetchurl }:
 
 let
   version = "1.0.0";
   name = "falion-${version}";
 
-  src = fetchTarball {
-    url = "https://github.com/Obscurely/falion/releases/download/v${version}-stable/falion-linux.tar.gz";
-    # Please replace <hash> with the correct hash for the tarball
-    sha256 = "301ae741284e64f5d42155ff459c1ac517d018f25c538edc224eefb8bbf5f53e";
+  plat = {
+    x86_64-linux = "";
+  }.${stdenv.hostPlatform.system};
+
+  sha256 = {
+    x86_64-linux = "27ca4181c7f152b7201772f58f465e910aa53655dca084ed59c9e795f8c5d166";
+  }.${stdenv.hostPlatform.system};
+
+  src = fetchurl {
+    url = "https://github.com/Obscurely/falion/releases/download/v${version}-stable/falion-linux.AppImage";
+    inherit sha256;
   };
-  
-in stdenv.mkDerivation {
+
+  appimageContents = appimageTools.extractType2 {
+    inherit name src;
+  };
+in
+appimageTools.wrapType2 rec {
   inherit name src;
 
-  buildInputs = [ makeWrapper ];
-
-  dontBuild = true; # Assuming there's no build process required as we're just repackaging binaries
-
-  installPhase = ''
-    mkdir -p $out/bin $out/share/pixmaps $out/share/licenses/falion
-
-    # Assuming the tarball structure is similar and binaries, icons, and .desktop files are located similarly as they were in the AppImage
-    cp falion $out/bin/falion
-    cp linux/desktop/icons/512x512/apps/falion.png $out/share/pixmaps/falion.png
-    cp LICENSE $out/share/licenses/falion/LICENSE
-
-    # Update paths and install desktop entry (adjust paths as necessary)
-    # Note: Adjust `Exec`, `Icon`, and other relevant paths in falion.desktop if needed
-    makeDesktopItem {
-      name = "falion";
-      exec = "$out/bin/falion"; # Adjust the executable path if needed
-      icon = "$out/share/pixmaps/falion.png"; # Adjust icon path if necessary
-      desktopName = "Falion";
-      genericName = "Falion";
-      categories = "Utility;";
-    } > $out/share/applications/falion.desktop
-
-    # Adjust permissions if necessary
-    chmod +x $out/bin/*
+  extraInstallCommands = ''
+    mkdir -p $out/share/pixmaps $out/share/licenses/falion
+    cp ${appimageContents}/falion.png $out/share/pixmaps/
+    cp ${appimageContents}/falion.desktop $out
+    cp ${appimageContents}/LICENSE $out/share/licenses/falion/LICENSE
+    mv $out/bin/${name} $out/bin/falion
+    ${desktop-file-utils}/bin/desktop-file-install --dir $out/share/applications \
+      --set-key Exec --set-value $out/bin/falion \
+      --set-key Comment --set-value "falion Linux" \
+      --delete-original $out/falion.desktop
   '';
 
   meta = {
     homepage = "https://github.com/Obscurely/falion";
     description = "An open source, programmed in rust, privacy focused tool for scraping programming resources (like stackoverflow) fast, efficient and asynchronous/parallel using the CLI or GUI. ";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Obscurely ];
     platforms = lib.platforms.linux;
   };
 }

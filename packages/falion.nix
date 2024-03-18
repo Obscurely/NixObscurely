@@ -1,7 +1,7 @@
 { lib, stdenv, appimageTools, desktop-file-utils, fetchurl }:
 
 let
-  version = "1.0.0";
+  version = "1.0.2";
   name = "falion-${version}";
 
   plat = {
@@ -9,7 +9,7 @@ let
   }.${stdenv.hostPlatform.system};
 
   sha256 = {
-    x86_64-linux = "27ca4181c7f152b7201772f58f465e910aa53655dca084ed59c9e795f8c5d166";
+    x86_64-linux = "418efba269d49f02e259de8f631809a73e266ab6facc312b49f65699e16e1071";
   }.${stdenv.hostPlatform.system};
 
   src = fetchurl {

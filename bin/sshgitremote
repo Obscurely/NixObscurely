@@ -1,0 +1,5 @@
+#!/usr/bin/env zsh
+
+# Update regular git https remote into the ssh equivalent
+
+ORIGIN=$(git remote get-url origin | sed 's/https:\/\/github.com\//git@github.com:/g' | awk -F "[.]git" '{{print $1}}' | awk '{{print $1".git"}}') && git remote set-url origin ${ORIGIN} && git remote get-url origin && git fetch

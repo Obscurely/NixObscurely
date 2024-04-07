@@ -1,0 +1,14 @@
+{
+  "keyMappings": "map <C-d> scrollPageDown\nmap <C-u> scrollPageUp\nunmap f\nmap s LinkHints.activateMode\nunmap F\nmap S LinkHints.activateModeToOpenInNewTab\nmap K previousTab\nmap J nextTab",
+  "settingsVersion": "2.1.2",
+  "exclusionRules": [
+    {
+      "passKeys": "",
+      "pattern": "https?://mail.google.com/*"
+    },
+    {
+      "passKeys": "",
+      "pattern": "https?://monkeytype.com/*"
+    }
+  ]
+}

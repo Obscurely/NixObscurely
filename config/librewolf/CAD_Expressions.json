@@ -6,7 +6,7 @@
       "storeId": "default",
       "cleanSiteData": [],
       "cookieNames": [],
-      "id": "y3sjJK6Y3"
+      "id": "LDh4VwMiq"
     },
     {
       "expression": "*.server.com",
@@ -14,7 +14,15 @@
       "storeId": "default",
       "cleanSiteData": [],
       "cookieNames": [],
-      "id": "Q35LUsB1D"
+      "id": "9EjQA9AwrN"
+    },
+    {
+      "expression": "*.vexio.ro",
+      "listType": "WHITE",
+      "storeId": "default",
+      "cleanSiteData": [],
+      "cookieNames": [],
+      "id": "YHFMOiMS8"
     },
     {
       "expression": "cs.rin.ru",
@@ -22,7 +30,7 @@
       "storeId": "default",
       "cleanSiteData": [],
       "cookieNames": [],
-      "id": "nzfSfeTGs"
+      "id": "SZkJTdyN37"
     },
     {
       "expression": "monkeytype.com",
@@ -30,7 +38,15 @@
       "storeId": "default",
       "cleanSiteData": [],
       "cookieNames": [],
-      "id": "lrgPeEhR6"
+      "id": "lZUmQyiOLV"
+    },
+    {
+      "expression": "vexio.ro",
+      "listType": "WHITE",
+      "storeId": "default",
+      "cleanSiteData": [],
+      "cookieNames": [],
+      "id": "7_eZ3wioi"
     }
   ]
 }

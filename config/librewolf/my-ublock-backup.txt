@@ -1,0 +1,42 @@
+{
+  "timeStamp": 1712472175218,
+  "version": "1.57.0",
+  "userSettings": {
+    "advancedUserEnabled": true,
+    "uiTheme": "dark",
+    "importedLists": [],
+    "popupPanelSections": 63
+  },
+  "selectedFilterLists": [
+    "user-filters",
+    "ublock-filters",
+    "ublock-badware",
+    "ublock-privacy",
+    "ublock-quick-fixes",
+    "ublock-unbreak",
+    "easylist",
+    "LegitimateURLShortener",
+    "adguard-spyware-url",
+    "easyprivacy",
+    "urlhaus-1",
+    "curben-phishing",
+    "plowe-0",
+    "AntiPaywall",
+    "bpc-paywall-filter"
+  ],
+  "hiddenSettings": {},
+  "whitelist": [
+    "about-scheme",
+    "chrome-extension-scheme",
+    "chrome-scheme",
+    "edge-scheme",
+    "moz-extension-scheme",
+    "opera-scheme",
+    "vivaldi-scheme",
+    "wyciwyg-scheme"
+  ],
+  "dynamicFilteringString": "behind-the-scene * * noop\nbehind-the-scene * inline-script noop\nbehind-the-scene * 1p-script noop\nbehind-the-scene * 3p-script noop\nbehind-the-scene * 3p-frame noop\nbehind-the-scene * image noop\nbehind-the-scene * 3p noop",
+  "urlFilteringString": "",
+  "hostnameSwitchesString": "no-large-media: behind-the-scene false\nno-csp-reports: * true\nno-strict-blocking: validate.perfdrive.com true",
+  "userFilters": "! 2023-06-17 https://cineplaynow.club\n||i0.wp.com/image.tmdb.org/t/p/original/5YZbUmjbMa3ClvSW1Wj3D6XGolb.jpg$image\n||i0.wp.com/image.tmdb.org/t/p/original/5YZbUmjbMa3ClvSW1Wj3D6XGolb.jpg$image\n||i0.wp.com/image.tmdb.org/t/p/original/5YZbUmjbMa3ClvSW1Wj3D6XGolb.jpg$image\n\n! 2023-09-07 https://careerkarma.com\n||careerkarma.com/blog/wp-content/plugins/ck-fasttrack-express-modal/assets/white-logo.png$image\n\n! 2024-03-06 https://piped.server.com\npiped.server.com##div.xl\\:col-span-4.sm\\:col-span-3:nth-of-type(2)\npiped.server.com##div.xl\\:col-span-4.sm\\:col-span-3 > .mb-2.btn\npiped.server.com##.sm\\:order-last.order-first > .mb-2.btn\npiped.server.com##.children\\:mx-3.text-center.py-4.rounded-xl.w-full.mt-10\npiped.server.com##.md\\:ml-auto > .flex-grow.select\npiped.server.com##.md\\:ml-auto > label\npiped.server.com##[href=\"/trending\"]\n\n||pipedapi.server.com/feed\n\n! 2024-03-06 https://www.youtube.com\nwww.youtube.com##.ytd-two-column-browse-results-renderer.style-scope > .ytd-rich-grid-renderer.style-scope\nwww.youtube.com###guide-icon > .yt-icon.style-scope > .yt-spec-icon-shape > div\nwww.youtube.com###guide-button\nwww.youtube.com##ytd-guide-section-renderer.ytd-guide-renderer.style-scope:nth-of-type(1)\nwww.youtube.com###guide-inner-content\nwww.youtube.com##ytd-button-renderer.ytd-masthead.style-scope > yt-button-shape > .yt-spec-button-shape-next--icon-leading.yt-spec-button-shape-next--size-m.yt-spec-button-shape-next--call-to-action.yt-spec-button-shape-next--outline.yt-spec-button-shape-next\n\n! 2024-01-18 https://www.youtube.com\n! Hide all videos containing the phrase \"#shorts\"\nyoutube.com##ytd-grid-video-renderer:has(#video-title:has-text(#shorts))\nyoutube.com##ytd-grid-video-renderer:has(#video-title:has-text(#Shorts))\nyoutube.com##ytd-grid-video-renderer:has(#video-title:has-text(#short))\nyoutube.com##ytd-grid-video-renderer:has(#video-title:has-text(#Short))\n\n! Hide all videos with the shorts indicator on the thumbnail\nyoutube.com##ytd-grid-video-renderer:has([overlay-style=\"SHORTS\"])\nyoutube.com##ytd-rich-item-renderer:has([overlay-style=\"SHORTS\"])\nyoutube.com##ytd-video-renderer:has([overlay-style=\"SHORTS\"])\nyoutube.com##ytd-item-section-renderer.ytd-section-list-renderer[page-subtype=\"subscriptions\"]:has(ytd-video-renderer:has([overlay-style=\"SHORTS\"]))\n\n! Hide shorts button in sidebar\nyoutube.com##ytd-guide-entry-renderer:has-text(Shorts)\nyoutube.com##ytd-mini-guide-entry-renderer:has-text(Shorts)\n\n! Hide shorts section on homepage\nyoutube.com##ytd-rich-section-renderer:has(#rich-shelf-header:has-text(Shorts))\nyoutube.com##ytd-reel-shelf-renderer:has(.ytd-reel-shelf-renderer:has-text(Shorts))\n\n! Hide shorts tab on channel pages\n! Old style\nyoutube.com##tp-yt-paper-tab:has(.tp-yt-paper-tab:has-text(Shorts))\n! New style (2023-10)\nyoutube.com##yt-tab-shape:has-text(/^Shorts$/)\n\n! Hide shorts in video descriptions\nyoutube.com##ytd-reel-shelf-renderer.ytd-structured-description-content-renderer:has-text(\"Shorts remixing this video\")\n\n! Remove empty spaces in grid\nyoutube.com##ytd-rich-grid-row,#contents.ytd-rich-grid-row:style(display: contents !important)\n\n\n!!! MOBILE !!!\n\n! Hide all videos in home feed containing the phrase \"#shorts\"\nm.youtube.com##ytm-rich-item-renderer:has(#video-title:has-text(#shorts))\nm.youtube.com##ytm-rich-item-renderer:has(#video-title:has-text(#Shorts))\nm.youtube.com##ytm-rich-item-renderer:has(#video-title:has-text(#short))\nm.youtube.com##ytm-rich-item-renderer:has(#video-title:has-text(#Short))\n\n! Hide all videos in subscription feed containing the phrase \"#shorts\"\nm.youtube.com##ytm-item-section-renderer:has(#video-title:has-text(#shorts))\nm.youtube.com##ytm-item-section-renderer:has(#video-title:has-text(#Shorts))\nm.youtube.com##ytm-item-section-renderer:has(#video-title:has-text(#short))\nm.youtube.com##ytm-item-section-renderer:has(#video-title:has-text(#Short))\n\n! Hide shorts button in the bottom navigation bar\nm.youtube.com##ytm-pivot-bar-item-renderer:has(.pivot-shorts)\n\n! Hide all videos with the shorts indicator on the thumbnail\nm.youtube.com##ytm-video-with-context-renderer:has([data-style=\"SHORTS\"])\n\n! Hide shorts sections\nm.youtube.com##ytm-rich-section-renderer:has(ytm-reel-shelf-renderer:has(.reel-shelf-title-wrapper:has-text(Shorts)))\nm.youtube.com##ytm-reel-shelf-renderer.item:has(.reel-shelf-title-wrapper:has-text(Shorts))\n\n! Hide shorts tab on channel pages\nm.youtube.com##.single-column-browse-results-tabs>a:has-text(Shorts)\n\n! 2024-03-05 https://www.youtube.com\nwww.youtube.com###guide-button\nwww.youtube.com##.ytd-rich-grid-renderer.style-scope > .ytd-rich-section-renderer.style-scope\nwww.youtube.com##.yt-spec-touch-feedback-shape--overlay-touch-response.yt-spec-touch-feedback-shape > .yt-spec-touch-feedback-shape__fill\nwww.youtube.com##ytd-mini-guide-renderer.ytd-app.style-scope\nwww.youtube.com###voice-search-button > .ytd-masthead.style-scope > yt-button-shape\nwww.youtube.com###end > .ytd-masthead.style-scope\nwww.youtube.com###comments > .ytd-comments.style-scope\nwww.youtube.com##.ytd-watch-next-secondary-results-renderer.style-scope > .ytd-rich-grid-renderer.style-scope\nwww.youtube.com##.ytd-live-chat-frame.style-scope > yt-button-shape > .yt-spec-button-shape-next--size-m.yt-spec-button-shape-next--mono.yt-spec-button-shape-next--outline.yt-spec-button-shape-next > yt-touch-feedback-shape > .yt-spec-touch-feedback-shape--touch-response.yt-spec-touch-feedback-shape > .yt-spec-touch-feedback-shape__fill\nwww.youtube.com##.ytd-live-chat-frame.style-scope > yt-button-shape > .yt-spec-button-shape-next--size-m.yt-spec-button-shape-next--mono.yt-spec-button-shape-next--outline.yt-spec-button-shape-next > yt-touch-feedback-shape > .yt-spec-touch-feedback-shape--touch-response.yt-spec-touch-feedback-shape > .yt-spec-touch-feedback-shape__stroke\nwww.youtube.com###show-hide-button\nwww.youtube.com##.yt-spec-button-shape-next--segmented-start.yt-spec-button-shape-next--icon-leading.yt-spec-button-shape-next--size-m.yt-spec-button-shape-next--mono.yt-spec-button-shape-next--tonal.yt-spec-button-shape-next > yt-touch-feedback-shape > .yt-spec-touch-feedback-shape--touch-response.yt-spec-touch-feedback-shape > .yt-spec-touch-feedback-shape__fill\n\n! 2024-03-06 https://www.youtube.com\nwww.youtube.com###secondary > .ytd-watch-flexy.style-scope\n\n! 2024-03-06 https://piped.server.com\npiped.server.com##.shorts-img.object-contain.w-full.aspect-video\n\npiped.server.com## body > div>div>div>div>div:has(>a>div>span:has-text(Shorts)):remove()\n\n! 2024-03-06 https://www.youtube.com\nwww.youtube.com##.ytd-item-section-renderer.style-scope > .ytd-shelf-renderer.style-scope\nwww.youtube.com##.ytd-topbar-logo-renderer.style-scope > .ytd-logo.style-scope\nwww.youtube.com###country-code\nwww.youtube.com###guide-content\nwww.youtube.com###contentContainer > .ytd-app.style-scope\nwww.youtube.com###contentContainer\n\n! 2024-03-09 https://piped.server.com\npiped.server.com###spinner\n"
+}

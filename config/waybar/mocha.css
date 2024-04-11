@@ -1,0 +1,207 @@
+@import "./themes/mocha.css";
+
+/* Global */
+* {
+  font-family: "FiraCode Nerd Font";
+  font-size: 1rem;
+  border-radius: 1rem;
+  transition-property: background-color;
+  transition-duration: 0.5s;
+  padding: 0.2rem;
+}
+
+@keyframes blink_red {
+  to {
+    background-color: @red;
+    color: @base;
+  }
+}
+
+.warning,
+.critical,
+.urgent {
+  animation-name: blink_red;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+#clock,
+#memory,
+#cpu,
+#mpd,
+#pulseaudio,
+#network,
+#custom-powermenu,
+#custom-launcher,
+#disk {
+  padding-left: 0.6rem;
+  padding-right: 0.6rem;
+}
+
+/* Bar */
+window#waybar {
+  background: transparent;
+  background-color: transparent;
+}
+
+window>box {
+  background: transparent;
+  background-color: shade(alpha(@base, 1), 0.9);
+  margin: 0.3rem;
+  margin-bottom: 0;
+}
+
+/* Workspaces */
+#workspaces {
+  padding: 0;
+}
+
+#workspaces button {
+  padding-right: 0.45rem;
+  padding-left: 0.45rem;
+  padding-top: 0rem;
+  padding-bottom: 0rem;
+  color: @text;
+  background-color: @surface0;
+  border-radius: 0rem;
+}
+
+#workspaces button label {
+  padding: 0;
+  font-size: 1.1rem;
+}
+
+#workspaces button:first-child {
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+  padding-left: 0.8rem;
+}
+
+#workspaces button:last-child {
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  padding-right: 1rem;
+}
+
+#workspaces button:hover {
+  background: none;
+  box-shadow: inherit;
+  text-shadow: inherit;
+}
+
+#workspaces button.empty {
+  color: @overlay1;
+}
+
+#workspaces button.visible {
+  color: @blue;
+  background-color: @surface0;
+}
+
+/* Tooltip */
+tooltip {
+  background-color: @base;
+}
+
+tooltip label {
+  color: @rosewater;
+}
+
+/* mpd */
+#mpd.paused {
+  color: @pink;
+  font-style: italic;
+}
+
+#mpd.stopped {
+  color: @rosewater;
+}
+
+#mpd {
+  color: @lavender;
+}
+
+/* Extra */
+#custom-launcher {
+  color: @blue;
+  font-size: 1.1rem;
+  background-color: @surface0;
+  padding-right: 0.2rem;
+  padding-left: 0.45rem;
+  margin-left: 0.3rem;
+  margin-right: 0;
+}
+
+#custom-powermenu {
+  color: @red;
+  font-size: 1.1rem;
+  background-color: @surface0;
+  padding-left: 0.6rem;
+  padding-right: 0.725rem;
+  margin-right: 0.3rem;
+}
+
+#memory {
+  color: @blue;
+  font-size: 1.04rem;
+  padding-right: 0.2rem;
+}
+
+#cpu {
+  color: @peach;
+  font-size: 1.04rem;
+  padding-right: 0.2rem;
+}
+
+#clock {
+  color: @black;
+  padding-right: 0.8rem;
+  padding-left: 0.8rem;
+  padding-top: 0rem;
+  padding-bottom: 0rem;
+  background-color: @surface0;
+  font-size: 1.04rem;
+}
+
+#pulseaudio {
+  color: @blue;
+  font-size: 1.04rem;
+  padding-right: 0.2rem;
+}
+
+#network {
+  color: @mauve;
+  font-size: 1.04rem;
+  padding-right: 0.2rem;
+}
+
+#disk {
+  color: @maroon;
+  font-size: 1.04rem;
+  padding-right: 0.2rem;
+}
+
+#custom-separatorleft {
+  color: #6e888b;
+  margin: 0 5px;
+  padding-right: 0.5rem;
+}
+
+#custom-separatorright {
+  color: #6e888b;
+  margin: 0 5px;
+  padding-right: 0.5rem;
+}
+
+#custom-separatoralt {
+  color: #2a2d34;
+  margin: 0 5px;
+}
+
+#custom-separatoraltalt {
+  color: #2a2d34;
+  margin: 0 5px;
+  padding-right: 0.5rem;
+}

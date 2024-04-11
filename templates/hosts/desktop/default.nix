@@ -55,11 +55,13 @@
       };
     };
     dev = {
+      aws.enable = true;
       arduino.enable = true;
       cc.enable = true;
       dotnet.enable = true;
       go.enable = true;
       java.enable = true;
+      kubernetes.enable = true;
       lua.enable = true;
       node = {
         enable = true;
@@ -91,15 +93,18 @@
       nvidia.enable = true;
       razer.enable = true;
       sensors.enable = true;
+      printer.enable = true;
       wifi.enable = false;
     };
     services = {
+      docker.enable = true;
       syncthing.enable = true;
     };
     shell = {
       direnv.enable = true;
       git.enable = true;
       gnupg.enable = true;
+      tmux.enable = true;
       utils.enable = true;
       vaultwarden.enable = true;
       zsh.enable = true;

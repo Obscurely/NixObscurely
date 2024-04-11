@@ -3,6 +3,14 @@ echo "---------------------------------------"
 echo "-  Running commands inside nix-shell  -"
 echo "---------------------------------------"
 
+# remove old host and copy over template
+echo "Remove old host and copy over default.nix template"
+
+# remove old host (done here too because I've had some weird behaviour)
+rm -rf hosts/main
+mkdir -p hosts/main
+cp templates/hosts/desktop/default.nix hosts/main/default.nix
+
 # make dir for dotfiles
 echo "Move dotfiles to new root."
 
@@ -12,17 +20,9 @@ cp -r NixObscurely/ /etc/dotfiles/
 # cd into that dir
 cd /etc/dotfiles/
 
-# remove old main host and remake it
-echo "Removing old main host and remaking it."
-
-# remove old host
-rm -rf hosts/main
-mkdir -p hosts/main
-
 # remake old host
 nixos-generate-config --root /mnt --dir /etc/dotfiles/hosts/main
 rm -f hosts/main/configuration.nix
-cp templates/hosts/desktop/default.nix hosts/main/default.nix
 git add hosts/main
 
 # Installing NixOS

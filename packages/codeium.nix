@@ -5,22 +5,18 @@
 , ... # other dependencies if required
 }:
 let
-  version = "1.0"; # You will need to specify the exact version or dynamically fetch it
-  pname = "codeium-lsp";
+  version = "1.6.7";
+  pname = "codeium_language_server";
 
-  # Define platforms similarly to how it's done in the flake.nix
   platforms = {
-    "aarch64-linux" = "linux_arm";
-    "aarch64-darwin" = "macos_arm";
     "x86_64-linux" = "linux_x64";
-    "x86_64-darwin" = "macos_x64";
   };
 
   # Assuming we are focusing on x86_64-linux, you should generalize or adapt this
   platform = platforms.${stdenv.hostPlatform.system};
 
   # Example hash; you should replace it with the actual hash
-  sha256 = "insert-real-hash-here-for-the-desired-platform";
+  sha256 = "sha256-tnhfo84pUiiptPvyP0NKXkSiETedH7An1NAqbwI5Wvg=";
 
   src = fetchurl {
     # This URL should be adjusted based on version and platform
@@ -34,7 +30,10 @@ stdenv.mkDerivation {
   sourceRoot = ".";
 
   # Only use patchelf on Linux platforms
-  nativeBuildInputs = stdenv.lib.optional (!stdenv.isDarwin) autoPatchelfHook;
+  nativeBuildInputs = lib.optional (!stdenv.isDarwin) autoPatchelfHook;
+
+  # Override unpack phase as it's a binary, not an archive
+  unpackPhase = "true";
 
   # Custom install phase
   installPhase = ''

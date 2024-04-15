@@ -277,7 +277,7 @@ in {
         "dom.security.https_only_mode" = true;
         "dom.security.https_only_mode_ever_enabled" = true;
         "layout.spellcheckDefault" = 0;
-        "dom.event.clipboardevents.enabled" = false;
+        "dom.event.clipboardevents.enabled" = true; # without it copy and pasting in apps like Trilium doesn't work
         "browser.safebrowsing.phishing.enabled" = false;
         "browser.safebrowsing.malware.enabled" = false;
         "network.http.sendRefererHeader" = 0; # Might break some sites such as WordPress

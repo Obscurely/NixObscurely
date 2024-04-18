@@ -8,6 +8,7 @@
     # Core dependencies.
     nixpkgs.url = "nixpkgs/nixos-unstable"; # primary nixpkgs
     nixpkgs-unstable.url = "nixpkgs/nixpkgs-unstable"; # for packages on the edge
+    nixpkgs-stable.url = "nixpkgs/nixpkgs-23.11";
     home-manager.url = "github:rycee/home-manager/master";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -19,6 +20,7 @@
     self,
     nixpkgs,
     nixpkgs-unstable,
+    nixpkgs-stable,
     ...
   }: let
     inherit (lib.my) mapModules mapModulesRec mapHosts;
@@ -33,6 +35,7 @@
       };
     pkgs = mkPkgs nixpkgs [self.overlay];
     pkgs' = mkPkgs nixpkgs-unstable [];
+    pkgs-stable = mkPkgs nixpkgs-stable [];
 
     lib =
       nixpkgs.lib.extend
@@ -47,6 +50,7 @@
 
     overlay = final: prev: {
       unstable = pkgs';
+      stable = pkgs-stable;
       my = self.packages."${system}";
     };
 

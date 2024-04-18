@@ -35,7 +35,7 @@ in {
         python311Packages.vulture # dead code analysis
         python311Packages.debugpy # debugger
         poetry
-        nodePackages.pyright
+        pylyzer # lsp 
         black
       ];
 

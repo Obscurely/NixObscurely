@@ -27,15 +27,13 @@ in {
         python311
         python311Packages.pip
         python311Packages.ipython
-        python311Packages.black
         python311Packages.setuptools
-        python311Packages.pylint
-        python311Packages.flake8 # multiple code analysis tools
         python311Packages.mypy # type checking
         python311Packages.vulture # dead code analysis
+	ruff # formatter and linter
         python311Packages.debugpy # debugger
+        pyright # lsp 
         poetry
-        stable.pylyzer # lsp 
         black
       ];
 

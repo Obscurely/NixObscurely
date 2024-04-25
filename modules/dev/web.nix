@@ -33,6 +33,8 @@ in {
         hugo # backend developer's best friend for building frontends
 	htmx-lsp # lsp for htmx
 	tailwindcss-language-server # lsp for tailwindcss
+	prettierd # prettier as a daemon for improved formatting speeds
+	emmet-ls # emmet language server
       ];
     })
   ];

@@ -26,7 +26,6 @@ in {
       user.packages = with pkgs; [
         shellcheck
         nodePackages.bash-language-server
-        nodePackages.prettier
         shfmt
       ];
     })

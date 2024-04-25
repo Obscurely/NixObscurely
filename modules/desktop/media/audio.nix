@@ -20,6 +20,7 @@ in {
       clementine
       sox # sample rate converter and spectrograms generator
       easytag # view and edit tags for various audio files
+      blanket # background ambient sounds
       (makeDesktopItem {
         name = "easytag";
         desktopName = "EasyTAG";

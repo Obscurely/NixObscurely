@@ -48,3 +48,4 @@ function r {
 
 # Other
 alias virt-viewer='virt-viewer -c qemu:///system'
+alias "awslocal=aws --endpoint-url=https://localhost.localstack.cloud"

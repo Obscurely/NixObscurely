@@ -21,7 +21,10 @@ in {
       user.packages = with pkgs; [
         terraform # IAC
         terraformer # Infrastructure to code
+	terraform-ls # terraform lsp
+	tfsec # static analysis security scanning for terraform files
         ansible # Configure/deploy to infrastructure
+	ansible-language-server # lsp for ansible	
       ];
     })
   ];

@@ -56,6 +56,7 @@
     };
     dev = {
       aws.enable = true;
+      cloud.enable = true;
       arduino.enable = true;
       cc.enable = true;
       dotnet.enable = true;

@@ -25,6 +25,7 @@ in {
 	tfsec # static analysis security scanning for terraform files
         ansible # Configure/deploy to infrastructure
 	ansible-language-server # lsp for ansible	
+	ansible-lint # linter for ansible yaml files
       ];
     })
   ];

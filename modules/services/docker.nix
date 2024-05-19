@@ -33,6 +33,7 @@ in {
         autoPrune.enable = true;
         enableOnBoot = mkDefault false;
         # listenOptions = [];
+	enableNvidia = true;
       };
     };
   };

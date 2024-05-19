@@ -46,5 +46,9 @@ function r {
   sched "$time" "notify-send --urgency=critical 'Reminder' '$@'; ding";
 }; compdef r=sched
 
+# kubernetes
+export do="--dry-run=client -o yaml"
+export now="--grace-period 0 --force"
+
 # Other
 alias virt-viewer='virt-viewer -c qemu:///system'

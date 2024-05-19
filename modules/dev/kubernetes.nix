@@ -20,6 +20,12 @@ in {
       user.packages = with pkgs; [
         kubectl # manage kubernetes clusters
       ];
+
+      environment.shellAliases = {
+        k = "kubectl";
+        kc = "kubectl config get-contexts";
+        kn = "kubectl config set-context --current --namespace";
+      };
     })
   ];
 }

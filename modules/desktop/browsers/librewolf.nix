@@ -255,8 +255,8 @@ in {
         # Disable middle click paste, just don't like the option
         "middlemouse.paste" = false;
 
-        # Disable ipv6 since my ISP doesn't use it
-        "network.dns.disableIPv6" = true;
+        # Enable ipv6
+        "network.dns.disableIPv6" = false;
 
         # Set cookie behaviour
         "network.cookie.cookieBehavior" = 5;

@@ -135,11 +135,11 @@ in {
     programs.ssh.enableAskPassword = false;
 
     # Enable libinput
-    services.xserver.libinput.enable = true;
+    services.libinput.enable = true;
 
     # Disable mouse acceleration
-    services.xserver.libinput.mouse.accelProfile = "flat";
-    services.xserver.libinput.mouse.accelSpeed = "0";
+    services.libinput.mouse.accelProfile = "flat";
+    services.libinput.mouse.accelSpeed = "0";
 
     # Enable gnome keyring service
     services.gnome.gnome-keyring.enable = true;

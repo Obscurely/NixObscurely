@@ -198,6 +198,9 @@ in {
         git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
         git clone https://github.com/Obscurely/neovim.git ~/.config/nvim/lua/custom
         arduino-cli config init
+        arduino-cli core update-index
+        arduino-cli core install arduino:avr
+        arduino-cli  core update-index --additional-urls https://arduino.esp8266.com/stable/package_esp8266com_index.json
       fi
 
       # Load locckscreen image if there is one

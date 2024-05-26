@@ -21,6 +21,7 @@ in {
     (mkIf cfg.enable {
       user.packages = with pkgs; [
         arduino-cli
+        arduino-language-server
       ];
     })
   ];

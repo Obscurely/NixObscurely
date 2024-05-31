@@ -12,7 +12,6 @@ pkill -9 ark &
 pkill -9 kitty &
 pkill -9 chromium &
 pkill -9 easytag &
-pkill -9 easyeffects &
 pkill -9 haruna &
 pkill -9 nvidia &
 pkill -9 bleachbit &

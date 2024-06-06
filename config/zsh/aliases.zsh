@@ -52,3 +52,10 @@ export now="--grace-period 0 --force"
 
 # Other
 alias virt-viewer='virt-viewer -c qemu:///system'
+
+# ntfy
+function ntfy() {
+   local message="$*"
+   local url="http://ntfy.server.com/other"
+   curl -d "$message" -H "Priority: high" "$url"
+}

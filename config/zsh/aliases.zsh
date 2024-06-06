@@ -57,5 +57,5 @@ alias virt-viewer='virt-viewer -c qemu:///system'
 function ntfy() {
    local message="$*"
    local url="http://ntfy.server.com/other"
-   curl -d "$message" -H "Priority: high" "$url"
+   curl -d "$message" -H "Priority: max" "$url"
 }

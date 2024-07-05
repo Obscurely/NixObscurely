@@ -31,6 +31,10 @@ in {
         proselint # basically it checks your writting.
         deno # fromat and other things
         hugo # backend developer's best friend for building frontends
+	htmx-lsp # lsp for htmx
+	tailwindcss-language-server # lsp for tailwindcss
+	prettierd # prettier as a daemon for improved formatting speeds
+	emmet-ls # emmet language server
       ];
     })
   ];

@@ -56,8 +56,10 @@
     };
     dev = {
       aws.enable = true;
+      cloud.enable = true;
       arduino.enable = true;
       cc.enable = true;
+      docker.enable = true;
       dotnet.enable = true;
       go.enable = true;
       java.enable = true;

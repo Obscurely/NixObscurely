@@ -21,6 +21,7 @@ in {
       editorconfig-core-c
       unstable.neovim
       tree-sitter
+      my.codeium # for autocompletions powered by AI
     ];
 
     # enable wakapi config

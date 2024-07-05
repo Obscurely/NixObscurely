@@ -19,7 +19,14 @@ in {
     (mkIf cfg.enable {
       user.packages = with pkgs; [
         kubectl # manage kubernetes clusters
+        kubernetes-helm # helm pkg manager for k8s
       ];
+
+      environment.shellAliases = {
+        k = "kubectl";
+        kc = "kubectl config get-contexts";
+        kn = "kubectl config set-context --current --namespace";
+      };
     })
   ];
 }

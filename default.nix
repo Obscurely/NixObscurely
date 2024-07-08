@@ -70,6 +70,9 @@ with lib.my; {
     };
   };
 
+  # Enable architecture emulation
+  boot.binfmt.emulatedSystems = ["aarch64-linux" "x86_64-windows" "i686-linux"];
+
   # Just the bear necessities...
   environment.systemPackages = with pkgs; [
     bind

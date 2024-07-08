@@ -11,13 +11,7 @@ with lib.my; let
 in {
   options.modules.hardware.nvopen = {
     enable = mkBoolOpt false;
-  };
-
-  # Make sure the xserver is disabled
-  services.xserver.enable = false;
-
-  # Make sure the nouveau module is loaded
-  boot.initrd.kernelModules = [ "nouveau" ];
+  }; 
 
   config = mkIf cfg.enable {
     hardware.opengl = {
@@ -28,6 +22,11 @@ in {
         nvidia-vaapi-driver 
       ];
     };
+    # Make sure the xserver is disabled
+    services.xserver.enable = false;
+
+    # Make sure the nouveau module is loaded
+    boot.initrd.kernelModules = [ "nouveau" ];
 
     services.xserver.videoDrivers = ["nouveau"];
     boot.kernelParams = ["nouveau.config=NvGspRm=1"];

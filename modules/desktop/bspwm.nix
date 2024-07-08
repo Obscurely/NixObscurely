@@ -28,14 +28,28 @@ in {
         pulseSupport = true;
         nlSupport = true;
       })
+      feh # image viewer
+      betterlockscreen # lockscreen
+      xclip
+      xdotool
+      xorg.xwininfo
+      xorg.xinit
+      xorg.libXcomposite
+      xorg.libXinerama
+      xorg.libxcb
+      xorg.xkill
+      picom # compositor
+      flameshot # cool utility for taking screen shots
+    ];
+
+    user.packages = with pkgs; [
+      (writeScriptBin "rofi" ''
+        #!${stdenv.shell}
+        exec ${pkgs.rofi}/bin/rofi -terminal xterm -m -1 "$@"
+      '')
     ];
 
     services = {
-      # picom = {
-      #   enable = true;
-      #   #experimentalBackends = true;
-      #   backend = "glx";
-      # };
       displayManager = {
 	defaultSession = "none+bspwm";
       };
@@ -44,6 +58,7 @@ in {
         displayManager = {
           lightdm.enable = true;
           lightdm.greeters.mini.enable = true;
+          lightdm.greeters.mini.user = config.user.name;
         };
         windowManager.bspwm.enable = true;
       };
@@ -61,6 +76,7 @@ in {
         recursive = true;
       };
       "picom".source = "${configDir}/picom";
+      "flameshot".source = "${configDir}/flameshot";
     };
   };
 }

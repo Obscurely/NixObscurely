@@ -31,17 +31,7 @@ in {
       }
     ];
 
-    user.packages = with pkgs; [
-      feh # image viewer
-      betterlockscreen # lockscreen
-      xclip
-      xdotool
-      xorg.xwininfo
-      xorg.xinit
-      xorg.libXcomposite
-      xorg.libXinerama
-      xorg.libxcb
-      xorg.xkill
+    user.packages = with pkgs; [ 
       qgnomeplatform # QPlatformTheme for a better Qt application inclusion in GNOME
       libsForQt5.qtstyleplugin-kvantum # SVG-based Qt5 theme engine plus a config tool and extra theme
       dialog # display dialog boxes from shell
@@ -49,9 +39,7 @@ in {
       lxde.lxsession # lightweight session manager
       sqlite # database
       usbutils # usb utilities
-      xdg-user-dirs # create xdg user dirs
-      picom # compositor
-      flameshot # cool utility for taking screen shots
+      xdg-user-dirs # create xdg user dirs 
       pkg-config # a tool for pkgs to find info about other pkgs
       ruby # for hey tool
     ];
@@ -92,10 +80,7 @@ in {
           fonts = ["FiraCode" "FiraMono" "DroidSansMono" "Hack" "Inconsolata" "Iosevka" "JetBrainsMono" "Meslo" "RobotoMono" "FantasqueSansMono" "Hermit"];
         })
       ];
-    };
-
-    ## Apps/Services
-    services.xserver.displayManager.lightdm.greeters.mini.user = config.user.name; 
+    }; 
 
     programs.thunar = {
       enable = true;
@@ -116,10 +101,6 @@ in {
     # Some crucial dotfiles
     home.configFile = with config.modules;
       mkMerge [
-        {
-          # Flameshot
-          "flameshot".source = "${configDir}/flameshot";
-        }
         {
           # Mimeapps list
           "mimeapps.list".source = "${configDir}/mimeapps.list";

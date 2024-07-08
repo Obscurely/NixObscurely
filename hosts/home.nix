@@ -5,7 +5,6 @@
 }:
 with builtins;
 with lib; {
-  ## Location config -- since Toronto is my 127.0.0.1
   time.timeZone = mkDefault "Europe/Bucharest";
   i18n.defaultLocale = mkDefault "en_US.UTF-8";
   i18n.extraLocaleSettings = {

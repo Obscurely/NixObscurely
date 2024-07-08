@@ -12,7 +12,7 @@
   ## Modules
   modules = {
     desktop = {
-      bspwm = {
+      hyprland = {
         enable = true;
         host = "main";
       };
@@ -21,7 +21,6 @@
         bitwarden.enable = true;
         discord.enable = true;
         element.enable = true;
-        rofi.enable = true;
         utils.enable = true;
       };
       browsers = {
@@ -48,7 +47,7 @@
       };
       term = {
         default = "xterm-kitty";
-        st.enable = true;
+        kitty.enable = true;
       };
       vm = {
         virtd.enable = true;
@@ -92,7 +91,7 @@
         enable = true;
         ssd.enable = true;
       };
-      nvidia.enable = true;
+      nvopen.enable = true;
       razer.enable = true;
       sensors.enable = true;
       printer.enable = true;

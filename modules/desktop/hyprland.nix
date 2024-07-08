@@ -23,41 +23,42 @@ in {
 
     environment.systemPackages = with pkgs; [
       dunst
-      qt6.qtwayland
+      libnotify
+      swaybg # setting the wallpaper
+      wl-clipboard # wayland clipboard
+      rofi-wayland # Rofi for wayland
+      wayshot # for taking screenshots
+      grim # grabs the screenshots
+      slurp # select a region to screenshot
     ];
 
+    qt.enable = true;
+
+    programs.hyprland = {
+      enable = true;
+      xwayland.enable = true;
+      hyprlock.enable = true;
+    };
+
+    programs.waybar.enable = true;
+
     services = {
-      programs.hyprland = {
-        enable = true;
-        xwayland.enable = true;
-      };
-      services.xserver.displayManager.sddm = {
+      displayManager.sddm = {
         enable = true;
         wayland.enable = true;
+        defaultSession = "hyprland"; 
       };
-      # xserver = {
-      #   enable = true;
-      #   displayManager = {
-      #     defaultSession = "none+bspwm";
-      #     lightdm.enable = true;
-      #     lightdm.greeters.mini.enable = true;
-      #   };
-      #   windowManager.bspwm.enable = true;
-      # };
       tumbler.enable = true; # get thumbnails in ristretto
     };
 
     # this may be needed in some cases
     programs.dconf.enable = true;
 
-    # link recursively so other modules can link files in their folders
     home.configFile = {
-      "sxhkd".source = "${configDir}/sxhkd";
-      "bspwm" = {
-        source = "${configDir}/bspwm/${cfg.host}";
+      "hypr" = {
+        source = "${configDir}/hypr/${cfg.host}";
         recursive = true;
       };
-      "picom".source = "${configDir}/picom";
     };
   };
 }

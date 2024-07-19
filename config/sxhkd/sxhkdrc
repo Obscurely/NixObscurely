@@ -172,9 +172,9 @@ super + d
 super + shift + d
   chromium-browser --ignore-certificate-errors --new-window https://discord.com/channels/@me & sleep 1.5 && id=$(bspc query -N -n); bspc node -d '^6'; bspc node -f ${id}; bspc desktop -f '^6';
 
-# open steam
+# open sonixd
 super + x
-	steam
+	sonixd
 
 # open qutebrowser
 super + q

@@ -29,7 +29,7 @@ in {
       winetricks
       dxvk
       mangohud
-      gnome.zenity
+      zenity
       auto-cpufreq
       vkBasalt
       goverlay

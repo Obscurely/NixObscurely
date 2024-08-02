@@ -5,7 +5,7 @@ lutris="󰊖"
 calculator="󰃬"
 easyeffects="󰕾"
 chromium=""
-steam=""
+steam="󰓓"
 vaultwarden=""
 
 # Error msg
@@ -14,7 +14,7 @@ msg() {
 }
 
 # Variable passed to rofi
-options="$lutris\n$calculator\n$easyeffects\n$chromium\n$sonixd\n$vaultwarden"
+options="$lutris\n$steam\n$calculator\n$easyeffects\n$chromium\n$vaultwarden"
 
 chosen="$(echo -e "$options" | $rofi_command -p "Most Used" -dmenu -selected-row 0)"
 case $chosen in

@@ -20,8 +20,7 @@ in {
   config = mkMerge [
     (mkIf cfg.enable {
       user.packages = with pkgs; [
-        nodePackages.vscode-langservers-extracted
-        nodePackages_latest.vscode-html-languageserver-bin
+        vscode-langservers-extracted
         nodePackages.typescript
         nodePackages.typescript-language-server
         marksman # language server for markdown

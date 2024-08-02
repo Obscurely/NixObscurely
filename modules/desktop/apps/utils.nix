@@ -20,7 +20,7 @@ in {
   config = mkIf cfg.enable {
     user.packages = with pkgs; [
       bleachbit # clean up computer utility
-      gnome.gnome-calculator # calculator
+      gnome-calculator # calculator
       gparted # partition manager
       lxappearance # appearance customization tool
       notepadqq # notepad++ but for linux
@@ -31,7 +31,7 @@ in {
       zoom-us # video conference app
       libsForQt5.ark # imo best linux archive manager
       xfce.xfce4-settings # setting manager
-      gnome.pomodoro # pomodor style timer for taking breaks
+      pomodoro # pomodor style timer for taking breaks
 
       # My packages
       my.estash

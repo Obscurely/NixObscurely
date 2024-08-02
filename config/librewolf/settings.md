@@ -10,8 +10,9 @@ Some settings that are needed for the theme to be displayed properly
 - Right click on the toolbar and hit customize toolbar
   - Enable the titler bar (left corner down)
   - Remove the flexible space by the refresh button
-  - Click on manage themes (left corner down) and disable all themes, so that
-    only system - auto remains
+  - Install
+    [Dark Reader Theme](https://addons.mozilla.org/en-US/firefox/addon/dark-reader-theme/)
+    and enable it
 - Right click on the toolbar, go to bookmarks toolbar and hit never show (the
   bookmarks can still be seen by pressing ctrl + b)
 

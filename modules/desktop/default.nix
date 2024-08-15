@@ -144,6 +144,9 @@ in {
     # Enable gnome keyring service
     services.gnome.gnome-keyring.enable = true;
 
+    # Enable xdg portal
+    xdg.portal.enable = true;
+
     # Run activation script for setting the user up
     # Create xdg folders, install neovim config etc.
     system.userActivationScripts.setupUser = ''

@@ -31,7 +31,7 @@ in {
       zoom-us # video conference app
       libsForQt5.ark # imo best linux archive manager
       xfce.xfce4-settings # setting manager
-      pomodoro # pomodor style timer for taking breaks
+      gnome-pomodoro # pomodor style timer for taking breaks
 
       # My packages
       my.estash

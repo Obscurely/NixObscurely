@@ -95,7 +95,7 @@ in {
     };
 
     ## Apps/Services
-    services.xserver.displayManager.lightdm.greeters.mini.user = config.user.name; 
+    services.xserver.displayManager.lightdm.greeters.mini.user = config.user.name;
 
     programs.thunar = {
       enable = true;
@@ -146,6 +146,14 @@ in {
 
     # Enable xdg portal
     xdg.portal.enable = true;
+    xdg.portal.config = {
+      common = {
+        default = [
+          "gtk"
+        ];
+      };
+    };
+    xdg.portal.configPackages = [ pkgs.gnome.gnome-session ];
 
     # Run activation script for setting the user up
     # Create xdg folders, install neovim config etc.

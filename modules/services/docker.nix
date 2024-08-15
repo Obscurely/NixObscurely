@@ -33,8 +33,9 @@ in {
         autoPrune.enable = true;
         enableOnBoot = mkDefault false;
         # listenOptions = [];
-	enableNvidia = true;
       };
     };
+
+    hardware.nvidia-container-toolkit.enable = true;
   };
 }

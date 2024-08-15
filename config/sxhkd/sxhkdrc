@@ -183,18 +183,50 @@ super + q
 # open vaultwarden menu
 super + shift + v
 	$DOTFILES_BIN/rofi/bwmenu
+
+#
+# Media Keys
+#
 	
-# media audio mute
+# Mute Audio 
 XF86AudioMute
   pactl set-sink-mute 0 toggle
 
-# media volume up
+# Volume Up 
 XF86AudioRaiseVolume
   pactl set-sink-volume 0 +2%
 
-# media volume down
+# Volume Down
 XF86AudioLowerVolume
   pactl set-sink-volume 0 -2%
+
+# Play/Pause
+XF86AudioPlay
+  playerctl play-pause
+
+# Next
+XF86AudioNext
+  playerctl next
+ 
+# Previous
+XF86AudioPrev
+  playerctl previous
+ 
+# Stop
+XF86AudioStop
+  playerctl stop
+
+# Rewind
+XF86AudioRewind
+  playerctl position 5-
+
+# Seek Forward
+XF86AudioForward
+  playerctl position 5+
+
+#
+# App Bindings
+#
 
 # screenshot display and copy to clipboard
 Print

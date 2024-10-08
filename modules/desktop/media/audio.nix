@@ -17,6 +17,7 @@ in {
   config = mkIf cfg.enable {
     user.packages = with pkgs; [
       sonixd # frontend for subsonic compatible servers
+      tidal-hifi # tidal player
       clementine
       sox # sample rate converter and spectrograms generator
       easytag # view and edit tags for various audio files

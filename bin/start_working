@@ -44,14 +44,19 @@ pkill -9 ristretto &
 pkill -9 xterm &
 pkill -9 pavucontrol &
 
-# Open xst with custom settings for neovim
-cd "$HOME/Code" && xrdb -load "$HOME/.config/xtheme/90.b-theme" && xst -c NeoVim -T NeoVim -t NeoVim & xrdb -load "$HOME/.config/xtheme/90-theme" &
+# Open xst with custom settings for neovim + Go into current project and run nix develop
+cd $HOME/Code && xrdb -load $HOME/.config/xtheme/90.b-theme && xst -c NeoVim -T NeoVim -t NeoVim -e tmux attach-session -t code || xst -c NeoVim -T NeoVim -t NeoVim -e tmux new-session -s code && xrdb -load $HOME/.config/xtheme/90-theme && tmux send-keys -t code C-u && tmux send-keys -t code "cd $HOME/Code/AWS/RekoSearch/" ENTER && tmux send-keys -t code "nix develop" ENTER &
 
-# Open the browser
-librewolf "https://trilium.server.com/#root/M31xPyu71vtg-64ZC" "https://vikunja.server.com/lists/20/kanban" &
+# Open the browser with everything needed for current project + open another window on the second monitor with the project
+librewolf "https://trilium.server.com/#root/M31xPyu71vtg/kOwY8uyEI1Os/p1pgPZFrvm2K/UfNfcsyGgUUf?ntxId=z2dL8r" "https://vikunja.server.com/projects/30/kanban" "https://console.aws.amazon.com" && bspc rule -a 'librewolf:*' desktop=^6 && librewolf --new-window "http://localhost:5000" && bspc rule -a 'librewolf:*' desktop=^3 &
+
+# Open bruno
+bruno &
 
 # Start pomodor timer
 gnome-pomodoro &
 sleep 2
 gnome-pomodoro --start
 
+# Return to coding workspace
+bspc desktop -f '^2'

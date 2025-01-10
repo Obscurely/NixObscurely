@@ -20,7 +20,7 @@ in {
   config = mkMerge [
     (mkIf cfg.enable {
       user.packages = with pkgs; [
-        dotnet-sdk_7
+        dotnet-sdk_9
         vscode-extensions.ms-dotnettools.csharp
         uncrustify # formats code (also for c++)
         netcoredbg # debugger

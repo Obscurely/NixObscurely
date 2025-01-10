@@ -28,7 +28,7 @@ in {
       virt-viewer
       libvirt
       quickemu # fast way to create optimzed vms
-      quickgui # gui for quickemu
+      # quickgui # gui for quickemu # TODO: enable back when fixed
     ];
 
     virtualisation.libvirtd = {

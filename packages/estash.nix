@@ -9,6 +9,7 @@
 }: let
   version = "0.6.1";
   name = "estash-${version}";
+  pname = "estash";
 
   plat =
     {
@@ -28,18 +29,16 @@
   };
 
   appimageContents = appimageTools.extractType2 {
-    inherit name src;
+    inherit pname version src;
   };
 in
   appimageTools.wrapType2 rec {
-    inherit name src;
+    inherit pname version src;
 
     extraInstallCommands = ''
       mkdir -p $out/share/pixmaps $out/share/licenses/estash
       cp ${appimageContents}/estash.png $out/share/pixmaps/
       cp ${appimageContents}/EStash.desktop $out
-      #cp ${appimageContents}/LICENSE.electron.txt $out/share/licenses/p3x-onenote/LICENSE
-      mv $out/bin/${name} $out/bin/estash
       ${desktop-file-utils}/bin/desktop-file-install --dir $out/share/applications \
         --set-key Exec --set-value $out/bin/estash \
         --set-key Comment --set-value "EStash Linux" \

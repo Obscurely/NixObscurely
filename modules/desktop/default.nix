@@ -88,9 +88,19 @@ in {
         noto-fonts-emoji
         SDL_ttf
         comfortaa
-        (nerdfonts.override {
-          fonts = ["FiraCode" "FiraMono" "DroidSansMono" "Hack" "Inconsolata" "Iosevka" "JetBrainsMono" "Meslo" "RobotoMono" "FantasqueSansMono" "Hermit"];
-        }) 
+	# Nerd fonts
+	nerd-fonts.fira-code
+	nerd-fonts.fira-mono
+	nerd-fonts.droid-sans-mono
+	nerd-fonts.hack
+	nerd-fonts.inconsolata
+	nerd-fonts.iosevka
+	nerd-fonts.jetbrains-mono
+	nerd-fonts.meslo-lg
+	nerd-fonts.roboto-mono
+	nerd-fonts.fantasque-sans-mono
+	nerd-fonts.hurmit
+	hermit
       ];
     };
 
@@ -153,7 +163,7 @@ in {
         ];
       };
     };
-    xdg.portal.configPackages = [ pkgs.gnome.gnome-session ];
+    xdg.portal.configPackages = [ pkgs.gnome-session ];
 
     # Run activation script for setting the user up
     # Create xdg folders, install neovim config etc.

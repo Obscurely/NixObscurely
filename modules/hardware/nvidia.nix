@@ -23,7 +23,7 @@ in {
     };
 
     services.xserver.videoDrivers = ["nvidia"];
-    hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.vulkan_beta;
+    #hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.vulkan_beta; # TODO: enable back when pkg is fixed
     hardware.nvidia.modesetting.enable = true;
     boot.kernelParams = ["nvidia-drm.modeset=1"];
     environment.variables = {

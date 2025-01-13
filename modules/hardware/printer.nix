@@ -15,6 +15,6 @@ in {
 
   config = mkIf cfg.enable {
     services.printing.enable = true;
-    services.printing.drivers = with pkgs; [ epson-escpr ];
+    services.printing.drivers = with pkgs; [ epson-escpr epson-escpr2 ];
   };
 }

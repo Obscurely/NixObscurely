@@ -35,6 +35,7 @@ in {
         pyright # lsp 
         poetry
         black
+	bandit # find security issues
       ];
 
       environment.shellAliases = {

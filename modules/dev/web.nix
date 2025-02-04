@@ -26,7 +26,7 @@ in {
         marksman # language server for markdown
         html-tidy # diagnostics for web files
         alex # catches incosiderate writting
-        mdl # markdown lint
+        markdownlint-cli2 # markdown lint
         proselint # basically it checks your writting.
         deno # fromat and other things
         hugo # backend developer's best friend for building frontends

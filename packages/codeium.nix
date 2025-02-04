@@ -5,7 +5,7 @@
 , ... # other dependencies if required
 }:
 let
-  version = "1.6.7";
+  version = "1.20.9";
   pname = "codeium_language_server";
 
   platforms = {
@@ -15,8 +15,8 @@ let
   # Assuming we are focusing on x86_64-linux, you should generalize or adapt this
   platform = platforms.${stdenv.hostPlatform.system};
 
-  # Example hash; you should replace it with the actual hash
-  sha256 = "sha256-tnhfo84pUiiptPvyP0NKXkSiETedH7An1NAqbwI5Wvg=";
+  # Hash
+  sha256 = "sha256-3BZ1Nug8updRc/WLFLlyPf02cuCCkOYBCc1Osr3Lv/I=";
 
   src = fetchurl {
     # This URL should be adjusted based on version and platform

@@ -92,7 +92,7 @@
         enable = true;
         ssd.enable = true;
       };
-      nvidia.enable = true;
+      nouveau.enable = true;
       razer.enable = true;
       sensors.enable = true;
       printer.enable = true;

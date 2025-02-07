@@ -38,5 +38,8 @@ in {
         exec ${config.boot.kernelPackages.nvidia_x11.settings}/bin/nvidia-settings --config="$XDG_CONFIG_HOME/nvidia/settings"
       '')
     ];
+
+	# Used in something like docker
+    hardware.nvidia-container-toolkit.enable = true;
   };
 }

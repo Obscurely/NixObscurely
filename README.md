@@ -17,7 +17,7 @@
 | **DM:**        | lightdm + lightdm-mini-greeter                                 |
 | **WM:**        | bspwm + polybar                                                |
 | **Editor:**    | [neovim][neovim]                                               |
-| **Terminal:**  | xst                                                            |
+| **Terminal:**  | Alacritty                                                      |
 | **Launcher:**  | rofi                                                           |
 | **Browser:**   | Librewolf, Qutebrowser and Chromium                            |
 | **GTK Theme:** | [Fluent Dark](https://github.com/vinceliuice/Fluent-gtk-theme) |

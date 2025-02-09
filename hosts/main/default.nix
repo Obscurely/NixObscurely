@@ -47,7 +47,8 @@
         recording.enable = true;
       };
       term = {
-        default = "xterm-kitty";
+        default = "alacritty";
+		alacritty.enable = true;
         st.enable = true;
       };
       vm = {

@@ -1,0 +1,55 @@
+[general]
+live_config_reload = true
+working_directory = "None"
+
+[window]
+dimensions = { lines = 0, columns = 0 }
+position = "None"
+padding = { x = 20, y = 20 }
+dynamic_padding = false
+decorations = "None"
+opacity = 0.5
+blur = false
+startup_mode = "Maximized"
+title = "Alacritty"
+dynamic_title = false
+class = { instance = "Alacritty", general = "Alacritty" }
+decorations_theme_variant = "Dark"
+level = "AlwaysOnTop"
+
+[scrolling]
+history = 10000
+multiplier = 3
+
+[font]
+normal = { family = "FiraCode Nerd Font Mono Med", style = "Medium,Regular" }
+size = 14
+offset = { x = 0, y = 0 }
+builtin_box_drawing = false
+
+[colors.primary]
+background = "#181f21"
+foreground = "#dadada"
+dim_foreground = "None"    # It gets automatically calculated
+bright_foreground = "None"
+
+[colors]
+cursor = { text = "CellBackground", cursor = "CellForeground" }
+selection = { text = "CellBackground", background = "CellForeground" }
+transparent_background_colors = false
+draw_bold_text_with_bright_colors = false
+
+[bell]
+duration = 0
+command = "None"
+
+[cursor]
+style = { shape = "Beam", blinking = "Never" }
+unfocused_hollow = false
+thickness = 0.15
+
+[terminal]
+shell = "zsh"
+
+[mouse]
+hide_when_typing = false

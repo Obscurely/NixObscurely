@@ -4,7 +4,7 @@
 
 # terminal emulator
 super + Return
-	cd $HOME && xrdb -load $HOME/.config/xtheme/90-theme && xst -c xst -T xst -t xst -e tmux attach-session -t main || xst -c xst -T xst -t xst -e tmux new-session -s main
+  alacritty --class Alacritty --title Alacritty --working-directory $HOME --hold --command tmux new-session -A -s main
 
 # make sxhkd reload its configuration files:
 super + Escape
@@ -162,7 +162,7 @@ super + e
 
 # Open kitty with custom settings in order to go well with NeoVim
 super + v
-  cd $HOME/Code && xrdb -load $HOME/.config/xtheme/90.b-theme && xst -c NeoVim -T NeoVim -t NeoVim -e tmux attach-session -t code || xst -c NeoVim -T NeoVim -t NeoVim -e tmux new-session -s code && xrdb -load $HOME/.config/xtheme/90-theme
+  alacritty --class NeoVim --title NeoVim --working-directory $HOME/Code --option window.padding.x=0 --option window.padding.y=0 --hold --command tmux new-session -A -s code
 
 # open discord
 super + d

@@ -66,7 +66,7 @@ in {
     boot = {
       # Make sure the nouveau module is loaded
       initrd.kernelModules = ["nouveau"];
-	  # A fix for the nouveau driver
+	  # Use the gsp driver 
       kernelParams = ["nouveau.config=NvGspRm=1"];
 	  # Make sure the proprietary NVIDIA drivers are blacklisted
       blacklistedKernelModules = ["nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm"];

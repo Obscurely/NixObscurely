@@ -92,7 +92,7 @@
         enable = true;
         ssd.enable = true;
       };
-      nouveau.enable = true;
+      nvidia.enable = true;
       razer.enable = true;
       sensors.enable = true;
       printer.enable = true;
@@ -116,7 +116,7 @@
 
   networking.networkmanager.enable = true;
 
-  ## Extra fix for resolution and monitor placement
+  # Extra fix for resolution and monitor placement
   environment.etc = {
     "X11/xorg.conf.d/52-resolution-fix.conf".text = ''
       Section "Monitor"

@@ -86,7 +86,7 @@ in {
         roboto
         xorg.fontxfree86type1
         noto-fonts-emoji
-        SDL_ttf
+        # SDL_ttf # TODO: enable back when fixed
         comfortaa
 	# Nerd fonts
 	nerd-fonts.fira-code

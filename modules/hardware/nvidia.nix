@@ -18,9 +18,6 @@ in {
       enable = true;
       enable32Bit = true;
       extraPackages = with pkgs; [
-        # Main
-        nvidia-utils
-
         # Vulkan
         vulkan-loader
         vulkan-headers

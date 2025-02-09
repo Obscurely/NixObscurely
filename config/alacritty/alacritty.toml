@@ -2,6 +2,9 @@
 live_config_reload = true
 working_directory = "None"
 
+[env]
+term = "xterm-256color"
+
 [window]
 dimensions = { lines = 0, columns = 0 }
 position = "None"

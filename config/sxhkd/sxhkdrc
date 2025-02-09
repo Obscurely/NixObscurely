@@ -4,7 +4,7 @@
 
 # terminal emulator
 super + Return
-  alacritty --class Alacritty --title Alacritty --working-directory $HOME --hold --command tmux new-session -A -s main
+  alacritty --class Alacritty --title Alacritty --working-directory $HOME --command tmux new-session -A -s main
 
 # make sxhkd reload its configuration files:
 super + Escape
@@ -162,7 +162,7 @@ super + e
 
 # Open kitty with custom settings in order to go well with NeoVim
 super + v
-  alacritty --class NeoVim --title NeoVim --working-directory $HOME/Code --option window.padding.x=0 --option window.padding.y=0 --hold --command tmux new-session -A -s code
+  alacritty --class NeoVim --title NeoVim --working-directory $HOME/Code --option window.padding.x=0 --option window.padding.y=0 --command tmux new-session -A -s code
 
 # open discord
 super + d

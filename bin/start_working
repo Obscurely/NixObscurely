@@ -45,7 +45,7 @@ pkill -9 xterm &
 pkill -9 pavucontrol &
 
 # Open alacritty with custom settings for neovim + Go into current project and run nix develop
-alacritty --class NeoVim --title NeoVim --working-directory $HOME/Code/AWS/RekoSearch/ --option window.padding.x=0 --option window.padding.y=0 --hold --command tmux new-session -A -s code && sleep 2 && tmux send-keys -t code C-u && tmux send-keys -t code "nix develop" ENTER &
+alacritty --class NeoVim --title NeoVim --working-directory $HOME/Code/AWS/RekoSearch/ --option window.padding.x=0 --option window.padding.y=0 --command tmux new-session -A -s code & sleep 2 && tmux send-keys -t code C-u && tmux send-keys -t code "nix develop" ENTER &
 
 # Open the browser with everything needed for current project + open another window on the second monitor with the project
 librewolf "https://start.server.com/" "https://trilium.server.com/#root/M31xPyu71vtg/kOwY8uyEI1Os/p1pgPZFrvm2K/UfNfcsyGgUUf?ntxId=z2dL8r" "https://vikunja.server.com/projects/30/kanban" & sleep 2 && bspc rule -a 'librewolf:*' desktop=^6 && librewolf --new-window "http://localhost:5000" & sleep 2 && bspc rule -a 'librewolf:*' desktop=^3 &

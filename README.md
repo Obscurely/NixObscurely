@@ -19,7 +19,7 @@
 | **Editor:**    | [neovim][neovim]                                               |
 | **Terminal:**  | Alacritty                                                      |
 | **Launcher:**  | rofi                                                           |
-| **Browser:**   | Librewolf, Qutebrowser and Chromium                            |
+| **Browser:**   | Zen, Librewolf, Firefox, Qutebrowser and Chromium              |
 | **GTK Theme:** | [Fluent Dark](https://github.com/vinceliuice/Fluent-gtk-theme) |
 
 ---

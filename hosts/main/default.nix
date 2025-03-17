@@ -25,10 +25,11 @@
         utils.enable = true;
       };
       browsers = {
-        default = "librewolf";
+        default = "zen";
         chromium.enable = true;
         librewolf.enable = true;
         torbrowser.enable = true;
+        zen.enable = true;
         firefox.enable = true;
       };
       gaming = {
@@ -48,7 +49,7 @@
       };
       term = {
         default = "alacritty";
-		alacritty.enable = true;
+        alacritty.enable = true;
         st.enable = true;
       };
       vm = {

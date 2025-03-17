@@ -1,0 +1,123 @@
+{
+  "settings": [
+    {
+      "name": "activeMode",
+      "value": true
+    },
+    {
+      "name": "cacheCleanup",
+      "value": true
+    },
+    {
+      "name": "cleanCookiesFromOpenTabsOnStartup",
+      "value": true
+    },
+    {
+      "name": "cleanExpiredCookies",
+      "value": true
+    },
+    {
+      "name": "contextMenus",
+      "value": false
+    },
+    {
+      "name": "contextualIdentities",
+      "value": false
+    },
+    {
+      "name": "contextualIdentitiesAutoRemove",
+      "value": true
+    },
+    {
+      "name": "debugMode",
+      "value": false
+    },
+    {
+      "name": "delayBeforeClean",
+      "value": 15
+    },
+    {
+      "name": "discardedCleanup",
+      "value": true
+    },
+    {
+      "name": "domainChangeCleanup",
+      "value": false
+    },
+    {
+      "name": "enableGreyListCleanup",
+      "value": true
+    },
+    {
+      "name": "enableNewVersionPopup",
+      "value": false
+    },
+    {
+      "id": "DEPRECATED - use default expressions",
+      "name": "greyCleanLocalstorage",
+      "value": false
+    },
+    {
+      "name": "indexedDBCleanup",
+      "value": true
+    },
+    {
+      "name": "keepDefaultIcon",
+      "value": false
+    },
+    {
+      "id": "DEPRECATED - use localStorageCleanup",
+      "name": "localstorageCleanup",
+      "value": true
+    },
+    {
+      "name": "localStorageCleanup",
+      "value": true
+    },
+    {
+      "name": "manualNotifications",
+      "value": true
+    },
+    {
+      "name": "notificationOnScreen",
+      "value": 3
+    },
+    {
+      "name": "pluginDataCleanup",
+      "value": true
+    },
+    {
+      "name": "serviceWorkersCleanup",
+      "value": true
+    },
+    {
+      "name": "showNotificationAfterCleanup",
+      "value": false
+    },
+    {
+      "name": "showNumOfCookiesInIcon",
+      "value": false
+    },
+    {
+      "name": "siteDataEmptyOnEnable",
+      "value": true
+    },
+    {
+      "name": "sizePopup",
+      "value": 16
+    },
+    {
+      "name": "sizeSetting",
+      "value": 16
+    },
+    {
+      "name": "statLogging",
+      "value": true
+    },
+    {
+      "id": "DEPRECATED - use default expressions",
+      "name": "whiteCleanLocalstorage",
+      "value": false
+    }
+  ]
+}

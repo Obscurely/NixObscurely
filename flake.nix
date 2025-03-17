@@ -14,6 +14,9 @@
 
     # Extras
     nixos-hardware.url = "github:nixos/nixos-hardware";
+
+    # Zen Browser
+    zen-browser.url = "github:0xc000022070/zen-browser-flake";
   };
 
   outputs = inputs @ {

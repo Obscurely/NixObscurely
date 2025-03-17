@@ -178,7 +178,7 @@ super + x
 
 # open qutebrowser
 super + q
-  librewolf 
+  zen
 
 # open vaultwarden menu
 super + shift + v

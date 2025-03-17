@@ -1,0 +1,38 @@
+{
+  "keyMappings": "map <C-d> scrollPageDown\nmap <C-u> scrollPageUp\nunmap f\nmap s LinkHints.activateMode\nunmap F\nmap S LinkHints.activateModeToOpenInNewTab\nmap K previousTab\nmap J nextTab",
+  "settingsVersion": "2.1.2",
+  "exclusionRules": [
+    {
+      "passKeys": "",
+      "pattern": "https?://mail.google.com/*"
+    },
+    {
+      "passKeys": "",
+      "pattern": "https?://monkeytype.com/*"
+    },
+    {
+      "passKeys": "",
+      "pattern": "https?://vikunja.server.com/*"
+    },
+    {
+      "passKeys": "",
+      "pattern": "https?://autosd.server.com/*"
+    },
+    {
+      "passKeys": "",
+      "pattern": "https?://localhost:7860/*"
+    },
+    {
+      "passKeys": "",
+      "pattern": "https?://eu-central-1.console.aws.amazon.com/*"
+    },
+    {
+      "passKeys": "",
+      "pattern": "https?://excalidraw.server.com/*"
+    },
+    {
+      "passKeys": "",
+      "pattern": "https?://trilium.server.com/*"
+    }
+  ]
+}

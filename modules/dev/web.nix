@@ -34,6 +34,12 @@ in {
 	tailwindcss-language-server # lsp for tailwindcss
 	prettierd # prettier as a daemon for improved formatting speeds
 	emmet-ls # emmet language server
+	
+	# Javascript
+	eslint
+	eslint_d
+	vscode-js-debug # debugger
+	nodePackages_latest.webpack-cli # bundle js files	
       ];
     })
   ];

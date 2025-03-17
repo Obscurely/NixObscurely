@@ -1,0 +1,76 @@
+{
+  "default": [
+    {
+      "expression": "*.localhost",
+      "listType": "WHITE",
+      "storeId": "default",
+      "cleanSiteData": [],
+      "cookieNames": [],
+      "id": "JVXPe8I_g"
+    },
+    {
+      "expression": "*.obscurely.dev",
+      "listType": "WHITE",
+      "storeId": "default",
+      "cleanSiteData": [],
+      "cookieNames": [],
+      "id": "ovFMTix5Z"
+    },
+    {
+      "expression": "*.proton.me",
+      "listType": "WHITE",
+      "storeId": "default",
+      "cleanSiteData": [],
+      "cookieNames": [],
+      "id": "HoiX3qvOH"
+    },
+    {
+      "expression": "*.server.com",
+      "listType": "WHITE",
+      "storeId": "default",
+      "cleanSiteData": [],
+      "cookieNames": [],
+      "id": "fAwwYnJcW"
+    },
+    {
+      "expression": "*.vexio.ro",
+      "listType": "WHITE",
+      "storeId": "default",
+      "cleanSiteData": [],
+      "cookieNames": [],
+      "id": "v6qw9giPCd"
+    },
+    {
+      "expression": "cs.rin.ru",
+      "listType": "WHITE",
+      "storeId": "default",
+      "cleanSiteData": [],
+      "cookieNames": [],
+      "id": "hzY7M_8lJw"
+    },
+    {
+      "expression": "gitea.server.com",
+      "listType": "WHITE",
+      "storeId": "default",
+      "cleanSiteData": [],
+      "cookieNames": [],
+      "id": "RLVwZMhTw"
+    },
+    {
+      "expression": "monkeytype.com",
+      "listType": "WHITE",
+      "storeId": "default",
+      "cleanSiteData": [],
+      "cookieNames": [],
+      "id": "PxfmHipZF5"
+    },
+    {
+      "expression": "vexio.ro",
+      "listType": "WHITE",
+      "storeId": "default",
+      "cleanSiteData": [],
+      "cookieNames": [],
+      "id": "w9Ndl-xJZe"
+    }
+  ]
+}

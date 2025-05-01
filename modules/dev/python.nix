@@ -24,14 +24,14 @@ in {
   config = mkMerge [
     (mkIf cfg.enable {
       user.packages = with pkgs; [
-        python312
-        python312Packages.pip
-        python312Packages.ipython
-        python312Packages.setuptools
-        python312Packages.mypy # type checking
-        python312Packages.vulture # dead code analysis
+        python313
+        python313Packages.pip
+        python313Packages.ipython
+        python313Packages.setuptools
+        python313Packages.mypy # type checking
+        python313Packages.vulture # dead code analysis
 	ruff # formatter and linter
-        python312Packages.debugpy # debugger
+        python313Packages.debugpy # debugger
         pyright # lsp 
         poetry
         black

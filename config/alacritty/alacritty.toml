@@ -26,7 +26,7 @@ multiplier = 3
 
 [font]
 normal = { family = "FiraCode Nerd Font Mono Med", style = "Medium,Regular" }
-size = 14
+size = 15
 offset = { x = 0, y = 0 }
 builtin_box_drawing = false
 

@@ -19,7 +19,6 @@ in {
       extraPackages = with pkgs; [
         # OpenGL + Vulkan
         mesa
-        mesa.drivers
         vulkan-loader
         vulkan-headers
         vulkan-validation-layers
@@ -38,20 +37,15 @@ in {
         mesa.opencl
         ocl-icd
 
-        # OpenMAX
-        mesa.osmesa
-
-        # Multimedia frameworks support
+        # Multimedia fameworks support
         gst_all_1.gst-vaapi
       ];
       extraPackages32 = with pkgs.driversi686Linux; [
         # Some 32-bit alternatives
         mesa
-        mesa.drivers
         libva-vdpau-driver
         libvdpau-va-gl
         mesa.opencl
-        mesa.osmesa
       ];
     };
 

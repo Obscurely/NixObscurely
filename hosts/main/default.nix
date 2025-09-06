@@ -20,6 +20,7 @@
       apps = {
         bitwarden.enable = true;
         discord.enable = true;
+		thunderbird.enable = true;
         element.enable = true;
         rofi.enable = true;
         utils.enable = true;

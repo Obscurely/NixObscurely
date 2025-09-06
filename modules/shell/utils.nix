@@ -47,6 +47,7 @@ in {
 	  svgcleaner # svg cleaning
 	  lsof # view ports usage
 	  ipcalc # calculate ip ranges
+	  protonmail-bridge # for using protonmail with thunderbird
     ];
 
     programs.adb.enable = true;

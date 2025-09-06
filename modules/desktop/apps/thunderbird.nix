@@ -19,5 +19,7 @@ in {
       thunderbird
 	  protonmail-bridge # for using protonmail with thunderbird
     ];
+
+    services.passSecretService.enable = true;
   };
 }

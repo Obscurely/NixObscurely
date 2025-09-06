@@ -65,6 +65,7 @@ flameshot &
 easyeffects --gapplication-service & # easy effects for the eq for my headset
 tmux new-session -d -s main & # for fast attach to tmux session
 tmux new-session -d -s code & # for fast attach to tmux session
+protonmail-bridge --noninteractive & # for email
 
 for file in $XDG_CONFIG_HOME/bspwm/rc.d/*; do
   source "$file" &

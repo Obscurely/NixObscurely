@@ -17,6 +17,7 @@ in {
   config = mkIf cfg.enable {
     user.packages = with pkgs; [
       thunderbird
+	  protonmail-bridge # for using protonmail with thunderbird
     ];
   };
 }

@@ -48,7 +48,7 @@ in {
 	  lsof # view ports usage
 	  ipcalc # calculate ip ranges
       claude-code # claude agent
-	  protonmail-bridge # for using protonmail with thunderbird
+	  pass # for authentication
     ];
 
     programs.adb.enable = true;

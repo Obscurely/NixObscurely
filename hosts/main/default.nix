@@ -31,6 +31,7 @@
         torbrowser.enable = true;
         zen.enable = true;
         firefox.enable = true;
+	firefoxdev.enable = true;
       };
       gaming = {
         legendary.enable = true;
@@ -94,8 +95,7 @@
         enable = true;
         ssd.enable = true;
       };
-      # nvidia.enable = true;
-	  nouveau.enable = true;
+      nvidia.enable = true;
       razer.enable = true;
       sensors.enable = true;
       printer.enable = true;

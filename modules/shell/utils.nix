@@ -47,6 +47,7 @@ in {
 	  svgcleaner # svg cleaning
 	  lsof # view ports usage
 	  ipcalc # calculate ip ranges
+      claude-code # claude agent
     ];
 
     programs.adb.enable = true;

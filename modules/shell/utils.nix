@@ -47,11 +47,8 @@ in {
 	  svgcleaner # svg cleaning
 	  lsof # view ports usage
 	  ipcalc # calculate ip ranges
-<<<<<<< HEAD
       claude-code # claude agent
-=======
 	  protonmail-bridge # for using protonmail with thunderbird
->>>>>>> c5a2fde9e73d86cecc8549e672cde6269bd89122
     ];
 
     programs.adb.enable = true;

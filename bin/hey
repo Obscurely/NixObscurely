@@ -297,7 +297,6 @@ module Hey
     end
   end
 
-  # TODO Generalize this to nix profiles
   defcmd [:generations, :gen] do
     desc "Explore, manage, diff across generations"
     opts       '--diff FROM TO',   "Diff profiles FROM with TO (numbers)"
@@ -327,7 +326,7 @@ module Hey
       when "remove"
         sh ["nix-env", "--delete-generations", "--profile", profile, *args], sudo: true
       when "switch"
-        puts "Targeted rollback not supported yet"  # TODO Is this true?
+        puts "Targeted rollback not supported yet"
         exit 1
       end
     end

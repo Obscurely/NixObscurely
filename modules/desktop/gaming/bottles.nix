@@ -1,5 +1,4 @@
 {
-  options,
   config,
   lib,
   pkgs,
@@ -15,7 +14,7 @@ in {
 
   config = mkIf cfg.enable {
     user.packages = with pkgs; [
-      bottles 
+      bottles
     ];
   };
 }

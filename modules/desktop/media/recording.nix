@@ -1,7 +1,6 @@
 # modules/desktop/media/recording.nix
 {
   config,
-  options,
   lib,
   pkgs,
   ...
@@ -29,7 +28,7 @@ in {
       # for longer term streaming/recording the screen
       (
         if cfg.video.enable
-        then [unstable.obs-studio ] # TODO: add unstable.handbrake when fixed 
+        then [unstable.obs-studio stable.handbrake]
         else []
       );
     home.configFile = with config.modules;

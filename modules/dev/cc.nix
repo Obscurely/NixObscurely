@@ -1,7 +1,6 @@
 # modules/dev/cc.nix --- C & C++
 {
   config,
-  options,
   lib,
   pkgs,
   ...

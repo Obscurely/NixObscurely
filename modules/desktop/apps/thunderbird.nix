@@ -1,7 +1,6 @@
 # modules/dev/thunderbird.nix
 {
   config,
-  options,
   lib,
   pkgs,
   ...
@@ -17,7 +16,7 @@ in {
   config = mkIf cfg.enable {
     user.packages = with pkgs; [
       thunderbird
-	  protonmail-bridge # for using protonmail with thunderbird
+      protonmail-bridge # for using protonmail with thunderbird
     ];
 
     services.passSecretService.enable = true;

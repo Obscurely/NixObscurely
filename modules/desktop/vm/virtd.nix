@@ -1,5 +1,4 @@
 {
-  options,
   config,
   lib,
   pkgs,
@@ -28,15 +27,17 @@ in {
       virt-viewer
       libvirt
       quickemu # fast way to create optimzed vms
-      # quickgui # gui for quickemu # TODO: enable back when fixed
+      stable.quickgui # gui for quickemu
     ];
 
     virtualisation.libvirtd = {
       enable = true;
-      qemu.swtpm.enable = true;
-      qemu.runAsRoot = true;
-      qemu.ovmf.enable = true;
-      qemu.ovmf.packages = [ pkgs.OVMFFull.fd ];
+      qemu = {
+        swtpm.enable = true;
+        runAsRoot = true;
+        ovmf.enable = true;
+        ovmf.packages = [pkgs.OVMFFull.fd];
+      };
     };
   };
 }

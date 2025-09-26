@@ -3,7 +3,6 @@
 # The chat app I need, not by choice
 {
   config,
-  options,
   lib,
   pkgs,
   ...
@@ -19,7 +18,6 @@ in {
   config = mkIf cfg.enable {
     user.packages = with pkgs; [
       element-desktop
-      telegram-desktop
     ];
   };
 }

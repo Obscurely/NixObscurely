@@ -1,9 +1,7 @@
 # modules/browser/firefox.nix
 {
-  options,
   config,
   lib,
-  pkgs,
   ...
 }:
 with lib;

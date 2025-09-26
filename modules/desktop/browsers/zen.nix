@@ -1,5 +1,4 @@
 {
-  options,
   config,
   lib,
   pkgs,
@@ -375,9 +374,9 @@ in {
       "extensions.webcompat.perform_ua_overrides" = true;
       "gecko.handlerService.defaultHandlersVersion" = 1;
       "gfx.webrender.all" = true;
-	  "svg.context-properties.content.enabled" = true;
-	  "media.hardware-video-decoding.enabled" = true;
-	  "media.hardware-video-decoding.force-enabled" = true;
+      "svg.context-properties.content.enabled" = true;
+      "media.hardware-video-decoding.enabled" = true;
+      "media.hardware-video-decoding.force-enabled" = true;
       "intl.accept_languages" = "en-US, en";
       "javascript.use_us_english_locale" = true;
       "media.gmp.storage.version.observed" = 1;

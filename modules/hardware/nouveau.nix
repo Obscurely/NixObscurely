@@ -51,7 +51,7 @@ in {
 
     environment.systemPackages = with pkgs; [
       vdpauinfo
-	  pciutils
+      pciutils
 
       # Codecs
       gst_all_1.gstreamer
@@ -62,16 +62,16 @@ in {
     boot = {
       # Make sure the nouveau module is loaded
       initrd.kernelModules = ["nouveau"];
-	  # Use the gsp driver 
+      # Use the gsp driver
       kernelParams = ["nouveau.config=NvGspRm=1"];
-	  # Make sure the proprietary NVIDIA drivers are blacklisted
+      # Make sure the proprietary NVIDIA drivers are blacklisted
       blacklistedKernelModules = ["nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm"];
     };
 
-	# Set nouveau as the default video driver
+    # Set nouveau as the default video driver
     services.xserver.videoDrivers = ["nouveau"];
 
-	# Configure the environment variables
+    # Configure the environment variables
     environment.variables = {
       NVD_BACKEND = "direct";
     };

@@ -1,5 +1,4 @@
 {
-  options,
   config,
   lib,
   pkgs,
@@ -8,7 +7,7 @@
 with lib;
 with lib.my; let
   cfg = config.modules.desktop.gaming.wine;
-  configDir = config.dotfiles.configDir;
+  inherit (config.dotfiles) configDir;
 in {
   options.modules.desktop.gaming.wine = with types; {
     enable = mkBoolOpt false;
@@ -44,6 +43,7 @@ in {
       vulkan-loader
       khronos-ocl-icd-loader
       libjpeg
+      protonup # for managing proton ge
     ];
 
     # Get in dotfiles

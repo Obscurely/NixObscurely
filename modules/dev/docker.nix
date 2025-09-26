@@ -2,7 +2,6 @@
 # for docker dev tools
 {
   config,
-  options,
   lib,
   pkgs,
   ...
@@ -19,9 +18,9 @@ in {
   config = mkMerge [
     (mkIf cfg.enable {
       user.packages = with pkgs; [
-	dockerfile-language-server-nodejs # lsp for docker file
-	docker-compose-language-service # lsp for dockercompose
-	hadolint # dockerfile linter
+        dockerfile-language-server # lsp for docker file
+        docker-compose-language-service # lsp for dockercompose
+        hadolint # dockerfile linter
       ];
     })
   ];

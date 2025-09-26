@@ -1,5 +1,4 @@
 {
-  options,
   config,
   lib,
   pkgs,
@@ -8,7 +7,7 @@
 with lib;
 with lib.my; let
   cfg = config.modules.desktop.bspwm;
-  configDir = config.dotfiles.configDir;
+  inherit (config.dotfiles) configDir;
 in {
   options.modules.desktop.bspwm = {
     enable = mkBoolOpt false;
@@ -31,13 +30,8 @@ in {
     ];
 
     services = {
-      # picom = {
-      #   enable = true;
-      #   #experimentalBackends = true;
-      #   backend = "glx";
-      # };
       displayManager = {
-	defaultSession = "none+bspwm";
+        defaultSession = "none+bspwm";
       };
       xserver = {
         enable = true;

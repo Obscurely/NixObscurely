@@ -2,7 +2,6 @@
 # intertwined with others, and are solely responsible for aesthetics. Disabling
 # a theme module should never leave a system non-functional.
 {
-  options,
   config,
   lib,
   pkgs,
@@ -211,7 +210,7 @@ in {
 
         home.dataFile = mkIf (cfg.wallpaper != null) {
           "wallpaper".source = cfg.wallpaper;
-	  "lockscreen.jpg".source = ./main/config/lockscreen.jpg;
+          "lockscreen.jpg".source = ./main/config/lockscreen.jpg;
         };
       }))
 

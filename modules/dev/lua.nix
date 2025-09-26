@@ -1,7 +1,6 @@
 # modules/dev/lua.nix --- https://www.lua.org/
 {
   config,
-  options,
   lib,
   pkgs,
   ...

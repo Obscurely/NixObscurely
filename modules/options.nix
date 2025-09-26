@@ -2,7 +2,6 @@
   config,
   options,
   lib,
-  home-manager,
   ...
 }:
 with lib;
@@ -75,7 +74,7 @@ with lib.my; {
           file = mkAliasDefinitions options.home.file;
           # Necessary for home-manager to work with flakes, otherwise it will
           # look for a nixpkgs channel.
-          stateVersion = config.system.stateVersion;
+          inherit (config.system) stateVersion;
         };
         xdg = {
           configFile = mkAliasDefinitions options.home.configFile;

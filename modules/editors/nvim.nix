@@ -2,7 +2,6 @@
 # For me all other text editors are trash against my configured neovim.
 {
   config,
-  options,
   lib,
   pkgs,
   ...

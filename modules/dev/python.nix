@@ -5,10 +5,8 @@
 # and Jupyter can have my babies. Every single one.
 {
   config,
-  options,
   lib,
   pkgs,
-  my,
   ...
 }:
 with lib;
@@ -30,12 +28,12 @@ in {
         python313Packages.setuptools
         python313Packages.mypy # type checking
         python313Packages.vulture # dead code analysis
-	ruff # formatter and linter
+        ruff # formatter and linter
         python313Packages.debugpy # debugger
-        pyright # lsp 
+        pyright # lsp
         poetry
         black
-	bandit # find security issues
+        bandit # find security issues
       ];
 
       environment.shellAliases = {

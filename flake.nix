@@ -34,7 +34,7 @@
       import pkgs {
         inherit system;
         config.allowUnfree = true; # forgive me Stallman senpai
- 	config.permittedInsecurePackages = [ "qtwebengine-5.15.19" ]; # HACK: temporarily enable insecure pkg
+        config.permittedInsecurePackages = ["qtwebengine-5.15.19"]; # HACK: temporarily enable insecure pkg
         overlays = extraOverlays ++ (lib.attrValues self.overlays);
       };
     pkgs = mkPkgs nixpkgs [self.overlay];

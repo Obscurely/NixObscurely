@@ -3,7 +3,6 @@
 # The chat app I need, not by choice
 {
   config,
-  options,
   lib,
   pkgs,
   ...

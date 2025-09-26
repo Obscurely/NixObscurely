@@ -1,6 +1,5 @@
 {
   config,
-  options,
   lib,
   pkgs,
   ...
@@ -8,7 +7,7 @@
 with lib;
 with lib.my; let
   cfg = config.modules.desktop;
-  configDir = config.dotfiles.configDir;
+  inherit (config.dotfiles) configDir;
 in {
   config = mkIf config.services.xserver.enable {
     assertions = [
@@ -86,21 +85,21 @@ in {
         roboto
         xorg.fontxfree86type1
         noto-fonts-emoji
-        # SDL_ttf # TODO: enable back when fixed
+        stable.SDL_ttf
         comfortaa
-	# Nerd fonts
-	nerd-fonts.fira-code
-	nerd-fonts.fira-mono
-	nerd-fonts.droid-sans-mono
-	nerd-fonts.hack
-	nerd-fonts.inconsolata
-	nerd-fonts.iosevka
-	nerd-fonts.jetbrains-mono
-	nerd-fonts.meslo-lg
-	nerd-fonts.roboto-mono
-	nerd-fonts.fantasque-sans-mono
-	nerd-fonts.hurmit
-	hermit
+        # Nerd fonts
+        nerd-fonts.fira-code
+        nerd-fonts.fira-mono
+        nerd-fonts.droid-sans-mono
+        nerd-fonts.hack
+        nerd-fonts.inconsolata
+        nerd-fonts.iosevka
+        nerd-fonts.jetbrains-mono
+        nerd-fonts.meslo-lg
+        nerd-fonts.roboto-mono
+        nerd-fonts.fantasque-sans-mono
+        nerd-fonts.hurmit
+        hermit
       ];
     };
 
@@ -163,7 +162,7 @@ in {
         ];
       };
     };
-    xdg.portal.configPackages = [ pkgs.gnome-session ];
+    xdg.portal.configPackages = [pkgs.gnome-session];
 
     # Run activation script for setting the user up
     # Create xdg folders, install neovim config etc.

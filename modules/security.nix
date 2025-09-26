@@ -84,5 +84,5 @@
   boot.kernelParams = ["mitigations=off"];
 
   # Enable port 5000 for developing
-  networking.firewall.allowedTCPPorts = [ 5000 3000 ];
+  networking.firewall.allowedTCPPorts = [5000 3000];
 }

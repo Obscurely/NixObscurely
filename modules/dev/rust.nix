@@ -3,7 +3,6 @@
 # Rust: the love of my life!
 {
   config,
-  options,
   lib,
   pkgs,
   ...
@@ -34,14 +33,14 @@ in {
         rustfmt
         clippy
         graphviz # this is for neovim rust-tools plugin
-	vscode-extensions.vadimcn.vscode-lldb.adapter # for nvim dap (debugger)
-        cargo-audit # audit dependencies in order to scan for supply chain attacks 
+        vscode-extensions.vadimcn.vscode-lldb.adapter # for nvim dap (debugger)
+        cargo-audit # audit dependencies in order to scan for supply chain attacks
         cargo-fuzz # fuzzing tool
         cargo-deny # tool to deny crates based on checks.
         cargo-cross # cross compilation
         cargo-edit # manage cargo dependencies
         cargo-deb # pkg rust apps for debian
-	cargo-nextest # next gen tests runner
+        cargo-nextest # next gen tests runner
         slint-lsp # language server for a UI framework
       ];
 

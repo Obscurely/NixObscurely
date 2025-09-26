@@ -1,7 +1,6 @@
 # modules/desktop/media/graphics.nix
 {
   config,
-  options,
   lib,
   pkgs,
   ...
@@ -45,7 +44,7 @@ in {
         then [
           krita
           gimp
-          #gimpPlugins.resynthesizer # content-aware scaling in gimp # enable when gimp with plugins is broken :/
+          stable.gimpPlugins.resynthesizer # content-aware scaling in gimp
         ]
         else []
       )
@@ -55,6 +54,7 @@ in {
         if cfg.video.enable
         then [
           kdePackages.kdenlive
+          davinci-resolve-studio
         ]
         else []
       )

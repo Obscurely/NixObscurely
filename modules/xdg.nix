@@ -2,11 +2,7 @@
 #
 # Set up and enforce XDG compliance. Other modules will take care of their own,
 # but this takes care of the general cases.
-{
-  config,
-  home-manager,
-  ...
-}: {
+{config, ...}: {
   ### A tidy $HOME is a tidy mind
   home-manager.users.${config.user.name}.xdg.enable = true;
 
@@ -34,13 +30,6 @@
       INPUTRC = "$XDG_CONFIG_HOME/readline/inputrc";
       LESSHISTFILE = "$XDG_CACHE_HOME/lesshst";
       WGETRC = "$XDG_CONFIG_HOME/wgetrc";
-
-      # Tools I don't use
-      # SUBVERSION_HOME = "$XDG_CONFIG_HOME/subversion";
-      # BZRPATH         = "$XDG_CONFIG_HOME/bazaar";
-      # BZR_PLUGIN_PATH = "$XDG_DATA_HOME/bazaar";
-      # BZR_HOME        = "$XDG_CACHE_HOME/bazaar";
-      # ICEAUTHORITY    = "$XDG_CACHE_HOME/ICEauthority";
     };
 
     # Move ~/.Xauthority out of $HOME (setting XAUTHORITY early isn't enough)

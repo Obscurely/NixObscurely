@@ -1,6 +1,5 @@
 # modules/themes/main/default.nix --- a regal dracula-inspired theme
 {
-  options,
   config,
   lib,
   pkgs,
@@ -9,7 +8,7 @@
 with lib;
 with lib.my; let
   cfg = config.modules.theme;
-  configDir = config.dotfiles.configDir;
+  inherit (config.dotfiles) configDir;
 in {
   config = mkIf (cfg.active == "main") (mkMerge [
     # Desktop-agnostic configuration

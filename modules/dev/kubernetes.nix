@@ -1,7 +1,6 @@
 # modules/dev/kubernetes.nix --- kubernetes lang
 {
   config,
-  options,
   lib,
   pkgs,
   ...

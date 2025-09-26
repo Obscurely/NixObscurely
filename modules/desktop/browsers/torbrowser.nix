@@ -1,6 +1,5 @@
 # modules/browser/torbrowser.nix
 {
-  options,
   config,
   lib,
   pkgs,

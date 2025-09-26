@@ -6,7 +6,7 @@
 with lib;
 with lib.my; let
   cfg = config.modules.services.syncthing;
-  configDir = config.dotfiles.configDir;
+  inherit (config.dotfiles) configDir;
 in {
   options.modules.services.syncthing = {
     enable = mkBoolOpt false;

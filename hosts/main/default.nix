@@ -20,11 +20,11 @@
       apps = {
         bitwarden.enable = true;
         discord.enable = true;
-	thunderbird.enable = true;
+        thunderbird.enable = true;
         element.enable = false;
         rofi.enable = true;
+		zoom.enable = false;
         utils.enable = true;
-	#davinciresolve.enable = true;
       };
       browsers = {
         default = "zen";
@@ -33,7 +33,7 @@
         torbrowser.enable = true;
         zen.enable = true;
         firefox.enable = true;
-	firefoxdev.enable = true;
+        firefoxdev.enable = true;
       };
       gaming = {
         legendary.enable = false;
@@ -86,6 +86,7 @@
       web.enable = true;
       yaml.enable = true;
       nix.enable = true;
+	  utils.enable = true;
     };
     editors = {
       default = "nvim";
@@ -115,6 +116,7 @@
       utils.enable = true;
       vaultwarden.enable = true;
       zsh.enable = true;
+	  optimize.enable = true;
     };
     theme.active = "main";
   };

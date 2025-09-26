@@ -3,7 +3,6 @@
 # For when really needed
 {
   config,
-  options,
   lib,
   pkgs,
   ...

@@ -1,6 +1,5 @@
 # modules/hardware/wifi.nix --- support for wifi
 {
-  options,
   config,
   lib,
   pkgs,

@@ -1,6 +1,4 @@
-# modules/dev/go.nix --- GO lang
-#
-# For when really needed
+# Utilities to help with development
 {
   config,
   lib,
@@ -10,18 +8,16 @@
 with lib;
 with lib.my; let
   devCfg = config.modules.dev;
-  cfg = devCfg.go;
+  cfg = devCfg.utils;
 in {
-  options.modules.dev.go = {
+  options.modules.dev.utils = {
     enable = mkBoolOpt false;
   };
 
   config = mkMerge [
     (mkIf cfg.enable {
       user.packages = with pkgs; [
-        go
-        gopls
-        gofumpt # formatter
+        bruno # http requests utility
       ];
     })
   ];

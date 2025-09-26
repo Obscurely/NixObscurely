@@ -2,7 +2,6 @@
 #
 # A custom version of Firefox, focused on privacy, security and freedom.
 {
-  options,
   config,
   lib,
   pkgs,
@@ -11,7 +10,6 @@
 with lib;
 with lib.my; let
   cfg = config.modules.desktop.browsers.librewolf;
-  configDir = config.dotfiles.configDir;
 in {
   options.modules.desktop.browsers.librewolf = with types; {
     enable = mkBoolOpt false;

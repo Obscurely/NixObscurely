@@ -1,5 +1,4 @@
 {
-  options,
   config,
   lib,
   pkgs,
@@ -43,7 +42,6 @@ in {
           "easyeffects/rnnoise".source = "${configDir}/easyeffects/rnnoise";
           "easyeffects/Discord and Record.json".source = "${configDir}/easyeffects/Discord and Record.json";
           "easyeffects/Main.json".source = "${configDir}/easyeffects/Main.json";
-          #"easyeffects/out.json".source = "${configDir}/easyeffects/output/out.json"; # TODO actually add config in the repo
         }
       ];
 

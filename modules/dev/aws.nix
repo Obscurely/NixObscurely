@@ -1,7 +1,6 @@
 # modules/dev/aws.nix
 {
   config,
-  options,
   lib,
   pkgs,
   ...

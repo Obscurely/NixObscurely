@@ -2,7 +2,6 @@
 # for cloud agnostic tools
 {
   config,
-  options,
   lib,
   pkgs,
   ...
@@ -27,7 +26,7 @@ in {
         ansible # Configure/deploy to infrastructure
         ansible-language-server # lsp for ansible
         ansible-lint # linter for ansible yaml files
-		doctl # digital ocean cli
+        doctl # digital ocean cli
       ];
     })
   ];

@@ -3,7 +3,6 @@
 # My day to day password manager with the vault selfhosted on my server
 {
   config,
-  options,
   lib,
   pkgs,
   ...

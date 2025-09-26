@@ -1,6 +1,5 @@
 # modules/browser/firefoxdev.nix
 {
-  options,
   config,
   lib,
   pkgs,
@@ -15,8 +14,8 @@ in {
   };
 
   config = mkIf cfg.enable {
-	user.packages = with pkgs; [
-		firefox-devedition
-	];	
+    user.packages = with pkgs; [
+      firefox-devedition
+    ];
   };
 }

@@ -1,6 +1,5 @@
 {
   config,
-  options,
   lib,
   pkgs,
   ...
@@ -8,7 +7,7 @@
 with lib;
 with lib.my; let
   cfg = config.modules.shell.git;
-  configDir = config.dotfiles.configDir;
+  inherit (config.dotfiles) configDir;
 in {
   options.modules.shell.git = {
     enable = mkBoolOpt false;

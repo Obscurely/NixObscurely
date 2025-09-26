@@ -1,7 +1,6 @@
 # modules/dev/nix.nix
 {
   config,
-  options,
   lib,
   pkgs,
   ...

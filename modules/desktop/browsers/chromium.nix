@@ -2,7 +2,6 @@
 #
 # Google Chromium, sans integration with google
 {
-  options,
   config,
   lib,
   pkgs,

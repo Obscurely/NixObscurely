@@ -54,7 +54,6 @@ in {
         if cfg.video.enable
         then [
           kdePackages.kdenlive
-          davinci-resolve-studio
         ]
         else []
       )

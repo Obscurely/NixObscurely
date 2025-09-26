@@ -123,6 +123,9 @@ cp -r NixObscurely/ /etc/dotfiles/
 # cd into that the dotfiles dir
 cd /etc/dotfiles/
 
+# get flakes
+nix-shell -p git nixVersions.latest
+
 # Create a host config and add it to the repo
 mkdir -p hosts/$HOST
 nixos-generate-config --root /mnt --dir /etc/dotfiles/hosts/$HOST

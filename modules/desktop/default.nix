@@ -43,10 +43,10 @@ in {
       xorg.libxcb
       xorg.xkill
       qgnomeplatform # QPlatformTheme for a better Qt application inclusion in GNOME
-      libsForQt5.qtstyleplugin-kvantum # SVG-based Qt5 theme engine plus a config tool and extra theme
+      kdePackages.qtstyleplugin-kvantum # SVG-based Qt5 theme engine plus a config tool and extra theme
       dialog # display dialog boxes from shell
       newt
-      lxde.lxsession # lightweight session manager
+      lxsession # lightweight session manager
       sqlite # database
       usbutils # usb utilities
       xdg-user-dirs # create xdg user dirs

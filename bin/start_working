@@ -32,7 +32,7 @@ pkill -9 lxappearance &
 pkill -9 mpv &
 pkill -9 tor &
 pkill -9 firefox &
-pkill -9 notepadqq &
+pkill -9 kate &
 pkill -9 DesktopEditors &
 pkill -9 obs &
 pkill -9 lutris &

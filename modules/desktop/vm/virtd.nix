@@ -21,7 +21,7 @@ in {
       dnsmasq
       libguestfs
       netcat
-      qemu_full
+      stable.qemu_full
       swtpm
       vde2
       virt-manager

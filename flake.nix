@@ -8,7 +8,7 @@
     # Core dependencies.
     nixpkgs.url = "nixpkgs/nixos-unstable"; # primary nixpkgs
     nixpkgs-unstable.url = "nixpkgs/nixpkgs-unstable"; # for packages on the edge
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.11";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
     home-manager.url = "github:rycee/home-manager/master";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -34,6 +34,7 @@
       import pkgs {
         inherit system;
         config.allowUnfree = true; # forgive me Stallman senpai
+ 	config.permittedInsecurePackages = [ "qtwebengine-5.15.19" ]; # HACK: temporarily enable insecure pkg
         overlays = extraOverlays ++ (lib.attrValues self.overlays);
       };
     pkgs = mkPkgs nixpkgs [self.overlay];

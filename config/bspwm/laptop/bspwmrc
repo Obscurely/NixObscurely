@@ -14,7 +14,7 @@ bspc rule -a xst  			          desktop='^1'	follow=on
 bspc rule -a Bitwarden 		        desktop='^8'	follow=on
 bspc rule -a Lutris			          desktop='^4'	follow=on
 bspc rule -a Postman		          desktop='^9'	follow=on
-bspc rule -a Notepadqq		        desktop='^2' 	follow=on
+bspc rule -a kate			 desktop='^2' 	follow=on
 bspc rule -a .gimp-2.10-wrapped_	desktop='^5'	follow=on
 bspc rule -a BleachBit 		        desktop='^10'	follow=on
 bspc rule -a gnome-calculator     desktop='^9'	follow=on

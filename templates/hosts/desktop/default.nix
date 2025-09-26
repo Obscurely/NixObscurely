@@ -20,16 +20,20 @@
       apps = {
         bitwarden.enable = true;
         discord.enable = true;
+		thunderbird.enable = true;
         element.enable = true;
         rofi.enable = true;
         utils.enable = true;
+	davinciresolve.enable = true;
       };
       browsers = {
-        default = "librewolf";
+        default = "zen";
         chromium.enable = true;
         librewolf.enable = true;
         torbrowser.enable = true;
+        zen.enable = true;
         firefox.enable = true;
+	firefoxdev.enable = true;
       };
       gaming = {
         legendary.enable = true;
@@ -47,7 +51,8 @@
         recording.enable = true;
       };
       term = {
-        default = "xterm-kitty";
+        default = "alacritty";
+        alacritty.enable = true;
         st.enable = true;
       };
       vm = {
@@ -56,8 +61,10 @@
     };
     dev = {
       aws.enable = true;
+      cloud.enable = true;
       arduino.enable = true;
       cc.enable = true;
+      docker.enable = true;
       dotnet.enable = true;
       go.enable = true;
       java.enable = true;
@@ -114,7 +121,7 @@
 
   networking.networkmanager.enable = true;
 
-  ## Extra fix for resolution and monitor placement
+  # Extra fix for resolution and monitor placement
   environment.etc = {
     "X11/xorg.conf.d/52-resolution-fix.conf".text = ''
       Section "Monitor"

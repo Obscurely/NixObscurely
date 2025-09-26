@@ -27,7 +27,7 @@ in {
         cmake-language-server
         llvmPackages.libcxx
         autoconf
-        libsForQt5.milou # arm build system
+        kdePackages.milou # arm build system
         cppcheck # does static analysis on code
       ];
     })

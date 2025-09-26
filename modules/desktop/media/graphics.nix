@@ -54,7 +54,7 @@ in {
       (
         if cfg.video.enable
         then [
-          libsForQt5.kdenlive
+          kdePackages.kdenlive
         ]
         else []
       )

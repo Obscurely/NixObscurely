@@ -91,4 +91,4 @@ echo "-   Done, please run run_in_nix_shell.sh now!   -"
 echo "-------------------------------------------------"
 
 # Enter a nix shell with git and nixVersions.stable (nixFlakes, got renamed for some reason)
-nix-shell -p git nixVersions.stable
+nix-shell -p git nixVersions.latest

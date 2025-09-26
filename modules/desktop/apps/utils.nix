@@ -23,13 +23,13 @@ in {
       gnome-calculator # calculator
       gparted # partition manager
       lxappearance # appearance customization tool
-      notepadqq # notepad++ but for linux
+      kdePackages.kate # notepad++ but for linux
       pavucontrol # audio control utility (universal)
       bruno # http requests utility
       qbittorrent # torrent downloader utility
       xfce.ristretto # photo viewer
       zoom-us # video conference app
-      libsForQt5.ark # imo best linux archive manager
+      kdePackages.ark # imo best linux archive manager
       xfce.xfce4-settings # setting manager
       gnome-pomodoro # pomodor style timer for taking breaks
 
@@ -46,10 +46,6 @@ in {
     # Get in dotfiles for utils
     home.configFile = with config.modules;
       mkMerge [
-        {
-          # Notepadqq
-          "Notepadqq/Notepadqq.ini".source = "${configDir}/Notepadqq/Notepadqq.ini";
-        }
         {
           # xfce4 settings
           "xfce4".source = "${configDir}/xfce4";

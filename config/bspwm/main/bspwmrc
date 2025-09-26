@@ -9,6 +9,7 @@ bspc monitor DVI-D-0 -d VI VII VIII IX X
 bspc rule -a Chromium-browser     desktop='^3'	follow=on
 bspc rule -a librewolf            desktop='^3'	follow=on
 bspc rule -a zen				  desktop='^3'	follow=on
+bspc rule -a zen-beta		  		  desktop='^3'	follow=on
 bspc rule -a discord              desktop='^6'	follow=off
 bspc rule -a Thunar 		          desktop='^7'	follow=on
 bspc rule -a Lxappearance	        desktop='^10'	follow=off
@@ -17,7 +18,7 @@ bspc rule -a Alacritty  	          desktop='^1'	follow=on
 bspc rule -a Bitwarden 		        desktop='^8'	follow=on
 bspc rule -a Lutris			          desktop='^4'	follow=on
 bspc rule -a Postman		          desktop='^9'	follow=on
-bspc rule -a Notepadqq		        desktop='^2' 	follow=on
+bspc rule -a kate			 desktop='^2' 	follow=on
 bspc rule -a .gimp-2.10-wrapped_	desktop='^5'	follow=on
 bspc rule -a BleachBit 		        desktop='^10'	follow=on
 bspc rule -a gnome-calculator     desktop='^9'	follow=on

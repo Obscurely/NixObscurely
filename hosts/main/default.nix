@@ -20,26 +20,27 @@
       apps = {
         bitwarden.enable = true;
         discord.enable = true;
-		thunderbird.enable = true;
-        element.enable = true;
+	thunderbird.enable = true;
+        element.enable = false;
         rofi.enable = true;
         utils.enable = true;
+	#davinciresolve.enable = true;
       };
       browsers = {
         default = "zen";
         chromium.enable = true;
-        librewolf.enable = true;
+        librewolf.enable = false;
         torbrowser.enable = true;
         zen.enable = true;
         firefox.enable = true;
 	firefoxdev.enable = true;
       };
       gaming = {
-        legendary.enable = true;
-        heroic.enable = true;
-        lutris.enable = true;
-        bottles.enable = true;
-        steam.enable = true;
+        legendary.enable = false;
+        heroic.enable = false;
+        lutris.enable = false;
+        bottles.enable = false;
+        steam.enable = false;
         wine.enable = true;
       };
       media = {
@@ -52,7 +53,7 @@
       term = {
         default = "alacritty";
         alacritty.enable = true;
-        st.enable = true;
+        st.enable = false;
       };
       vm = {
         virtd.enable = true;

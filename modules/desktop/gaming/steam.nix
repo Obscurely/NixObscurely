@@ -18,6 +18,6 @@ in {
     programs.gamemode.enable = true;
 
     # better for steam proton games
-    systemd.extraConfig = "DefaultLimitNOFILE=1048576";
+    systemd.user.extraConfig = "DefaultLimitNOFILE=1048576";
   };
 }

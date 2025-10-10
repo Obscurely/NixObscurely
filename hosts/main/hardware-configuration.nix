@@ -29,12 +29,12 @@
       fsType = "f2fs";
     };
 
-  fileSystems."/data" =
+  fileSystems."/extra" =
     { device = "/dev/disk/by-uuid/298368fb-3085-456e-947c-da17168b60e5";
       fsType = "xfs";
     };
 
-  fileSystems."/extra" =
+  fileSystems."/data" =
     { device = "/dev/disk/by-uuid/2c3fbdac-0952-40c1-80e9-dd70c3b88991";
       fsType = "f2fs";
     };

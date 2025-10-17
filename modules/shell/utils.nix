@@ -38,6 +38,7 @@ in {
       lsof # view ports usage
       ipcalc # calculate ip ranges
       claude-code # claude agent
+	  opencode # runs on top of claude-code and other models
       pass # for authentication
     ];
 

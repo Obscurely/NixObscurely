@@ -140,8 +140,8 @@ in {
         }
       ];
 
-    # Enable ssh askpass
-    programs.ssh.enableAskPassword = true;
+    # disable ssh askpass
+    programs.ssh.enableAskPassword = false;
 
     # Enable libinput
     services.libinput.enable = true;

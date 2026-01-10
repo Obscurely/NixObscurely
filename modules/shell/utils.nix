@@ -21,7 +21,7 @@ in {
       speedtest-cli # internet speed test in shell
       traceroute # trace ip address to initial ip
       neofetch
-      aria # fast cli downloader
+      aria2 # fast cli downloader
       mat2 # utility for removing metadata from files
       netdiscover # discovering devices in local network
       ffmpeg # convert media files
@@ -38,10 +38,9 @@ in {
       lsof # view ports usage
       ipcalc # calculate ip ranges
       claude-code # claude agent
-	  opencode # runs on top of claude-code and other models
+      opencode # runs on top of claude-code and other models
       pass # for authentication
+      android-tools # adb tools
     ];
-
-    programs.adb.enable = true;
   };
 }

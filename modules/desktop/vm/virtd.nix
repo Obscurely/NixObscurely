@@ -19,6 +19,9 @@ in {
       bridge-utils
       dnsmasq
       libguestfs
+      virtiofsd # file system sharing
+      vhost-device-sound # virtio sound
+      virtio-win # windows drivers
       netcat
       stable.qemu_full
       swtpm
@@ -28,6 +31,7 @@ in {
       libvirt
       quickemu # fast way to create optimzed vms
       stable.quickgui # gui for quickemu
+      OVMFFull
     ];
 
     virtualisation.libvirtd = {
@@ -35,8 +39,6 @@ in {
       qemu = {
         swtpm.enable = true;
         runAsRoot = true;
-        ovmf.enable = true;
-        ovmf.packages = [pkgs.OVMFFull.fd];
       };
     };
   };

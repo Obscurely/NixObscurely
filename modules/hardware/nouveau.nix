@@ -29,7 +29,6 @@ in {
         libva-vdpau-driver
 
         # VDPAU
-        vaapiVdpau
         libvdpau
         libvdpau-va-gl
 

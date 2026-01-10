@@ -19,7 +19,7 @@ in {
       user.packages = with pkgs; [
         lua
         luaPackages.moonscript
-        sumneko-lua-language-server
+	lua-language-server
         stylua
       ];
     })

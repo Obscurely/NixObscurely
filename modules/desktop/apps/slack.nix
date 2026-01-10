@@ -1,4 +1,3 @@
-# modules/desktop/media/docs.nix
 {
   config,
   lib,
@@ -7,15 +6,15 @@
 }:
 with lib;
 with lib.my; let
-  cfg = config.modules.desktop.media.documents;
+  cfg = config.modules.desktop.apps.slack;
 in {
-  options.modules.desktop.media.documents = {
+  options.modules.desktop.apps.slack = {
     enable = mkBoolOpt false;
   };
 
   config = mkIf cfg.enable {
     user.packages = with pkgs; [
-      onlyoffice-desktopeditors
+      slack
     ];
   };
 }

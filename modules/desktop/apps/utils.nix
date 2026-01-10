@@ -25,16 +25,16 @@ in {
       kdePackages.kate # notepad++ but for linux
       pavucontrol # audio control utility (universal)
       qbittorrent # torrent downloader utility
-      xfce.ristretto # photo viewer
+      ristretto # photo viewer
       kdePackages.ark # imo best linux archive manager
-      xfce.xfce4-settings # setting manager
+      xfce4-settings # setting manager
       gnome-pomodoro # pomodor style timer for taking breaks
 
       # My packages
       my.estash
 
       # libs
-      xfce.exo # this is for xfce shortcuts like open terminal
+      xfce4-exo # this is for xfce shortcuts like open terminal
     ];
 
     # Get in dotfiles for utils

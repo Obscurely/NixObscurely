@@ -27,7 +27,7 @@ in {
         grub2
         llvmPackages_latest.lld
         rust-analyzer
-        taplo-cli
+        taplo
         rustc
         cargo
         rustfmt

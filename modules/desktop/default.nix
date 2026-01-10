@@ -59,7 +59,7 @@ in {
       fontDir.enable = true;
       enableGhostscriptFonts = true;
       packages = with pkgs; [
-        ubuntu_font_family
+        ubuntu-classic
         symbola
         corefonts
         liberation_ttf
@@ -84,7 +84,7 @@ in {
         hack-font
         roboto
         xorg.fontxfree86type1
-        noto-fonts-emoji
+        noto-fonts-color-emoji
         stable.SDL_ttf
         comfortaa
         # Nerd fonts
@@ -108,7 +108,7 @@ in {
 
     programs.thunar = {
       enable = true;
-      plugins = with pkgs.xfce; [thunar-archive-plugin thunar-volman];
+      plugins = with pkgs; [thunar-archive-plugin thunar-volman];
     };
     programs.htop.enable = true;
 
@@ -163,6 +163,9 @@ in {
       };
     };
     xdg.portal.configPackages = [pkgs.gnome-session];
+
+    # Enable upower
+    services.upower.enable = true;
 
     # Run activation script for setting the user up
     # Create xdg folders, install neovim config etc.

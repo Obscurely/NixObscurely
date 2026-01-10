@@ -29,7 +29,6 @@ in {
         libva-vdpau-driver
 
         # Vdpau
-        vaapiVdpau
         libvdpau
 
         # OCL

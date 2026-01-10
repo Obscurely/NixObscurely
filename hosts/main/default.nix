@@ -20,6 +20,7 @@
       apps = {
         bitwarden.enable = true;
         discord.enable = true;
+	slack.enable = true;
         thunderbird.enable = true;
         element.enable = false;
         rofi.enable = true;
@@ -38,9 +39,9 @@
       gaming = {
         legendary.enable = false;
         heroic.enable = false;
-        lutris.enable = false;
-        bottles.enable = false;
-        steam.enable = false;
+        lutris.enable = true;
+        bottles.enable = true;
+        steam.enable = true;
         wine.enable = true;
       };
       media = {
@@ -99,6 +100,7 @@
         ssd.enable = true;
       };
       nvidia.enable = true;
+      nouveau.enable = false;
       razer.enable = true;
       sensors.enable = true;
       printer.enable = true;

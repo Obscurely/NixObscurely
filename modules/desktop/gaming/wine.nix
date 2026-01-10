@@ -30,11 +30,11 @@ in {
       mangohud
       zenity
       auto-cpufreq
-      vkBasalt
+      vkbasalt
       goverlay
       earlyoom
       ananicy
-      vaapiVdpau
+      libva-vdpau-driver
       libgpg-error
       libgcrypt
       ncurses
@@ -43,7 +43,7 @@ in {
       vulkan-loader
       khronos-ocl-icd-loader
       libjpeg
-      protonup # for managing proton ge
+      protonup-ng # for managing proton ge
     ];
 
     # Get in dotfiles

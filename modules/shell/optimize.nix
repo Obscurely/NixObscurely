@@ -29,7 +29,5 @@ in {
 	  pngcrush # for png
 	  jpeg-archive # for jpeg-recompress
     ];
-
-    programs.adb.enable = true;
   };
 }

@@ -29,6 +29,7 @@ in {
       kdePackages.ark # imo best linux archive manager
       xfce4-settings # setting manager
       gnome-pomodoro # pomodor style timer for taking breaks
+	  moonlight-qt # sunshine client
 
       # My packages
       my.estash

@@ -60,6 +60,9 @@ with lib.my; {
   # Enable wake on lan
   networking.interfaces.enp8s0.wakeOnLan.enable = true;
 
+  # Fix bug when running both ipv6 and ipv4
+  networking.resolvconf.dnsSingleRequest = true;
+
   # Use the latest kernel
   boot = {
     kernelPackages = mkDefault pkgs.linuxPackages_zen;

@@ -3,9 +3,25 @@
 # start picom
 picom --backend=glx --config ~/.config/picom/picom.conf &
 
-bspc monitor DP-0 -d I II III IV V
-bspc monitor DVI-D-0 -d VI VII VIII IX X
+# Set resolution
+xrandr --output DP-0 --mode 3840x2160 --rate 240 --primary
+xrandr --output HDMI-0 --mode 2560x1440 --rate 144
+xrandr --output HDMI-1 --mode 1920x1080 --rate 60
+xrandr --output HDMI-1 --left-of DP-0
+xrandr --output HDMI-0 --right-of DP-0
 
+# Refresh wallpaper
+feh --bg-fill --no-fehbg $XDG_DATA_HOME/wallpaper
+
+# Configure workspaces
+bspc monitor DP-0 -d I II III IV V
+bspc monitor HDMI-0 -d VI VII VIII IX
+bspc monitor HDMI-1 -d X
+
+# Set the order of the workspaces
+bspc wm --reorder-monitors DP-0 HDMI-0 HDMI-1
+
+# Set app rules
 bspc rule -a Chromium-browser     desktop='^3'	follow=on
 bspc rule -a librewolf            desktop='^3'	follow=on
 bspc rule -a zen				  desktop='^3'	follow=on
@@ -55,11 +71,6 @@ bspc rule -a Blanket 		          desktop='^5' 	follow=off
 bspc rule -a bruno                desktop='^4'  follow=on
 bspc rule -a tidal-hifi           desktop='^5'  follow=on
 
-# Set resolution
-xrandr --output DVI-D-0 --mode 1920x1080 --rate 144
-xrandr --output DP-0 --mode 2560x1440 --rate 165
-xrandr --output DP-0 --primary --left-of DVI-D-0
-
 # Auto-Start
 bspc desktop -f ^1
 lxpolkit & # prompt to enter sudo password daemon
@@ -77,3 +88,12 @@ done
 lxappearance & # Fix cursor not showing on desktop (background)
 sleep 3
 pkill lxappearance # Fix cursor not showing on desktop (background)
+
+# Set mouse speed to match 1440p
+xinput set-prop "Logitech G502 X" "libinput Accel Profile Enabled" 0 1
+xinput set-prop "Logitech G502 X" "libinput Accel Speed" 0.5
+
+# Start subscriber to reorder monitors on monitor power cycles
+bspc subscribe monitor | while read -r _; do
+    bspc wm --reorder-monitors DP-0 HDMI-0 HDMI-1
+done &

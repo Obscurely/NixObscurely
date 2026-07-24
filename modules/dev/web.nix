@@ -20,12 +20,13 @@ in {
     (mkIf cfg.enable {
       user.packages = with pkgs; [
         vscode-langservers-extracted
-        nodePackages.typescript
-        nodePackages.typescript-language-server
+        typescript
+        typescript-language-server
         marksman # language server for markdown
         html-tidy # diagnostics for web files
         alex # catches incosiderate writting
         markdownlint-cli2 # markdown lint
+	go-grip # markdown preview locally
         proselint # basically it checks your writting.
         deno # fromat and other things
         hugo # backend developer's best friend for building frontends
@@ -38,7 +39,7 @@ in {
         eslint
         eslint_d
         vscode-js-debug # debugger
-        nodePackages_latest.webpack-cli # bundle js files
+        webpack-cli # bundle js files
       ];
     })
   ];

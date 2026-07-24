@@ -106,3 +106,10 @@ st.color14: #7dd5cf
 ! LightGrey + White
 st.color7:  #d0d0d0
 st.color15: #f5f5f5
+
+! Dpi hint for 4k
+Xft.dpi: 144
+
+! Cursor
+Xcursor.size: 36
+Xcursor.theme: volantes_cursors

@@ -20,7 +20,7 @@ in {
       ncdu
       speedtest-cli # internet speed test in shell
       traceroute # trace ip address to initial ip
-      neofetch
+      fastfetch
       aria2 # fast cli downloader
       mat2 # utility for removing metadata from files
       netdiscover # discovering devices in local network

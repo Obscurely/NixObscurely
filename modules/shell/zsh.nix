@@ -54,7 +54,7 @@ in {
       ripgrep
       tldr
       autojump
-      nodePackages.npm
+      nodejs
     ];
 
     env = {

@@ -33,7 +33,7 @@ in {
         f2fs-tools
         xfsprogs
         fuse3
-        fuseiso
+        fuse2
         gf
         gptfdisk # gpt cli util
       ];

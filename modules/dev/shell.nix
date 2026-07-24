@@ -23,7 +23,7 @@ in {
     (mkIf cfg.enable {
       user.packages = with pkgs; [
         shellcheck
-        nodePackages.bash-language-server
+        bash-language-server
         shfmt
       ];
     })

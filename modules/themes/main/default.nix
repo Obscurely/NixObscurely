@@ -23,7 +23,9 @@ in {
           };
           fonts = {
             sans.name = "Fira Sans";
+            sans.size = 15;
             mono.name = "Fira Code";
+	    mono.size = 18;
           };
           colors = {
             black = "#1E2029";

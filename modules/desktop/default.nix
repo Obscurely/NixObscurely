@@ -99,9 +99,22 @@ in {
         nerd-fonts.roboto-mono
         nerd-fonts.fantasque-sans-mono
         nerd-fonts.hurmit
+	nerd-fonts.sauce-code-pro
         hermit
       ];
     };
+
+    ## Scale for 4k
+	services.xserver.dpi = 144;  # 96 × 1.5
+
+	environment.variables = {
+	  # Qt scaling
+	  QT_AUTO_SCREEN_SCALE_FACTOR = "0";
+	  QT_SCALE_FACTOR = "1.5";
+
+	  # Cursor size (default 24 × 1.5 = 36)
+	  XCURSOR_SIZE = "36";
+	};
 
     ## Apps/Services
     services.xserver.displayManager.lightdm.greeters.mini.user = config.user.name;
@@ -111,6 +124,11 @@ in {
       plugins = with pkgs; [thunar-archive-plugin thunar-volman];
     };
     programs.htop.enable = true;
+
+    # Tailscale
+    services.tailscale = {
+      enable = true;
+    };
 
     # Try really hard to get QT to respect my GTK theme.
     env.GTK_DATA_PREFIX = ["${config.system.path}"];

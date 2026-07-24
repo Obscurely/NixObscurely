@@ -21,7 +21,7 @@ in {
       jpegoptim # optimize jpeg
       ghostscript # optimize pdf
       bc # for optimizing photos
-      nodePackages.svgo # svg cleaning
+      svgo # svg cleaning
       svgcleaner # svg cleaning
 	  libwebp # for cwebp and dwebp
 	  libavif # for avif

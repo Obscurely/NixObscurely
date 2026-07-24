@@ -23,7 +23,7 @@ configuration {
 window {
     transparency:                   "real";
     border-radius:                  12px;
-    width:                          100px;
+    width:                          150px;
     location:                       east;
     x-offset:                       -15px;
     y-offset:                       0px;
@@ -31,8 +31,8 @@ window {
 
 listview {
     lines:							6;
-    margin:                         8px;
-    spacing:                        8px;
+    margin:                         12px;
+    spacing:                        12px;
     cycle:                          true;
     dynamic:                        true;
     layout:                         vertical;
@@ -53,11 +53,11 @@ element {
 element-text {
     background-color: 				inherit;
     text-color:       				inherit;
-	  font:							"RobotoMono Nerd Font 20";
+	  font:							"RobotoMono Nerd Font 30";
     expand:                         true;
     horizontal-align:               0.5;
     vertical-align:                 0.5;
-    margin:                         26px 26px 26px 26px;
+    margin:                         39px 39px 39px 39px;
 }
 
 element normal.urgent,

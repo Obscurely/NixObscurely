@@ -1,6 +1,4 @@
-# modules/dev/yaml.nix --- yaml lang
-#
-# For when really needed
+# modules/dev/zig.nix
 {
   config,
   lib,
@@ -10,19 +8,19 @@
 with lib;
 with lib.my; let
   devCfg = config.modules.dev;
-  cfg = devCfg.yaml;
+  cfg = devCfg.zig;
 in {
-  options.modules.dev.yaml = {
+  options.modules.dev.zig = {
     enable = mkBoolOpt false;
+    xdg.enable = mkBoolOpt devCfg.xdg.enable;
   };
 
   config = mkMerge [
     (mkIf cfg.enable {
       user.packages = with pkgs; [
-        yaml-language-server
-        yamlfmt
-        yamllint
-        actionlint # github actions linter
+	zig
+	zls
+	zig-zlint
       ];
     })
   ];

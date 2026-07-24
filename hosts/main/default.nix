@@ -18,10 +18,10 @@
       };
       compression.enable = true;
       apps = {
-        bitwarden.enable = true;
+        bitwarden.enable = false;
         discord.enable = true;
 	slack.enable = true;
-        thunderbird.enable = true;
+        thunderbird.enable = false;
         element.enable = false;
         rofi.enable = true;
 		zoom.enable = false;
@@ -39,10 +39,10 @@
       gaming = {
         legendary.enable = false;
         heroic.enable = false;
-        lutris.enable = true;
-        bottles.enable = true;
-        steam.enable = true;
-        wine.enable = true;
+        lutris.enable = false;
+        bottles.enable = false;
+        steam.enable = false;
+        wine.enable = false;
       };
       media = {
         audio.enable = true;
@@ -83,6 +83,7 @@
         enable = true;
         xdg.enable = true;
       };
+      zig.enable = true;
       shell.enable = true;
       web.enable = true;
       yaml.enable = true;

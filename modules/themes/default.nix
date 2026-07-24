@@ -168,6 +168,7 @@ in {
           gtk-xft-hinting=1
           gtk-xft-hintstyle=hintfull
           gtk-xft-rgba=none
+	  gtk-cursor-theme-size=32
         '';
         # GTK2 global theme (widget and icon theme)
         "gtk-2.0/gtkrc".text = ''
@@ -176,6 +177,7 @@ in {
           ${optionalString (cfg.gtk.iconTheme != "")
             ''gtk-icon-theme-name="${cfg.gtk.iconTheme}"''}
           gtk-font-name="Sans ${toString (cfg.fonts.sans.size)}"
+	  gtk-cursor-theme-size=32
         '';
         # QT4/5 global theme
         "Trolltech.conf".text = ''

@@ -24,8 +24,8 @@ in {
         tfsec # static analysis security scanning for terraform files
         tflint # terraform linter
         ansible # Configure/deploy to infrastructure
-        # ansible-language-server # lsp for ansible
-        # ansible-lint # linter for ansible yaml files
+        ansible-lint # linter for ansible yaml files
+	jinja-lsp # for jinja templates
         doctl # digital ocean cli
       ];
     })

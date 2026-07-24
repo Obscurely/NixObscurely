@@ -14,8 +14,5 @@ in {
   config = mkIf cfg.enable {
     programs.steam.enable = true;
     programs.gamemode.enable = true;
-
-    # better for steam proton games
-    systemd.user.extraConfig = "DefaultLimitNOFILE=1048576";
   };
 }

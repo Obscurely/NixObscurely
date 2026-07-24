@@ -8,7 +8,7 @@
  */
 
 configuration {
-	font:							"Noto Sans Bold 10";
+	font:							"Noto Sans Bold 15";
     show-icons:                     true;
 	icon-theme: 					"Papirus-Dark";
     display-drun: 					"";
@@ -41,7 +41,7 @@ prompt {
 	padding: 						0.30% 1% 0% -0.5%;
 	background-color: 				@background-alt;
 	text-color: 					@foreground;
-	font:							"FantasqueSansMono Nerd Font 12";
+	font:							"FantasqueSansMono Nerd Font 18";
 }
 
 entry {

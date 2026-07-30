@@ -29,9 +29,10 @@
       fsType = "f2fs";
     };
 
-  fileSystems."/extra" =
-    { device = "/dev/disk/by-uuid/298368fb-3085-456e-947c-da17168b60e5";
+  fileSystems."/extra" = 
+    { device = "/dev/disk/by-uuid/6d894eb6-1c46-4559-96f0-84a6aaa1468a";
       fsType = "xfs";
+      options = [ "nofail" "x-systemd.device-timeout=5" ];
     };
 
   fileSystems."/data" =

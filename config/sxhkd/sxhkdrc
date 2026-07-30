@@ -158,7 +158,7 @@ super + alt + b
 
 # open thunar
 super + e
-  thunar
+  GDK_DPI_SCALE=1.1 thunar
 
 # Open kitty with custom settings in order to go well with NeoVim
 super + v
@@ -180,9 +180,9 @@ super + x
 super + q
   zen-beta
 
-# open vaultwarden menu
+# open virt manager
 super + shift + v
-	$DOTFILES_BIN/rofi/bwmenu
+  GDK_SCALE=2 GDK_DPI_SCALE=0.75 virt-manager	
 
 #
 # Media Keys

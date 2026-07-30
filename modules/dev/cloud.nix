@@ -25,7 +25,7 @@ in {
         tflint # terraform linter
         ansible # Configure/deploy to infrastructure
         ansible-lint # linter for ansible yaml files
-	jinja-lsp # for jinja templates
+        jinja-lsp # for jinja templates
         doctl # digital ocean cli
       ];
     })

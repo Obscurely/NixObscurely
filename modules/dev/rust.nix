@@ -1,6 +1,4 @@
 # modules/dev/rust.nix --- https://rust-lang.org
-#
-# Rust: the love of my life!
 {
   config,
   lib,

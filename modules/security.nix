@@ -4,17 +4,13 @@
   ...
 }: {
   ## System security tweaks
-  # sets hidepid=2 on /proc (make process info visible only to owning user)
-  # NOTE Was removed on nixpkgs-unstable because it doesn't do anything
-  # security.hideProcessInformation = true;
   # Prevent replacing the running kernel w/o reboot
   security.protectKernelImage = true;
 
-  # tmpfs = /tmp is mounted in ram. Doing so makes temp file management speedy
-  # on ssd systems, and volatile! Because it's wiped on reboot.
+  # tmpfs = /tmp is mounted in ram. Faster and actually temporary
   boot.tmp.useTmpfs = lib.mkDefault true;
-  # If not using tmpfs, which is naturally purged on reboot, we must clean it
-  # /tmp ourselves. /tmp should be volatile storage!
+
+  # In case tmpfs is not used clean /tmp on boot
   boot.tmp.cleanOnBoot = lib.mkDefault (!config.boot.tmp.useTmpfs);
 
   # Fix a security hole in place for backwards compatibility. See desc in
@@ -24,7 +20,7 @@
   boot.kernel.sysctl = {
     # The Magic SysRq key is a key combo that allows users connected to the
     # system console of a Linux kernel to perform some low-level commands.
-    # Disable it, since we don't need it, and is a potential security concern.
+    # No need for it
     "kernel.sysrq" = 0;
 
     ## TCP hardening
@@ -37,7 +33,7 @@
     # Do not accept IP source route packets (we're not a router)
     "net.ipv4.conf.all.accept_source_route" = 0;
     "net.ipv6.conf.all.accept_source_route" = 0;
-    # Don't send ICMP redirects (again, we're on a router)
+    # Don't send ICMP redirects (again, we're not a router)
     "net.ipv4.conf.all.send_redirects" = 0;
     "net.ipv4.conf.default.send_redirects" = 0;
     # Refuse ICMP redirects (MITM mitigations)
@@ -77,12 +73,12 @@
   };
   boot.kernelModules = ["tcp_bbr"];
 
-  # So we don't have to do this later...
+  # So it doesn't need to be done later
   security.acme.acceptTerms = true;
 
   # Disable CPU mitigations, not required on a non-server machine
   boot.kernelParams = ["mitigations=off"];
 
-  # Enable port 5000 for developing
+  # Expose port 5000 and 3000 for developing (common ports)
   networking.firewall.allowedTCPPorts = [5000 3000];
 }

@@ -28,18 +28,14 @@ in {
         ]
         else []
       )
-      ++
-      # replaces illustrator & indesign
-      (
+      ++ (
         if cfg.vector.enable
         then [
           unstable.inkscape
         ]
         else []
       )
-      ++
-      # Replaces photoshop
-      (
+      ++ (
         if cfg.raster.enable
         then [
           krita
@@ -48,18 +44,14 @@ in {
         ]
         else []
       )
-      ++
-      # Replaces photoshop
-      (
+      ++ (
         if cfg.video.enable
         then [
           kdePackages.kdenlive
         ]
         else []
       )
-      ++
-      # 3D modelling
-      (
+      ++ (
         if cfg.models.enable
         then [
           blender

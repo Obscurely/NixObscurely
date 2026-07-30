@@ -1,6 +1,4 @@
 # modules/browser/chromium.nix --- https://github.com/ungoogled-software/ungoogled-chromium
-#
-# Google Chromium, sans integration with google
 {
   config,
   lib,
@@ -18,14 +16,6 @@ in {
   config = mkIf cfg.enable {
     user.packages = with pkgs; [
       ungoogled-chromium
-      (makeDesktopItem {
-        name = "chromium";
-        desktopName = "Chromium";
-        genericName = "Open a chromium tab";
-        icon = "chromium";
-        exec = "${brave}/bin/chromium --ignore-certificate-errors";
-        categories = ["Network"];
-      })
     ];
   };
 }

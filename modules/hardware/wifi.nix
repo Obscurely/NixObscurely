@@ -1,4 +1,4 @@
-# modules/hardware/wifi.nix --- support for wifi
+# modules/hardware/wifi.nix --- support for wifi (for my laptop)
 {
   config,
   lib,

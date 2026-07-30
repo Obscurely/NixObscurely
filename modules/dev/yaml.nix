@@ -1,6 +1,4 @@
 # modules/dev/yaml.nix --- yaml lang
-#
-# For when really needed
 {
   config,
   lib,

@@ -33,7 +33,7 @@ with lib.my; {
       type = attrsOf (oneOf [str path (listOf (either str path))]);
       apply =
         mapAttrs
-        (n: v:
+        (v:
           if isList v
           then concatMapStringsSep ":" (x: toString x) v
           else (toString v));
@@ -65,10 +65,8 @@ with lib.my; {
     home-manager = {
       useUserPackages = true;
 
-      # I only need a subset of home-manager's capabilities. That is, access to
-      # its home.file, home.xdg.configFile and home.xdg.dataFile so I can deploy
-      # files easily to my $HOME, but 'home-manager.users.hlissner.home.file.*'
-      # is much too long and harder to maintain, so I've made aliases in:
+      # Only a couple of home manager's features are required
+      # Plus configure shorthands
       users.${config.user.name} = {
         home = {
           file = mkAliasDefinitions options.home.file;

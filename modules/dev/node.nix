@@ -25,7 +25,7 @@ in {
           pkgs.yarn
         ];
 
-        # Run locally installed bin-script, e.g. n coffee file.coffee
+        # Run locally installed bin-script
         environment.shellAliases = {
           n = "PATH=\"$(${node}/bin/npm bin):$PATH\"";
           ya = "yarn";

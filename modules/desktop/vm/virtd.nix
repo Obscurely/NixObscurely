@@ -42,10 +42,10 @@ in {
       };
     };
 
-	systemd.services.libvirtd.environment = {
+    systemd.services.libvirtd.environment = {
       # Tell libglvnd where to find the NVIDIA driver JSON
       __EGL_VENDOR_LIBRARY_FILENAMES = "/run/opengl-driver/share/glvnd/egl_vendor.d/10_nvidia.json";
-      
+
       # Force the library path so QEMU finds the proprietary libs
       LD_LIBRARY_PATH = "/run/opengl-driver/lib";
     };

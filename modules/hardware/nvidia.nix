@@ -40,11 +40,11 @@ in {
     };
 
     services.xserver.videoDrivers = ["nvidia"];
-    hardware.nvidia.open = false;
+    hardware.nvidia.open = true;
     hardware.nvidia.modesetting.enable = true;
-    boot.kernelParams = ["nvidia-drm.modeset=1"];
     environment.variables = {
       NVD_BACKEND = "direct";
+      LIBVA_DRIVER_NAME = "nvidia";
     };
 
     environment.systemPackages = with pkgs; [

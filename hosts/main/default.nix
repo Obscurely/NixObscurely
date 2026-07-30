@@ -1,9 +1,4 @@
-{
-  pkgs,
-  config,
-  lib,
-  ...
-}: {
+{...}: {
   imports = [
     ../home.nix
     ./hardware-configuration.nix
@@ -12,7 +7,7 @@
   ## Modules
   modules = {
     desktop = {
-      bspwm = {
+      sway = {
         enable = true;
         host = "main";
       };
@@ -20,21 +15,17 @@
       apps = {
         bitwarden.enable = false;
         discord.enable = true;
-	slack.enable = true;
+        slack.enable = true;
         thunderbird.enable = false;
         element.enable = false;
-        rofi.enable = true;
-		zoom.enable = false;
         utils.enable = true;
       };
       browsers = {
         default = "zen";
         chromium.enable = true;
-        librewolf.enable = false;
         torbrowser.enable = true;
         zen.enable = true;
         firefox.enable = true;
-        firefoxdev.enable = true;
       };
       gaming = {
         legendary.enable = false;
@@ -50,11 +41,11 @@
         graphics.enable = true;
         mpv.enable = true;
         recording.enable = true;
+        tidal = true;
       };
       term = {
         default = "alacritty";
         alacritty.enable = true;
-        st.enable = false;
       };
       vm = {
         virtd.enable = true;
@@ -88,7 +79,7 @@
       web.enable = true;
       yaml.enable = true;
       nix.enable = true;
-	  utils.enable = true;
+      utils.enable = true;
     };
     editors = {
       default = "nvim";
@@ -101,8 +92,6 @@
         ssd.enable = true;
       };
       nvidia.enable = true;
-      nouveau.enable = false;
-      razer.enable = true;
       sensors.enable = true;
       printer.enable = true;
       wifi.enable = false;
@@ -117,28 +106,11 @@
       gnupg.enable = true;
       tmux.enable = true;
       utils.enable = true;
-      vaultwarden.enable = true;
       zsh.enable = true;
-	  optimize.enable = true;
+      optimize.enable = true;
     };
     theme.active = "main";
   };
 
   networking.networkmanager.enable = true;
-
-  # Extra fix for resolution and monitor placement
-  environment.etc = {
-    "X11/xorg.conf.d/52-resolution-fix.conf".text = ''
-      Section "Monitor"
-          Identifier "DP-0"
-          Option "PreferredMode" "2560x1440"
-          Option "Primary" "1"
-      EndSection
-      Section "Monitor"
-          Identifier "DVI-D-0"
-          Option "PreferredMode" "1920x1080"
-          Option "RightOf" "DP-0"
-      EndSection
-    '';
-  };
 }

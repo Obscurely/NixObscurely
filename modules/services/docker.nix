@@ -31,7 +31,6 @@ in {
         enable = true;
         autoPrune.enable = true;
         enableOnBoot = mkDefault false;
-        # listenOptions = [];
       };
     };
   };

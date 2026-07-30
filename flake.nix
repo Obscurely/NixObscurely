@@ -1,14 +1,11 @@
-# flake.nix --- the heart of my dotfiles
-# Welcome to ground zero. Where the whole flake gets set up and all its modules
-# are loaded.
+# The root flake file
 {
-  description = "A grossly incandescent nixos config.";
+  description = "NixOS";
 
   inputs = {
-    # Core dependencies.
+    # Core dependencies
     nixpkgs.url = "nixpkgs/nixos-unstable"; # primary nixpkgs
-    nixpkgs-unstable.url = "nixpkgs/nixpkgs-unstable"; # for packages on the edge
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-26.05";
     home-manager.url = "github:rycee/home-manager/master";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -33,8 +30,7 @@
     mkPkgs = pkgs: extraOverlays:
       import pkgs {
         inherit system;
-        config.allowUnfree = true; # forgive me Stallman senpai
-        config.permittedInsecurePackages = ["qtwebengine-5.15.19" "electron-39.8.10"]; # HACK: temporarily enable insecure pkg
+        config.allowUnfree = true; # For things such as nvidia
         overlays = extraOverlays ++ (lib.attrValues self.overlays);
       };
     pkgs = mkPkgs nixpkgs [self.overlay];
@@ -43,7 +39,7 @@
 
     lib =
       nixpkgs.lib.extend
-      (self: super: {
+      (self: {
         my = import ./lib {
           inherit pkgs inputs;
           lib = self;
@@ -52,7 +48,7 @@
   in {
     lib = lib.my;
 
-    overlay = final: prev: {
+    overlay = {
       unstable = pkgs';
       stable = pkgs-stable;
       my = self.packages."${system}";
@@ -77,7 +73,7 @@
       {
         full = {
           path = ./.;
-          description = "A grossly incandescent nixos config";
+          description = "NixOS";
         };
         default = self.templates.full;
       }

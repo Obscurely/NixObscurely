@@ -1,6 +1,4 @@
 # modules/dev/arudino.nix --- arduino lang
-#
-# For when really needed
 {
   config,
   lib,

@@ -18,9 +18,9 @@ in {
   config = mkMerge [
     (mkIf cfg.enable {
       user.packages = with pkgs; [
-	zig
-	zls
-	zig-zlint
+        zig
+        zls
+        zig-zlint
       ];
     })
   ];

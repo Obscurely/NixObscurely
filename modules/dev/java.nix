@@ -1,6 +1,4 @@
 # modules/dev/jav.nix --- java lang
-#
-# For when really needed
 {
   config,
   lib,

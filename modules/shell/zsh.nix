@@ -33,9 +33,6 @@ in {
     programs.zsh = {
       enable = true;
       enableCompletion = true;
-      # I init completion myself, because enableGlobalCompInit initializes it
-      # too soon, which means commands initialized later in my config won't get
-      # completion, and running compinit twice is slow.
       enableGlobalCompInit = false;
       promptInit = "";
     };
@@ -70,10 +67,6 @@ in {
         recursive = true;
       };
 
-      # Why am I creating extra.zsh{rc,env} when I could be using extraInit?
-      # Because extraInit generates those files in /etc/profile, and mine just
-      # write the files to ~/.config/zsh; where it's easier to edit and tweak
-      # them in case of issues or when experimenting.
       "zsh/extra.zshrc".text = let
         aliasLines = mapAttrsToList (n: v: "alias ${n}=\"${v}\"") cfg.aliases;
       in ''

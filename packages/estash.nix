@@ -15,13 +15,17 @@
     {
       x86_64-linux = "";
     }
-    .${stdenv.hostPlatform.system};
+    .${
+      stdenv.hostPlatform.system
+    };
 
   sha256 =
     {
       x86_64-linux = "17a8a303b91f3b7dbcbdf77a42d62a7a5659027b87678f57adf3c3f5f2875aab";
     }
-    .${stdenv.hostPlatform.system};
+    .${
+      stdenv.hostPlatform.system
+    };
 
   src = fetchurl {
     url = "https://github.com/Obscurely/EStash/releases/download/v${version}-stable/estash-linux.AppImage";

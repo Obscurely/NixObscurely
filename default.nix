@@ -8,13 +8,12 @@
 with lib;
 with lib.my; {
   imports =
-    # I use home-manager to deploy files to $HOME; little else
+    # Config Files
     [inputs.home-manager.nixosModules.home-manager]
-    # All my personal modules
+    # Modules installing apps and configs
     ++ (mapModulesRec' (toString ./modules) import);
 
-  # Common config for all nixos machines; and to ensure the flake operates
-  # soundly
+  # Common config
   environment.variables.DOTFILES = config.dotfiles.dir;
   environment.variables.DOTFILES_BIN = config.dotfiles.binDir;
 
@@ -47,14 +46,10 @@ with lib.my; {
   system.configurationRevision = with inputs; mkIf (self ? rev) self.rev;
   system.stateVersion = "21.05";
 
-  ## Some reasonable, global defaults
-  # This is here to appease 'nix flake check' for generic hosts with no
-  # hardware-configuration.nix or fileSystem config.
+  # Don't flag missing hardware config file
   fileSystems."/".device = mkDefault "/dev/disk/by-label/nixos";
 
-  # The global useDHCP flag is deprecated, therefore explicitly set to false
-  # here. Per-interface useDHCP will be mandatory in the future, so we enforce
-  # this default behavior here.
+  # Per interface is enforced
   networking.useDHCP = mkDefault false;
 
   # Enable wake on lan
@@ -76,7 +71,7 @@ with lib.my; {
   # Enable architecture emulation
   boot.binfmt.emulatedSystems = ["aarch64-linux" "x86_64-windows" "i686-linux"];
 
-  # Just the bear necessities...
+  # Just the bear necessities
   environment.systemPackages = with pkgs; [
     bind
     cached-nix-shell

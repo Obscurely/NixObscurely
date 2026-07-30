@@ -1,5 +1,5 @@
-# Neovim: the second love of my life
-# For me all other text editors are trash against my configured neovim.
+# The actual neovim configuration lives in it's own repo and gets automatically installed.
+# Updates to it happen outside of NixOS
 {
   config,
   lib,
@@ -9,7 +9,6 @@
 with lib;
 with lib.my; let
   cfg = config.modules.editors.nvim;
-  configDir = config.dotfiles.configDir;
 in {
   options.modules.editors.nvim = {
     enable = mkBoolOpt false;
@@ -20,15 +19,6 @@ in {
       editorconfig-core-c
       unstable.neovim
       tree-sitter
-      my.codeium # for autocompletions powered by AI
     ];
-
-    # enable wakapi config
-    home.configFile = with config.modules;
-      mkMerge [
-        {
-          "../.wakatime.cfg".source = "${configDir}/wakapi/.wakatime.cfg";
-        }
-      ];
   };
 }

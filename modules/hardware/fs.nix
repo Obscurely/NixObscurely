@@ -55,8 +55,8 @@ in {
 
       (mkIf cfg.ssd.enable {
         # Will only TRIM SSDs; skips over HDDs
-        services.fstrim.enable = false;
-        services.zfs.trim.enable = true;
+        services.fstrim.enable = true;
+        services.zfs.trim.enable = false; # not using zfs with nix
       })
     ]))
   ]);

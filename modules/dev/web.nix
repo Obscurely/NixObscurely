@@ -1,6 +1,4 @@
 # modules/dev/web.nix --- web lang
-#
-# For when really needed
 {
   config,
   lib,
@@ -26,7 +24,7 @@ in {
         html-tidy # diagnostics for web files
         alex # catches incosiderate writting
         markdownlint-cli2 # markdown lint
-	go-grip # markdown preview locally
+        go-grip # markdown preview locally
         proselint # basically it checks your writting.
         deno # fromat and other things
         hugo # backend developer's best friend for building frontends

@@ -1,6 +1,6 @@
 {lib, ...}: let
   inherit (lib) mkOption types;
-in rec {
+in {
   mkOpt = type: default:
     mkOption {inherit type default;};
 

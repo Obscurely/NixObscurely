@@ -1,6 +1,4 @@
 # modules/dev/go.nix --- GO lang
-#
-# For when really needed
 {
   config,
   lib,

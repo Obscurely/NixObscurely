@@ -19,25 +19,43 @@ set $c_text    #f8f8f2
 set $c_urgent  #ff5555
 
 ### Outputs
-#
-# SAFE DEFAULT: let sway auto-detect native mode so first boot always shows a
-# picture. Wallpaper is applied to every output.
-output * bg $XDG_DATA_HOME/wallpaper fill
+# Connector names from `swaymsg -t get_outputs`:
+#   DP-1     = GIGA-BYTE MO32U24   (4K,   240Hz)  -> main   (middle)
+#   HDMI-A-1 = GIGA-BYTE FI27Q     (1440p 144Hz)  -> right
+#   HDMI-A-2 = ASUS VG248          (1080p 60Hz)   -> left
+# Logical layout after scaling: [1080p 1920][4K@1.5 2560][1440p 2560]
+set $mon_main  DP-1
+set $mon_right HDMI-A-1
+set $mon_left  HDMI-A-2
 
-# --- Fill in after `swaymsg -t get_outputs` (names + supported modes). Example:
-# output "Make Model Serial"  { mode 3840x2160@240Hz scale 1.5 position 1920 0 }
-# output "Make Model Serial2" { mode 2560x1440@144Hz scale 1   position 4480 0 }
-# output "Make Model Serial3" { mode 1920x1080@60Hz  scale 1   position 0 180  }
-#
-# --- Workspace -> output pinning (enable once names are known):
-# workspace 1 output <main>
-# ...
-# workspace 10 output <left>
+output $mon_left  { mode 1920x1080@60Hz  scale 1   position 0 180  }
+output $mon_main  { mode 3840x2160@240Hz scale 1.5 position 1920 0 render_bit_depth 10 }
+output $mon_right { mode 2560x1440@144Hz scale 1   position 4480 0 }
+
+# Wallpaper: via swaybg in `exec` (sway does NOT expand env vars in `output bg`,
+# but the exec shell does). Installed to $XDG_DATA_HOME/wallpaper by the theme.
+exec swaybg -i "$XDG_DATA_HOME/wallpaper" -m fill
+
+# Workspace -> output pinning
+workspace 1  output $mon_main
+workspace 2  output $mon_main
+workspace 3  output $mon_main
+workspace 4  output $mon_main
+workspace 5  output $mon_main
+workspace 6  output $mon_right
+workspace 7  output $mon_right
+workspace 8  output $mon_right
+workspace 9  output $mon_right
+workspace 10 output $mon_left
 
 ### Input
 input type:pointer {
     accel_profile flat
-    pointer_accel 0.5
+    # 0 = libinput baseline (felt right). Range: -1 (slowest) .. 0 .. 1 (fastest).
+    # The old X11 value 0.5 was compensation for the unscaled 4K; Wayland per-output
+    # scaling removes the need. Tune live with:
+    #   swaymsg 'input type:pointer pointer_accel <val>'
+    pointer_accel 0
 }
 input type:keyboard {
     xkb_numlock enabled
@@ -142,6 +160,9 @@ bindsym $mod+Shift+7 move container to workspace number 7
 bindsym $mod+Shift+8 move container to workspace number 8
 bindsym $mod+Shift+9 move container to workspace number 9
 bindsym $mod+Shift+0 move container to workspace number 10
+
+## HDR toggle on the QD-OLED (DP-1). Needs the Vulkan renderer (sway.hdr.enable).
+bindsym $mod+F9 exec $XDG_CONFIG_HOME/sway/hdr-toggle.sh
 
 ## apps (rofi scripts live in $DOTFILES_BIN/rofi)
 bindsym $mod+F12 exec $DOTFILES_BIN/rofi/launcher

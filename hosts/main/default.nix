@@ -10,6 +10,7 @@
       sway = {
         enable = true;
         host = "main";
+        hdr.enable = true;
       };
       compression.enable = true;
       apps = {

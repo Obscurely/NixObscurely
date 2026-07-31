@@ -163,6 +163,8 @@ bindsym $mod+Shift+0 move container to workspace number 10
 
 ## HDR toggle on the QD-OLED (DP-1). Needs the Vulkan renderer (sway.hdr.enable).
 bindsym $mod+F9 exec $XDG_CONFIG_HOME/sway/hdr-toggle.sh
+## VRR / adaptive-sync (GSYNC) toggle on the QD-OLED (DP-1) — for gaming.
+bindsym $mod+F10 exec $XDG_CONFIG_HOME/sway/vrr-toggle.sh
 
 ## apps (rofi scripts live in $DOTFILES_BIN/rofi)
 bindsym $mod+F12 exec $DOTFILES_BIN/rofi/launcher
@@ -204,10 +206,10 @@ exec lxqt-policykit-agent
 exec mako
 exec wl-paste --watch cliphist store
 
-# swayidle: lock after 10min, DPMS off after 15min
+# swayidle: lock at 9min, screen off (OLED burn-in guard) at 10min
 exec swayidle -w \
-    timeout 600 'swaylock -f' \
-    timeout 900 'swaymsg "output * power off"' \
+    timeout 540 'swaylock -f' \
+    timeout 600 'swaymsg "output * power off"' \
     resume 'swaymsg "output * power on"' \
     before-sleep 'swaylock -f'
 

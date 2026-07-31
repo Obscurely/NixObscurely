@@ -113,6 +113,7 @@ in {
         pavucontrol
         wf-recorder
         jq # used by a couple of sway keybinds
+        glib # gsettings/gio (theme for GTK4/libadwaita apps, via init.sh)
       ];
 
       # Qt theming (QT_QPA_PLATFORMTHEME) is owned by modules/themes/main.

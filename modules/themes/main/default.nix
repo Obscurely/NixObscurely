@@ -22,7 +22,7 @@ in {
             cursorTheme = "volantes_cursors";
           };
           fonts = {
-            sans.name = "Fira Sans";
+            sans.name = "Fira Code"; # you want Fira Code (mono) everywhere, like alacritty
             sans.size = 15;
             mono.name = "Fira Code";
             mono.size = 18;
@@ -112,6 +112,13 @@ in {
           (mkIf desktop.apps.rofi.enable {
             "rofi/theme" = {
               source = ./config/rofi;
+              recursive = true;
+            };
+          })
+          (mkIf desktop.sway.waybar.enable {
+            # Catppuccin-Mocha waybar (config.jsonc + style.css auto-loaded by name)
+            "waybar" = {
+              source = ./config/waybar;
               recursive = true;
             };
           })

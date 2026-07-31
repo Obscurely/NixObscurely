@@ -102,6 +102,7 @@ in {
             ''gtk-cursor-theme-name=${cfg.gtk.cursorTheme}''}
           gtk-fallback-icon-theme=gnome
           gtk-application-prefer-dark-theme=true
+          gtk-font-name=${cfg.fonts.sans.name} ${toString cfg.fonts.sans.size}
           gtk-xft-hinting=1
           gtk-xft-hintstyle=hintfull
           gtk-xft-rgba=none
@@ -113,7 +114,7 @@ in {
             ''gtk-theme-name="${cfg.gtk.theme}"''}
           ${optionalString (cfg.gtk.iconTheme != "")
             ''gtk-icon-theme-name="${cfg.gtk.iconTheme}"''}
-          gtk-font-name="Sans ${toString (cfg.fonts.sans.size)}"
+          gtk-font-name="${cfg.fonts.sans.name} ${toString (cfg.fonts.sans.size)}"
           gtk-cursor-theme-size=32
         '';
         # QT4/5 global theme

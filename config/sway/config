@@ -201,10 +201,10 @@ bindsym XF86AudioPlay        exec playerctl play-pause
 bindsym XF86AudioNext        exec playerctl next
 bindsym XF86AudioPrev        exec playerctl previous
 
-### Bar
-bar {
-    swaybar_command waybar
-}
+### Bar — waybar runs standalone (config.jsonc + style.css from the theme module).
+# Using `exec` instead of `bar { swaybar_command waybar }` so it behaves like a
+# normal waybar (the swaybar_command form ignores `swaymsg bar` control).
+exec waybar
 
 ### NixOS integration
 # We ship an authoritative ~/.config/sway/config, so sway reads THIS instead of
@@ -219,9 +219,10 @@ exec lxqt-policykit-agent
 exec mako
 exec wl-paste --watch cliphist store
 
-# swayidle: lock at 9min, screen off (OLED burn-in guard) at 10min
+# swayidle: NO auto-lock. Just turn the screen off at 10min (OLED burn-in guard).
+# Lock manually with $alt+Shift+x. Still locks before suspend (security) — remove
+# the before-sleep line too if you don't want even that.
 exec swayidle -w \
-    timeout 540 'swaylock -f' \
     timeout 600 'swaymsg "output * power off"' \
     resume 'swaymsg "output * power on"' \
     before-sleep 'swaylock -f'

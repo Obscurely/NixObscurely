@@ -1,0 +1,153 @@
+{
+  "modules-left": [
+    "custom/launcher",
+    "custom/separatorleft",
+    "sway/workspaces",
+    "custom/separatoralt",
+    "cpu",
+    "custom/separatoralt",
+    "memory",
+    "custom/separatoralt",
+    "disk",
+  ],
+  "modules-center": [
+  ],
+  "modules-right": [
+    "pulseaudio",
+    "custom/separatoralt",
+    "network",
+    "custom/separatoraltalt",
+    "clock",
+    "custom/separatorright",
+    "custom/powermenu",
+  ],
+  "custom/launcher": {
+    "format": " ",
+    "on-click": "$DOTFILES_BIN/rofi/launcher",
+    "tooltip": false,
+  },
+  "sway/workspaces": {
+    "disable-scroll": true,
+    "format": "{icon}",
+    "format-icons": {
+      "1": "󰆍",
+      "2": "󰘐",
+      "3": "",
+      "4": "",
+      "5": "󰉔",
+      "6": "󰙯",
+      "7": "󰉋",
+      "8": "",
+      "9": "",
+      "10": "",
+    },
+    // Workspaces pinned to each monitor (matches config/sway/config).
+    "persistent-workspaces": {
+      "DP-1": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ], // 4K, main
+      "HDMI-A-1": [
+        6,
+        7,
+        8,
+        9
+      ], // 1440p, right
+      "HDMI-A-2": [
+        10
+      ], // 1080p, left
+    },
+  },
+  "disk": {
+    "interval": 30,
+    "format": "󰆼 <span color=\"#cdd6f4\">{free}</span>",
+    "path": "/",
+    "tooltip": true,
+    "tooltip-format": "{used}/{total} => {path} {percentage_used}%",
+  },
+  "pulseaudio": {
+    "scroll-step": 1,
+    "format": "{icon} <span color=\"#cdd6f4\">{volume}%</span>",
+    "format-muted": "󰝟 <span color=\"#f38ba8\">Muted</span>",
+    "format-icons": {
+      "default": [
+        "",
+        "",
+        ""
+      ],
+    },
+    "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+    "tooltip": true,
+  },
+  "clock": {
+    "format": "<span color=\"#eba0ac\"></span> <span color=\"#cdd6f4\">{:%H:%M}</span>",
+    "format-alt": "<span color=\"#eba0ac\"></span> <span color=\"#cdd6f4\">{:%A, %B %d, %Y (%R)}</span>",
+    "tooltip-format": "<tt><small>{calendar}</small></tt>",
+    "calendar": {
+      "mode": "year",
+      "mode-mon-col": 3,
+      "weeks-pos": "right",
+      "on-scroll": 1,
+      "format": {
+        "months": "<span color='#ffead3'><b>{}</b></span>",
+        "days": "<span color='#ecc6d9'><b>{}</b></span>",
+        "weeks": "<span color='#99ffdd'><b>W{}</b></span>",
+        "weekdays": "<span color='#ffcc66'><b>{}</b></span>",
+        "today": "<span color='#ff6699'><b><u>{}</u></b></span>",
+      },
+    },
+    "actions": {
+      "on-click-right": "mode",
+      "on-click-forward": "tz_up",
+      "on-click-backward": "tz_down",
+      "on-scroll-up": "shift_up",
+      "on-scroll-down": "shift_down",
+    },
+  },
+  "memory": {
+    "interval": 1,
+    "format": " <span color=\"#cdd6f4\">{used}GiB</span>",
+    "states": {
+      "warning": 85,
+    },
+  },
+  "cpu": {
+    "interval": 1,
+    "format": "󰄧 <span color=\"#cdd6f4\">{usage}%</span>",
+  },
+  "network": {
+    "interval": 1,
+    "format-ethernet": "󰒍 <span color=\"#cdd6f4\">{ifname}</span>",
+    "format-disconnected": "󰒎 <span color=\"#f38ba8\">Disconnected</span>",
+    "tooltip": true,
+    "tooltip-format": "Down: {bandwidthDownBytes} | Up: {bandwidthUpBytes}",
+  },
+  "custom/powermenu": {
+    "format": "",
+    "on-click": "$DOTFILES_BIN/rofi/powermenu",
+    "tooltip": false,
+  },
+  "custom/separatorleft": {
+    "format": "",
+    "interval": "once",
+    "tooltip": false,
+  },
+  "custom/separatorright": {
+    "format": "",
+    "interval": "once",
+    "tooltip": false,
+  },
+  "custom/separatoralt": {
+    "format": "",
+    "interval": "once",
+    "tooltip": false,
+  },
+  "custom/separatoraltalt": {
+    "format": "",
+    "interval": "once",
+    "tooltip": false,
+  },
+}

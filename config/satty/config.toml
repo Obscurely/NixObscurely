@@ -1,0 +1,6 @@
+# ~/.config/satty/config.toml
+[general]
+fullscreen = false
+early-exit = true
+initial-tool = "brush"
+copy-command = "wl-copy"

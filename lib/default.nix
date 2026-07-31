@@ -20,5 +20,5 @@
     (file: import file {inherit self lib pkgs inputs;}));
 in
   mylib.extend
-  (super:
+  (self: super:
     foldr (a: b: a // b) {} (attrValues super))

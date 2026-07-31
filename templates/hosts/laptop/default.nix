@@ -12,7 +12,7 @@
   ## Modules
   modules = {
     desktop = {
-      bspwm = {
+      sway = {
         enable = true;
         host = "laptop";
       };
@@ -44,8 +44,8 @@
         recording.enable = true;
       };
       term = {
-        default = "xterm-kitty";
-        st.enable = true;
+        default = "alacritty";
+        alacritty.enable = true;
       };
       vm = {
         virtd.enable = true;

@@ -53,10 +53,9 @@ in {
       "font.name.serif.x-western" = "Roboto";
       "font.name.monospace.x-western" = "FiraCode Nerd Font Mono";
       "font.name.sans-serif.x-western" = "Noto Sans";
-      # Fix dpi (I have a high res dispaly 1440p)
-      "layout.css.devPixelsPerPx" = "1.5";
-      # Enable ETP for decent security (makes zen containers and many
-      # common security/privacy add-ons redundant).
+      # NOTE: removed `layout.css.devPixelsPerPx = 1.5`. Under Wayland, Firefox/
+      # zen scale from the compositor's per-output scale; a global 1.5 here
+      # double-scales. Breaks multi res setup
       "browser.contentblocking.category" = "strict";
       "privacy.donottrackheader.enabled" = true;
       "privacy.donottrackheader.value" = 1;
@@ -219,7 +218,6 @@ in {
       "browser.preferences.defaultPerformanceSettings.enabled" = false;
       "layers.acceleration.disabled" = false;
       "layers.acceleration.force-enabled" = true;
-      "gfx.x11-egl.force-enabled" = true;
       "media.ffmpeg.enabled" = true;
       "media.rdd-ffmpeg.enabled" = true;
       "media.ffmpeg.vaapi.enabled" = true;

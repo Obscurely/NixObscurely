@@ -8,12 +8,10 @@ with lib.my; let
   cfg = config.modules.desktop.term;
 in {
   options.modules.desktop.term = {
-    default = mkOpt types.str "xterm";
+    default = mkOpt types.str "alacritty";
   };
 
   config = {
-    services.xserver.desktopManager.xterm.enable = mkDefault (cfg.default == "xterm");
-
     env.TERMINAL = cfg.default;
   };
 }

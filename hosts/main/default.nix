@@ -13,11 +13,10 @@
       };
       compression.enable = true;
       apps = {
-        bitwarden.enable = false;
         discord.enable = true;
         slack.enable = true;
-        thunderbird.enable = false;
         element.enable = false;
+        rofi.enable = true;
         utils.enable = true;
       };
       browsers = {
@@ -41,7 +40,7 @@
         graphics.enable = true;
         mpv.enable = true;
         recording.enable = true;
-        tidal = true;
+        tidal.enable = true;
       };
       term = {
         default = "alacritty";

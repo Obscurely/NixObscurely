@@ -1,0 +1,194 @@
+# ~/.config/sway/config
+#
+# First-boot–focused Sway config. Goal: reliably start, show a bar, and open a
+# terminal + neovim. Deliberately does NOT force output modes (a wrong mode can
+# blank a display) — run `swaymsg -t get_outputs` on first boot, then uncomment
+# and fill the ### Outputs block with the REAL connector names.
+
+### Variables
+set $mod Mod4
+set $alt Mod1
+set $term alacritty
+set $shots $HOME/Pictures/screenshots
+
+# Dracula-ish colours (border bg text indicator child_border)
+set $c_focus   #bd93f9
+set $c_unfocus #44475a
+set $c_bg      #282a36
+set $c_text    #f8f8f2
+set $c_urgent  #ff5555
+
+### Outputs
+#
+# SAFE DEFAULT: let sway auto-detect native mode so first boot always shows a
+# picture. Wallpaper is applied to every output.
+output * bg $XDG_DATA_HOME/wallpaper fill
+
+# --- Fill in after `swaymsg -t get_outputs` (names + supported modes). Example:
+# output "Make Model Serial"  { mode 3840x2160@240Hz scale 1.5 position 1920 0 }
+# output "Make Model Serial2" { mode 2560x1440@144Hz scale 1   position 4480 0 }
+# output "Make Model Serial3" { mode 1920x1080@60Hz  scale 1   position 0 180  }
+#
+# --- Workspace -> output pinning (enable once names are known):
+# workspace 1 output <main>
+# ...
+# workspace 10 output <left>
+
+### Input
+input type:pointer {
+    accel_profile flat
+    pointer_accel 0.5
+}
+input type:keyboard {
+    xkb_numlock enabled
+    repeat_delay 250
+    repeat_rate 45
+}
+seat * {
+    xcursor_theme volantes_cursors 24
+    hide_cursor when-typing enable
+}
+
+### Appearance
+default_orientation horizontal
+gaps inner 8
+gaps outer 2
+smart_gaps on
+default_border pixel 2
+default_floating_border pixel 2
+titlebar_padding 1
+font pango:FiraCode Nerd Font 10
+
+client.focused          $c_focus   $c_focus   $c_text $c_focus   $c_focus
+client.focused_inactive $c_unfocus $c_unfocus $c_text $c_unfocus $c_unfocus
+client.unfocused        $c_unfocus $c_bg      $c_text $c_unfocus $c_unfocus
+client.urgent           $c_urgent  $c_urgent  $c_text $c_urgent  $c_urgent
+
+focus_follows_mouse yes
+mouse_warping none
+
+### Window rules
+for_window [app_id="pavucontrol"] floating enable, resize set 900 600
+for_window [app_id="lxqt-policykit-agent"] floating enable
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="dialog"] floating enable
+for_window [window_type="dialog"] floating enable
+for_window [app_id="satty"] floating enable
+
+### Keybindings
+## session
+bindsym $mod+Return exec $term
+bindsym $mod+v exec $term --class NeoVim --title NeoVim -e nvim
+bindsym $mod+Escape reload
+bindsym $mod+$alt+r reload
+bindsym $mod+$alt+q exit
+bindsym $alt+Shift+x exec swaylock -f
+
+## windows
+bindsym $mod+w kill
+bindsym $mod+f fullscreen toggle
+bindsym $mod+s floating toggle
+bindsym $mod+t floating disable
+bindsym $mod+Shift+t sticky toggle
+
+## focus (hjkl)
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+bindsym $mod+Tab workspace back_and_forth
+bindsym $mod+bracketleft workspace prev_on_output
+bindsym $mod+bracketright workspace next_on_output
+
+## split direction (was bspwm preselect)
+bindsym $mod+Ctrl+h split horizontal
+bindsym $mod+Ctrl+l split horizontal
+bindsym $mod+Ctrl+j split vertical
+bindsym $mod+Ctrl+k split vertical
+
+## resize mode
+mode "resize" {
+    bindsym h resize shrink width 40px
+    bindsym l resize grow width 40px
+    bindsym j resize grow height 40px
+    bindsym k resize shrink height 40px
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+## workspaces
+bindsym $mod+1 workspace number 1
+bindsym $mod+2 workspace number 2
+bindsym $mod+3 workspace number 3
+bindsym $mod+4 workspace number 4
+bindsym $mod+5 workspace number 5
+bindsym $mod+6 workspace number 6
+bindsym $mod+7 workspace number 7
+bindsym $mod+8 workspace number 8
+bindsym $mod+9 workspace number 9
+bindsym $mod+0 workspace number 10
+bindsym $mod+Shift+1 move container to workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4
+bindsym $mod+Shift+5 move container to workspace number 5
+bindsym $mod+Shift+6 move container to workspace number 6
+bindsym $mod+Shift+7 move container to workspace number 7
+bindsym $mod+Shift+8 move container to workspace number 8
+bindsym $mod+Shift+9 move container to workspace number 9
+bindsym $mod+Shift+0 move container to workspace number 10
+
+## apps (rofi scripts live in $DOTFILES_BIN/rofi)
+bindsym $mod+F12 exec $DOTFILES_BIN/rofi/launcher
+bindsym $mod+F11 exec $DOTFILES_BIN/rofi/quick
+bindsym $alt+Tab exec $DOTFILES_BIN/rofi/switcher
+bindsym $mod+e exec thunar
+
+## clipboard history
+bindsym $mod+Shift+z exec cliphist list | rofi -dmenu -p clip | cliphist decode | wl-copy
+
+## screenshots (grim/slurp/satty)
+bindsym Print       exec grim - | wl-copy
+bindsym $mod+Print  exec grim "$shots/$(date +%Y%m%d_%H%M%S).png"
+bindsym Ctrl+Print  exec grim -g "$(slurp -d)" - | satty -f - --copy-command wl-copy --early-exit
+
+## media keys
+bindsym XF86AudioMute        exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +2%
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -2%
+bindsym XF86AudioPlay        exec playerctl play-pause
+bindsym XF86AudioNext        exec playerctl next
+bindsym XF86AudioPrev        exec playerctl previous
+
+### Bar
+bar {
+    swaybar_command waybar
+}
+
+### NixOS integration
+# We ship an authoritative ~/.config/sway/config, so sway reads THIS instead of
+# /etc/sway/config. Pull in the NixOS drop-in, which runs
+# `dbus-update-activation-environment` + `systemctl --user import-environment`
+# and starts sway-session.target — without this, xdg-desktop-portal
+# (screenshare/file-picker), the systemd user session and pinentry misbehave.
+include /etc/sway/config.d/*
+
+### Autostart
+exec lxqt-policykit-agent
+exec mako
+exec wl-paste --watch cliphist store
+
+# swayidle: lock after 10min, DPMS off after 15min
+exec swayidle -w \
+    timeout 600 'swaylock -f' \
+    timeout 900 'swaymsg "output * power off"' \
+    resume 'swaymsg "output * power on"' \
+    before-sleep 'swaylock -f'
+
+# Your own hook (safe no-op by default)
+exec_always $XDG_CONFIG_HOME/sway/init.sh

@@ -1,0 +1,10 @@
+# ~/.config/mako/config
+font=FiraCode Nerd Font 10
+background-color=#282a36
+text-color=#f8f8f2
+border-color=#bd93f9
+border-size=2
+border-radius=6
+default-timeout=6000
+padding=8
+margin=10

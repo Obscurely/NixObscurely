@@ -33,7 +33,7 @@ with lib.my; {
       type = attrsOf (oneOf [str path (listOf (either str path))]);
       apply =
         mapAttrs
-        (v:
+        (n: v:
           if isList v
           then concatMapStringsSep ":" (x: toString x) v
           else (toString v));

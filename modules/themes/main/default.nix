@@ -25,7 +25,7 @@ in {
             sans.name = "Fira Sans";
             sans.size = 15;
             mono.name = "Fira Code";
-	    mono.size = 18;
+            mono.size = 18;
           };
           colors = {
             black = "#1E2029";
@@ -50,24 +50,11 @@ in {
             types.border = "#1a1c25";
           };
         };
-
-        desktop.browsers = {
-          librewolf.userChrome = concatMapStringsSep "\n" readFile [
-            ./config/librewolf/userChrome.css
-          ];
-          qutebrowser.userStyles =
-            concatMapStringsSep "\n" readFile
-            (map toCSSFile [
-              ./config/qutebrowser/userstyles/monospace-textareas.scss
-              ./config/qutebrowser/userstyles/stackoverflow.scss
-              ./config/qutebrowser/userstyles/xkcd.scss
-            ]);
-        };
       };
     }
 
-    # Desktop (X11) theming
-    (mkIf config.services.xserver.enable {
+    # Theming (Wayland/sway)
+    {
       user.packages = with pkgs; [
         papirus-icon-theme
       ];
@@ -82,18 +69,14 @@ in {
         ];
       };
 
-      # Login screen theme
-      services.xserver.displayManager.lightdm.greeters.mini.extraConfig = ''
-        text-color = "${cfg.colors.magenta}"
-        password-background-color = "${cfg.colors.black}"
-        window-color = "${cfg.colors.types.border}"
-        border-color = "${cfg.colors.types.border}"
-      '';
-
-      # Get qt to look similar to the gtk apps
+      # Qt theming: platformTheme "gtk2" makes Qt pull palette/fonts/icons from
+      # the GTK (Fluent-Dark) theme; style "kvantum" makes Qt widgets use the
+      # installed Kvantum Fluent-Dark theme (QT_STYLE_OVERRIDE=kvantum + the
+      # qtstyleplugin-kvantum plugins for qt5 & qt6). The Kvantum theme files are
+      # installed to ~/.config/Kvantum below.
       qt.enable = true;
       qt.platformTheme = "gtk2";
-      qt.style = "gtk2";
+      qt.style = "kvantum";
 
       # Other dotfiles
       home.configFile = with config.modules;
@@ -111,32 +94,11 @@ in {
             "../.icons/volantes_cursors".source = ./config/volantes_cursors;
           }
           {
-            # Sourced from sessionCommands in modules/themes/default.nix
-            "xtheme/90-theme".source = ./config/Xresources;
-          }
-          {
-            # Additional file to load when coding (to remove the borders in xst)
-            "xtheme/90.b-theme".source = ./config/Xresources_code;
-          }
-          {
             # Haruna theme
             "harunarc".source = ./config/harunarc;
           }
-          (mkIf desktop.bspwm.enable {
-            "bspwm/rc.d/00-theme".source = ./config/bspwmrc;
-            "bspwm/rc.d/95-polybar".source = ./config/polybar/run.sh;
-          })
-          (mkIf desktop.apps.rofi.enable {
-            "rofi/theme" = {
-              source = ./config/rofi;
-              recursive = true;
-            };
-          })
-          (mkIf (desktop.bspwm.enable) {
-            "polybar" = {
-              source = ./config/polybar;
-              recursive = true;
-            };
+          {
+            # Kvantum (Qt) theme
             "Fluent-Dark-kvantum" = {
               recursive = true;
               source = ./config/Fluent-Dark/kde/kvantum/Fluent-Dark;
@@ -146,14 +108,17 @@ in {
               source = ./config/Fluent-Dark/kde/kvantum.kvconfig;
               target = "Kvantum/kvantum.kvconfig";
             };
+          }
+          (mkIf desktop.apps.rofi.enable {
+            "rofi/theme" = {
+              source = ./config/rofi;
+              recursive = true;
+            };
           })
           (mkIf desktop.media.graphics.vector.enable {
             "inkscape/templates/default.svg".source = ./config/inkscape/default-template.svg;
           })
-          (mkIf desktop.browsers.qutebrowser.enable {
-            "qutebrowser/extra/theme.py".source = ./config/qutebrowser/theme.py;
-          })
         ];
-    })
+    }
   ]);
 }

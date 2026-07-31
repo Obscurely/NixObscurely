@@ -89,71 +89,8 @@ in {
   };
 
   config = mkIf (cfg.active != null) (mkMerge [
-    # Read xresources files in ~/.config/xtheme/* to allow modular configuration
-    # of Xresources.
-    (let
-      xrdb = ''cat "$XDG_CONFIG_HOME"/xtheme/* | ${pkgs.xorg.xrdb}/bin/xrdb -load'';
-    in {
-      home.configFile."xtheme.init" = {
-        text = xrdb;
-        executable = true;
-      };
-      modules.theme.onReload.xtheme = xrdb;
-    })
-
-    (mkIf config.modules.desktop.bspwm.enable {
-      home.configFile."bspwm/rc.d/05-init" = {
-        text = "$XDG_CONFIG_HOME/xtheme.init";
-        executable = true;
-      };
-    })
-
     {
       home.configFile = {
-        "xtheme/00-init".text = with cfg.colors; ''
-          #define bg   ${types.bg}
-          #define fg   ${types.fg}
-          #define blk  ${black}
-          #define red  ${red}
-          #define grn  ${green}
-          #define ylw  ${yellow}
-          #define blu  ${blue}
-          #define mag  ${magenta}
-          #define cyn  ${cyan}
-          #define wht  ${white}
-          #define bblk ${grey}
-          #define bred ${brightred}
-          #define bgrn ${brightgreen}
-          #define bylw ${brightyellow}
-          #define bblu ${brightblue}
-          #define bmag ${brightmagenta}
-          #define bcyn ${brightcyan}
-          #define bwht ${silver}
-        '';
-        "xtheme/05-colors".text = ''
-          *.foreground: fg
-          *.background: bg
-          *.color0:  blk
-          *.color1:  red
-          *.color2:  grn
-          *.color3:  ylw
-          *.color4:  blu
-          *.color5:  mag
-          *.color6:  cyn
-          *.color7:  wht
-          *.color8:  bblk
-          *.color9:  bred
-          *.color10: bgrn
-          *.color11: bylw
-          *.color12: bblu
-          *.color13: bmag
-          *.color14: bcyn
-          *.color15: bwht
-        '';
-        "xtheme/05-fonts".text = with cfg.fonts.mono; ''
-          *.font: xft:${name}:pixelsize=${toString size}
-          Emacs.font: ${name}:pixelsize=${toString size}
-        '';
         # GTK
         "gtk-3.0/settings.ini".text = ''
           [Settings]
@@ -168,7 +105,7 @@ in {
           gtk-xft-hinting=1
           gtk-xft-hintstyle=hintfull
           gtk-xft-rgba=none
-	  gtk-cursor-theme-size=32
+          gtk-cursor-theme-size=32
         '';
         # GTK2 global theme (widget and icon theme)
         "gtk-2.0/gtkrc".text = ''
@@ -177,7 +114,7 @@ in {
           ${optionalString (cfg.gtk.iconTheme != "")
             ''gtk-icon-theme-name="${cfg.gtk.iconTheme}"''}
           gtk-font-name="Sans ${toString (cfg.fonts.sans.size)}"
-	  gtk-cursor-theme-size=32
+          gtk-cursor-theme-size=32
         '';
         # QT4/5 global theme
         "Trolltech.conf".text = ''
@@ -193,31 +130,13 @@ in {
       };
     }
 
-    (mkIf (cfg.wallpaper != null)
-      # Set the wallpaper ourselves so we don't need .background-image and/or
-      # .fehbg polluting $HOME
-      (let
-        wCfg = config.services.xserver.desktopManager.wallpaper;
-        command = ''
-          if [ -e "$XDG_DATA_HOME/wallpaper" ]; then
-            ${pkgs.feh}/bin/feh --bg-${wCfg.mode} \
-              ${optionalString wCfg.combineScreens "--no-xinerama"} \
-              --no-fehbg \
-              $XDG_DATA_HOME/wallpaper
-          fi
-        '';
-      in {
-        services.xserver.displayManager.sessionCommands = command;
-        modules.theme.onReload.wallpaper = command;
-
-        home.dataFile = mkIf (cfg.wallpaper != null) {
-          "wallpaper".source = cfg.wallpaper;
-          "lockscreen.jpg".source = ./main/config/lockscreen.jpg;
-        };
-      }))
-
-    (mkIf (cfg.loginWallpaper != null) {
-      services.xserver.displayManager.lightdm.background = cfg.loginWallpaper;
+    # Wallpaper installed to $XDG_DATA_HOME/wallpaper; sway applies it via
+    # `output * bg` (config/sway/config). `swaymsg reload` re-applies it.
+    (mkIf (cfg.wallpaper != null) {
+      home.dataFile = {
+        "wallpaper".source = cfg.wallpaper;
+        "lockscreen.jpg".source = ./main/config/lockscreen.jpg;
+      };
     })
 
     (mkIf (cfg.onReload != {})

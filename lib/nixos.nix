@@ -17,7 +17,7 @@ in {
           nixpkgs.pkgs = pkgs;
           networking.hostName = mkDefault (removeSuffix ".nix" (baseNameOf path));
         }
-        (filterAttrs (n: !elem n ["system"]) attrs)
+        (filterAttrs (n: v: !elem n ["system"]) attrs)
         ../. # /default.nix
         (import path)
       ];

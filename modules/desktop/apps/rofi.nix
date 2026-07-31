@@ -16,7 +16,7 @@ in {
     user.packages = with pkgs; [
       (writeScriptBin "rofi" ''
         #!${stdenv.shell}
-        exec ${pkgs.rofi}/bin/rofi -terminal xterm -m -1 "$@"
+        exec ${pkgs.rofi}/bin/rofi -terminal alacritty -m -1 "$@"
       '')
     ];
   };

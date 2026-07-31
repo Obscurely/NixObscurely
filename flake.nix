@@ -5,6 +5,7 @@
   inputs = {
     # Core dependencies
     nixpkgs.url = "nixpkgs/nixos-unstable"; # primary nixpkgs
+    nixpkgs-unstable.url = "nixpkgs/nixpkgs-unstable"; # for packages on the edge (overlay `unstable`)
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-26.05";
     home-manager.url = "github:rycee/home-manager/master";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -39,7 +40,7 @@
 
     lib =
       nixpkgs.lib.extend
-      (self: {
+      (self: super: {
         my = import ./lib {
           inherit pkgs inputs;
           lib = self;
@@ -48,7 +49,7 @@
   in {
     lib = lib.my;
 
-    overlay = {
+    overlay = final: prev: {
       unstable = pkgs';
       stable = pkgs-stable;
       my = self.packages."${system}";

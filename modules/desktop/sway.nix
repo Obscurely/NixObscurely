@@ -42,6 +42,12 @@ in {
             export XDG_SESSION_TYPE=wayland
             export XDG_SESSION_DESKTOP=sway
 
+            # Silence sway's harmless "Proprietary Nvidia drivers are in use"
+            # warning (runs fine on the open modules + Vulkan). Equivalent to
+            # passing `--unsupported-gpu`, but without touching the greetd --cmd
+            # quoting.
+            export SWAY_UNSUPPORTED_GPU=true
+
             # Chromium/Electron native Wayland; Qt prefers Wayland, falls back to xcb.
             export NIXOS_OZONE_WL=1
             export QT_QPA_PLATFORM="wayland;xcb"

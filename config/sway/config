@@ -28,9 +28,22 @@ set $mon_main  DP-1
 set $mon_right HDMI-A-1
 set $mon_left  HDMI-A-2
 
-output $mon_left  { mode 1920x1080@60Hz  scale 1   position 0 180  }
-output $mon_main  { mode 3840x2160@240Hz scale 1.5 position 1920 0 render_bit_depth 10 }
-output $mon_right { mode 2560x1440@144Hz scale 1   position 4480 0 }
+output $mon_left {
+    mode 1920x1080@60Hz
+    scale 1
+    position 0 180
+}
+output $mon_main {
+    mode 3840x2160@240Hz
+    scale 1.5
+    position 1920 0
+    render_bit_depth 10
+}
+output $mon_right {
+    mode 2560x1440@144Hz
+    scale 1
+    position 4480 0
+}
 
 # Wallpaper: via swaybg in `exec` (sway does NOT expand env vars in `output bg`,
 # but the exec shell does). Installed to $XDG_DATA_HOME/wallpaper by the theme.

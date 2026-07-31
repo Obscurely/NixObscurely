@@ -22,8 +22,8 @@ in {
             cursorTheme = "volantes_cursors";
           };
           fonts = {
-            sans.name = "Fira Code"; # you want Fira Code (mono) everywhere, like alacritty
-            sans.size = 15;
+            sans.name = "Fira Code";
+            sans.size = 17;
             mono.name = "Fira Code";
             mono.size = 18;
           };

@@ -18,7 +18,7 @@ in {
     # on NVIDIA. Flip true only once a plain session is confirmed working.
     hdr.enable = mkBoolOpt false;
 
-    waybar.enable = mkBoolOpt true;
+    bar.enable = mkBoolOpt true;
     greeter.enable = mkBoolOpt true;
     idle.enable = mkBoolOpt true;
   };
@@ -140,8 +140,11 @@ in {
     ##########################################################################
     ## Bar
     ##########################################################################
-    (mkIf cfg.waybar.enable {
-      user.packages = [pkgs.waybar];
+    (mkIf cfg.bar.enable {
+      # eww "glacial island" bar; config + scripts installed by modules/themes/main.
+      # Runtime deps are already in user.packages above: jq, playerctl, swaymsg (sway),
+      # and pactl (from the system PipeWire/Pulse).
+      user.packages = [pkgs.eww];
     })
 
     ##########################################################################

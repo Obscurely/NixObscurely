@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Emit the active MPRIS player's now-playing as one JSON line per change.
+# JSON is built with `jq --arg` (correctly escapes &, ", <, >, backslashes) instead
+# of playerctl's `markup_escape`, which produced literal "&amp;" in the plain-text label.
+# Survives having no player (playerctl -F exits when none exist), retrying until one appears.
+emit() {
+  local s a t
+  s=$(playerctl status 2>/dev/null) || s="Stopped"
+  a=$(playerctl metadata artist 2>/dev/null) || a=""
+  t=$(playerctl metadata title 2>/dev/null) || t=""
+  jq -cn --arg s "$s" --arg a "$a" --arg t "$t" '{status:$s,artist:$a,title:$t}'
+}
+
+while true; do
+  emit
+  # block on metadata/status changes; each change re-emits fresh JSON
+  playerctl -F metadata --format '{{status}}' 2>/dev/null | while IFS= read -r _; do emit; done
+  echo '{"status":"Stopped","artist":"","title":""}'
+  sleep 2
+done

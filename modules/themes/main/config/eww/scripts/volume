@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Emit volume 0..100, or -1 when muted (the eww audio widget renders the muted state).
+mute=$(pactl get-sink-mute @DEFAULT_SINK@ 2>/dev/null)
+case "$mute" in
+  *yes*) echo -1; exit 0 ;;
+esac
+pactl get-sink-volume @DEFAULT_SINK@ 2>/dev/null | grep -oP '\d+(?=%)' | head -1

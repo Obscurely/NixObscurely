@@ -1,0 +1,108 @@
+;; =====================================================================
+;;  eww bar — glacial island (Sway/Wayland)
+;;  Icons are injected from codepoints into the {{I_*}} placeholders by the
+;;  inject step; do not hand-type the glyph bytes (some drop in transit).
+;; =====================================================================
+
+;; ------------------------------- data --------------------------------
+(deflisten workspaces :initial "[]" `bash $HOME/.config/eww/scripts/workspaces`)
+(deflisten player :initial "{\"status\":\"Stopped\",\"title\":\"\",\"artist\":\"\"}" `bash $HOME/.config/eww/scripts/player`)
+(defpoll   volume   :interval "500ms" :initial "0"     `bash $HOME/.config/eww/scripts/volume`)
+(defpoll   network  :interval "2s"    :initial "{}"    `bash $HOME/.config/eww/scripts/network`)
+(defpoll   cputemp  :interval "3s"    :initial "0"     `bash $HOME/.config/eww/scripts/temp`)
+(defpoll   clock    :interval "10s"   :initial "--:--" `date +'%H:%M'`)
+
+;; ---------------------------- sub-widgets ----------------------------
+(defwidget statitem [icon val]
+  (box :class "statitem" :space-evenly false :spacing 10
+    (label :class "s-icon" :text icon)
+    (label :class "s-val"  :text val)))
+
+(defwidget sep [] (label :class "sep" :text "●"))
+
+(defwidget workspaces [output]
+  (box :class "mod ws" :space-evenly false :halign "start" :spacing 2
+    (for ws in {jq(workspaces, '[.[] | select(.output == "' + output + '")]')}
+      (button
+        :class "wsbtn ${ws.urgent ? "urgent" : ws.focused ? "focused" : ws.visible ? "visible" : ws.occupied ? "occupied" : "empty"}"
+        :onclick "swaymsg workspace number ${ws.num}"
+        (label :text {ws.icon})))))
+
+(defwidget sensors []
+  (box :class "mod sensors" :space-evenly false :spacing 16
+    (statitem :icon "󰄧"  :val "${round(EWW_CPU.avg, 0)}%")
+    (statitem :icon "󰍛"  :val "${round(EWW_RAM.used_mem / 1073741824, 1)}G")
+    (statitem :icon "󰆼" :val "${round(EWW_DISK['/'].free / 1000000000, 0)}G")
+    (statitem :icon "󰔏" :val "${cputemp}°")))
+
+(defwidget media []
+  (box :class "mod media ${player.status == 'Playing' ? 'playing' : player.status == 'Paused' ? 'paused' : 'idle'}"
+       :visible {player.title != ""}
+       :space-evenly false :spacing 8
+    (button :class "m-icon" :onclick "playerctl play-pause" (label :text "󰝚"))
+    (box :class "m-text" :space-evenly false :spacing 0
+      (label :class "m-artist" :visible {player.artist != ""} :text {player.artist})
+      (label :class "m-dash"   :visible {player.artist != ""} :text "—")
+      (label :class "m-title" :limit-width 42 :show-truncated true :text {player.title}))))
+
+(defwidget audio []
+  (eventbox :class "mod audio" :onclick "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+    (box :class "audio-inner" :space-evenly false :spacing 10
+      (label :class {volume < 0 ? "s-icon warn" : "s-icon"} :text {volume < 0 ? "󰝟" : "󰕾"})
+      (label :class "s-val" :text {volume < 0 ? "muted" : "${volume}%"}))))
+
+(defwidget net []
+  (box :class "mod net" :space-evenly false :spacing 12
+    (box :visible {network.connected} :space-evenly false :spacing 12
+      (box :class "netgrp" :space-evenly false :spacing 5
+        (label :class "s-icon" :text "↓")
+        (label :class "s-val netspd" :text {network.down}))
+      (box :class "netgrp" :space-evenly false :spacing 5
+        (label :class "s-icon" :text "↑")
+        (label :class "s-val netspd" :text {network.up})))
+    (box :visible {network.connected == false} :space-evenly false :spacing 8
+      (label :class "s-icon warn" :text "󰒎")
+      (label :class "s-val" :text "off"))))
+
+(defwidget clockw []
+  (box :class "mod clock" :space-evenly false :spacing 10
+    (label :class "s-icon" :text "󰅐")
+    (label :class "s-val"  :text clock)))
+
+(defwidget launcher []
+  (button :class "mod iconbtn launcher" :onclick "$DOTFILES_BIN/rofi/launcher &"
+    (label :text "󱄅")))
+
+(defwidget power []
+  (button :class "mod iconbtn power" :onclick "$DOTFILES_BIN/rofi/powermenu &"
+    (label :text "󰐥")))
+
+;; ------------------------------- bar ---------------------------------
+(defwidget bar [output]
+  (centerbox :class "bar-root" :orientation "h"
+    (box :class "sec sec-left" :halign "start" :space-evenly false :spacing 8
+      (launcher)
+      (sep)
+      (workspaces :output output)
+      (sep)
+      (sensors))
+    (box :class "sec sec-center" :halign "center" :space-evenly false
+      (media))
+    (box :class "sec sec-right" :halign "end" :space-evenly false :spacing 8
+      (audio)
+      (sep)
+      (net)
+      (sep)
+      (clockw)
+      (sep)
+      (power))))
+
+;; ------------------------------ windows ------------------------------
+(defwindow bar [output]
+  :monitor output
+  :stacking "fg"
+  :exclusive true
+  :focusable false
+  :namespace "eww-bar"
+  :geometry (geometry :x "0" :y "0" :width "100%" :height "42px" :anchor "top center")
+  (bar :output output))

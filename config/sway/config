@@ -84,7 +84,7 @@ seat * {
 default_orientation horizontal
 gaps inner 8
 gaps outer 2
-smart_gaps on
+smart_gaps off
 default_border pixel 2
 default_floating_border pixel 2
 titlebar_padding 1
@@ -201,10 +201,12 @@ bindsym XF86AudioPlay        exec playerctl play-pause
 bindsym XF86AudioNext        exec playerctl next
 bindsym XF86AudioPrev        exec playerctl previous
 
-### Bar — waybar runs standalone (config.jsonc + style.css from the theme module).
-# Using `exec` instead of `bar { swaybar_command waybar }` so it behaves like a
-# normal waybar (the swaybar_command form ignores `swaymsg bar` control).
-exec waybar
+### Bar — eww "glacial island", one window per monitor (config from the theme module).
+# Single `exec` (not exec_always) so sway reloads don't stack eww daemons; the daemon
+# auto-starts on the first `open`. Each window's output is passed via --arg, which drives
+# both `:monitor` and the per-monitor workspace filter.
+exec eww open-many bar:dp1 bar:hdmi1 bar:hdmi2 \
+    --arg "dp1:output=DP-1" --arg "hdmi1:output=HDMI-A-1" --arg "hdmi2:output=HDMI-A-2"
 
 ### NixOS integration
 # We ship an authoritative ~/.config/sway/config, so sway reads THIS instead of

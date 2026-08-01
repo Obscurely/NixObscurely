@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Emit JSON {connected, iface, down, up} for the default-route interface.
+# Speed = byte-counter delta between polls (state kept in XDG_RUNTIME_DIR).
+set -u
+IF=$(ip route show default 2>/dev/null | awk '/default/{print $5; exit}')
+if [ -z "${IF:-}" ]; then
+  echo '{"connected":false,"iface":"","down":"","up":""}'; exit 0
+fi
+state="${XDG_RUNTIME_DIR:-/tmp}/eww-net.$IF"
+now=$(date +%s%3N)
+rx=$(cat "/sys/class/net/$IF/statistics/rx_bytes" 2>/dev/null || echo 0)
+tx=$(cat "/sys/class/net/$IF/statistics/tx_bytes" 2>/dev/null || echo 0)
+prx=$rx; ptx=$tx; pt=$now
+[ -f "$state" ] && read -r prx ptx pt < "$state" 2>/dev/null
+echo "$rx $tx $now" > "$state"
+dt=$(( now - pt )); [ "$dt" -le 0 ] && dt=1000
+drx=$(( (rx - prx) * 1000 / dt ))
+dtx=$(( (tx - ptx) * 1000 / dt ))
+human() {
+  local b=$1; [ "$b" -lt 0 ] && b=0
+  if   [ "$b" -ge 1048576 ]; then printf '%d.%dM' $((b/1048576)) $(((b%1048576)*10/1048576))
+  elif [ "$b" -ge 1024 ];    then printf '%dK' $((b/1024))
+  else printf '%dB' "$b"; fi
+}
+printf '{"connected":true,"iface":"%s","down":"%s","up":"%s"}\n' "$IF" "$(human "$drx")" "$(human "$dtx")"

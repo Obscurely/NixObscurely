@@ -115,10 +115,10 @@ in {
               recursive = true;
             };
           })
-          (mkIf desktop.sway.waybar.enable {
-            # Catppuccin-Mocha waybar (config.jsonc + style.css auto-loaded by name)
-            "waybar" = {
-              source = ./config/waybar;
+          (mkIf desktop.sway.bar.enable {
+            # eww "glacial island" bar — eww.yuck + eww.scss + scripts/
+            "eww" = {
+              source = ./config/eww;
               recursive = true;
             };
           })

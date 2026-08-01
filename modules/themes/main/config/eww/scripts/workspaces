@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Emit the full pinned workspace set as one JSON line per change, for eww `deflisten`.
+#
+# Two verified sway gotchas this handles:
+#   * `swaymsg -t subscribe` REQUIRES -m (otherwise it exits after the first event).
+#   * `get_workspaces` OMITS empty workspaces, so pinned-but-empty ones would vanish.
+# So we template the full 1..10 set (with per-workspace output + icon) and left-join
+# the live state by workspace number.
+#
+# Icons are emitted from codepoints ($'\U...') so the source stays pure ASCII and the
+# glyph bytes are always correct (Material Design + Font Awesome ranges).
+set -u
+
+declare -A PIN=(
+  [1]=DP-1 [2]=DP-1 [3]=DP-1 [4]=DP-1 [5]=DP-1
+  [6]=HDMI-A-1 [7]=HDMI-A-1 [8]=HDMI-A-1 [9]=HDMI-A-1
+  [10]=HDMI-A-2
+)
+declare -A ICON=(
+  [1]=$'\U000f018d' [2]=$'\U000f0610' [3]=$'\U0000f269' [4]=$'\U0000f11b' [5]=$'\U000f0254'
+  [6]=$'\U000f066f' [7]=$'\U000f024b' [8]=$'\U0000f1c0' [9]=$'\U0000f15c' [10]=$'\U0000f013'
+)
+
+emit() {
+  local live pin
+  live=$(swaymsg -t get_workspaces -r)
+  pin=$(for n in $(seq 1 10); do
+          printf '{"num":%d,"output":"%s","icon":"%s"}\n' "$n" "${PIN[$n]}" "${ICON[$n]}"
+        done | jq -cs '.')
+  jq -cn --argjson live "$live" --argjson pin "$pin" '
+    [ $pin[]
+      | . as $p
+      | (($live[] | select(.num == $p.num)) // null) as $l
+      | { num: $p.num, output: $p.output, icon: $p.icon,
+          focused:  ($l.focused  // false),
+          visible:  ($l.visible  // false),
+          urgent:   ($l.urgent   // false),
+          occupied: ($l != null) } ]'
+}
+
+emit
+swaymsg -t subscribe -m '["workspace"]' | while read -r _; do emit; done

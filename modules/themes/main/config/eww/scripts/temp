@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# CPU package temperature in whole degrees C (via hwmon).
+for h in /sys/class/hwmon/hwmon*; do
+  name=$(cat "$h/name" 2>/dev/null)
+  case "$name" in
+    k10temp|zenpower|coretemp)
+      for f in "$h"/temp*_label; do
+        [ -e "$f" ] || continue
+        case "$(cat "$f" 2>/dev/null)" in
+          Tctl|Tdie|Package*|CPU*)
+            echo $(( $(cat "${f%_label}_input") / 1000 )); exit 0 ;;
+        esac
+      done
+      if [ -e "$h/temp1_input" ]; then
+        echo $(( $(cat "$h/temp1_input") / 1000 )); exit 0
+      fi ;;
+  esac
+done
+echo 0

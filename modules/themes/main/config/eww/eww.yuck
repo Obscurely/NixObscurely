@@ -4,8 +4,9 @@
 ;;  inject step; do not hand-type the glyph bytes (some drop in transit).
 ;; =====================================================================
 
-;; Quick Settings panel — separate window, same daemon
+;; Quick Settings panel + Audio popup — separate windows, same daemon
 (include "quicksettings.yuck")
+(include "audio.yuck")
 
 ;; ------------------------------- data --------------------------------
 (deflisten workspaces :initial "[]" `bash $HOME/.config/eww/scripts/workspaces`)
@@ -50,6 +51,7 @@
 
 (defwidget audio []
   (eventbox :class "mod audio" :onclick "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+            :onrightclick "setsid -f bash $HOME/.config/eww/scripts/audio-toggle"
     (box :class "audio-inner" :space-evenly false :spacing 10
       (label :class {volume < 0 ? "s-icon warn" : "s-icon"} :text {volume < 0 ? "󰝟" : "󰕾"})
       (label :class "s-val" :text {volume < 0 ? "muted" : "${volume}%"}))))

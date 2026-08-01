@@ -1,0 +1,173 @@
+#!/usr/bin/env python3
+# Audio widget live state (deflisten). Emits ONE JSON object, then re-emits — throttled
+# and coalesced — on every relevant PipeWire/Pulse event via `pactl subscribe`. Instant,
+# no polling. Shape:
+#   { "out": {vol,mute,dev,devices:[{name,desc,active}]},
+#     "in":  {vol,mute,dev,devices:[...]},
+#     "apps":[{id,name,vol,mute}],
+#     "ee":  {running,bypass,preset,presets:[]} }
+# Volume/mute via wpctl; devices + per-app via pactl; easyeffects via pidof/dconf/-b/-p.
+import json
+import os
+import re
+import select
+import subprocess
+import time
+
+EE_CACHE = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "qs-ee-presets.json")
+EE_TTL = 60
+HIDE_SINKS = {"easyeffects_sink"}
+HIDE_SOURCES = {"easyeffects_source"}
+
+
+def run(cmd):
+    try:
+        return subprocess.run(cmd, capture_output=True, text=True, timeout=2).stdout
+    except Exception:
+        return ""
+
+
+def vol_mute(target):
+    out = run(["wpctl", "get-volume", target])  # "Volume: 0.72 [MUTED]"
+    vol = 0
+    for tok in out.replace("Volume:", "").split():
+        try:
+            vol = round(float(tok) * 100)
+            break
+        except ValueError:
+            pass
+    return vol, ("MUTED" in out)
+
+
+def devices(kind):  # kind: "sinks" | "sources"
+    is_sink = kind == "sinks"
+    default = run(["pactl", "get-default-sink" if is_sink else "get-default-source"]).strip()
+    hide = HIDE_SINKS if is_sink else HIDE_SOURCES
+    header = "Sink #" if is_sink else "Source #"
+    devs, name, desc = [], None, None
+
+    def flush():
+        if name and name not in hide and not (not is_sink and name.endswith(".monitor")):
+            devs.append({"name": name, "desc": desc or name, "active": name == default})
+
+    for line in run(["pactl", "list", kind]).splitlines():
+        if line.startswith(header):
+            flush()
+            name = desc = None
+        else:
+            s = line.strip()
+            if s.startswith("Name:") and name is None:
+                name = s.split(":", 1)[1].strip()
+            elif s.startswith("Description:") and desc is None:
+                desc = s.split(":", 1)[1].strip()
+    flush()
+    return default, devs
+
+
+def apps():
+    out, cur = [], None
+
+    def flush():
+        if cur and cur.get("id"):
+            out.append(cur)
+
+    for line in run(["pactl", "list", "sink-inputs"]).splitlines():
+        if line.startswith("Sink Input #"):
+            flush()
+            cur = {"id": line.split("#", 1)[1].strip(), "name": "", "vol": 0, "mute": False}
+        elif cur is not None:
+            s = line.strip()
+            if s.startswith("Mute:"):
+                cur["mute"] = "yes" in s
+            elif s.startswith("Volume:") and "%" in s:
+                m = re.search(r"(\d+)%", s)
+                cur["vol"] = int(m.group(1)) if m else 0
+            elif s.startswith("application.name ="):
+                cur["name"] = s.split("=", 1)[1].strip().strip('"')
+            elif s.startswith("media.name =") and not cur["name"]:
+                cur["name"] = s.split("=", 1)[1].strip().strip('"')
+    flush()
+    return out
+
+
+def ee_presets_cached():
+    try:
+        if time.time() - os.path.getmtime(EE_CACHE) < EE_TTL:
+            with open(EE_CACHE) as f:
+                return json.load(f)
+    except Exception:
+        pass
+    presets, section = [], None
+    for line in run(["easyeffects", "-p"]).splitlines():
+        s, low = line.strip(), line.strip().lower()
+        if low.startswith("output presets"):
+            section = "out"
+            continue
+        if low.startswith("input presets") or low.startswith("no input"):
+            section = "in"
+            continue
+        if s and section == "out":
+            parts = s.split("\t", 1)
+            presets.append((parts[1] if len(parts) == 2 else s).strip())
+    try:
+        with open(EE_CACHE, "w") as f:
+            json.dump(presets, f)
+    except Exception:
+        pass
+    return presets
+
+
+def ee():
+    running = subprocess.run(["pidof", "easyeffects"], capture_output=True).returncode == 0
+    if not running:
+        return {"running": False, "bypass": False, "preset": "", "presets": []}
+    bypass = run(["easyeffects", "-b", "3"]).strip() == "1"
+    preset = run(["dconf", "read", "/com/github/wwmm/easyeffects/last-loaded-output-preset"]).strip().strip("'")
+    return {"running": True, "bypass": bypass, "preset": preset, "presets": ee_presets_cached()}
+
+
+def state():
+    ov, om = vol_mute("@DEFAULT_AUDIO_SINK@")
+    iv, im = vol_mute("@DEFAULT_AUDIO_SOURCE@")
+    odef, odevs = devices("sinks")
+    idef, idevs = devices("sources")
+    return {
+        "out": {"vol": ov, "mute": om, "dev": odef, "devices": odevs},
+        "in": {"vol": iv, "mute": im, "dev": idef, "devices": idevs},
+        "apps": apps(),
+        "ee": ee(),
+    }
+
+
+def emit():
+    print(json.dumps(state()), flush=True)
+
+
+RELEVANT = ("sink", "source", "server", "client", "card")  # "sink-input" contains "sink"
+
+
+def main():
+    # Coalesce-on-quiet: emit the INITIAL state, then re-emit only after pactl events
+    # go quiet (>=0.25s with none). Crucially we do NOT emit *during* a burst of events
+    # — i.e. never mid-drag. A running slider fires a stream of volume events; emitting
+    # then would re-apply `:value` (snap the thumb back) and rebuild the tree (block the
+    # other sliders). Waiting for quiet means the emit only lands once the drag settles,
+    # so the thumb stays put and the final value sticks (incl. reaching 100).
+    emit()
+    proc = subprocess.Popen(["pactl", "subscribe"], stdout=subprocess.PIPE, text=True)
+    pending = False
+    while True:
+        r, _, _ = select.select([proc.stdout], [], [], 0.25)
+        if r:
+            line = proc.stdout.readline()
+            if not line:
+                break
+            if any(k in line for k in RELEVANT):
+                pending = True
+        elif pending:  # 0.25s of quiet after a burst -> settled -> emit once
+            emit()
+            pending = False
+
+
+if __name__ == "__main__":
+    main()

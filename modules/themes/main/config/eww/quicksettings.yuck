@@ -5,7 +5,7 @@
 
 (deflisten displays :initial "[]" `python3 $HOME/.config/eww/scripts/displays`)
 (defpoll system :interval "2s"
-  :initial '{"idle":true,"dnd":false,"ee_running":false,"ee_bypass":false,"ee_preset":"","ee_presets":[]}'
+  :initial '{"mode":"","idle":true,"dnd":false}'
   `python3 $HOME/.config/eww/scripts/system`)
 
 ;; ---------- reusable bits ----------
@@ -59,12 +59,11 @@
       (for s in {d.scales}
         (qs-chip :text "${s}" :active {d.scale == s}
                  :onclick "swaymsg output ${d.name} scale ${s}")))
-    (revealer :reveal {d.hdr_cap} :transition "slidedown" :duration "150ms"
-      (box :space-evenly false :spacing 8 :halign "end"
-        (qs-toggle :text "VRR" :on {d.vrr}
-                   :onclick "swaymsg output ${d.name} adaptive_sync ${d.vrr ? "off" : "on"}")
-        (qs-toggle :text "HDR" :on {d.hdr}
-                   :onclick "swaymsg output ${d.name} hdr ${d.hdr ? "off" : "on"} ; swaymsg output ${d.name} render_bit_depth 10"))))))
+    (box :class "qs-vrr-row" :space-evenly false :spacing 8 :halign "end" :visible {d.hdr_cap}
+      (qs-toggle :text "VRR" :on {d.vrr}
+                 :onclick "swaymsg output ${d.name} adaptive_sync ${d.vrr ? "off" : "on"}")
+      (qs-toggle :text "HDR" :on {d.hdr}
+                 :onclick "swaymsg output ${d.name} hdr ${d.hdr ? "off" : "on"} ; swaymsg output ${d.name} render_bit_depth 10")))))
 
 (defwidget qs-displays []
   (box :orientation "v" :space-evenly false :spacing 9
@@ -87,23 +86,6 @@
       (qs-displays)
       (button :class "qs-reset" :onclick "setsid -f bash $HOME/.config/eww/scripts/reset-displays"
         (label :text "⟳  Reset displays")))
-    (qs-section :title "AUDIO"
-      (label :class "qs-todo" :halign "start" :text "volume · devices · per-app — phase 4–5")
-      ;; EasyEffects card — collapses to just its On/Off when the service is stopped
-      (box :class "qs-out" :orientation "v" :space-evenly false :spacing 8
-        (box :space-evenly false
-          (label :class "qs-out-name" :halign "start" :hexpand true :text "EasyEffects")
-          (qs-toggle :text {system.ee_running ? "On" : "Off"} :on {system.ee_running}
-                     :onclick "setsid -f bash $HOME/.config/eww/scripts/ee-toggle"))
-        (box :orientation "v" :space-evenly false :spacing 8 :visible {system.ee_running}
-          (qs-ctl :label "Effects"
-            (qs-toggle :text {system.ee_bypass ? "Bypassed" : "Active"} :on {!system.ee_bypass}
-                       :onclick "setsid -f easyeffects --bypass-toggle"))
-          (qs-ctl :label "Preset"
-            (box :space-evenly false :spacing 5 :halign "end"
-              (for p in {jq(system, '.ee_presets')}
-                (qs-chip :text p :active {system.ee_preset == p}
-                         :onclick "setsid -f easyeffects -l '${p}'")))))))
     (qs-section :title "SYSTEM"
       ;; simple runtime toggles (idle screen-off + notification DND)
       (box :class "qs-out" :orientation "v" :space-evenly false :spacing 8

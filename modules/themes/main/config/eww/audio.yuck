@@ -1,0 +1,90 @@
+;; =====================================================================
+;;  Audio — popup under the bar's audio module (right-click). Glacial theme.
+;;  All audio control lives here: output, input, per-app, EasyEffects.
+;;  Reuses qs-* widgets/styles from quicksettings.yuck (shared eww namespace).
+;; =====================================================================
+
+(deflisten audio
+  :initial '{"out":{"vol":0,"mute":false,"dev":"","devices":[]},"in":{"vol":0,"mute":false,"dev":"","devices":[]},"apps":[],"ee":{"running":false,"bypass":false,"preset":"","presets":[]}}'
+  `python3 $HOME/.config/eww/scripts/audio`)
+
+;; OUTPUT/INPUT slider values are OPTIMISTIC — the scale's own value is the source of
+;; truth (it drives the audio live and never lags). onchange writes the dragged value
+;; here + sets the volume; the deflisten only SEEDS these when the widget opens (via
+;; audio-toggle). This avoids the readback snap-back and keeps the % label live.
+(defvar avol 50)
+(defvar aivol 50)
+;; per-app optimistic volumes, keyed by sink-input id: {"<id>": <vol>}. Apps are
+;; dynamic so we can't pre-declare a var each — a row reads its optimistic value if
+;; present, else falls back to the live value. onchange merges the dragged value in.
+(defvar appvols "{}")
+
+;; volume row: lead (icon or app name) + slider + live % + mute toggle
+(defwidget a-row [lead leadclass vol mute setcmd mutecmd]
+  (box :class "a-row" :space-evenly false :spacing 10
+    (label :class leadclass :limit-width 16 :text lead)
+    (scale :class "a-slider" :hexpand true :value vol :min 0 :max 100 :onchange setcmd)
+    (label :class "a-pct" :text "${vol}%")
+    (qs-toggle :text {mute ? "Muted" : "On"} :on {!mute} :onclick mutecmd)))
+
+;; ---------- popup body ----------
+(defwidget audio-root []
+  (box :class "qs-root a-root" :orientation "v" :space-evenly false :spacing 14
+    (box :class "qs-titlebar" :space-evenly false
+      (label :class "qs-title" :halign "start" :hexpand true :text "Audio")
+      (button :class "qs-close" :onclick "setsid -f bash $HOME/.config/eww/scripts/audio-toggle" :text "✕"))
+
+    (qs-section :title "OUTPUT"
+      (box :class "qs-out" :orientation "v" :space-evenly false :spacing 8
+        (a-row :lead "󰕾" :leadclass "a-icon" :vol {avol} :mute {audio.out.mute}
+               :setcmd "v=$(printf %.0f {}); [ $v -ge 99 ] && v=100; eww update avol=$v; wpctl set-volume @DEFAULT_AUDIO_SINK@ $v%"
+               :mutecmd "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle")
+        (box :orientation "v" :space-evenly false :spacing 4
+          (for d in {jq(audio, '.out.devices')}
+            (button :class "a-dev ${d.active ? "on" : ""}" :onclick "pactl set-default-sink '${d.name}'"
+              (label :halign "start" :limit-width 40 :text {d.desc}))))))
+
+    (qs-section :title "INPUT"
+      (box :class "qs-out" :orientation "v" :space-evenly false :spacing 8
+        (a-row :lead "󰍬" :leadclass "a-icon" :vol {aivol} :mute {audio.in.mute}
+               :setcmd "v=$(printf %.0f {}); [ $v -ge 99 ] && v=100; eww update aivol=$v; wpctl set-volume @DEFAULT_AUDIO_SOURCE@ $v%"
+               :mutecmd "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle")
+        (box :orientation "v" :space-evenly false :spacing 4
+          (for d in {jq(audio, '.in.devices')}
+            (button :class "a-dev ${d.active ? "on" : ""}" :onclick "pactl set-default-source '${d.name}'"
+              (label :halign "start" :limit-width 40 :text {d.desc}))))))
+
+    (qs-section :title "APPS"
+      (box :class "qs-out" :orientation "v" :space-evenly false :spacing 8
+        (label :class "qs-todo" :halign "start" :visible {jq(audio, '.apps | length') == 0}
+               :text "Nothing playing")
+        (for a in {jq(audio, '.apps')}
+          (a-row :lead {a.name} :leadclass "a-app-name" :mute {a.mute}
+                 :vol {jq(appvols, '.["' + a.id + '"] // -1') >= 0 ? jq(appvols, '.["' + a.id + '"]') : a.vol}
+                 :setcmd "v=$(printf %.0f {}); [ $v -ge 99 ] && v=100; pactl set-sink-input-volume ${a.id} $v%; eww update appvols=$(jq -cn --arg k ${a.id} --argjson n $v '{($k):$n}')"
+                 :mutecmd "pactl set-sink-input-mute ${a.id} toggle"))))
+
+    (qs-section :title "EASYEFFECTS"
+      (box :class "qs-out" :orientation "v" :space-evenly false :spacing 8
+        (box :space-evenly false
+          (label :class "qs-out-name" :halign "start" :hexpand true :text "EasyEffects")
+          (qs-toggle :text {audio.ee.running ? "On" : "Off"} :on {audio.ee.running}
+                     :onclick "setsid -f bash $HOME/.config/eww/scripts/ee-toggle"))
+        (box :orientation "v" :space-evenly false :spacing 8 :visible {audio.ee.running}
+          (qs-ctl :label "Effects"
+            (qs-toggle :text {audio.ee.bypass ? "Bypassed" : "Active"} :on {!audio.ee.bypass}
+                       :onclick "setsid -f easyeffects --bypass-toggle"))
+          (qs-ctl :label "Preset"
+            (box :space-evenly false :spacing 5 :halign "end"
+              (for p in {jq(audio, '.ee.presets')}
+                (qs-chip :text p :active {audio.ee.preset == p}
+                         :onclick "setsid -f easyeffects -l '${p}'")))))))))
+
+;; ---------- window (drops under the bar audio module — x/width tuned during build) ----------
+(defwindow audio
+  :monitor "DP-1"
+  :stacking "overlay"
+  :exclusive false
+  :focusable false
+  :geometry (geometry :x "220px" :y "0" :width "460px" :anchor "top right")
+  (audio-root))

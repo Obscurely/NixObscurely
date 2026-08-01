@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Restore the default display layout (the "Work" default):
+#   DP-1 (4K@240, scale 1.5, 10-bit, HDR/VRR off) + HDMI-A-1 (1440p@144, scale 1) on,
+#   HDMI-A-2 (1080p) off. Uses output-toggle so the bars follow. A panic button.
+H="$HOME/.config/eww/scripts"
+
+# DP-1 — main, always on
+swaymsg output DP-1 enable
+swaymsg output DP-1 position 1920 0
+swaymsg output DP-1 mode 3840x2160@240Hz
+swaymsg output DP-1 scale 1.5
+swaymsg output DP-1 render_bit_depth 10
+swaymsg output DP-1 adaptive_sync off
+swaymsg output DP-1 hdr off
+
+# HDMI-A-1 — right, on
+bash "$H/output-toggle" HDMI-A-1 on
+swaymsg output HDMI-A-1 position 4480 0
+swaymsg output HDMI-A-1 mode 2560x1440@144Hz
+swaymsg output HDMI-A-1 scale 1
+swaymsg output HDMI-A-1 adaptive_sync off
+
+# HDMI-A-2 — 1080p side, OFF by default
+bash "$H/output-toggle" HDMI-A-2 off

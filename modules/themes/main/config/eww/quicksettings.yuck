@@ -1,0 +1,126 @@
+;; =====================================================================
+;;  Quick Settings — right-edge overlay panel on DP-1 (glacial theme)
+;;  PHASE 1: shell + per-output display controls (enable/res/refresh/scale/VRR/HDR).
+;; =====================================================================
+
+(deflisten displays :initial "[]" `python3 $HOME/.config/eww/scripts/displays`)
+(defpoll system :interval "2s"
+  :initial '{"idle":true,"dnd":false,"ee_running":false,"ee_bypass":false,"ee_preset":"","ee_presets":[]}'
+  `python3 $HOME/.config/eww/scripts/system`)
+
+;; ---------- reusable bits ----------
+(defwidget qs-section [title]
+  (box :class "qs-section" :orientation "v" :space-evenly false :spacing 10
+    (label :class "qs-hdr" :halign "start" :text title)
+    (box :orientation "v" :space-evenly false :spacing 9
+      (children))))
+
+;; selectable chip (resolution / refresh / scale)
+(defwidget qs-chip [text active onclick]
+  (button :class "qs-chip ${active ? "on" : ""}" :onclick onclick
+    (label :text text)))
+
+;; on/off toggle button
+(defwidget qs-toggle [text on onclick]
+  (button :class "qs-tgl ${on ? "on" : "off"}" :onclick onclick
+    (box :space-evenly false :spacing 7
+      (label :class "qs-dot" :text "●")
+      (label :text text))))
+
+;; labeled control row: label on the left, chips right-aligned
+(defwidget qs-ctl [label]
+  (box :class "qs-ctl" :space-evenly false :spacing 8
+    (label :class "qs-ctl-lbl" :text label)
+    (box :space-evenly false :spacing 5 :halign "end" :hexpand true
+      (children))))
+
+;; scene preset button (Work / Focus / Cinema / Game); `active` = the inferred current mode
+(defwidget qs-mode [text active onclick]
+  (button :class "qs-mode ${active ? "on" : ""}" :onclick onclick
+    (label :text text)))
+
+;; one monitor card  (ISOLATION TEST C — qs-chip with dynamic active, static onclick)
+(defwidget qs-output [d]
+  (box :class "qs-out" :orientation "v" :space-evenly false :spacing 6
+    (box :space-evenly false
+      (label :class "qs-out-name" :halign "start" :hexpand true :text {d.name})
+      (qs-toggle :text {d.enabled ? "On" : "Off"} :on {d.enabled}
+                 :onclick "setsid -f bash $HOME/.config/eww/scripts/output-toggle ${d.name} ${d.enabled ? "off" : "on"}"))
+    (box :orientation "v" :space-evenly false :spacing 6 :visible {d.enabled}
+    (box :space-evenly false :spacing 5
+      (for r in {d.resolutions}
+        (qs-chip :text {r.label} :active {d.res == r.res}
+                 :onclick "swaymsg output ${d.name} mode ${r.res}@${r.max}Hz")))
+    (box :space-evenly false :spacing 5
+      (for hz in {d.refreshes}
+        (qs-chip :text "${hz}" :active {d.refresh == hz}
+                 :onclick "swaymsg output ${d.name} mode ${d.res}@${hz}Hz")))
+    (box :space-evenly false :spacing 5
+      (for s in {d.scales}
+        (qs-chip :text "${s}" :active {d.scale == s}
+                 :onclick "swaymsg output ${d.name} scale ${s}")))
+    (revealer :reveal {d.hdr_cap} :transition "slidedown" :duration "150ms"
+      (box :space-evenly false :spacing 8 :halign "end"
+        (qs-toggle :text "VRR" :on {d.vrr}
+                   :onclick "swaymsg output ${d.name} adaptive_sync ${d.vrr ? "off" : "on"}")
+        (qs-toggle :text "HDR" :on {d.hdr}
+                   :onclick "swaymsg output ${d.name} hdr ${d.hdr ? "off" : "on"} ; swaymsg output ${d.name} render_bit_depth 10"))))))
+
+(defwidget qs-displays []
+  (box :orientation "v" :space-evenly false :spacing 9
+    (for d in {jq(displays, ".")}
+      (qs-output :d d))))
+
+;; ---------- panel body ----------
+(defwidget qs-root []
+  (box :class "qs-root" :orientation "v" :space-evenly false :spacing 14
+    (box :class "qs-titlebar" :space-evenly false
+      (label :class "qs-title" :halign "start" :hexpand true :text "Quick Settings")
+      (button :class "qs-close" :onclick "setsid -f bash $HOME/.config/eww/scripts/qs-toggle" :text "✕"))
+    (qs-section :title "MODES"
+      (box :space-evenly true :spacing 7
+        (qs-mode :text "Work"   :active {system.mode == "work"}   :onclick "setsid -f bash $HOME/.config/eww/scripts/mode work")
+        (qs-mode :text "Focus"  :active {system.mode == "focus"}  :onclick "setsid -f bash $HOME/.config/eww/scripts/mode focus")
+        (qs-mode :text "Cinema" :active {system.mode == "cinema"} :onclick "setsid -f bash $HOME/.config/eww/scripts/mode cinema")
+        (qs-mode :text "Game"   :active {system.mode == "game"}   :onclick "setsid -f bash $HOME/.config/eww/scripts/mode game")))
+    (qs-section :title "DISPLAYS"
+      (qs-displays)
+      (button :class "qs-reset" :onclick "setsid -f bash $HOME/.config/eww/scripts/reset-displays"
+        (label :text "⟳  Reset displays")))
+    (qs-section :title "AUDIO"
+      (label :class "qs-todo" :halign "start" :text "volume · devices · per-app — phase 4–5")
+      ;; EasyEffects card — collapses to just its On/Off when the service is stopped
+      (box :class "qs-out" :orientation "v" :space-evenly false :spacing 8
+        (box :space-evenly false
+          (label :class "qs-out-name" :halign "start" :hexpand true :text "EasyEffects")
+          (qs-toggle :text {system.ee_running ? "On" : "Off"} :on {system.ee_running}
+                     :onclick "setsid -f bash $HOME/.config/eww/scripts/ee-toggle"))
+        (box :orientation "v" :space-evenly false :spacing 8 :visible {system.ee_running}
+          (qs-ctl :label "Effects"
+            (qs-toggle :text {system.ee_bypass ? "Bypassed" : "Active"} :on {!system.ee_bypass}
+                       :onclick "setsid -f easyeffects --bypass-toggle"))
+          (qs-ctl :label "Preset"
+            (box :space-evenly false :spacing 5 :halign "end"
+              (for p in {jq(system, '.ee_presets')}
+                (qs-chip :text p :active {system.ee_preset == p}
+                         :onclick "setsid -f easyeffects -l '${p}'")))))))
+    (qs-section :title "SYSTEM"
+      ;; simple runtime toggles (idle screen-off + notification DND)
+      (box :class "qs-out" :orientation "v" :space-evenly false :spacing 8
+        (qs-ctl :label "Idle screen-off"
+          (qs-toggle :text {system.idle ? "On" : "Off"} :on {system.idle}
+                     :onclick "setsid -f bash $HOME/.config/eww/scripts/idle-toggle"))
+        (qs-ctl :label "Do Not Disturb"
+          (qs-toggle :text {system.dnd ? "On" : "Off"} :on {system.dnd}
+                     :onclick "makoctl mode -t do-not-disturb")))
+      (button :class "qs-reset" :onclick "setsid -f bash $HOME/.config/eww/scripts/sway-reload"
+        (label :text "⟳  Reload sway")))))
+
+;; ---------- window ----------
+(defwindow quicksettings
+  :monitor "DP-1"
+  :stacking "overlay"
+  :exclusive false
+  :focusable false
+  :geometry (geometry :x "0" :y "0" :width "480px" :anchor "top right")
+  (qs-root))

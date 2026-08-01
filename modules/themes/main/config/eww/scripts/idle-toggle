@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Toggle swayidle (OLED screen-off @10min). Boot default is ON (sway `exec swayidle`).
+# Runtime toggle — matches how swaylock / hdr-toggle.sh / vrr-toggle.sh work here: no
+# systemd unit, no Wayland-env plumbing (swayidle inherits sway's env from the eww
+# daemon that runs this). Relaunch args MUST mirror the boot `exec swayidle` line.
+#
+# MUST be launched detached (`setsid -f`) so eww doesn't kill the relaunched swayidle
+# when the Idle toggle button re-renders on the resulting state change.
+set -u
+if pgrep -x swayidle >/dev/null; then
+  pkill -x swayidle
+else
+  exec swayidle -w \
+    timeout 600 'swaymsg "output * power off"' \
+    resume 'swaymsg "output * power on"' \
+    before-sleep 'swaylock -f'
+fi

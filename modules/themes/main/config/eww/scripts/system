@@ -1,0 +1,121 @@
+#!/usr/bin/env python3
+# Quick Settings — SYSTEM section live state (defpoll target).
+# Emits ONE JSON object; the panel is a live mirror of it.
+#
+#   idle       -> pgrep -x swayidle                 (boot default ON; toggled at runtime)
+#   dnd        -> makoctl mode  contains 'do-not-disturb'
+#   ee_running -> pidof easyeffects                  (see note in running())
+#   ee_bypass  -> `easyeffects -b 3`  (1 = bypassed, 2 = active) — the LIVE state.
+#                 NB: the dconf `bypass` key is only the startup default and does NOT
+#                 track `--bypass-toggle`, so it must not be used here.
+#   ee_preset  -> dconf .../last-loaded-output-preset  (written on preset load)
+#   ee_presets -> `easyeffects -p`, CACHED (the list changes ~never; re-query at most
+#                 once a minute so the panel doesn't shell out to easyeffects every tick)
+import json
+import os
+import subprocess
+import time
+
+CACHE = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "qs-ee-presets.json")
+PRESET_TTL = 60
+
+
+def out(cmd):
+    try:
+        return subprocess.run(cmd, capture_output=True, text=True, timeout=2).stdout
+    except Exception:
+        return ""
+
+
+def running(name):
+    # `pidof` matches argv[0]'s basename, so it catches nix-wrapped binaries whose
+    # `comm` is the truncated ".<name>-wrapped" (e.g. easyeffects) as well as plain
+    # ones (swayidle). `pgrep -x` would miss the wrapped case.
+    return subprocess.run(["pidof", name], capture_output=True).returncode == 0
+
+
+def dconf(key):
+    return out(["dconf", "read", f"/com/github/wwmm/easyeffects/{key}"]).strip().strip("'")
+
+
+def sway_outputs():
+    try:
+        return {o["name"]: o for o in json.loads(out(["swaymsg", "-t", "get_outputs", "-r"]))}
+    except Exception:
+        return {}
+
+
+def active_mode(outs):
+    # Infer the current scene preset from live display state (see scripts/mode).
+    # Distinguished purely by DP-1 HDR/VRR + which sides are on; "" = custom layout.
+    dp1 = outs.get("DP-1", {})
+    if not dp1.get("active"):
+        return ""
+    hdr = bool(dp1.get("hdr"))
+    vrr = dp1.get("adaptive_sync_status") == "enabled"
+    h1 = bool(outs.get("HDMI-A-1", {}).get("active"))
+    h2 = bool(outs.get("HDMI-A-2", {}).get("active"))
+    if hdr and vrr:
+        return "game"
+    if hdr:
+        return "cinema"
+    if not vrr and h1 and not h2:
+        return "work"
+    if not vrr and not h1 and not h2:
+        return "focus"
+    return ""
+
+
+def parse_presets(text):
+    presets, section = [], None
+    for line in text.splitlines():
+        s = line.strip()
+        low = s.lower()
+        if low.startswith("output presets"):
+            section = "out"
+            continue
+        if low.startswith("input presets") or low.startswith("no input"):
+            section = "in"
+            continue
+        if not s:
+            continue
+        if section == "out":
+            parts = s.split("\t", 1)  # each line is "<index>\t<name>"
+            presets.append((parts[1] if len(parts) == 2 else s).strip())
+    return presets
+
+
+def ee_presets_cached():
+    try:
+        if time.time() - os.path.getmtime(CACHE) < PRESET_TTL:
+            with open(CACHE) as f:
+                return json.load(f)
+    except Exception:
+        pass
+    presets = parse_presets(out(["easyeffects", "-p"]))
+    try:
+        with open(CACHE, "w") as f:
+            json.dump(presets, f)
+    except Exception:
+        pass
+    return presets
+
+
+ee_running = running("easyeffects")
+ee_bypass = False
+ee_preset = ""
+ee_presets = []
+if ee_running:
+    ee_bypass = out(["easyeffects", "-b", "3"]).strip() == "1"
+    ee_preset = dconf("last-loaded-output-preset")
+    ee_presets = ee_presets_cached()
+
+print(json.dumps({
+    "mode": active_mode(sway_outputs()),
+    "idle": running("swayidle"),
+    "dnd": "do-not-disturb" in out(["makoctl", "mode"]),
+    "ee_running": ee_running,
+    "ee_bypass": ee_bypass,
+    "ee_preset": ee_preset,
+    "ee_presets": ee_presets,
+}), flush=True)

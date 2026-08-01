@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Enable/disable a display AND move its eww bar window with it.
+# Disabling a sway output destroys it -> its eww bar window vanishes and won't reopen
+# on hotplug. So we open/close the bar here, together with the output.
+#
+# On enable there are TWO lags: (1) sway marks the output active, then (2) eww/GTK
+# registers the new monitor a moment later. A single `eww open` fired between the two
+# lands on a monitor GTK doesn't know yet and silently no-ops. So we RETRY `eww open`
+# until the bar window actually appears. Idempotent. 10-bit re-asserted on DP-1 only.
+# Usage: output-toggle <connector> <on|off>
+set -u
+name="${1:-}"; action="${2:-}"
+case "$name" in
+  DP-1)     id=dp1 ;;
+  HDMI-A-1) id=hdmi1 ;;
+  HDMI-A-2) id=hdmi2 ;;
+  *)        id="" ;;
+esac
+bar_open() { eww active-windows 2>/dev/null | grep -q "^${id}:"; }
+is_active() {
+  swaymsg -t get_outputs -r | python3 -c \
+    "import sys,json;exit(0 if any(o['name']=='$name' and o.get('active') for o in json.load(sys.stdin)) else 1)" 2>/dev/null
+}
+
+if [ "$action" = on ]; then
+  swaymsg output "$name" enable
+  [ "$name" = DP-1 ] && swaymsg output "$name" render_bit_depth 10
+  for _ in $(seq 1 12); do is_active && break; sleep 0.15; done
+  if [ -n "$id" ]; then
+    for _ in $(seq 1 12); do
+      bar_open && break
+      eww open bar --id "$id" --arg "output=$name" 2>/dev/null
+      sleep 0.3
+    done
+  fi
+else
+  [ -n "$id" ] && bar_open && eww close "$id"
+  swaymsg output "$name" disable
+fi

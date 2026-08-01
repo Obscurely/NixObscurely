@@ -4,6 +4,9 @@
 ;;  inject step; do not hand-type the glyph bytes (some drop in transit).
 ;; =====================================================================
 
+;; Quick Settings panel — separate window, same daemon
+(include "quicksettings.yuck")
+
 ;; ------------------------------- data --------------------------------
 (deflisten workspaces :initial "[]" `bash $HOME/.config/eww/scripts/workspaces`)
 (deflisten player :initial "{\"status\":\"Stopped\",\"title\":\"\",\"artist\":\"\"}" `bash $HOME/.config/eww/scripts/player`)

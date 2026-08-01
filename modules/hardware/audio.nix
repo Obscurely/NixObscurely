@@ -45,6 +45,26 @@ in {
         }
       ];
 
+    # Autostart EasyEffects in service mode (headless — no window). Replaces the old
+    # `--gapplication-service` autostart, which the current build dropped in favour of
+    # `--service-mode`. Bound to the graphical session so it inherits the Wayland/
+    # PipeWire env the sway drop-in imports (`systemctl --user import-environment`).
+    # The eww Quick Settings panel toggles this unit (eww/scripts/ee-toggle); Restart
+    # is on-failure so a manual "off" from the panel stays off. Loads the last-used
+    # preset on start (easyeffects tracks it in dconf: last-loaded-output-preset).
+    systemd.user.services.easyeffects = {
+      description = "EasyEffects audio effects (service mode)";
+      wantedBy = ["graphical-session.target"];
+      partOf = ["graphical-session.target"];
+      after = ["graphical-session.target" "pipewire.service" "wireplumber.service"];
+      serviceConfig = {
+        ExecStart = "${pkgs.easyeffects}/bin/easyeffects --service-mode";
+        ExecStop = "${pkgs.easyeffects}/bin/easyeffects --quit";
+        Restart = "on-failure";
+        RestartSec = 5;
+      };
+    };
+
     # HACK Prevents ~/.esd_auth files by disabling the esound protocol module
     #      for pulseaudio, which I likely don't need. Is there a better way?
     services.pulseaudio.configFile = let

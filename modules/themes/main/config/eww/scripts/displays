@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+# Emit per-output display state as one JSON line per change, for eww `deflisten`.
+# Invoke via:  python3 $HOME/.config/eww/scripts/displays
+#
+# Each output: name/model, enabled, current res+refresh+scale, VRR, HDR (+capable),
+# the monitor's supported resolutions (each with its available refresh rates + max),
+# and the refresh rates for the *current* resolution — so the UI never offers an
+# unsupported mode, and changing resolution can pick a valid rate. Re-emits on `output`.
+import json, subprocess
+
+RES = [("3840x2160", "4K"), ("2560x1440", "1440p"), ("1920x1080", "1080p")]
+SCALES = [1.0, 1.25, 1.5, 1.75, 2.0]
+HDR_CAPABLE = {"DP-1"}                       # only the QD-OLED reports HDR
+ORDER = {"DP-1": 0, "HDMI-A-1": 1, "HDMI-A-2": 2}
+
+
+def build():
+    outs = json.loads(subprocess.check_output(["swaymsg", "-t", "get_outputs", "-r"]))
+    result = []
+    for o in outs:
+        name = o["name"]
+        cm = o.get("current_mode") or {}
+        cur = f'{cm.get("width")}x{cm.get("height")}' if cm.get("width") else ""
+        by_res = {}
+        for m in o.get("modes", []):
+            by_res.setdefault(f'{m["width"]}x{m["height"]}', set()).add(round(m["refresh"] / 1000))
+        resolutions = []
+        for r, l in RES:
+            if r in by_res:
+                rr = sorted(by_res[r], reverse=True)
+                resolutions.append({"res": r, "label": l, "refreshes": rr, "max": rr[0]})
+        refreshes = next((x["refreshes"] for x in resolutions if x["res"] == cur), [])
+        result.append({
+            "name": name,
+            "model": o.get("model", ""),
+            "enabled": bool(o.get("active")),
+            "res": cur,
+            "label": next((l for r, l in RES if r == cur), cur),
+            "refresh": round(cm.get("refresh", 0) / 1000) if cm.get("refresh") else 0,
+            "scale": o.get("scale", 1.0),
+            "vrr": o.get("adaptive_sync_status") == "enabled",
+            "hdr": bool(o.get("hdr")),
+            "hdr_cap": name in HDR_CAPABLE,
+            "resolutions": resolutions,
+            "refreshes": refreshes,
+            "scales": SCALES,
+        })
+    result.sort(key=lambda d: ORDER.get(d["name"], 9))
+    return json.dumps(result)
+
+
+print(build(), flush=True)
+p = subprocess.Popen(["swaymsg", "-t", "subscribe", "-m", '["output"]'], stdout=subprocess.PIPE)
+for _ in p.stdout:
+    print(build(), flush=True)

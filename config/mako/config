@@ -1,10 +1,29 @@
-# ~/.config/mako/config
-font=FiraCode Nerd Font 10
-background-color=#282a36
-text-color=#f8f8f2
-border-color=#bd93f9
+# ~/.config/mako/config — glacial (matches the eww bar + quick-settings panel).
+# Palette mirrors modules/themes/main/config/eww/eww.scss.
+font=FiraCode Nerd Font 11
+width=380
+height=140
+background-color=#0E1420F2
+text-color=#CBD8EA
+border-color=#3A526FCC
 border-size=2
-border-radius=6
+border-radius=12
 default-timeout=6000
-padding=8
-margin=10
+padding=13
+margin=12
+icons=1
+max-icon-size=48
+
+[urgency=low]
+border-color=#2A3B52CC
+text-color=#90A4BC
+
+[urgency=high]
+border-color=#E7B872
+text-color=#CBD8EA
+default-timeout=0
+
+# Do Not Disturb — toggled from the eww Quick Settings panel via
+# `makoctl mode -t do-not-disturb`. Suppresses all notifications while active.
+[mode=do-not-disturb]
+invisible=1

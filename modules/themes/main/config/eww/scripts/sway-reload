@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# Full refresh — reload every config layer, then re-sync the eww bars to the live
+# output layout. The panel's "reload everything" button (next to the display Reset).
+#
+# swaymsg reload re-reads the sway config (outputs, keybinds, exec_always/init.sh)
+# and can enable/disable outputs WITHOUT going through output-toggle — which would
+# leave a freshly-enabled monitor bar-less, or a bar orphaned on a disabled one. So
+# afterwards we reconcile: a bar on every active output, none on the inactive ones
+# (same is_active/bar_open + retry pattern as output-toggle — eww/GTK registers a
+# newly-enabled monitor a moment after sway marks it active).
+#
+# Launch detached (`setsid -f`) from the onclick: the retry loop + eww calls would
+# otherwise be killed when the panel re-renders.
+set -u
+declare -A ID=([DP-1]=dp1 [HDMI-A-1]=hdmi1 [HDMI-A-2]=hdmi2)
+
+swaymsg reload
+makoctl reload 2>/dev/null
+eww reload
+sleep 0.5   # let the reloaded output layout settle before reading it
+
+is_active() {
+  swaymsg -t get_outputs -r | python3 -c \
+    "import sys,json;exit(0 if any(o['name']=='$1' and o.get('active') for o in json.load(sys.stdin)) else 1)" 2>/dev/null
+}
+bar_open() { eww active-windows 2>/dev/null | grep -q "^$1:"; }
+
+for name in "${!ID[@]}"; do
+  id="${ID[$name]}"
+  if is_active "$name"; then
+    for _ in $(seq 1 12); do bar_open "$id" && break; eww open bar --id "$id" --arg "output=$name"; sleep 0.3; done
+  else
+    bar_open "$id" && eww close "$id"
+  fi
+done

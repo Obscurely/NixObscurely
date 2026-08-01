@@ -33,6 +33,8 @@ output $mon_left {
     scale 1
     position 0 180
 }
+# 1080p side monitor OFF by default (Work default) — enable it from the quick-settings panel.
+output $mon_left disable
 output $mon_main {
     mode 3840x2160@240Hz
     scale 1.5
@@ -205,8 +207,8 @@ bindsym XF86AudioPrev        exec playerctl previous
 # Single `exec` (not exec_always) so sway reloads don't stack eww daemons; the daemon
 # auto-starts on the first `open`. Each window's output is passed via --arg, which drives
 # both `:monitor` and the per-monitor workspace filter.
-exec eww open-many bar:dp1 bar:hdmi1 bar:hdmi2 \
-    --arg "dp1:output=DP-1" --arg "hdmi1:output=HDMI-A-1" --arg "hdmi2:output=HDMI-A-2"
+exec eww open-many bar:dp1 bar:hdmi1 \
+    --arg "dp1:output=DP-1" --arg "hdmi1:output=HDMI-A-1"
 
 ### NixOS integration
 # We ship an authoritative ~/.config/sway/config, so sway reads THIS instead of

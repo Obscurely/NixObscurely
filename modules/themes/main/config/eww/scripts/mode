@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+# Scene presets — apply a full display + system layout in one click.
+# Side monitors go through output-toggle so their eww bars follow enable/disable.
+# DP-1 is always on with its native base geometry; modes only vary HDR/VRR + the
+# side monitors + the idle/DND system state.
+#
+#   work    DP-1 + HDMI-A-1 on, HDMI-A-2 off, HDR/VRR off, idle on,  DND off  (= default)
+#   focus   DP-1 only,                        HDR/VRR off, idle on,  DND on
+#   cinema  DP-1 only, HDR on,                VRR off,     idle off, DND on
+#   game    DP-1 only, HDR on, VRR on,                     idle off, DND on
+#
+# Must be launched detached (`setsid -f`) from the onclick: it calls output-toggle
+# (which opens/closes bars) and idle-toggle (which relaunches swayidle) — eww would
+# otherwise kill these children when the panel re-renders on the state change.
+set -u
+H="$HOME/.config/eww/scripts"
+mode="${1:-work}"
+
+dp1_base() {           # DP-1 is always on; base geometry is identical across modes
+  swaymsg output DP-1 enable
+  swaymsg output DP-1 position 1920 0
+  swaymsg output DP-1 mode 3840x2160@240Hz
+  swaymsg output DP-1 scale 1.5
+  swaymsg output DP-1 render_bit_depth 10
+}
+dp1_hdr() { swaymsg output DP-1 hdr "$1"; swaymsg output DP-1 render_bit_depth 10; }
+dp1_vrr() { swaymsg output DP-1 adaptive_sync "$1"; }
+
+side_work() {          # HDMI-A-1 on (right of DP-1), HDMI-A-2 off
+  bash "$H/output-toggle" HDMI-A-1 on
+  swaymsg output HDMI-A-1 position 4480 0
+  swaymsg output HDMI-A-1 mode 2560x1440@144Hz
+  swaymsg output HDMI-A-1 scale 1
+  swaymsg output HDMI-A-1 adaptive_sync off
+  bash "$H/output-toggle" HDMI-A-2 off
+}
+sides_off() { bash "$H/output-toggle" HDMI-A-1 off; bash "$H/output-toggle" HDMI-A-2 off; }
+
+set_idle() {           # on|off — reuse the tested toggle, detached (it execs swayidle)
+  cur=$(pgrep -x swayidle >/dev/null && echo on || echo off)
+  [ "$cur" != "$1" ] && setsid -f bash "$H/idle-toggle"
+}
+set_dnd() { [ "$1" = on ] && makoctl mode -a do-not-disturb || makoctl mode -r do-not-disturb; }
+
+dp1_base
+case "$mode" in
+  work)   dp1_hdr off; dp1_vrr off; side_work; set_idle on;  set_dnd off ;;
+  focus)  dp1_hdr off; dp1_vrr off; sides_off; set_idle on;  set_dnd on  ;;
+  cinema) dp1_hdr on;  dp1_vrr off; sides_off; set_idle off; set_dnd on  ;;
+  game)   dp1_hdr on;  dp1_vrr on;  sides_off; set_idle off; set_dnd on  ;;
+  *)      echo "unknown mode: $mode" >&2; exit 1 ;;
+esac

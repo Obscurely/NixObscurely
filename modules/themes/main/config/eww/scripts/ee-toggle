@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Toggle EasyEffects on/off. Prefers the systemd user service (post-deploy autostart);
+# falls back to the binary directly during live iteration, before the service exists.
+# Detached via `setsid -f` from the onclick so eww doesn't kill it on re-render.
+set -u
+unit=easyeffects.service
+has_unit() { systemctl --user cat "$unit" >/dev/null 2>&1; }
+
+if pidof easyeffects >/dev/null; then
+  has_unit && systemctl --user stop "$unit"
+  pidof easyeffects >/dev/null && easyeffects -q
+else
+  if has_unit; then
+    systemctl --user start "$unit"
+  else
+    exec easyeffects --service-mode -w
+  fi
+fi

@@ -3,6 +3,7 @@
 //  Tune these tiers and re-run `eww reload` to iterate live.
 // =====================================================================
 * { all: unset; font-family: "FiraCode Nerd Font"; font-size: 18px; }
+label { margin: -3px 0; }   // trim the font's ~10px line-box slack -> slimmer pills, same glyph size
 
 // ---- glacial tiers (from the wallpaper) ----
 $bg:         rgba(14, 20, 32, 0.90);   // island fill (translucent)
@@ -21,12 +22,12 @@ $warn:       #E7B872;                  // urgent / warning ONLY
 .bar-root {
   background-color: $bg;
   border: 1px solid $border;
-  border-radius: 18px;
-  margin: 6px 10px;          // the floating gap from screen edges
+  border-radius: 16px;
+  margin: 5px 9px 0px 9px;  // 5px float top; 9px sides (1px tighter than the window's 10); bottom 0
   padding: 0 10px;
   color: $text;
 }
-.sec { padding: 7px 0; }
+.sec { padding: 6px 0; }   // pills now float in the bar (glyphs slimmed via negative label margin)
 
 // ---- module pills ----
 .mod { padding: 1px 15px; border-radius: 13px; }

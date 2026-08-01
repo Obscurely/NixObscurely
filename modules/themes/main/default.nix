@@ -23,7 +23,7 @@ in {
           };
           fonts = {
             sans.name = "Fira Code";
-            sans.size = 17;
+            sans.size = 15;
             mono.name = "Fira Code";
             mono.size = 18;
           };

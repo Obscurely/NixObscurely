@@ -58,7 +58,7 @@ in {
       partOf = ["graphical-session.target"];
       after = ["graphical-session.target" "pipewire.service" "wireplumber.service"];
       serviceConfig = {
-        ExecStart = "${pkgs.easyeffects}/bin/easyeffects --service-mode";
+        ExecStart = "${pkgs.easyeffects}/bin/easyeffects --service-mode --hide-window";
         ExecStop = "${pkgs.easyeffects}/bin/easyeffects --quit";
         Restart = "on-failure";
         RestartSec = 5;

@@ -1,4 +1,4 @@
-{...}: {
+{pkgs, ...}: {
   imports = [
     ../home.nix
     ./hardware-configuration.nix
@@ -113,4 +113,19 @@
   };
 
   networking.networkmanager.enable = true;
+
+  # Boot console / greeter display (machine-specific).
+  #  - video=HDMI-A-2:d keeps the 1080p side monitor dark through boot + the
+  #    tuigreet login (the kernel console never lights it). sway still enables it
+  #    on demand from the quick-settings panel — it does its own modesetting, so
+  #    this only governs the kernel's own fbcon default, not what sway can drive.
+  #  - Scale the console font up so the greeter is legible on the 4K DP-1. The
+  #    greeter comes up on the 4K nvidia-drm console, so a large font is the fix;
+  #    tuigreet is a centered TUI, so it's bigger/legible but not edge-to-edge.
+  boot.kernelParams = ["video=HDMI-A-2:d"];
+  console = {
+    earlySetup = true;
+    packages = [pkgs.terminus_font];
+    font = "${pkgs.terminus_font}/share/consolefonts/ter-v32n.psf.gz";
+  };
 }

@@ -78,6 +78,7 @@
 
 (defwidget power []
   (button :class "mod iconbtn power" :onclick "$DOTFILES_BIN/rofi/powermenu &"
+          :onrightclick "setsid -f bash $HOME/.config/eww/scripts/qs-toggle"
     (label :text "󰐥")))
 
 ;; ------------------------------- bar ---------------------------------

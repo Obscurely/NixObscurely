@@ -181,6 +181,9 @@ bindsym $mod+F9 exec $XDG_CONFIG_HOME/sway/hdr-toggle.sh
 ## VRR / adaptive-sync (GSYNC) toggle on the QD-OLED (DP-1) — for gaming.
 bindsym $mod+F10 exec $XDG_CONFIG_HOME/sway/vrr-toggle.sh
 
+## Quick Settings panel (eww) — right-edge slide-out (displays/audio/system/modes)
+bindsym $mod+comma exec bash $XDG_CONFIG_HOME/eww/scripts/qs-toggle
+
 ## apps (rofi scripts live in $DOTFILES_BIN/rofi)
 bindsym $mod+F12 exec $DOTFILES_BIN/rofi/launcher
 bindsym $mod+F11 exec $DOTFILES_BIN/rofi/quick

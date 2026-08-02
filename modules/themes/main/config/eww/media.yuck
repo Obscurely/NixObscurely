@@ -31,9 +31,15 @@
         (label :class "m-meta2" :halign "start" :limit-width 30 :show-truncated true :visible {media.album  != ""} :text {media.album})))
 
     ;; seek + time
+    ;; Scale is PERCENT-based (const max 1000), NOT absolute seconds. Binding :value to the
+    ;; live position with :max=length meant that switching to a source whose position exceeds
+    ;; the current track length made GTK clamp the value to the old max and fire onchange with
+    ;; the STALE target -> it seeked the previous player to ~its end -> skipped the track. A
+    ;; constant max can never clamp, so onchange only fires on a real user drag.
     (box :orientation "v" :space-evenly false :spacing 2
-      (scale :class "m-seek" :hexpand true :value {media.pos} :min 0 :max {media.len > 0 ? media.len : 1}
-             :onchange "playerctl -p ${media.target} position {}")
+      (scale :class "m-seek" :hexpand true :min 0 :max 1000
+             :value {media.len > 0 ? round(1000 * media.pos / media.len, 0) : 0}
+             :onchange "playerctl -p ${media.target} position ${round(media.len * {} / 1000, 0)}")
       (box :space-evenly false
         (label :class "m-time" :halign "start" :hexpand true :text {media.posStr})
         (label :class "m-time" :halign "end" :text {media.lenStr})))

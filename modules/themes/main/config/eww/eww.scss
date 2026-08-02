@@ -222,7 +222,7 @@ scale.m-seek slider    { background-color: $text; border-radius: 999px; min-widt
 
 // source rows
 .m-src {
-  background-color: rgba(14, 20, 32, 0.55);
+  background-color: $pill;                 // match the unselected QS modes (.qs-mode)
   color: $text2; border-radius: 8px; padding: 6px 11px;
   transition: background-color 150ms ease, color 150ms ease;
 }

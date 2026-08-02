@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# print the id of cresults[$1] (the selected index)
+eww get cresults 2>/dev/null | SEL="$1" python3 -c 'import sys,os,json
+d=json.load(sys.stdin); i=int(os.environ["SEL"])
+print(d[i]["id"] if 0<=i<len(d) else "")'

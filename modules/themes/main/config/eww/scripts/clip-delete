@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# delete the selected entry from history, refresh the list in place (stay open).
+s="$HOME/.config/eww/scripts"; RT="${XDG_RUNTIME_DIR:-/tmp}"
+sel=$(eww get csel 2>/dev/null); sel=${sel:-0}
+id=$(bash "$s/clip-idof" "$sel")
+[ -z "$id" ] && exit 0
+cliphist list | awk -F'\t' -v id="$id" '$1==id' | cliphist delete
+python3 "$s/clip-list" >/dev/null                      # rewrite the cache
+q=$(cat "$RT/eww-clip-query" 2>/dev/null)
+new="$(python3 "$s/clip-filter" "$q")"
+len=$(printf '%s' "$new" | python3 -c 'import sys,json;print(len(json.load(sys.stdin)))')
+[ "$sel" -ge "$len" ] && sel=$((len>0 ? len-1 : 0))
+eww update cresults="$new" csel="$sel"

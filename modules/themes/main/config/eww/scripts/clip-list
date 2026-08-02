@@ -1,0 +1,53 @@
+#!/usr/bin/env python3
+# Build the clipboard-history list for the eww clipboard widget from `cliphist list`.
+# Emits JSON [{id, preview, isimg, thumb, search}] and caches it (eww-clips.json) for the filter.
+# Image entries (cliphist shows "[[ binary data … png 3838x487 ]]") get a decoded, downscaled
+# thumbnail cached by id in ~/.cache/eww/clipthumbs (persists; regenerated only when new).
+import json
+import os
+import re
+import subprocess
+
+RT = os.environ.get("XDG_RUNTIME_DIR", "/tmp")
+CACHE = os.path.join(RT, "eww-clips.json")
+THUMBS = os.path.expanduser("~/.cache/eww/clipthumbs")
+os.makedirs(THUMBS, exist_ok=True)
+DIMS = re.compile(r"(\w+)\s+(\d+)x(\d+)")
+
+
+def thumb_for(cid):
+    p = os.path.join(THUMBS, f"{cid}.png")
+    if os.path.exists(p):
+        return p
+    try:
+        dec = subprocess.run(["cliphist", "decode", cid], capture_output=True, timeout=4).stdout
+        subprocess.run(["magick", "-", "-thumbnail", "56x38^", "-gravity", "center",
+                        "-extent", "56x38", p], input=dec, timeout=6)
+    except Exception:
+        pass
+    return p if os.path.exists(p) else ""
+
+
+raw = ""
+try:
+    raw = subprocess.run(["cliphist", "list"], capture_output=True, text=True, timeout=4).stdout
+except Exception:
+    pass
+
+entries = []
+for line in raw.splitlines():
+    cid, tab, preview = line.partition("\t")
+    if not tab:
+        continue
+    if preview.startswith("[[ binary data"):
+        m = DIMS.search(preview)
+        label = f"image · {m.group(1)} {m.group(2)}×{m.group(3)}" if m else "image"
+        entries.append({"id": cid, "preview": label, "isimg": True,
+                        "thumb": thumb_for(cid), "search": "image " + (m.group(1) if m else "")})
+    else:
+        entries.append({"id": cid, "preview": preview, "isimg": False,
+                        "thumb": "", "search": preview.lower()})
+
+with open(CACHE, "w") as f:
+    json.dump(entries, f)
+print(json.dumps(entries), flush=True)

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+q="$*"
+printf '%s' "$q" > "${XDG_RUNTIME_DIR:-/tmp}/eww-clip-query"
+eww update cresults="$(python3 "$HOME/.config/eww/scripts/clip-filter" "$q")" csel=0

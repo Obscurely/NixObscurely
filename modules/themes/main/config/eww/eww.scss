@@ -352,3 +352,9 @@ scale.sm-bar slider    { background-color: transparent; min-width: 0; min-height
 .l-name  { min-width: 96px; }             // align window titles after the app name
 .l-title { color: $text2; font-size: 13px; }
 .l-ws    { color: $inactive; font-size: 12px; min-width: 16px; }
+
+// clipboard history (reuses .l-* launcher styles)
+.l-lead      { min-width: 56px; }         // fixed lead slot so text + image rows align
+.l-thumb     { border-radius: 5px; }
+.l-clip-icon { color: $text2; font-size: 19px; }
+.l-clip      { color: $text; font-size: 14px; }

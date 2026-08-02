@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# copy the chosen entry to the clipboard, then close. No arg -> selected (csel); arg -> that id (click).
+close() { bash "$HOME/.config/eww/scripts/clip-close"; }
+id="$1"
+[ -z "$id" ] && id=$(bash "$HOME/.config/eww/scripts/clip-idof" "$(eww get csel 2>/dev/null)")
+[ -n "$id" ] && cliphist decode "$id" | wl-copy
+close

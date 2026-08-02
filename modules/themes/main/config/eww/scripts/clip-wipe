@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+cliphist wipe 2>/dev/null
+bash "$HOME/.config/eww/scripts/clip-close"

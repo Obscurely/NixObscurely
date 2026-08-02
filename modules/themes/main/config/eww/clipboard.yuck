@@ -1,0 +1,40 @@
+;; =====================================================================
+;;  Clipboard history — searchable list over cliphist. Glacial. Reuses the launcher's .l-*
+;;  styles + focus model. Open via $mod+V (clip-toggle). Type -> fuzzy filter; Enter/click
+;;  copies (cliphist decode | wl-copy) + closes; Shift+Del removes an entry; image entries
+;;  show a thumbnail.
+;; =====================================================================
+
+(defvar cresults "[]")   ; JSON array of {id,preview,isimg,thumb,search}
+(defvar csel 0)
+
+(defwidget clipboard-root []
+  (box :class "qs-root l-root" :orientation "v" :space-evenly false :spacing 12
+    (box :class "l-search" :space-evenly false :spacing 12
+      (label :class "l-search-icon" :text "󰅍")
+      (input :class "l-input" :hexpand true
+             :onchange "bash $HOME/.config/eww/scripts/clip-oninput {}"))
+
+    (box :class "l-results" :orientation "v" :space-evenly false :spacing 2
+      (for entry in {cresults}
+        (button :class "l-row ${cresults[csel].id == entry.id ? "on" : ""}"
+                :onclick "setsid -f bash $HOME/.config/eww/scripts/clip-run ${entry.id}"
+          (box :class "l-row-in" :space-evenly false :spacing 13
+            (box :class "l-lead" :halign "center" :valign "center"
+              (image :class "l-thumb" :visible {entry.isimg && entry.thumb != ""}
+                     :path {entry.thumb} :image-width 56 :image-height 38)
+              (label :class "l-clip-icon" :visible {!(entry.isimg && entry.thumb != "")}
+                     :text {entry.isimg ? "󰋩" : "󰅍"}))
+            (label :class "l-clip" :halign "start" :hexpand true :limit-width 72 :show-truncated true
+                   :text {entry.preview}))))
+      (label :class "qs-todo" :halign "start" :visible {arraylength(cresults) == 0} :text "clipboard empty"))
+
+    (label :class "l-hint" :halign "end"
+           :text "${arraylength(cresults)}  ·  ↵ copy  ·  ⇧⌦ del  ·  ⌃⇧⌦ wipe  ·  esc")))
+
+(defwindow clipboard
+  :monitor "DP-1"
+  :stacking "overlay"
+  :focusable true
+  :geometry (geometry :x "0" :y "300px" :width "640px" :anchor "top center")
+  (clipboard-root))

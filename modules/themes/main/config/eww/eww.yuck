@@ -13,6 +13,7 @@
 (include "network.yuck")
 (include "launcher.yuck")
 (include "switcher.yuck")
+(include "clipboard.yuck")
 
 ;; ------------------------------- data --------------------------------
 (deflisten workspaces :initial "[]" `bash $HOME/.config/eww/scripts/workspaces`)

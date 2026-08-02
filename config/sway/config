@@ -34,6 +34,7 @@ output $mon_left {
     position 0 180
 }
 # 1080p side monitor OFF by default (Work default) — enable it from the quick-settings panel.
+# (The kernel's `video=HDMI-A-2:d` force is lifted post-greeter in sway/init.sh.)
 output $mon_left disable
 output $mon_main {
     mode 3840x2160@240Hz

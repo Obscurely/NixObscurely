@@ -13,4 +13,11 @@ gsettings set org.gnome.desktop.interface cursor-size 32 2>/dev/null
 gsettings set org.gnome.desktop.interface font-name 'Fira Code 15' 2>/dev/null
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' 2>/dev/null
 
+# Lift the kernel's `video=HDMI-A-2:d` DRM force now that sway owns KMS (past the greeter),
+# so the 1080p (HDMI-A-2) hotplugs normally and appears in the quick-settings panel as a
+# toggleable (still-disabled) output. Boot/greeter stay protected by the force. Needs root
+# (writes a DRM sysfs node) → scoped passwordless-sudo rule + helper live in hosts/main.
+# `-n` never prompts; harmless no-op on hosts/sessions without the rule.
+sudo -n /run/current-system/sw/bin/clear-hdmi-force 2>/dev/null || true
+
 exit 0

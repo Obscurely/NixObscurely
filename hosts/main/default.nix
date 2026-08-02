@@ -1,4 +1,19 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  config,
+  ...
+}: let
+  # Undo the `video=HDMI-A-2:d` DRM force at session start (called from config/sway/init.sh).
+  # The kernel force keeps the 1080p side panel dark through boot + the tuigreet greeter
+  # (no flashbang; greeter stays on the 4K DP-1). Once sway owns KMS we clear it so the
+  # connector hotplugs normally and the quick-settings panel can toggle it. Needs root
+  # (writes the DRM sysfs `status` node), so sway calls it via scoped passwordless sudo.
+  clearHdmiForce = pkgs.writeShellScriptBin "clear-hdmi-force" ''
+    for s in /sys/class/drm/*-HDMI-A-2/status; do
+      [ -w "$s" ] && echo detect > "$s"
+    done
+  '';
+in {
   imports = [
     ../home.nix
     ./hardware-configuration.nix
@@ -128,4 +143,20 @@
     packages = [pkgs.terminus_font];
     font = "${pkgs.terminus_font}/share/consolefonts/ter-v32n.psf.gz";
   };
+
+  # sway/init.sh runs `clear-hdmi-force` at session start to lift the boot-time DRM force.
+  # It writes a root-owned sysfs node, so grant passwordless sudo scoped to exactly that
+  # one command — the /run path is a stable, exact match for the sudoers rule.
+  environment.systemPackages = [clearHdmiForce];
+  security.sudo.extraRules = [
+    {
+      users = [config.user.name];
+      commands = [
+        {
+          command = "/run/current-system/sw/bin/clear-hdmi-force";
+          options = ["NOPASSWD"];
+        }
+      ];
+    }
+  ];
 }

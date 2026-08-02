@@ -1,0 +1,30 @@
+#!/usr/bin/env python3
+# Fuzzy-filter the cached window list (eww-windows.json, written by switcher-toggle on open).
+# Args = query. Empty -> full list. Non-empty -> fzf --filter over "app title". JSON array out.
+import json
+import os
+import subprocess
+import sys
+
+CACHE = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "eww-windows.json")
+SEP = "\x1f"
+N = 10
+
+try:
+    wins = json.load(open(CACHE))
+except Exception:
+    wins = []
+q = " ".join(sys.argv[1:]).strip()
+
+if not q:
+    print(json.dumps(wins[:N]))
+    sys.exit()
+
+lines = "".join(f"{i}{SEP}{w['search']}\n" for i, w in enumerate(wins))
+try:
+    r = subprocess.run(["fzf", "--filter", q, "--delimiter", SEP, "--nth", "2"],
+                       input=lines, capture_output=True, text=True, timeout=3)
+    idx = [int(l.split(SEP, 1)[0]) for l in r.stdout.splitlines() if l]
+except Exception:
+    idx = []
+print(json.dumps([wins[i] for i in idx[:N]]))

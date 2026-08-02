@@ -1,0 +1,52 @@
+;; =====================================================================
+;;  App launcher — Spotlight/Raycast-style eww launcher (replaces rofi). Glacial.
+;;  Open via launcher-toggle (NixOS logo left-click / keybind). Type -> fuzzy filter (fzf) ->
+;;  Enter launches the selected app; `= <expr>` = calculator. Keyboard nav via sway binds
+;;  set while open (see launcher-toggle); letters fall through to the eww input.
+;; =====================================================================
+
+(defvar lresults "[]")   ; JSON array of {name,exec,icon,generic,term}
+(defvar lsel 0)          ; selected index
+(defvar lmode "apps")    ; "apps" | "calc"
+(defvar lcalc "")        ; calc result
+
+(defwidget launcher-root []
+  (box :class "qs-root l-root" :orientation "v" :space-evenly false :spacing 12
+    ;; search field
+    (box :class "l-search" :space-evenly false :spacing 12
+      (label :class "l-search-icon" :text "󰍉")
+      (input :class "l-input" :hexpand true
+             :onchange "bash $HOME/.config/eww/scripts/launcher-oninput {}"))
+
+    ;; calculator result
+    (box :orientation "v" :space-evenly false :visible {lmode == "calc"}
+      (button :class "l-row on" :onclick "setsid -f bash $HOME/.config/eww/scripts/launcher-run"
+        (box :class "l-row-in" :space-evenly false :spacing 13
+          (label :class "l-calc-eq" :text "󰃬")
+          (label :class "l-calc-val" :halign "start" :hexpand true :text {lcalc == "" ? "…" : lcalc})
+          (label :class "l-hint" :text "↵ copy"))))
+
+    ;; app results
+    (box :class "l-results" :orientation "v" :space-evenly false :spacing 2 :visible {lmode == "apps"}
+      (for entry in {lresults}
+        (button :class "l-row ${lresults[lsel].name == entry.name ? "on" : ""}"
+                :onclick "setsid -f bash $HOME/.config/eww/scripts/launcher-run '${entry.name}'"
+          (box :class "l-row-in" :space-evenly false :spacing 13
+            (image :class "l-icon" :path {entry.icon} :image-width 30 :image-height 30 :visible {entry.icon != ""})
+            (label :class "l-icon-ph" :visible {entry.icon == ""} :text "󰀻")
+            (label :class "l-name" :halign "start" :text {entry.name})
+            (label :class "l-generic" :halign "end" :hexpand true :limit-width 24 :show-truncated false :text {entry.generic}))))
+      (label :class "qs-todo" :halign "start" :visible {arraylength(lresults) == 0} :text "no matches"))
+
+    ;; footer hint
+    (label :class "l-hint" :halign "end" :visible {lmode == "apps"}
+           :text "${arraylength(lresults)} apps  ·  ↵ launch  ·  esc")))
+
+(defwindow launcher
+  :monitor "DP-1"
+  :stacking "overlay"
+  :focusable true
+  ;; top-anchored so the search bar stays put and results grow DOWNWARD as you filter
+  ;; (center-anchor made the whole window re-center vertically on every keystroke)
+  :geometry (geometry :x "0" :y "300px" :width "560px" :anchor "top center")
+  (launcher-root))

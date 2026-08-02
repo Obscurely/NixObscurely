@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Toggle the app launcher (left-click the NixOS logo / keybind). On open: refresh the index
+# (fast if cached), seed the top results, open the focused window, and bind the nav keys in
+# sway (letters fall through to the eww input; Escape/Return/Down/Up/Tab we handle). Close
+# removes the binds (scripts/launcher-close).
+s="$HOME/.config/eww/scripts"
+
+if eww active-windows 2>/dev/null | grep -q '^launcher:'; then
+  bash "$s/launcher-close"
+else
+  # refresh the index in the BACKGROUND so opening never waits (build sync only if no cache yet).
+  [ -f "${XDG_RUNTIME_DIR:-/tmp}/eww-apps.json" ] || python3 "$s/launcher-index"
+  setsid -f python3 "$s/launcher-index" >/dev/null 2>&1
+  eww update lmode="apps" lcalc="" lsel=0 lresults="$(python3 "$s/launcher-filter")"
+  eww open launcher
+  swaymsg "bindsym Escape exec bash $s/launcher-close"      >/dev/null 2>&1
+  swaymsg "bindsym Return exec setsid -f bash $s/launcher-run" >/dev/null 2>&1
+  swaymsg "bindsym Down   exec bash $s/launcher-nav down"   >/dev/null 2>&1
+  swaymsg "bindsym Up     exec bash $s/launcher-nav up"     >/dev/null 2>&1
+  swaymsg "bindsym Tab    exec bash $s/launcher-nav down"   >/dev/null 2>&1
+fi

@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+# Build the running-window list for the eww window switcher: swaymsg -t get_tree -> leaf
+# windows {con_id, app, title, ws, icon}. Excludes the currently-focused window; orders the
+# current workspace first. Icons reuse the launcher's resolved icons (eww-apps.json), matched
+# by app_id -> app exec basename. Emits a JSON array.
+import json
+import os
+import subprocess
+
+APPS = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "eww-apps.json")
+SCRIPTS = os.path.expanduser("~/.config/eww/scripts")
+
+
+def sh(cmd):
+    try:
+        return subprocess.run(cmd, capture_output=True, text=True, timeout=3).stdout
+    except Exception:
+        return ""
+
+
+# icon map from the launcher's app cache (build it if missing), keyed by exec basename + name
+if not os.path.exists(APPS):
+    subprocess.run(["python3", os.path.join(SCRIPTS, "launcher-index")], timeout=10)
+icons = {}
+try:
+    for a in json.load(open(APPS)):
+        if not a.get("icon"):
+            continue
+        base = a["exec"].split()[0].split("/")[-1].lower() if a.get("exec") else ""
+        if base:
+            icons.setdefault(base, a["icon"])
+        icons.setdefault(a["name"].lower(), a["icon"])
+except Exception:
+    pass
+
+
+def icon_for(app):
+    a = (app or "").lower()
+    return icons.get(a) or icons.get(a.split(".")[0]) or icons.get(a.replace("-", " ")) or ""
+
+
+tree = json.loads(sh(["swaymsg", "-t", "get_tree"]) or "{}")
+wins = []
+focused_ws = None
+
+
+def walk(n, ws, wsnum):
+    global focused_ws
+    if n.get("type") == "workspace":
+        ws, wsnum = n.get("name"), n.get("num", 0)
+    kids = n.get("nodes", []) + n.get("floating_nodes", [])
+    app = n.get("app_id") or n.get("window_properties", {}).get("class")
+    if not kids and app:
+        if n.get("focused"):
+            focused_ws = wsnum
+        wins.append({"con_id": n.get("id"), "app": app, "title": n.get("name") or app,
+                     "ws": ws, "wsnum": wsnum, "focused": bool(n.get("focused")),
+                     "icon": icon_for(app)})
+    for c in kids:
+        walk(c, ws, wsnum)
+
+
+walk(tree, None, 0)
+# drop the focused window; current workspace first, then by workspace number
+wins = [w for w in wins if not w["focused"]]
+wins.sort(key=lambda w: (w["wsnum"] != focused_ws, w["wsnum"], w["title"].lower()))
+for w in wins:
+    w.pop("focused", None)
+    w["search"] = f"{w['app']} {w['title']}".lower()
+print(json.dumps(wins), flush=True)

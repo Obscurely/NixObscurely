@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# eww input onchange handler. Rejoin the query ("$*" is robust to eww splitting on spaces).
+# `= <expr>` -> calculator (bc); otherwise -> fuzzy app filter. Resets the selection to the top.
+q="$*"
+if [ "${q:0:1}" = "=" ]; then
+  res=$(printf 'scale=6; %s\n' "${q#=}" | bc 2>/dev/null | sed 's/0*$//; s/\.$//')
+  eww update lmode="calc" lcalc="${res:-…}" lresults="[]" lsel=0
+else
+  eww update lmode="apps" lcalc="" \
+    lresults="$(python3 "$HOME/.config/eww/scripts/launcher-filter" "$q")" lsel=0
+fi

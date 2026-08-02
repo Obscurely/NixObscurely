@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Focus the chosen window then close. No arg -> the selected (ssel); arg -> that con_id (row click).
+close() { bash "$HOME/.config/eww/scripts/switcher-close"; }
+id="$1"
+if [ -z "$id" ]; then
+  sel=$(eww get ssel 2>/dev/null); sel=${sel:-0}
+  id=$(eww get sresults 2>/dev/null | SEL="$sel" python3 -c '
+import sys, os, json
+d = json.load(sys.stdin); i = int(os.environ["SEL"])
+print(d[i]["con_id"] if 0 <= i < len(d) else "")')
+fi
+[ -n "$id" ] && swaymsg "[con_id=$id] focus" >/dev/null 2>&1
+close

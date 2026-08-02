@@ -1,0 +1,141 @@
+#!/usr/bin/env python3
+# Build the app index for the eww launcher: parse .desktop files -> JSON list of
+# {name, exec, icon(path), generic, search, terminal}. Icons resolved to file paths via the
+# icon theme (Papirus-Dark -> Papirus -> hicolor -> pixmaps). Cached to $XDG_RUNTIME_DIR;
+# only rebuilt when a .desktop dir is newer than the cache (so opening the launcher is instant).
+import glob
+import json
+import os
+import re
+
+HOME = os.path.expanduser("~")
+RT = os.environ.get("XDG_RUNTIME_DIR", "/tmp")
+CACHE = os.path.join(RT, "eww-apps.json")
+USER = os.environ.get("USER", "")
+
+APP_DIRS = [
+    f"{HOME}/.local/share/applications",
+    f"/etc/profiles/per-user/{USER}/share/applications",
+    "/run/current-system/sw/share/applications",
+]
+ICON_ROOTS = [
+    f"{HOME}/.local/share/icons", f"{HOME}/.icons",
+    f"/etc/profiles/per-user/{USER}/share/icons",
+    "/run/current-system/sw/share/icons",
+]
+ICON_THEMES = ["Papirus-Dark", "Papirus", "hicolor"]
+PIXMAPS = [f"/etc/profiles/per-user/{USER}/share/pixmaps", "/run/current-system/sw/share/pixmaps"]
+
+FIELD_CODES = re.compile(r"%[fFuUdDnNickvm]")
+
+
+def staleness_ok():
+    try:
+        c = os.stat(CACHE).st_mtime
+    except OSError:
+        return False
+    for d in APP_DIRS:
+        try:
+            if os.stat(d).st_mtime > c:
+                return False
+        except OSError:
+            pass
+    return True
+
+
+def build_icon_index():
+    # stem -> best path (svg preferred, then bigger size, then theme order)
+    idx = {}
+
+    def better(new, old):
+        ns = new.endswith(".svg")
+        os_ = old.endswith(".svg")
+        if ns != os_:
+            return ns
+        def size(p):
+            m = re.search(r"/(\d+)x\d+/", p)
+            return int(m.group(1)) if m else (512 if "scalable" in p else 0)
+        return size(new) > size(old)
+
+    for root in ICON_ROOTS:
+        for theme in ICON_THEMES:
+            # only <theme>/<size>/apps/ (one level) — NOT recursive; walking all of Papirus is ~5s
+            for path in glob.glob(f"{root}/{theme}/*/apps/*.svg") + \
+                        glob.glob(f"{root}/{theme}/*/apps/*.png"):
+                stem = os.path.splitext(os.path.basename(path))[0]
+                if stem not in idx or better(path, idx[stem]):
+                    idx[stem] = path
+    for pm in PIXMAPS:
+        for path in glob.glob(f"{pm}/*.png") + glob.glob(f"{pm}/*.svg"):
+            stem = os.path.splitext(os.path.basename(path))[0]
+            idx.setdefault(stem, path)
+    return idx
+
+
+def parse(path):
+    e = {}
+    in_entry = False
+    try:
+        for line in open(path, encoding="utf-8", errors="ignore"):
+            line = line.rstrip("\n")
+            if line.startswith("["):
+                if in_entry:
+                    break
+                in_entry = line == "[Desktop Entry]"
+                continue
+            if in_entry and "=" in line:
+                k, _, v = line.partition("=")
+                e[k.strip()] = v.strip()
+    except OSError:
+        return None
+    if e.get("Type") != "Application":
+        return None
+    if e.get("NoDisplay", "").lower() == "true" or e.get("Hidden", "").lower() == "true":
+        return None
+    name = e.get("Name", "")
+    exc = FIELD_CODES.sub("", e.get("Exec", "")).strip()
+    if not name or not exc:
+        return None
+    return {
+        "name": name, "exec": exc, "icon_name": e.get("Icon", ""),
+        "generic": e.get("GenericName", "") or e.get("Comment", ""),
+        "keywords": e.get("Keywords", "").replace(";", " "),
+        "categories": e.get("Categories", "").replace(";", " "),
+        "terminal": e.get("Terminal", "").lower() == "true",
+    }
+
+
+def resolve_icon(name, iconidx):
+    if not name:
+        return ""
+    if name.startswith("/"):
+        return name if os.path.exists(name) else ""
+    return iconidx.get(name, "")
+
+
+def main():
+    if staleness_ok():
+        return  # cache is fresh
+    iconidx = build_icon_index()
+    seen, apps = set(), []
+    for d in APP_DIRS:
+        for path in glob.glob(f"{d}/*.desktop"):
+            appid = os.path.basename(path)
+            if appid in seen:
+                continue
+            seen.add(appid)
+            a = parse(path)
+            if not a:
+                continue
+            a["icon"] = resolve_icon(a.pop("icon_name"), iconidx)
+            a["search"] = " ".join((a["name"], a["generic"], a["keywords"], a["categories"])).lower()
+            apps.append(a)
+    apps.sort(key=lambda a: a["name"].lower())
+    tmp = CACHE + ".tmp"
+    with open(tmp, "w") as f:
+        json.dump(apps, f)
+    os.replace(tmp, CACHE)
+
+
+if __name__ == "__main__":
+    main()

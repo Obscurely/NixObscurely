@@ -1,0 +1,37 @@
+;; =====================================================================
+;;  Window switcher — searchable, list-style alt-tab widget. Glacial. Reuses the launcher's
+;;  .l-* styles + focus model (sway binds while open). Open via $mod+F12 (switcher-toggle).
+;;  Type -> fuzzy filter (app+title); Enter/click focuses the window (swaymsg [con_id] focus).
+;; =====================================================================
+
+(defvar sresults "[]")   ; JSON array of {con_id,app,title,ws,icon,search}
+(defvar ssel 0)
+
+(defwidget switcher-root []
+  (box :class "qs-root l-root" :orientation "v" :space-evenly false :spacing 12
+    (box :class "l-search" :space-evenly false :spacing 12
+      (label :class "l-search-icon" :text "󰍉")
+      (input :class "l-input" :hexpand true
+             :onchange "bash $HOME/.config/eww/scripts/switcher-oninput {}"))
+
+    (box :class "l-results" :orientation "v" :space-evenly false :spacing 2
+      (for entry in {sresults}
+        (button :class "l-row ${sresults[ssel].con_id == entry.con_id ? "on" : ""}"
+                :onclick "setsid -f bash $HOME/.config/eww/scripts/switcher-run ${entry.con_id}"
+          (box :class "l-row-in" :space-evenly false :spacing 13
+            (image :class "l-icon" :path {entry.icon} :image-width 28 :image-height 28 :visible {entry.icon != ""})
+            (label :class "l-icon-ph" :visible {entry.icon == ""} :text "󰀻")
+            (label :class "l-name" :halign "start" :text {entry.app})
+            (label :class "l-title" :halign "start" :hexpand true :limit-width 44 :show-truncated true :text {entry.title})
+            (label :class "l-ws" :text {entry.ws}))))
+      (label :class "qs-todo" :halign "start" :visible {arraylength(sresults) == 0} :text "no other windows"))
+
+    (label :class "l-hint" :halign "end"
+           :text "${arraylength(sresults)} windows  ·  ↵ focus  ·  esc")))
+
+(defwindow switcher
+  :monitor "DP-1"
+  :stacking "overlay"
+  :focusable true
+  :geometry (geometry :x "0" :y "300px" :width "620px" :anchor "top center")
+  (switcher-root))

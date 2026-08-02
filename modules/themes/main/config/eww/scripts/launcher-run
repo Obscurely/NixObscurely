@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# Launch the chosen launcher entry, then close. No args -> the selected (lsel) app (keyboard
+# Enter). With args (a name) -> that app (mouse click on a row). Calc mode -> copy the result.
+# Bumps frecency (~/.cache/eww/launch-freq.json, persists across reboots).
+close() { bash "$HOME/.config/eww/scripts/launcher-close"; }
+
+if [ "$(eww get lmode 2>/dev/null)" = "calc" ]; then
+  printf '%s' "$(eww get lcalc 2>/dev/null)" | wl-copy 2>/dev/null
+  close; exit 0
+fi
+
+name="$*"
+results=$(eww get lresults 2>/dev/null)
+sel=$(eww get lsel 2>/dev/null); sel=${sel:-0}
+
+# resolve name<TAB>term<TAB>exec for the target (by name if given, else the lsel index)
+IFS=$'\t' read -r appname term appexec < <(printf '%s' "$results" | SEL="$sel" python3 -c '
+import sys, os, json
+d = json.load(sys.stdin)
+name = " ".join(sys.argv[1:])
+a = next((x for x in d if x["name"] == name), None) if name else \
+    (d[int(os.environ["SEL"])] if 0 <= int(os.environ["SEL"]) < len(d) else None)
+if a:
+    print(a["name"] + "\t" + ("1" if a.get("term") else "0") + "\t" + a["exec"])
+' "$name")
+
+[ -z "$appexec" ] && { close; exit 0; }
+
+# frecency bump
+APP="$appname" python3 -c '
+import json, os
+p = os.path.expanduser("~/.cache/eww/launch-freq.json")
+os.makedirs(os.path.dirname(p), exist_ok=True)
+try: d = json.load(open(p))
+except Exception: d = {}
+n = os.environ["APP"]; d[n] = d.get(n, 0) + 1
+json.dump(d, open(p, "w"))
+'
+
+close
+if [ "$term" = "1" ]; then
+  setsid -f alacritty -e sh -c "$appexec" >/dev/null 2>&1
+else
+  setsid -f sh -c "$appexec" >/dev/null 2>&1
+fi

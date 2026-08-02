@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# switcher input onchange: fuzzy-filter the window list (switcher-filter handles empty=full).
+eww update sresults="$(python3 "$HOME/.config/eww/scripts/switcher-filter" "$*")" ssel=0

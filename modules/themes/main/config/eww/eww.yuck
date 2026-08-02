@@ -11,6 +11,8 @@
 (include "datetime.yuck")
 (include "sysmon.yuck")
 (include "network.yuck")
+(include "launcher.yuck")
+(include "switcher.yuck")
 
 ;; ------------------------------- data --------------------------------
 (deflisten workspaces :initial "[]" `bash $HOME/.config/eww/scripts/workspaces`)
@@ -93,7 +95,7 @@
       (label :class "s-val"  :text {clock_date ? datestr : clock}))))
 
 (defwidget launcher []
-  (button :class "mod iconbtn launcher" :onclick "$DOTFILES_BIN/rofi/launcher &"
+  (button :class "mod iconbtn launcher" :onclick "setsid -f bash $HOME/.config/eww/scripts/launcher-toggle"
     (label :text "󱄅")))
 
 (defwidget power []

@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+# Fuzzy-filter the app index for the eww launcher. Args = the query (rejoined).
+# Empty query -> frecency-sorted top N. Non-empty -> fzf --filter (fuzzy rank) over
+# name+generic+keywords, blended with frecency. Emits a JSON array of the top N results.
+import json
+import os
+import subprocess
+import sys
+
+HOME = os.path.expanduser("~")
+CACHE = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "eww-apps.json")
+FREQ = os.path.join(HOME, ".cache", "eww", "launch-freq.json")  # persists across reboots
+SEP = "\x1f"
+N = 8
+
+
+def load(path, default):
+    try:
+        return json.load(open(path))
+    except Exception:
+        return default
+
+
+def out(apps):
+    slim = [{"name": a["name"], "exec": a["exec"], "icon": a.get("icon", ""),
+             "generic": a.get("generic", ""), "term": a.get("terminal", False)} for a in apps[:N]]
+    sys.stdout.write(json.dumps(slim))
+
+
+apps = load(CACHE, [])
+freq = load(FREQ, {})
+query = " ".join(sys.argv[1:]).strip()
+
+
+def frec(a):
+    return freq.get(a["name"], 0)
+
+
+if not query:
+    out(sorted(apps, key=lambda a: (-frec(a), a["name"].lower())))
+    sys.exit()
+
+# feed "idx<US>searchtext" to fzf, match only the searchtext field, keep the index
+lines = "".join(f"{i}{SEP}{a['search']}\n" for i, a in enumerate(apps))
+try:
+    r = subprocess.run(["fzf", "--filter", query, "--delimiter", SEP, "--nth", "2"],
+                       input=lines, capture_output=True, text=True, timeout=3)
+    ranked = [int(l.split(SEP, 1)[0]) for l in r.stdout.splitlines() if l]
+except Exception:
+    ranked = []
+
+# blend: fzf rank primary, frecency a mild boost (used-often apps rise a few spots)
+scored = sorted(((pos - min(frec(apps[i]), 4), i) for pos, i in enumerate(ranked)),
+                key=lambda t: t[0])
+out([apps[i] for _, i in scored])

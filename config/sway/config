@@ -184,9 +184,10 @@ bindsym $mod+F10 exec $XDG_CONFIG_HOME/sway/vrr-toggle.sh
 ## Quick Settings panel (eww) — right-edge slide-out (displays/audio/system/modes)
 bindsym $mod+comma exec bash $XDG_CONFIG_HOME/eww/scripts/qs-toggle
 
-## apps (rofi scripts live in $DOTFILES_BIN/rofi)
-bindsym $mod+F12 exec $DOTFILES_BIN/rofi/launcher
-bindsym $mod+F11 exec $DOTFILES_BIN/rofi/quick
+## apps
+bindsym $mod+F11 exec setsid -f bash $HOME/.config/eww/scripts/launcher-toggle   # single-tap launcher thumb -> eww app launcher
+bindsym $mod+F12 exec setsid -f bash $HOME/.config/eww/scripts/switcher-toggle   # double-tap launcher thumb -> window switcher
+# clipboard history -> $mod+v — TODO when built
 bindsym $alt+Tab exec $DOTFILES_BIN/rofi/switcher
 bindsym $mod+e exec thunar
 

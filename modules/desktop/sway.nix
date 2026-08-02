@@ -143,8 +143,8 @@ in {
     (mkIf cfg.bar.enable {
       # eww "glacial island" bar; config + scripts installed by modules/themes/main.
       # Runtime deps are already in user.packages above: jq, playerctl, swaymsg (sway),
-      # and pactl (from the system PipeWire/Pulse).
-      user.packages = [pkgs.eww];
+      # and pactl (from the system PipeWire/Pulse). cava feeds the media-widget visualizer.
+      user.packages = [pkgs.eww pkgs.cava];
     })
 
     ##########################################################################

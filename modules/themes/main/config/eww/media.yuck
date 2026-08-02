@@ -8,6 +8,11 @@
   :initial '{"target":"","player":"","status":"Stopped","title":"","artist":"","album":"","art":"","pos":0,"len":0,"posStr":"0:00","lenStr":"0:00","loop":"None","loopOk":false,"shuffle":"Off","shuffleOk":false,"sources":[]}'
   `python3 $HOME/.config/eww/scripts/media`)
 
+;; visualizer feed — cava spectrum via the eww-cava fifo (cava is started/stopped by
+;; media-toggle, only while the popup is open). Lazy: the reader starts on media-open.
+(deflisten viz :initial "[0,0,0,0,0,0,0,0,0,0,0,0]"
+  `python3 $HOME/.config/eww/scripts/visualizer`)
+
 ;; ---------- popup body ----------
 (defwidget media-root []
   (box :class "qs-root m-root" :orientation "v" :space-evenly false :spacing 14
@@ -45,6 +50,11 @@
       (button :class "m-btn ${media.shuffle == "On" ? "on" : ""}" :visible {media.shuffleOk}
               :onclick "setsid -f bash $HOME/.config/eww/scripts/mpris shuffle ${media.shuffle == "On" ? "Off" : "On"}"
         (label :text "󰒟")))
+
+    ;; visualizer — mirrored cava spectrum (bass centered, treble to the edges); +2px floor
+    (box :class "m-viz" :space-evenly false :spacing 2 :valign "center"
+      (for h in {jq(viz, "reverse + . | map(.+2)")}
+        (box :class "m-viz-bar" :valign "end" :hexpand true :style "min-height: ${h}px")))
 
     ;; sources — click to pin (click the pinned one to un-pin -> back to default)
     (qs-section :title "SOURCES"

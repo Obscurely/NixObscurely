@@ -232,6 +232,14 @@ scale.m-seek slider    { background-color: $text; border-radius: 999px; min-widt
 .m-src-app   { color: $text; }
 .m-src-title { color: $text2; }
 
+// visualizer strip — mirrored cava spectrum; bars grow up from a baseline, brighter = louder
+.m-viz { min-height: 30px; padding: 3px 2px 0 2px; }
+.m-viz-bar {
+  min-width: 3px;
+  border-radius: 3px 3px 0 0;                                  // rounded tops
+  background-image: linear-gradient(to top, $occupied, $accent-br);   // base $occupied -> tip $accent-br
+}
+
 // =====================================================================
 //  Date/Time popup (glacial)
 // =====================================================================

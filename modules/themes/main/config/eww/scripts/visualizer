@@ -1,0 +1,38 @@
+#!/usr/bin/env python3
+# Media-widget visualizer feed (see docs/.../media-visualizer-design.md).
+# Reads the eww-cava fifo — raw ascii spectrum frames from cava (';'-delimited, one per
+# line) — and emits ONE compact JSON array of bar heights per frame for eww's `viz`
+# deflisten. cava is started/stopped by scripts/media-toggle (only while the popup is
+# open); when it isn't writing, the read simply blocks (near-zero cost).
+import os, sys, json
+
+BARS = 12  # keep in sync with cava.conf [general] bars
+FIFO = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "eww-cava")
+
+try:
+    os.mkfifo(FIFO)
+except FileExistsError:
+    pass
+
+def emit(vals):
+    sys.stdout.write(json.dumps(vals) + "\n")
+    sys.stdout.flush()
+
+# floor frame so the strip isn't empty before cava first writes
+emit([0] * BARS)
+
+# O_RDWR keeps a write end open on our side, so read() never sees EOF when cava dies —
+# no reopen loop, and it blocks cheaply between frames / while the popup is closed.
+fd = os.open(FIFO, os.O_RDWR)
+with os.fdopen(fd, "r", buffering=1) as f:
+    while True:
+        line = f.readline()
+        if not line:
+            continue
+        line = line.strip().rstrip(";")
+        if not line:
+            continue
+        try:
+            emit([int(x) for x in line.split(";")])
+        except ValueError:
+            continue

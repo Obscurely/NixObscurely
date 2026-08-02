@@ -1,12 +1,47 @@
 #!/usr/bin/env bash
 # Toggle the media popup (right-click the bar's now-playing module). Escape closes it
 # while open; the binding is removed on close. Instant open/close, :focusable false.
+#
+# Also drives the cava visualizer: cava runs ONLY while the popup is open (started here,
+# killed on close) and writes raw frames to the eww-cava fifo, which scripts/visualizer
+# (the `viz` deflisten) reads. Source = the monitor of the sink that's actually playing.
 self="$HOME/.config/eww/scripts/media-toggle"
+cfg="$HOME/.config/eww"
+fifo="$XDG_RUNTIME_DIR/eww-cava"
+rtconf="$XDG_RUNTIME_DIR/eww-cava.conf"
+pidfile="$XDG_RUNTIME_DIR/eww-cava.pid"
+
+stop_cava() {
+  [ -f "$pidfile" ] && kill "$(cat "$pidfile")" 2>/dev/null
+  rm -f "$pidfile"
+}
+
+start_cava() {
+  command -v cava >/dev/null || return 0        # no cava installed -> skip silently
+  stop_cava                                     # idempotent: never stack instances
+  mkfifo "$fifo" 2>/dev/null                    # ensure it's a fifo before cava opens it
+  # source = a MONITOR that carries the audio you actually hear. Prefer EasyEffects' sink:
+  # all media routes through it and its monitor is readable, whereas the Komplete pro-output
+  # monitor reads silence. Else the current stream's sink, else the default sink.
+  local sink si
+  if pactl list short sinks 2>/dev/null | awk '{print $2}' | grep -qx easyeffects_sink; then
+    sink=easyeffects_sink
+  else
+    si=$(pactl list short sink-inputs 2>/dev/null | awk 'NR==1{print $2}')
+    [ -n "$si" ] && sink=$(pactl list short sinks 2>/dev/null | awk -v i="$si" '$1==i{print $2}')
+    [ -z "$sink" ] && sink=$(pactl get-default-sink 2>/dev/null)
+  fi
+  sed "s|^source = .*|source = ${sink}.monitor|" "$cfg/cava.conf" > "$rtconf"
+  cava -p "$rtconf" > "$fifo" 2>/dev/null &
+  echo $! > "$pidfile"
+}
 
 if eww active-windows 2>/dev/null | grep -q '^media:'; then
   swaymsg unbindsym Escape 2>/dev/null
+  stop_cava
   eww close media
 else
   eww open media
   swaymsg "bindsym Escape exec bash $self" 2>/dev/null
+  start_cava
 fi

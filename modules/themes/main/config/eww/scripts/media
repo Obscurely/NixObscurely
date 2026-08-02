@@ -4,38 +4,39 @@
 # loop/shuffle, plus a summary of every source. Runs only while the popup is open (eww
 # starts the poll lazily with the window).
 #
+# CHEAP by design: the whole poll fires every second while the visualizer animates in the
+# same window, so a subprocess burst here shows up as dropped viz frames. The target's
+# fields come from ONE `playerctl --format` call (not 8), file:// art is resolved in-process
+# (no `media-art` spawn), and each source is one call — ~4 spawns/poll instead of ~15.
+#
 # `target` is the resolved player INSTANCE — the seek slider targets it directly
-# (`playerctl -p <target> position`) to avoid the wrapper's per-tick `playerctl -l`
-# check, whose backpressure would stick the slider (learned from the audio app-slider).
+# (`playerctl -p <target> position`) to avoid the wrapper's per-tick `playerctl -l` check.
 import json
 import os
+import shutil
 import subprocess
 
 SEL = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "mpris-selected")
 ART = os.path.expanduser("~/.config/eww/scripts/media-art")
+PCTL = shutil.which("playerctl") or "playerctl"   # resolve once — skip the PATH walk per call
+SEP = "\x1f"  # unit separator — safe field delimiter (won't appear in titles)
+FIELDS = ["status", "title", "artist", "album", "mpris:artUrl", "position", "mpris:length"]
+FMT = SEP.join("{{" + f + "}}" for f in FIELDS)
+FMT_DEF = "{{playerInstance}}" + SEP + FMT  # default player: also emit its instance name
 
 
 def run(cmd):
     try:
-        return subprocess.run(cmd, capture_output=True, text=True, timeout=2).stdout.strip()
+        return subprocess.run(cmd, capture_output=True, text=True, timeout=2).stdout
     except Exception:
         return ""
 
 
-def pctl(player, *args):  # player="" -> playerctl default
-    return run(["playerctl"] + (["-p", player] if player else []) + list(args))
-
-
-def meta(player, field):
-    return pctl(player, "metadata", field)
-
-
-def pctl_ok(player, *args):
-    # returns (value, supported) — many players (e.g. Chromium/web media) don't implement
+def run_ok(cmd):
+    # returns (value, supported) — many players (Chromium/web media) don't implement
     # loop/shuffle over MPRIS ("No player could handle this command")
     try:
-        r = subprocess.run(["playerctl"] + (["-p", player] if player else []) + list(args),
-                           capture_output=True, text=True, timeout=2)
+        r = subprocess.run(cmd, capture_output=True, text=True, timeout=2)
         if r.returncode == 0 and r.stdout.strip():
             return r.stdout.strip(), True
         return "", False
@@ -43,56 +44,81 @@ def pctl_ok(player, *args):
         return "", False
 
 
+def toint(s):
+    try:
+        return int(s)
+    except (ValueError, TypeError):
+        return 0
+
+
 def mmss(sec):  # seconds -> "m:ss" (eww has no floor(), so format here)
     sec = max(0, int(sec))
     return f"{sec // 60}:{sec % 60:02d}"
 
 
-players = [p for p in run(["playerctl", "-l"]).splitlines() if p]
+def resolve_art(url):
+    if not url:
+        return ""
+    if url.startswith("file://"):
+        return url[len("file://"):]          # browsers: local temp file, no subprocess
+    if url.startswith(("http://", "https://")):
+        return run([ART, url]).strip()        # remote (Spotify etc.): cache via media-art
+    return ""
+
+
+players = [p.strip() for p in run([PCTL, "-l"]).splitlines() if p.strip()]
+
 try:
     with open(SEL) as f:
         sel = f.read().strip()
 except Exception:
     sel = ""
 
+# resolve the target instance AND all its now-playing fields in one playerctl call
+target = status = title = artist = album = arturl = ""
+pos = length = 0
 if sel and sel in players:
     target = sel
+    parts = run([PCTL, "-p", target, "metadata", "--format", FMT]).rstrip("\n").split(SEP)
+    if len(parts) >= 7:
+        status, title, artist, album, arturl = parts[:5]
+        pos, length = round(toint(parts[5]) / 1e6), round(toint(parts[6]) / 1e6)
 elif players:
-    # playerctl's own default pick, as a concrete instance name
-    target = run(["playerctl", "metadata", "--format", "{{playerInstance}}"]) or players[0]
-else:
-    target = ""
+    parts = run([PCTL, "metadata", "--format", FMT_DEF]).rstrip("\n").split(SEP)
+    if len(parts) >= 8:
+        target, status, title, artist, album, arturl = parts[:6]
+        pos, length = round(toint(parts[6]) / 1e6), round(toint(parts[7]) / 1e6)
+    if not target:
+        target = players[0]
 
-arturl = meta(target, "mpris:artUrl") if target else ""
-try:
-    pos = round(float(pctl(target, "position") or 0)) if target else 0
-except ValueError:
-    pos = 0
-try:
-    length = round(int(meta(target, "mpris:length") or 0) / 1e6) if target else 0
-except ValueError:
-    length = 0
+loopv = run_ok([PCTL, "-p", target, "loop"]) if target else ("", False)
+shufv = run_ok([PCTL, "-p", target, "shuffle"]) if target else ("", False)
 
-sources = [{
-    "name": p,
-    "app": p.split(".")[0],
-    "title": meta(p, "title"),
-    "status": pctl(p, "status") or "Stopped",
-    "active": p == target,   # currently controlled (pinned OR default)
-    "pinned": p == sel,      # explicitly pinned
-} for p in players]
-
-loopv = pctl_ok(target, "loop") if target else ("", False)
-shufv = pctl_ok(target, "shuffle") if target else ("", False)
+sources = []
+for p in players:
+    if p == target:
+        pst, ptitle = (status or "Stopped"), title      # reuse the target batch (no extra spawn)
+    else:
+        pp = run([PCTL, "-p", p, "metadata", "--format", "{{status}}" + SEP + "{{title}}"]).rstrip("\n").split(SEP)
+        pst = (pp[0] if pp and pp[0] else "Stopped")
+        ptitle = pp[1] if len(pp) > 1 else ""
+    sources.append({
+        "name": p,
+        "app": p.split(".")[0],
+        "title": ptitle,
+        "status": pst,
+        "active": p == target,   # currently controlled (pinned OR default)
+        "pinned": p == sel,      # explicitly pinned
+    })
 
 print(json.dumps({
     "target": target,
     "player": target.split(".")[0] if target else "",
-    "status": (pctl(target, "status") if target else "") or "Stopped",
-    "title": meta(target, "title") if target else "",
-    "artist": meta(target, "artist") if target else "",
-    "album": meta(target, "xesam:album") if target else "",
-    "art": run([ART, arturl]) if arturl else "",
+    "status": (status or "Stopped") if target else "Stopped",
+    "title": title if target else "",
+    "artist": artist if target else "",
+    "album": album if target else "",
+    "art": resolve_art(arturl) if target else "",
     "pos": pos,
     "len": length,
     "posStr": mmss(pos),

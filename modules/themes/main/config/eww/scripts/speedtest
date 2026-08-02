@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# On-demand speed test for the network popup. Writes state to eww-speedtest.json, which the
+# widget's `speedtest` defpoll reads (idle -> running -> done/error). Spawned detached (setsid)
+# by the run button so it never blocks eww. ~20s, saturates the link while running.
+f="${XDG_RUNTIME_DIR:-/tmp}/eww-speedtest.json"
+printf '{"state":"running"}' > "$f"
+out=$(speedtest-cli --json 2>/dev/null)
+if [ -n "$out" ]; then
+  printf '%s' "$out" | python3 -c '
+import sys, json
+try:
+    d = json.load(sys.stdin)
+    print(json.dumps({"state": "done",
+                      "down": round(d["download"] / 1e6, 1),
+                      "up":   round(d["upload"] / 1e6, 1),
+                      "ping": round(d["ping"])}))
+except Exception:
+    print("{\"state\":\"error\"}")' > "$f"
+else
+  printf '{"state":"error"}' > "$f"
+fi

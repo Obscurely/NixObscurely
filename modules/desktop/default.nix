@@ -96,9 +96,6 @@ in {
       };
       programs.htop.enable = true;
 
-      # Tailscale
-      services.tailscale.enable = true;
-
       # Try really hard to get QT to respect my GTK theme.
       env.GTK_DATA_PREFIX = ["${config.system.path}"];
 

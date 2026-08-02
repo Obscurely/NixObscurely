@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Left-click the bar network module -> copy the local IPv4 to the clipboard + notify.
+ip=$(ip -4 route get 1.1.1.1 2>/dev/null | grep -oP 'src \K[\d.]+')
+[ -z "$ip" ] && ip=$(ip -4 -o addr show scope global 2>/dev/null | awk '{print $4}' | cut -d/ -f1 | head -1)
+if [ -n "$ip" ]; then
+  printf '%s' "$ip" | wl-copy
+  notify-send -t 2000 -a Network "Copied local IP" "$ip"
+fi

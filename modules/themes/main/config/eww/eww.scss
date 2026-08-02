@@ -40,6 +40,7 @@ $warn:       #E7B872;                  // urgent / warning ONLY
 .media-inner { padding: 1px 15px; }   // media is now an eventbox too (left=play/pause, right=popup)
 .clock-inner { padding: 1px 15px; }   // clock is an eventbox too (left=toggle time/date, right=popup)
 .sensors-inner { padding: 1px 10px 1px 15px; }   // sensors is an eventbox too (left=btop, right=sysmon popup); 10px right per below
+.net-inner { padding: 1px 15px; }   // net is an eventbox too (left=copy IP, right=network popup)
 .sensors, .ws, .audio, .net, .clock, .media {
   background-color: $pill;
 }
@@ -300,3 +301,19 @@ scale.sm-bar slider    { background-color: transparent; min-width: 0; min-height
 .sm-disk-use      { color: $text2; font-size: 13px; min-width: 96px; }
 .sm-disk-pct      { color: $text2; font-size: 13px; min-width: 40px; }
 .sm-disk-pct.warn { color: $warn; }
+
+// =====================================================================
+//  Network popup (glacial — reuses the qs-* / sm-* tiers)
+// =====================================================================
+.n-root .qs-hdr { margin-bottom: 2px; }   // more gap between LOCAL/PUBLIC/TRAFFIC headers and their rows (counters the global -3px)
+.n-conn      { color: $accent; font-size: 14px; }
+.n-conn.warn { color: $warn; }
+.n-key       { color: $text2; font-size: 13px; min-width: 68px; }
+.n-val       { color: $text;  font-size: 13px; }
+.n-thr       { color: $text;  font-size: 15px; }
+.n-run {
+  background-color: rgba(140, 198, 242, 0.20);
+  color: $accent; border-radius: 8px; padding: 3px 13px;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+.n-run:hover { background-color: $pill-hover; color: $accent-br; }

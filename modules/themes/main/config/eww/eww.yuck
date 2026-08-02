@@ -10,6 +10,7 @@
 (include "media.yuck")
 (include "datetime.yuck")
 (include "sysmon.yuck")
+(include "network.yuck")
 
 ;; ------------------------------- data --------------------------------
 (deflisten workspaces :initial "[]" `bash $HOME/.config/eww/scripts/workspaces`)
@@ -68,17 +69,20 @@
       (label :class "s-val" :text {volume < 0 ? "muted" : "${volume}%"}))))
 
 (defwidget net []
-  (box :class "mod net" :space-evenly false :spacing 12
-    (box :visible {network.connected} :space-evenly false :spacing 12
-      (box :class "netgrp" :space-evenly false :spacing 5
-        (label :class "s-icon" :text "↓")
-        (label :class "s-val netspd" :text {network.down}))
-      (box :class "netgrp" :space-evenly false :spacing 5
-        (label :class "s-icon" :text "↑")
-        (label :class "s-val netspd" :text {network.up})))
-    (box :visible {network.connected == false} :space-evenly false :spacing 8
-      (label :class "s-icon warn" :text "󰒎")
-      (label :class "s-val" :text "off"))))
+  (eventbox :class "mod net"
+            :onclick "setsid -f bash $HOME/.config/eww/scripts/netip-copy"
+            :onrightclick "setsid -f bash $HOME/.config/eww/scripts/net-toggle"
+    (box :class "net-inner" :space-evenly false :spacing 12
+      (box :visible {network.connected} :space-evenly false :spacing 12
+        (box :class "netgrp" :space-evenly false :spacing 5
+          (label :class "s-icon" :text "↓")
+          (label :class "s-val netspd" :text {network.down}))
+        (box :class "netgrp" :space-evenly false :spacing 5
+          (label :class "s-icon" :text "↑")
+          (label :class "s-val netspd" :text {network.up})))
+      (box :visible {network.connected == false} :space-evenly false :spacing 8
+        (label :class "s-icon warn" :text "󰒎")
+        (label :class "s-val" :text "off")))))
 
 (defwidget clockw []
   (eventbox :class "mod clock"

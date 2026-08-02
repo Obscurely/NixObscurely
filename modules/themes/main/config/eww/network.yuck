@@ -1,0 +1,80 @@
+;; =====================================================================
+;;  Network — popup under the bar's network module (right-click). Glacial.
+;;  Left-click the module copies the local IPv4 (scripts/netip-copy). No keybind.
+;; =====================================================================
+
+(defpoll netinfo :interval "2s"
+  :initial '{"connected":false,"iface":"","type":"","name":"","speed":"","ip":"","cidr":"","gw":"","dns":"","mac":"","pub":{"ok":false,"ip":"","isp":"","city":""},"down":"","up":"","totalDown":"","totalUp":"","pingGw":"","pingNet":""}'
+  `python3 $HOME/.config/eww/scripts/netinfo`)
+
+;; on-demand speed test result (written by scripts/speedtest)
+(defpoll speedtest :interval "2s" :initial '{"state":"idle"}'
+  `cat $XDG_RUNTIME_DIR/eww-speedtest.json 2>/dev/null || echo '{"state":"idle"}'`)
+
+;; label : value row
+(defwidget n-row [label val]
+  (box :class "n-row" :space-evenly false :spacing 10
+    (label :class "n-key" :halign "start" :text label)
+    (label :class "n-val" :halign "end" :hexpand true :text val)))
+
+(defwidget network-root []
+  (box :class "qs-root n-root" :orientation "v" :space-evenly false :spacing 13
+    (box :class "qs-titlebar" :space-evenly false
+      (label :class "qs-title" :halign "start" :hexpand true :text "Network"))
+
+    ;; CONNECTION
+    (box :class "qs-section" :orientation "v" :space-evenly false :spacing 5
+      (box :space-evenly false
+        (label :class "qs-hdr" :halign "start" :hexpand true :text "CONNECTION")
+        (label :class "n-conn ${netinfo.connected ? "" : "warn"}" :halign "end"
+               :text {netinfo.connected ? "● " + netinfo.name : "● disconnected"}))
+      (label :class "sm-detail" :halign "start" :visible {netinfo.connected}
+             :text "${netinfo.iface}  ·  ${netinfo.type}  ·  ${netinfo.speed}"))
+
+    ;; LOCAL
+    (box :class "qs-section" :orientation "v" :space-evenly false :spacing 5
+      (label :class "qs-hdr" :halign "start" :text "LOCAL")
+      (n-row :label "IP"      :val {netinfo.cidr})
+      (n-row :label "gateway" :val {netinfo.gw})
+      (n-row :label "DNS"     :val {netinfo.dns})
+      (n-row :label "MAC"     :val {netinfo.mac}))
+
+    ;; PUBLIC
+    (box :class "qs-section" :orientation "v" :space-evenly false :spacing 5
+      (label :class "qs-hdr" :halign "start" :text "PUBLIC")
+      (n-row :label "IP" :val {netinfo.pub.ok ? netinfo.pub.ip : "unavailable"})
+      (box :orientation "v" :space-evenly false :spacing 5 :visible {netinfo.pub.ok}
+        (n-row :label "ISP"      :val {netinfo.pub.isp})
+        (n-row :label "location" :val {netinfo.pub.city})))
+
+    ;; TRAFFIC
+    (box :class "qs-section" :orientation "v" :space-evenly false :spacing 5
+      (label :class "qs-hdr" :halign "start" :text "TRAFFIC")
+      (box :space-evenly false :spacing 20 :halign "start"
+        (label :class "n-thr" :text "↓ ${netinfo.down}")
+        (label :class "n-thr" :text "↑ ${netinfo.up}"))
+      (n-row :label "total" :val "↓ ${netinfo.totalDown}   ↑ ${netinfo.totalUp}")
+      (n-row :label "ping"  :val "gw ${netinfo.pingGw}  ·  ${netinfo.pingNet}"))
+
+    ;; SPEED TEST
+    (box :class "qs-section" :orientation "v" :space-evenly false :spacing 7
+      (box :space-evenly false
+        (label :class "qs-hdr" :halign "start" :hexpand true :text "SPEED TEST")
+        (button :class "n-run" :visible {speedtest.state != "running"}
+                :onclick "setsid -f bash $HOME/.config/eww/scripts/speedtest"
+          (label :text {speedtest.state == "done" ? "󰑐 again" : "󰓅 run"})))
+      (label :class "sm-detail" :halign "start" :visible {speedtest.state == "running"} :text "testing…  (~20s)")
+      (label :class "n-conn warn" :halign "start" :visible {speedtest.state == "error"} :text "test failed")
+      (box :space-evenly false :spacing 18 :halign "start" :visible {speedtest.state == "done"}
+        (label :class "n-thr" :text "↓ ${speedtest.down} Mbps")
+        (label :class "n-thr" :text "↑ ${speedtest.up} Mbps")
+        (label :class "sm-detail" :valign "center" :text "${speedtest.ping} ms")))))
+
+;; ---------- window (drops under the bar's right-section network module) ----------
+(defwindow network
+  :monitor "DP-1"
+  :stacking "overlay"
+  :exclusive false
+  :focusable false
+  :geometry (geometry :x "60px" :y "0" :width "380px" :anchor "top right")
+  (network-root))

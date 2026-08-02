@@ -1,0 +1,151 @@
+#!/usr/bin/env python3
+# Network-popup feed (right-click the bar's network module). defpoll, 2s, lazy with the window.
+# Emits connection + local addressing + public IP (cached) + throughput/totals + latency. Sudo-free.
+import glob
+import json
+import os
+import re
+import subprocess
+import time
+
+RT = os.environ.get("XDG_RUNTIME_DIR", "/tmp")
+PUBCACHE = os.path.join(RT, "eww-netpub.json")
+PUB_TTL = 900  # 15 min
+
+
+def sh(cmd, timeout=3):
+    try:
+        return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout).stdout.strip()
+    except Exception:
+        return ""
+
+
+def human(n):
+    n = float(n)
+    for u in ("B", "K", "M", "G", "T"):
+        if n < 1024:
+            return f"{n:.0f}{u}" if u == "B" else f"{n:.1f}{u}"
+        n /= 1024
+    return f"{n:.1f}P"
+
+
+def cat(path):
+    try:
+        return open(path).read().strip()
+    except Exception:
+        return ""
+
+
+EMPTY = {"connected": False, "iface": "", "type": "", "name": "", "speed": "", "ip": "", "cidr": "",
+         "gw": "", "dns": "", "mac": "", "pub": {"ok": False, "ip": "", "isp": "", "city": ""},
+         "down": "", "up": "", "totalDown": "", "totalUp": "", "pingGw": "", "pingNet": ""}
+
+# default-route interface + gateway
+iface = gw = ""
+parts = sh(["ip", "-4", "route", "show", "default"]).split()
+for i, p in enumerate(parts):
+    if p == "via" and i + 1 < len(parts):
+        gw = parts[i + 1]
+    elif p == "dev" and i + 1 < len(parts):
+        iface = parts[i + 1]
+
+if not iface:
+    print(json.dumps(EMPTY), flush=True)
+    raise SystemExit
+
+# local IPv4 + cidr
+ipcidr = ""
+for tok in sh(["ip", "-4", "-o", "addr", "show", "dev", iface]).split():
+    if "/" in tok and tok.count(".") == 3:
+        ipcidr = tok
+        break
+ip = ipcidr.split("/")[0] if ipcidr else ""
+
+# type + connection name (nmcli)
+typ = name = ""
+for line in sh(["nmcli", "-t", "-f", "GENERAL.TYPE,GENERAL.CONNECTION", "device", "show", iface]).splitlines():
+    if line.startswith("GENERAL.TYPE:"):
+        typ = line.split(":", 1)[1]
+    elif line.startswith("GENERAL.CONNECTION:"):
+        name = line.split(":", 1)[1]
+typ = {"ethernet": "Ethernet", "wifi": "WiFi"}.get(typ, typ.capitalize() if typ else "")
+
+# link speed + mac
+sp = cat(f"/sys/class/net/{iface}/speed")
+speed = f"{sp} Mbps" if sp.isdigit() and int(sp) > 0 else ""
+mac = cat(f"/sys/class/net/{iface}/address")
+
+# dns (first two)
+dns = ""
+d = sh(["resolvectl", "dns", iface])
+if ":" in d:
+    dns = d.split(":", 1)[1].strip()
+if not dns:
+    try:
+        dns = " ".join(l.split()[1] for l in open("/etc/resolv.conf") if l.startswith("nameserver"))
+    except Exception:
+        pass
+dns = " ".join(dns.split()[:2])
+
+# throughput delta + session totals
+statef = os.path.join(RT, f"eww-netinfo.{iface}")
+now = time.time()
+rx = int(cat(f"/sys/class/net/{iface}/statistics/rx_bytes") or 0)
+tx = int(cat(f"/sys/class/net/{iface}/statistics/tx_bytes") or 0)
+prx, ptx, pt = rx, tx, now
+try:
+    prx, ptx, pt = map(float, open(statef).read().split())
+except Exception:
+    pass
+open(statef, "w").write(f"{rx} {tx} {now}")
+dt = max(now - pt, 0.001)
+down = human(max(rx - prx, 0) / dt) + "/s"
+up = human(max(tx - ptx, 0) / dt) + "/s"
+
+# latency
+def ping(host):
+    if not host:
+        return "—"
+    m = re.search(r"time=([\d.]+)", sh(["ping", "-c1", "-W1", host], timeout=2))
+    if not m:
+        return "—"
+    v = float(m.group(1))
+    return f"{v:.1f}ms" if v < 10 else f"{v:.0f}ms"
+
+
+# public IP (15-min self-cache; keep last-good on failure).
+# ifconfig.co (NOT ipinfo.io — the user's local DNS blocks that; resolves to ::).
+def fetch_pub():
+    o = sh(["curl", "-4", "-sf", "--max-time", "5", "https://ifconfig.co/json"], timeout=7)
+    try:
+        j = json.loads(o)
+        return {"ok": True, "ip": j.get("ip", ""),
+                "isp": re.sub(r"^AS\d+\s+", "", j.get("asn_org", "")).strip(),
+                "city": ", ".join(x for x in (j.get("city", ""), j.get("country_iso", "")) if x)}
+    except Exception:
+        return None
+
+
+pub = {"ok": False, "ip": "", "isp": "", "city": ""}
+cached = None
+try:
+    cached = json.load(open(PUBCACHE))
+    fresh = (now - os.stat(PUBCACHE).st_mtime) < PUB_TTL
+except Exception:
+    fresh = False
+if fresh and cached:
+    pub = cached
+else:
+    p = fetch_pub()
+    if p:
+        pub = p
+        open(PUBCACHE, "w").write(json.dumps(p))
+    elif cached:
+        pub = cached
+
+print(json.dumps({
+    "connected": True, "iface": iface, "type": typ, "name": name, "speed": speed,
+    "ip": ip, "cidr": ipcidr, "gw": gw, "dns": dns, "mac": mac, "pub": pub,
+    "down": down, "up": up, "totalDown": human(rx), "totalUp": human(tx),
+    "pingGw": ping(gw), "pingNet": ping("1.1.1.1"),
+}), flush=True)

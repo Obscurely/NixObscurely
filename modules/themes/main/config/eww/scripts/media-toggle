@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Toggle the media popup (right-click the bar's now-playing module). Escape closes it
+# while open; the binding is removed on close. Instant open/close, :focusable false.
+self="$HOME/.config/eww/scripts/media-toggle"
+
+if eww active-windows 2>/dev/null | grep -q '^media:'; then
+  swaymsg unbindsym Escape 2>/dev/null
+  eww close media
+else
+  eww open media
+  swaymsg "bindsym Escape exec bash $self" 2>/dev/null
+fi

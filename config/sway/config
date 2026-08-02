@@ -202,9 +202,11 @@ bindsym Ctrl+Print  exec grim -g "$(slurp -d)" - | satty -f - --copy-command wl-
 bindsym XF86AudioMute        exec pactl set-sink-mute @DEFAULT_SINK@ toggle
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +2%
 bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -2%
-bindsym XF86AudioPlay        exec playerctl play-pause
-bindsym XF86AudioNext        exec playerctl next
-bindsym XF86AudioPrev        exec playerctl previous
+# Route through the mpris wrapper so they target the source pinned in the media popup
+# (falls back to playerctl's default when nothing is pinned).
+bindsym XF86AudioPlay        exec bash $XDG_CONFIG_HOME/eww/scripts/mpris play-pause
+bindsym XF86AudioNext        exec bash $XDG_CONFIG_HOME/eww/scripts/mpris next
+bindsym XF86AudioPrev        exec bash $XDG_CONFIG_HOME/eww/scripts/mpris previous
 
 ### Bar — eww "glacial island", one window per monitor (config from the theme module).
 # Single `exec` (not exec_always) so sway reloads don't stack eww daemons; the daemon

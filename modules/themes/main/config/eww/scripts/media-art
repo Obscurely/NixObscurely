@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Resolve an MPRIS artUrl to a local file path that eww's `image` widget can show.
+#   file://…      -> strip the prefix (Chromium/browsers give a local temp file)
+#   http(s)://…   -> download + cache once per URL to $XDG_RUNTIME_DIR/mediaart/<hash>
+#                    (Spotify etc.); skip re-download if already cached
+#   empty / other -> print nothing (widget falls back to a placeholder glyph)
+url="${1:-}"
+[ -z "$url" ] && exit 0
+case "$url" in
+  file://*) printf '%s' "${url#file://}" ;;
+  http://* | https://*)
+    dir="${XDG_RUNTIME_DIR:-/tmp}/mediaart"; mkdir -p "$dir"
+    f="$dir/$(printf '%s' "$url" | sha1sum | cut -c1-16)"
+    [ -f "$f" ] || curl -sfL --max-time 5 -o "$f" "$url" 2>/dev/null || exit 0
+    [ -s "$f" ] && printf '%s' "$f" ;;
+  *) exit 0 ;;
+esac

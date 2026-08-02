@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Run a playerctl command against the PINNED player (from the state file), falling back
+# to playerctl's default when nothing is pinned or the pinned player has closed. This is
+# the single control path for media: the sway media keybinds, the bar left-click, and the
+# media popup's transport all go through it, so "pinning" a source in the popup makes the
+# bar + keybinds follow it.
+# Usage: mpris <play-pause|next|previous|position …|loop …|shuffle …|status|…>
+sel=$(cat "${XDG_RUNTIME_DIR:-/tmp}/mpris-selected" 2>/dev/null)
+if [ -n "$sel" ] && playerctl -l 2>/dev/null | grep -qx "$sel"; then
+  exec playerctl -p "$sel" "$@"
+else
+  exec playerctl "$@"
+fi

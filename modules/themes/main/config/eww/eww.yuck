@@ -4,9 +4,10 @@
 ;;  inject step; do not hand-type the glyph bytes (some drop in transit).
 ;; =====================================================================
 
-;; Quick Settings panel + Audio popup — separate windows, same daemon
+;; Quick Settings panel + Audio + Media popups — separate windows, same daemon
 (include "quicksettings.yuck")
 (include "audio.yuck")
+(include "media.yuck")
 
 ;; ------------------------------- data --------------------------------
 (deflisten workspaces :initial "[]" `bash $HOME/.config/eww/scripts/workspaces`)
@@ -40,14 +41,16 @@
     (statitem :icon "󰔏" :val "${cputemp}°")))
 
 (defwidget media []
-  (box :class "mod media ${player.status == 'Playing' ? 'playing' : player.status == 'Paused' ? 'paused' : 'idle'}"
-       :visible {player.title != ""}
-       :space-evenly false :spacing 8
-    (button :class "m-icon" :onclick "playerctl play-pause" (label :text "󰝚"))
-    (box :class "m-text" :space-evenly false :spacing 0
-      (label :class "m-artist" :visible {player.artist != ""} :text {player.artist})
-      (label :class "m-dash"   :visible {player.artist != ""} :text "—")
-      (label :class "m-title" :limit-width 42 :show-truncated true :text {player.title}))))
+  (eventbox :class "mod media ${player.status == 'Playing' ? 'playing' : player.status == 'Paused' ? 'paused' : 'idle'}"
+            :visible {player.title != ""}
+            :onclick "setsid -f bash $HOME/.config/eww/scripts/mpris play-pause"
+            :onrightclick "setsid -f bash $HOME/.config/eww/scripts/media-toggle"
+    (box :class "media-inner" :space-evenly false :spacing 8
+      (label :class "m-icon" :text "󰝚")
+      (box :class "m-text" :space-evenly false :spacing 0
+        (label :class "m-artist" :visible {player.artist != ""} :limit-width 30 :show-truncated true :text {player.artist})
+        (label :class "m-dash"   :visible {player.artist != ""} :text "—")
+        (label :class "m-title" :limit-width 42 :show-truncated true :text {player.title})))))
 
 (defwidget audio []
   (eventbox :class "mod audio" :onclick "pactl set-sink-mute @DEFAULT_SINK@ toggle"

@@ -1,0 +1,105 @@
+#!/usr/bin/env python3
+# Media popup feed (defpoll target, 1s — position advances continuously so it can't be
+# purely event-driven). Emits the PINNED (or default) player's now-playing + position +
+# loop/shuffle, plus a summary of every source. Runs only while the popup is open (eww
+# starts the poll lazily with the window).
+#
+# `target` is the resolved player INSTANCE — the seek slider targets it directly
+# (`playerctl -p <target> position`) to avoid the wrapper's per-tick `playerctl -l`
+# check, whose backpressure would stick the slider (learned from the audio app-slider).
+import json
+import os
+import subprocess
+
+SEL = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "mpris-selected")
+ART = os.path.expanduser("~/.config/eww/scripts/media-art")
+
+
+def run(cmd):
+    try:
+        return subprocess.run(cmd, capture_output=True, text=True, timeout=2).stdout.strip()
+    except Exception:
+        return ""
+
+
+def pctl(player, *args):  # player="" -> playerctl default
+    return run(["playerctl"] + (["-p", player] if player else []) + list(args))
+
+
+def meta(player, field):
+    return pctl(player, "metadata", field)
+
+
+def pctl_ok(player, *args):
+    # returns (value, supported) — many players (e.g. Chromium/web media) don't implement
+    # loop/shuffle over MPRIS ("No player could handle this command")
+    try:
+        r = subprocess.run(["playerctl"] + (["-p", player] if player else []) + list(args),
+                           capture_output=True, text=True, timeout=2)
+        if r.returncode == 0 and r.stdout.strip():
+            return r.stdout.strip(), True
+        return "", False
+    except Exception:
+        return "", False
+
+
+def mmss(sec):  # seconds -> "m:ss" (eww has no floor(), so format here)
+    sec = max(0, int(sec))
+    return f"{sec // 60}:{sec % 60:02d}"
+
+
+players = [p for p in run(["playerctl", "-l"]).splitlines() if p]
+try:
+    with open(SEL) as f:
+        sel = f.read().strip()
+except Exception:
+    sel = ""
+
+if sel and sel in players:
+    target = sel
+elif players:
+    # playerctl's own default pick, as a concrete instance name
+    target = run(["playerctl", "metadata", "--format", "{{playerInstance}}"]) or players[0]
+else:
+    target = ""
+
+arturl = meta(target, "mpris:artUrl") if target else ""
+try:
+    pos = round(float(pctl(target, "position") or 0)) if target else 0
+except ValueError:
+    pos = 0
+try:
+    length = round(int(meta(target, "mpris:length") or 0) / 1e6) if target else 0
+except ValueError:
+    length = 0
+
+sources = [{
+    "name": p,
+    "app": p.split(".")[0],
+    "title": meta(p, "title"),
+    "status": pctl(p, "status") or "Stopped",
+    "active": p == target,   # currently controlled (pinned OR default)
+    "pinned": p == sel,      # explicitly pinned
+} for p in players]
+
+loopv = pctl_ok(target, "loop") if target else ("", False)
+shufv = pctl_ok(target, "shuffle") if target else ("", False)
+
+print(json.dumps({
+    "target": target,
+    "player": target.split(".")[0] if target else "",
+    "status": (pctl(target, "status") if target else "") or "Stopped",
+    "title": meta(target, "title") if target else "",
+    "artist": meta(target, "artist") if target else "",
+    "album": meta(target, "xesam:album") if target else "",
+    "art": run([ART, arturl]) if arturl else "",
+    "pos": pos,
+    "len": length,
+    "posStr": mmss(pos),
+    "lenStr": mmss(length),
+    "loop": (loopv[0] or "None") if target else "None",
+    "loopOk": loopv[1] if target else False,
+    "shuffle": (shufv[0] or "Off") if target else "Off",
+    "shuffleOk": shufv[1] if target else False,
+    "sources": sources,
+}), flush=True)

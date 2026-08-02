@@ -1,20 +1,28 @@
 #!/usr/bin/env bash
-# Emit the active MPRIS player's now-playing as one JSON line per change.
-# JSON is built with `jq --arg` (correctly escapes &, ", <, >, backslashes) instead
-# of playerctl's `markup_escape`, which produced literal "&amp;" in the plain-text label.
-# Survives having no player (playerctl -F exits when none exist), retrying until one appears.
-emit() {
+# Emit the PINNED (or default) MPRIS player's now-playing as one JSON line per change.
+# The pinned player is chosen in the media popup (state file); the bar now-playing AND
+# the media keybinds all follow it (see scripts/mpris). Falls back to playerctl's default
+# when nothing is pinned or the pinned player has closed.
+#
+# Follows the target's events for instant title/status updates, and re-resolves the pin
+# every ~2s (so pinning a different source is reflected in the bar within ~2s — playerctl
+# has no multi-player follow, and inotifywait isn't available here).
+# JSON via `jq --arg` to correctly escape &, ", <, > (playerctl markup_escape emits &amp;).
+SEL="${XDG_RUNTIME_DIR:-/tmp}/mpris-selected"
+
+emit() {  # $1 = "-p <player>" or "" (word-split intentionally)
   local s a t
-  s=$(playerctl status 2>/dev/null) || s="Stopped"
-  a=$(playerctl metadata artist 2>/dev/null) || a=""
-  t=$(playerctl metadata title 2>/dev/null) || t=""
+  s=$(playerctl $1 status 2>/dev/null) || s="Stopped"
+  a=$(playerctl $1 metadata artist 2>/dev/null) || a=""
+  t=$(playerctl $1 metadata title 2>/dev/null) || t=""
   jq -cn --arg s "$s" --arg a "$a" --arg t "$t" '{status:$s,artist:$a,title:$t}'
 }
 
 while true; do
-  emit
-  # block on metadata/status changes; each change re-emits fresh JSON
-  playerctl -F metadata --format '{{status}}' 2>/dev/null | while IFS= read -r _; do emit; done
-  echo '{"status":"Stopped","artist":"","title":""}'
-  sleep 2
+  sel=$(cat "$SEL" 2>/dev/null)
+  if [ -n "$sel" ] && playerctl -l 2>/dev/null | grep -qx "$sel"; then P="-p $sel"; else P=""; fi
+  emit "$P"
+  # instant updates while following; the 2s timeout re-checks the pin each cycle
+  timeout 2 playerctl $P -F --format '{{status}}' 2>/dev/null | while IFS= read -r _; do emit "$P"; done
+  sleep 0.2   # avoid busy-looping when there are no players (playerctl -F exits at once)
 done

@@ -1,0 +1,69 @@
+;; =====================================================================
+;;  Media — popup under the bar's now-playing module (right-click). Glacial.
+;;  Transport + seek + artwork/metadata + multi-source pinning. NO volume.
+;;  Reuses qs-* widgets/styles (shared eww namespace).
+;; =====================================================================
+
+(defpoll media :interval "1s"
+  :initial '{"target":"","player":"","status":"Stopped","title":"","artist":"","album":"","art":"","pos":0,"len":0,"posStr":"0:00","lenStr":"0:00","loop":"None","loopOk":false,"shuffle":"Off","shuffleOk":false,"sources":[]}'
+  `python3 $HOME/.config/eww/scripts/media`)
+
+;; ---------- popup body ----------
+(defwidget media-root []
+  (box :class "qs-root m-root" :orientation "v" :space-evenly false :spacing 14
+    (box :class "qs-titlebar" :space-evenly false
+      (label :class "qs-title" :halign "start" :hexpand true :text "Media")
+      (button :class "qs-close" :onclick "setsid -f bash $HOME/.config/eww/scripts/media-toggle" :text "✕"))
+
+    ;; artwork + metadata
+    (box :space-evenly false :spacing 14
+      (box :class "m-art"
+        (image :visible {media.art != ""} :path {media.art} :image-width 92 :image-height 92)
+        (label :class "m-art-ph" :visible {media.art == ""} :text "󰝚"))
+      (box :orientation "v" :space-evenly false :spacing 4 :valign "center" :hexpand true
+        (label :class "m-title2" :halign "start" :limit-width 26 :show-truncated true
+               :text {media.title != "" ? media.title : "Nothing playing"})
+        (label :class "m-meta"  :halign "start" :limit-width 30 :show-truncated true :visible {media.artist != ""} :text {media.artist})
+        (label :class "m-meta2" :halign "start" :limit-width 30 :show-truncated true :visible {media.album  != ""} :text {media.album})))
+
+    ;; seek + time
+    (box :orientation "v" :space-evenly false :spacing 2
+      (scale :class "m-seek" :hexpand true :value {media.pos} :min 0 :max {media.len > 0 ? media.len : 1}
+             :onchange "playerctl -p ${media.target} position {}")
+      (box :space-evenly false
+        (label :class "m-time" :halign "start" :hexpand true :text {media.posStr})
+        (label :class "m-time" :halign "end" :text {media.lenStr})))
+
+    ;; transport (loop/shuffle only shown when the player supports them)
+    (box :class "m-transport" :halign "center" :space-evenly false :spacing 18
+      (button :class "m-btn ${media.loop != "None" ? "on" : ""}" :visible {media.loopOk}
+              :onclick "setsid -f bash $HOME/.config/eww/scripts/mpris loop ${media.loop == "None" ? "Track" : media.loop == "Track" ? "Playlist" : "None"}"
+        (label :text {media.loop == "Playlist" ? "󰑖" : media.loop == "Track" ? "󰑘" : "󰑗"}))
+      (button :class "m-btn" :onclick "setsid -f bash $HOME/.config/eww/scripts/mpris previous" (label :text "󰒮"))
+      (button :class "m-btn m-play" :onclick "setsid -f bash $HOME/.config/eww/scripts/mpris play-pause"
+        (label :text {media.status == "Playing" ? "󰏤" : "󰐊"}))
+      (button :class "m-btn" :onclick "setsid -f bash $HOME/.config/eww/scripts/mpris next" (label :text "󰒭"))
+      (button :class "m-btn ${media.shuffle == "On" ? "on" : ""}" :visible {media.shuffleOk}
+              :onclick "setsid -f bash $HOME/.config/eww/scripts/mpris shuffle ${media.shuffle == "On" ? "Off" : "On"}"
+        (label :text "󰒟")))
+
+    ;; sources — click to pin (click the pinned one to un-pin -> back to default)
+    (qs-section :title "SOURCES"
+      (box :orientation "v" :space-evenly false :spacing 5
+        (label :class "qs-todo" :halign "start" :visible {jq(media, '.sources | length') == 0} :text "No players")
+        (for s in {jq(media, '.sources')}
+          (button :class "m-src ${s.active ? "on" : ""}"
+                  :onclick "echo -n '${s.pinned ? "" : s.name}' > $XDG_RUNTIME_DIR/mpris-selected"
+            (box :space-evenly false :spacing 9
+              (label :class "m-src-state" :text {s.status == "Playing" ? "󰐊" : "󰏤"})
+              (label :class "m-src-app" :text {s.app})
+              (label :class "m-src-title" :halign "start" :hexpand true :limit-width 22 :show-truncated true :text {s.title}))))))))
+
+;; ---------- window (drops under the bar's centered media module) ----------
+(defwindow media
+  :monitor "DP-1"
+  :stacking "overlay"
+  :exclusive false
+  :focusable false
+  :geometry (geometry :x "0" :y "0" :width "540px" :anchor "top center")
+  (media-root))

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Toggle the system-monitor popup (right-click the bar's cpu/mem/disk/temp module).
+# Escape closes it while open; the binding is removed on close. Instant, :focusable false.
+self="$HOME/.config/eww/scripts/sysmon-toggle"
+
+if eww active-windows 2>/dev/null | grep -q '^sysmon:'; then
+  swaymsg unbindsym Escape 2>/dev/null
+  eww close sysmon
+else
+  eww open sysmon
+  swaymsg "bindsym Escape exec bash $self" 2>/dev/null
+fi

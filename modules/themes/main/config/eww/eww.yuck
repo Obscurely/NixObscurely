@@ -9,6 +9,7 @@
 (include "audio.yuck")
 (include "media.yuck")
 (include "datetime.yuck")
+(include "sysmon.yuck")
 
 ;; ------------------------------- data --------------------------------
 (deflisten workspaces :initial "[]" `bash $HOME/.config/eww/scripts/workspaces`)
@@ -38,11 +39,14 @@
         (label :text {ws.icon})))))
 
 (defwidget sensors []
-  (box :class "mod sensors" :space-evenly false :spacing 16
-    (statitem :icon "󰄧"  :val "${round(EWW_CPU.avg, 0)}%")
-    (statitem :icon "󰍛"  :val "${round(EWW_RAM.used_mem / 1073741824, 1)}G")
-    (statitem :icon "󰆼" :val "${round(EWW_DISK['/'].free / 1000000000, 0)}G")
-    (statitem :icon "󰔏" :val "${cputemp}°")))
+  (eventbox :class "mod sensors"
+            :onclick "setsid -f bash $HOME/.config/eww/scripts/monitor"
+            :onrightclick "setsid -f bash $HOME/.config/eww/scripts/sysmon-toggle"
+    (box :class "sensors-inner" :space-evenly false :spacing 16
+      (statitem :icon "󰄧"  :val "${round(EWW_CPU.avg, 0)}%")
+      (statitem :icon "󰍛"  :val "${round(EWW_RAM.used_mem / 1073741824, 1)}G")
+      (statitem :icon "󰆼" :val "${round(EWW_DISK['/'].free / 1000000000, 0)}G")
+      (statitem :icon "󰔏" :val "${cputemp}°"))))
 
 (defwidget media []
   (eventbox :class "mod media ${player.status == 'Playing' ? 'playing' : player.status == 'Paused' ? 'paused' : 'idle'}"

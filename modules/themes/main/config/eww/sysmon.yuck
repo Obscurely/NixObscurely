@@ -1,0 +1,101 @@
+;; =====================================================================
+;;  System monitor — popup under the bar's cpu/mem/disk/temp module (right-click).
+;;  Left-click the module launches btop. Glacial. Per-core CPU via EWW_CPU magic var;
+;;  everything else via scripts/sysmon (defpoll, lazy w/ the window). No keybind.
+;; =====================================================================
+
+(defpoll sysmon :interval "2s"
+  :initial '{"cpu":{"model":"","cores":"","tempC":-1,"freqAvg":0},"mem":{"total":"","used":"","usedPct":0,"cached":"","buffers":"","shmem":"","swapUsed":"","swapTotal":"","swapPct":0},"gpu":{"ok":false,"name":"","tempC":-1,"util":0,"vramUsed":0,"vramTotal":0,"vramPct":0,"powerW":0},"temps":{"cpu":-1,"gpu":-1,"nvme":-1},"disks":[],"nix":{"gen":"","built":"","flake":"","kernel":""},"load":"","uptime":""}'
+  `python3 $HOME/.config/eww/scripts/sysmon`)
+
+;; non-interactive glacial fill bar (0-100); knob hidden in CSS, no onchange
+(defwidget sm-bar [pct]
+  (scale :class "sm-bar" :value pct :min 0 :max 100 :hexpand true))
+
+;; one grouped temperature (value + label); `hot` = amber threshold
+(defwidget sm-temp [label t hot]
+  (box :orientation "v" :space-evenly false :spacing 1 :halign "center"
+    (label :class "sm-temp-val ${t >= hot ? "warn" : ""}" :text {t >= 0 ? "${t}°" : "—"})
+    (label :class "sm-temp-lbl" :text label)))
+
+(defwidget sysmon-root []
+  (box :class "qs-root sm-root" :orientation "v" :space-evenly false :spacing 13
+    (box :class "qs-titlebar" :space-evenly false
+      (label :class "qs-title" :halign "start" :hexpand true :text "System"))
+
+    ;; ---- CPU ----
+    (box :class "qs-section" :orientation "v" :space-evenly false :spacing 8
+      (box :space-evenly false
+        (label :class "qs-hdr" :halign "start" :hexpand true :text "CPU")
+        (label :class "sm-sub" :halign "end" :text "${sysmon.cpu.model} · ${sysmon.cpu.cores}"))
+      (box :space-evenly false :spacing 11
+        (label :class "sm-big" :text "${round(EWW_CPU.avg, 0)}%")
+        (sm-bar :pct {EWW_CPU.avg})
+        (label :class "sm-val ${sysmon.temps.cpu >= 85 ? "warn" : ""}"
+               :text {sysmon.temps.cpu >= 0 ? "${sysmon.temps.cpu}°" : "—"})
+        (label :class "sm-val" :text "${sysmon.cpu.freqAvg} GHz"))
+      ;; per-core: usage bar (height) + freq label (GHz), one column per thread
+      (box :class "sm-cores" :space-evenly true :spacing 3
+        (for c in {EWW_CPU.cores}
+          (box :orientation "v" :space-evenly false :spacing 3 :valign "end"
+            (box :class "sm-corebar" :valign "end"
+              (box :class "sm-corefill" :valign "end"
+                   :style "min-height: ${round(c.usage * 0.22, 0) + 1}px"))
+            (label :class "sm-corefreq" :text "${round(c.freq / 1000, 1)}")))))
+
+    ;; ---- MEMORY ----
+    (box :class "qs-section" :orientation "v" :space-evenly false :spacing 6
+      (box :space-evenly false
+        (label :class "qs-hdr" :halign "start" :hexpand true :text "MEMORY")
+        (label :class "sm-sub" :halign "end" :text "${sysmon.mem.used} / ${sysmon.mem.total}"))
+      (sm-bar :pct {sysmon.mem.usedPct})
+      (label :class "sm-detail" :halign "start"
+             :text "cached ${sysmon.mem.cached}  ·  buffers ${sysmon.mem.buffers}  ·  shmem ${sysmon.mem.shmem}")
+      (label :class "sm-detail" :halign "start"
+             :text "swap ${sysmon.mem.swapUsed} / ${sysmon.mem.swapTotal}"))
+
+    ;; ---- GPU ----
+    (box :class "qs-section" :orientation "v" :space-evenly false :spacing 6 :visible {sysmon.gpu.ok}
+      (box :space-evenly false
+        (label :class "qs-hdr" :halign "start" :hexpand true :text "GPU")
+        (label :class "sm-sub" :halign "end" :text {sysmon.gpu.name}))
+      (box :space-evenly false :spacing 12
+        (label :class "sm-val ${sysmon.gpu.tempC >= 85 ? "warn" : ""}" :text "${sysmon.gpu.tempC}°")
+        (label :class "sm-val" :text "${sysmon.gpu.util}%")
+        (sm-bar :pct {sysmon.gpu.vramPct})
+        (label :class "sm-val" :text "${sysmon.gpu.vramUsed}/${sysmon.gpu.vramTotal}G")
+        (label :class "sm-val" :text "${sysmon.gpu.powerW} W")))
+
+    ;; ---- TEMPS ----
+    (box :class "qs-section" :orientation "v" :space-evenly false :spacing 7
+      (label :class "qs-hdr" :halign "start" :text "TEMPS")
+      (box :class "sm-temps" :space-evenly true
+        (sm-temp :label "CPU"  :t {sysmon.temps.cpu}  :hot 85)
+        (sm-temp :label "GPU"  :t {sysmon.temps.gpu}  :hot 85)
+        (sm-temp :label "NVMe" :t {sysmon.temps.nvme} :hot 70)))
+
+    ;; ---- DISKS ----
+    (box :class "qs-section" :orientation "v" :space-evenly false :spacing 7
+      (label :class "qs-hdr" :halign "start" :text "DISKS")
+      (for d in {jq(sysmon, ".disks")}
+        (box :class "sm-disk" :space-evenly false :spacing 10
+          (label :class "sm-disk-mnt" :halign "start" :text {d.mount})
+          (sm-bar :pct {d.pct})
+          (label :class "sm-disk-use" :halign "end" :text "${d.used}/${d.size}")
+          (label :class "sm-disk-pct ${d.pct >= 90 ? "warn" : ""}" :halign "end" :text "${d.pct}%"))))
+
+    ;; ---- SYSTEM ----
+    (box :class "qs-section" :orientation "v" :space-evenly false :spacing 4
+      (label :class "qs-hdr" :halign "start" :text "SYSTEM")
+      (label :class "sm-detail" :halign "start" :text "generation ${sysmon.nix.gen}  ·  built ${sysmon.nix.built}")
+      (label :class "sm-detail" :halign "start" :text "flake.lock ${sysmon.nix.flake}  ·  kernel ${sysmon.nix.kernel}")
+      (label :class "sm-detail" :halign "start" :text "load ${sysmon.load}  ·  up ${sysmon.uptime}"))))
+
+;; ---------- window (drops under the bar's left cpu/mem/disk/temp module) ----------
+(defwindow sysmon
+  :monitor "DP-1"
+  :stacking "overlay"
+  :exclusive false
+  :focusable false
+  :geometry (geometry :x "230px" :y "0" :width "440px" :anchor "top left")
+  (sysmon-root))

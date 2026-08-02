@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Left-click the bar's cpu/mem/disk/temp module -> btop in a normal tiled terminal (deep dive;
+# the right-click popup is the at-a-glance view). Focus an existing one instead of stacking.
+# (Tiled, not floating — btop needs a large terminal; a small floating one errors "size too small".)
+if swaymsg -t get_tree 2>/dev/null | grep -q '"app_id": "sysmon-btop"'; then
+  swaymsg '[app_id="sysmon-btop"] focus' 2>/dev/null
+else
+  # btop uses the global glacial + transparent config now (config/btop, nix-managed)
+  exec alacritty --class sysmon-btop -e btop
+fi

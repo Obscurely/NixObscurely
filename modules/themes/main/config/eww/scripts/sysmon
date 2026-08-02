@@ -1,0 +1,198 @@
+#!/usr/bin/env python3
+# System-monitor feed for the sysmon popup (right-click the bar's cpu/mem/disk/temp module).
+# defpoll, 2s, lazy with the window. Per-core CPU comes from eww's EWW_CPU magic var in yuck;
+# this emits everything else as one JSON line. All sudo-free.
+import glob
+import json
+import os
+import re
+import subprocess
+from datetime import datetime
+
+REPO_FLAKE = os.path.expanduser("~/Code/Nix/NixObscurely/flake.lock")
+
+
+def sh(cmd):
+    try:
+        return subprocess.run(cmd, capture_output=True, text=True, timeout=3).stdout
+    except Exception:
+        return ""
+
+
+def human(n):  # bytes -> "5.4G"
+    n = float(n)
+    for u in ("B", "K", "M", "G", "T"):
+        if n < 1024:
+            return f"{n:.0f}{u}" if u == "B" else f"{n:.1f}{u}"
+        n /= 1024
+    return f"{n:.1f}P"
+
+
+# ---------- memory (/proc/meminfo, kB -> bytes) ----------
+mi = {}
+try:
+    with open("/proc/meminfo") as f:
+        for line in f:
+            k, _, v = line.partition(":")
+            mi[k] = int(v.strip().split()[0]) * 1024
+except Exception:
+    pass
+mtotal = mi.get("MemTotal", 0)
+mavail = mi.get("MemAvailable", 0)
+mused = mtotal - mavail
+swtotal = mi.get("SwapTotal", 0)
+swused = swtotal - mi.get("SwapFree", 0)
+mem = {
+    "total": human(mtotal), "used": human(mused),
+    "usedPct": round(100 * mused / mtotal) if mtotal else 0,
+    "cached": human(mi.get("Cached", 0) + mi.get("SReclaimable", 0)),
+    "buffers": human(mi.get("Buffers", 0)),
+    "shmem": human(mi.get("Shmem", 0)),
+    "swapUsed": human(swused), "swapTotal": human(swtotal),
+    "swapPct": round(100 * swused / swtotal) if swtotal else 0,
+}
+
+# ---------- temps (sensors -j) ----------
+temps = {"cpu": None, "gpu": None, "nvme": None}
+
+
+def first_input(section):  # first temp*_input value in a sensors sub-dict
+    for kk, vv in section.items():
+        if kk.endswith("_input"):
+            return round(vv)
+    return None
+
+
+try:
+    s = json.loads(sh(["sensors", "-j"]) or "{}")
+    for chip, v in s.items():
+        if chip.startswith("k10temp"):
+            for sec in v.values():
+                if isinstance(sec, dict) and (t := first_input(sec)) is not None:
+                    temps["cpu"] = t
+                    break
+        elif chip.startswith("nvme"):
+            comp = v.get("Composite") if isinstance(v.get("Composite"), dict) else \
+                next((sec for sec in v.values() if isinstance(sec, dict)), {})
+            temps["nvme"] = first_input(comp)
+except Exception:
+    pass
+
+# ---------- gpu (nvidia-smi) ----------
+gpu = None
+g = sh(["nvidia-smi",
+        "--query-gpu=name,temperature.gpu,utilization.gpu,memory.used,memory.total,power.draw",
+        "--format=csv,noheader,nounits"]).strip()
+if g and "," in g:
+    p = [x.strip() for x in g.split(",")]
+    try:
+        vu, vt = float(p[3]) / 1024, float(p[4]) / 1024
+        gpu = {
+            "name": p[0].replace("NVIDIA GeForce ", "").replace("NVIDIA ", ""),
+            "tempC": int(float(p[1])), "util": int(float(p[2])),
+            "vramUsed": round(vu, 1), "vramTotal": round(vt, 1),
+            "vramPct": round(100 * vu / vt) if vt else 0, "powerW": round(float(p[5])),
+        }
+        temps["gpu"] = gpu["tempC"]
+    except Exception:
+        gpu = None
+
+# ---------- cpu meta ----------
+model = ""
+phys = set()
+try:
+    with open("/proc/cpuinfo") as f:
+        for line in f:
+            if line.startswith("model name") and not model:
+                model = line.split(":", 1)[1].strip()
+            elif line.startswith("core id"):
+                phys.add(line.split(":", 1)[1].strip())
+except Exception:
+    pass
+model = re.sub(r"^(AMD|Intel\(R\))\s+", "", model).replace(" Eight-Core Processor", "") \
+    .replace("(TM)", "").replace("(R)", "").strip()
+logical = os.cpu_count() or 0
+freqs = []
+for fp in glob.glob("/sys/devices/system/cpu/cpu[0-9]*/cpufreq/scaling_cur_freq"):
+    try:
+        freqs.append(int(open(fp).read()) / 1e6)  # kHz -> GHz
+    except Exception:
+        pass
+cpu = {
+    "model": model, "cores": f"{len(phys) or logical}c/{logical}t",
+    "tempC": temps["cpu"], "freqAvg": round(sum(freqs) / len(freqs), 1) if freqs else 0,
+}
+
+# ---------- disks ----------
+disks = []
+df = sh(["df", "-B1", "-x", "tmpfs", "-x", "devtmpfs", "-x", "efivarfs", "-x", "overlay",
+         "--output=target,used,size,pcent"])
+for line in df.splitlines()[1:]:
+    parts = line.split()
+    if len(parts) < 4:
+        continue
+    tgt, u, sz, pc = parts[0], parts[1], parts[2], parts[3]
+    if tgt.startswith("/nix") or tgt.startswith("/sys") or tgt.startswith("/run"):
+        continue
+    try:
+        disks.append({"mount": tgt, "used": human(int(u)), "size": human(int(sz)),
+                      "pct": int(pc.rstrip("%"))})
+    except Exception:
+        pass
+# root first, then by mount name
+disks.sort(key=lambda d: (d["mount"] != "/", d["mount"]))
+
+# ---------- nix generation + flake.lock + kernel ----------
+link = sh(["readlink", "/nix/var/nix/profiles/system"]).strip()
+m = re.search(r"system-(\d+)-link", link)
+
+
+def fmt(ts):
+    try:
+        return datetime.fromtimestamp(ts).strftime("%b %-d %H:%M")
+    except Exception:
+        return ""
+
+
+built = ""
+try:
+    # lstat: the symlink's own mtime = activation/switch time. Following it (os.stat) would
+    # reach the nix store, whose mtimes are normalized to epoch 1 (would show 1970).
+    built = fmt(os.lstat("/run/current-system").st_mtime)
+except Exception:
+    pass
+flake = ""
+for p in (REPO_FLAKE, "/etc/nixos/flake.lock"):
+    if os.path.exists(p):
+        flake = fmt(os.path.getmtime(p))
+        break
+nix = {"gen": m.group(1) if m else "?", "built": built, "flake": flake,
+       "kernel": sh(["uname", "-r"]).strip()}
+
+# ---------- load + uptime ----------
+try:
+    la = open("/proc/loadavg").read().split()[:3]
+    load = " · ".join(la)
+except Exception:
+    load = ""
+try:
+    up = float(open("/proc/uptime").read().split()[0])
+    d, h, mnt = int(up // 86400), int(up % 86400 // 3600), int(up % 3600 // 60)
+    uptime = " ".join(x for x in (f"{d}d" if d else "", f"{h}h" if h else "",
+                                  f"{mnt}m" if not d else "") if x) or "0m"
+except Exception:
+    uptime = ""
+
+# normalize for eww (no null literal in yuck; missing temp -> -1, gpu -> full object + ok flag)
+temps = {k: (v if isinstance(v, int) else -1) for k, v in temps.items()}
+cpu["tempC"] = temps["cpu"]
+if gpu is None:
+    gpu = {"ok": False, "name": "", "tempC": -1, "util": 0,
+           "vramUsed": 0, "vramTotal": 0, "vramPct": 0, "powerW": 0}
+else:
+    gpu["ok"] = True
+
+print(json.dumps({
+    "cpu": cpu, "mem": mem, "gpu": gpu, "temps": temps, "disks": disks,
+    "nix": nix, "load": load, "uptime": uptime,
+}), flush=True)

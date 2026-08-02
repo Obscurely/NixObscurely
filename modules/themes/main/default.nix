@@ -125,6 +125,14 @@ in {
           (mkIf desktop.media.graphics.vector.enable {
             "inkscape/templates/default.svg".source = ./config/inkscape/default-template.svg;
           })
+          {
+            # Global btop: glacial theme + transparent bg (matches the desktop; the sysmon
+            # widget's left-click btop uses it too). Recursive so btop can still write its log.
+            "btop" = {
+              source = ./config/btop;
+              recursive = true;
+            };
+          }
         ];
     }
   ]);

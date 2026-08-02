@@ -1,0 +1,58 @@
+#* Glacial — icy monochrome btop theme (global default). Matches the eww desktop palette;
+#* main_bg empty + theme_background=False so the terminal (alacritty opacity 0.5) shows the wallpaper.
+#* Amber is reserved for hot temps only, exactly like the rest of the desktop.
+
+theme[main_bg]=""
+theme[main_fg]="#CBD8EA"
+theme[title]="#CBD8EA"
+theme[hi_fg]="#8CC6F2"
+theme[selected_bg]="#2E4058"
+theme[selected_fg]="#A6CCEC"
+theme[inactive_fg]="#4C5D72"
+theme[graph_text]="#90A4BC"
+theme[meter_bg]="#1F2C3C"
+theme[proc_misc]="#8CC6F2"
+
+# box outlines / dividers
+theme[cpu_box]="#2A3B52"
+theme[mem_box]="#2A3B52"
+theme[net_box]="#2A3B52"
+theme[proc_box]="#2A3B52"
+theme[div_line]="#2A3B52"
+
+# temperature gradient (cool -> hot; amber = warning, on-language)
+theme[temp_start]="#5E8DB8"
+theme[temp_mid]="#8CC6F2"
+theme[temp_end]="#E7B872"
+
+# cpu load gradient (icy ladder)
+theme[cpu_start]="#5E8DB8"
+theme[cpu_mid]="#7FB0E0"
+theme[cpu_end]="#A6CCEC"
+
+# memory: free / cached / available / used (all icy shades)
+theme[free_start]="#2A3B52"
+theme[free_mid]="#3A5578"
+theme[free_end]="#5E8DB8"
+theme[cached_start]="#3A5578"
+theme[cached_mid]="#5E8DB8"
+theme[cached_end]="#8CC6F2"
+theme[available_start]="#4C5D72"
+theme[available_mid]="#6E86A0"
+theme[available_end]="#90A4BC"
+theme[used_start]="#5E8DB8"
+theme[used_mid]="#7FB0E0"
+theme[used_end]="#A6CCEC"
+
+# network gradients
+theme[download_start]="#3A5578"
+theme[download_mid]="#5E8DB8"
+theme[download_end]="#8CC6F2"
+theme[upload_start]="#4C5D72"
+theme[upload_mid]="#7FB0E0"
+theme[upload_end]="#A6CCEC"
+
+# process gradient
+theme[process_start]="#5E8DB8"
+theme[process_mid]="#8CC6F2"
+theme[process_end]="#A6CCEC"

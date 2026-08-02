@@ -39,6 +39,7 @@ $warn:       #E7B872;                  // urgent / warning ONLY
 .audio-inner { padding: 1px 15px; }   // eventbox ignores padding; put it on the child
 .media-inner { padding: 1px 15px; }   // media is now an eventbox too (left=play/pause, right=popup)
 .clock-inner { padding: 1px 15px; }   // clock is an eventbox too (left=toggle time/date, right=popup)
+.sensors-inner { padding: 1px 10px 1px 15px; }   // sensors is an eventbox too (left=btop, right=sysmon popup); 10px right per below
 .sensors, .ws, .audio, .net, .clock, .media {
   background-color: $pill;
 }
@@ -85,9 +86,9 @@ $warn:       #E7B872;                  // urgent / warning ONLY
 .m-title  { color: $text; }
 .media.paused .m-title, .media.paused .m-artist, .media.paused .m-icon { color: $text2; }
 
-// ---- interactive bar modules (audio / net / media / clock) — smooth hover, matching the panels ----
-.audio, .net, .media, .clock { transition: background-color 150ms ease; }
-.audio:hover, .net:hover, .media:hover, .clock:hover { background-color: $pill-hover; }
+// ---- interactive bar modules (sensors / audio / net / media / clock) — smooth hover, matching the panels ----
+.sensors, .audio, .net, .media, .clock { transition: background-color 150ms ease; }
+.sensors:hover, .audio:hover, .net:hover, .media:hover, .clock:hover { background-color: $pill-hover; }
 
 // =====================================================================
 //  Quick Settings panel (glacial — reuses the tiers above)
@@ -268,3 +269,34 @@ calendar.dt-cal.highlight { color: $text2; }           // weekday names
 .dt-dayname { color: $text; font-size: 16px; min-width: 42px; }
 .dt-wicon2  { color: $accent; font-size: 21px; }
 .dt-wrain   { color: $text2; font-size: 15px; }
+
+// =====================================================================
+//  System monitor popup (glacial — reuses the qs-* tiers)
+// =====================================================================
+.sm-sub      { color: $text2; font-size: 13px; }
+.sm-big      { color: $text;  font-size: 19px; }   // no min-width -> left-aligns with the CPU header (minor % jitter is fine)
+.sm-val      { color: $text2; font-size: 14px; }
+.sm-val.warn { color: $warn; }
+.sm-detail   { color: $text2; font-size: 13px; margin: 1px 0; }   // override the global -3px so stacked detail rows aren't munched
+
+// generic non-interactive fill bar (scale with the knob hidden)
+scale.sm-bar trough    { background-color: rgba(14, 20, 32, 0.60); border-radius: 999px; min-height: 7px; }
+scale.sm-bar highlight { background-color: $accent; border-radius: 999px; }
+scale.sm-bar slider    { background-color: transparent; min-width: 0; min-height: 0; margin: 0; }
+
+// per-core CPU grid (usage bar height + freq label)
+.sm-cores    { margin-top: 2px; }
+.sm-corebar  { min-width: 11px; min-height: 24px; background-color: rgba(14, 20, 32, 0.55); border-radius: 2px; }
+.sm-corefill { min-width: 11px; border-radius: 2px; background-image: linear-gradient(to top, $occupied, $accent-br); }
+.sm-corefreq { color: $text2; font-size: 11px; }
+
+// grouped temps
+.sm-temp-val      { color: $text;  font-size: 17px; }
+.sm-temp-val.warn { color: $warn; }
+.sm-temp-lbl      { color: $text2; font-size: 11px; }
+
+// disks
+.sm-disk-mnt      { color: $text;  font-size: 14px; min-width: 62px; }
+.sm-disk-use      { color: $text2; font-size: 13px; min-width: 96px; }
+.sm-disk-pct      { color: $text2; font-size: 13px; min-width: 40px; }
+.sm-disk-pct.warn { color: $warn; }

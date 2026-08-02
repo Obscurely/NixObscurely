@@ -32,7 +32,6 @@ in {
         discord.enable = true;
         slack.enable = true;
         element.enable = false;
-        rofi.enable = true;
         utils.enable = true;
       };
       browsers = {

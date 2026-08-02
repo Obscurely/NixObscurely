@@ -22,7 +22,6 @@
         discord.enable = true;
 		thunderbird.enable = true;
         element.enable = true;
-        rofi.enable = true;
         utils.enable = true;
 	davinciresolve.enable = true;
       };

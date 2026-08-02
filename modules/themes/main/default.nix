@@ -109,12 +109,6 @@ in {
               target = "Kvantum/kvantum.kvconfig";
             };
           }
-          (mkIf desktop.apps.rofi.enable {
-            "rofi/theme" = {
-              source = ./config/rofi;
-              recursive = true;
-            };
-          })
           (mkIf desktop.sway.bar.enable {
             # eww "glacial island" bar — eww.yuck + eww.scss + scripts/
             "eww" = {

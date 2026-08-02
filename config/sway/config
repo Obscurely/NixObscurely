@@ -189,7 +189,7 @@ bindsym $mod+comma exec bash $XDG_CONFIG_HOME/eww/scripts/qs-toggle
 bindsym $mod+F11 exec setsid -f bash $HOME/.config/eww/scripts/launcher-toggle   # single-tap launcher thumb -> eww app launcher
 bindsym $mod+F12 exec setsid -f bash $HOME/.config/eww/scripts/switcher-toggle   # double-tap launcher thumb -> window switcher
 # clipboard history -> $mod+c (see below); $mod+v is nvim
-bindsym $alt+Tab exec $DOTFILES_BIN/rofi/switcher
+bindsym $alt+Tab exec setsid -f bash $HOME/.config/eww/scripts/switcher-toggle
 bindsym $mod+e exec thunar
 
 ## clipboard history

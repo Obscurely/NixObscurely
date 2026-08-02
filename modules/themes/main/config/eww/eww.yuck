@@ -15,6 +15,7 @@
 (include "switcher.yuck")
 (include "clipboard.yuck")
 (include "notifications.yuck")
+(include "power.yuck")
 
 ;; ------------------------------- data --------------------------------
 (deflisten workspaces :initial "[]" `bash $HOME/.config/eww/scripts/workspaces`)
@@ -102,7 +103,7 @@
     (label :text "󱄅")))
 
 (defwidget power []
-  (button :class "mod iconbtn power" :onclick "$DOTFILES_BIN/rofi/powermenu &"
+  (button :class "mod iconbtn power" :onclick "setsid -f bash $HOME/.config/eww/scripts/power-toggle"
           :onrightclick "setsid -f bash $HOME/.config/eww/scripts/qs-toggle"
     (label :text "󰐥")))
 

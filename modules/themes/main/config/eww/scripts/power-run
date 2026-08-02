@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Execute a confirmed power action, then get out of the way. Close the menu first so it
+# doesn't linger, then run the command detached. Unknown key = no-op.
+key="$1"
+swaymsg unbindsym Escape 2>/dev/null
+eww close power 2>/dev/null
+
+case "$key" in
+  lock)     setsid -f swaylock -f ;;
+  logout)   setsid -f swaymsg exit ;;
+  reboot)   setsid -f systemctl reboot ;;
+  poweroff) setsid -f systemctl poweroff ;;
+  *)        exit 0 ;;
+esac

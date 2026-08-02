@@ -207,7 +207,7 @@ scale.a-slider slider {
 scale.m-seek trough    { background-color: rgba(14, 20, 32, 0.60); border-radius: 999px; min-height: 6px; }
 scale.m-seek highlight { background-color: $accent; border-radius: 999px; }
 scale.m-seek slider    { background-color: $text; border-radius: 999px; min-width: 14px; min-height: 14px; margin: -5px; }
-.m-time { color: $text2; font-size: 13px; padding-top: 4px; }
+.m-time { color: $text2; font-size: 13px; padding-top: 8px; }
 
 // transport
 .m-transport { padding: 2px 0; }

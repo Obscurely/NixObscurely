@@ -74,8 +74,7 @@
 (defwidget qs-root []
   (box :class "qs-root" :orientation "v" :space-evenly false :spacing 14
     (box :class "qs-titlebar" :space-evenly false
-      (label :class "qs-title" :halign "start" :hexpand true :text "Quick Settings")
-      (button :class "qs-close" :onclick "setsid -f bash $HOME/.config/eww/scripts/qs-toggle" :text "✕"))
+      (label :class "qs-title" :halign "start" :hexpand true :text "Quick Settings"))
     (qs-section :title "MODES"
       (box :space-evenly true :spacing 7
         (qs-mode :text "Work"   :active {system.mode == "work"}   :onclick "setsid -f bash $HOME/.config/eww/scripts/mode work")

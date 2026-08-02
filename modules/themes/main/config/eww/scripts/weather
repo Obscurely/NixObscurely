@@ -1,0 +1,105 @@
+#!/usr/bin/env python3
+# Weather feed for the datetime popup (defpoll target). Fetches wttr.in ?format=j1
+# (auto-geolocated by IP) and emits a compact JSON. Self-throttles via a 15-min cache
+# (returns cached instantly so the popup opens fast; only re-fetches when stale), and
+# falls back to stale cache on a failed fetch so a transient network blip never blanks it.
+# Emits {"ok": false} only when there's no cache at all.
+#   {ok, city,
+#    now  {temp,feels,desc,icon,humidity,wind,rain},   # rain = nearest-hour chance
+#    today{hi,lo,maxrain,sunrise,sunset,icon},         # maxrain = day's max chance
+#    next:[{day,icon,hi,lo,rain}]}                      # next 2 days
+import datetime
+import json
+import os
+import subprocess
+import time
+
+CACHE = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "eww-weather.json")
+TTL = 900  # 15 min
+
+# wttr weatherCode -> Nerd Font (Material Design) weather glyph
+ICON = {
+    "113": "󰖙",  # clear/sunny
+    "116": "󰖕",  # partly cloudy
+    "119": "󰖐",  # cloudy
+    "122": "󰖐",  # overcast
+    "143": "󰖑", "248": "󰖑", "260": "󰖑",  # mist/fog
+    "176": "󰖗", "263": "󰖗", "266": "󰖗", "281": "󰖗", "284": "󰖗",
+    "293": "󰖗", "296": "󰖗", "299": "󰖖", "302": "󰖖", "305": "󰖖",
+    "308": "󰖖", "311": "󰖗", "314": "󰖗",  # rain/drizzle (heavy -> pouring 󰖖)
+    "179": "󰖘", "182": "󰖘", "185": "󰖘", "227": "󰖘", "230": "󰖘",
+    "317": "󰖘", "320": "󰖘", "323": "󰖘", "326": "󰖘", "329": "󰖘",
+    "332": "󰖘", "335": "󰖘", "338": "󰖘", "350": "󰖘", "362": "󰖘",
+    "365": "󰖘", "368": "󰖘", "371": "󰖘", "374": "󰖘", "377": "󰖘",  # snow/sleet
+    "200": "󰖓", "386": "󰖓", "389": "󰖓", "392": "󰖓", "395": "󰖓",  # thunder
+}
+
+
+def icon(code):
+    return ICON.get(str(code), "󰖐")
+
+
+def fetch():
+    try:
+        out = subprocess.run(["curl", "-s", "--max-time", "10", "wttr.in/?format=j1"],
+                             capture_output=True, text=True, timeout=12).stdout
+        d = json.loads(out)
+        cur = d["current_condition"][0]
+        w = d["weather"]
+        area = (d.get("nearest_area") or [{}])[0]
+        city = (area.get("areaName") or [{}])[0].get("value", "") if area else ""
+
+        def hour_of(h):
+            return int(h["time"]) // 100
+
+        def maxrain(day):
+            return max(int(h["chanceofrain"]) for h in day["hourly"])
+
+        def midcode(day):
+            return day["hourly"][len(day["hourly"]) // 2]["weatherCode"]
+
+        now_h = datetime.datetime.now().hour
+        nearest = min(w[0]["hourly"], key=lambda h: abs(hour_of(h) - now_h))
+        return {
+            "ok": True, "city": city,
+            "now": {"temp": cur["temp_C"], "feels": cur["FeelsLikeC"],
+                    "desc": cur["weatherDesc"][0]["value"], "icon": icon(cur["weatherCode"]),
+                    "humidity": cur["humidity"], "wind": cur["windspeedKmph"],
+                    "rain": nearest["chanceofrain"]},
+            "today": {"hi": w[0]["maxtempC"], "lo": w[0]["mintempC"], "maxrain": str(maxrain(w[0])),
+                      "sunrise": w[0]["astronomy"][0]["sunrise"], "sunset": w[0]["astronomy"][0]["sunset"],
+                      "icon": icon(midcode(w[0]))},
+            "next": [{"day": datetime.date.fromisoformat(day["date"]).strftime("%a"),
+                      "icon": icon(midcode(day)), "hi": day["maxtempC"], "lo": day["mintempC"],
+                      "rain": str(maxrain(day))} for day in w[1:3]],
+        }
+    except Exception:
+        return {"ok": False}
+
+
+def main():
+    try:  # fresh cache -> serve instantly, no fetch
+        if time.time() - os.path.getmtime(CACHE) < TTL:
+            with open(CACHE) as f:
+                print(f.read(), flush=True)
+                return
+    except Exception:
+        pass
+    res = fetch()
+    if res.get("ok"):
+        try:
+            with open(CACHE, "w") as f:
+                json.dump(res, f)
+        except Exception:
+            pass
+        print(json.dumps(res), flush=True)
+        return
+    try:  # failed fetch -> stale cache if any
+        with open(CACHE) as f:
+            print(f.read(), flush=True)
+    except Exception:
+        print(json.dumps({"ok": False}), flush=True)
+
+
+if __name__ == "__main__":
+    main()

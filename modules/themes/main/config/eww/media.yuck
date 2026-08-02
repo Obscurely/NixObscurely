@@ -12,8 +12,7 @@
 (defwidget media-root []
   (box :class "qs-root m-root" :orientation "v" :space-evenly false :spacing 14
     (box :class "qs-titlebar" :space-evenly false
-      (label :class "qs-title" :halign "start" :hexpand true :text "Media")
-      (button :class "qs-close" :onclick "setsid -f bash $HOME/.config/eww/scripts/media-toggle" :text "✕"))
+      (label :class "qs-title" :halign "start" :hexpand true :text "Media"))
 
     ;; artwork + metadata
     (box :space-evenly false :spacing 14

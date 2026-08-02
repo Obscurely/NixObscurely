@@ -4,10 +4,11 @@
 ;;  inject step; do not hand-type the glyph bytes (some drop in transit).
 ;; =====================================================================
 
-;; Quick Settings panel + Audio + Media popups — separate windows, same daemon
+;; Quick Settings + Audio + Media + Date/Time popups — separate windows, same daemon
 (include "quicksettings.yuck")
 (include "audio.yuck")
 (include "media.yuck")
+(include "datetime.yuck")
 
 ;; ------------------------------- data --------------------------------
 (deflisten workspaces :initial "[]" `bash $HOME/.config/eww/scripts/workspaces`)
@@ -16,6 +17,9 @@
 (defpoll   network  :interval "2s"    :initial "{}"    `bash $HOME/.config/eww/scripts/network`)
 (defpoll   cputemp  :interval "3s"    :initial "0"     `bash $HOME/.config/eww/scripts/temp`)
 (defpoll   clock    :interval "10s"   :initial "--:--" `date +'%H:%M'`)
+(defvar    clock_date false)                                       ; bar clock shows date instead of time
+(defpoll   datestr  :interval "600s"  :initial ""      `date +'%a %-d %b'`)       ; inline toggle date "Sun 2 Aug"
+(defpoll   fulldate :interval "600s"  :initial ""      `date +'%A, %-d %B %Y'`)   ; popup full date
 
 ;; ---------------------------- sub-widgets ----------------------------
 (defwidget statitem [icon val]
@@ -73,9 +77,12 @@
       (label :class "s-val" :text "off"))))
 
 (defwidget clockw []
-  (box :class "mod clock" :space-evenly false :spacing 10
-    (label :class "s-icon" :text "󰅐")
-    (label :class "s-val"  :text clock)))
+  (eventbox :class "mod clock"
+            :onclick "eww update clock_date=${!clock_date}"
+            :onrightclick "setsid -f bash $HOME/.config/eww/scripts/datetime-toggle"
+    (box :class "clock-inner" :space-evenly false :spacing 10
+      (label :class "s-icon" :text {clock_date ? "󰃭" : "󰅐"})
+      (label :class "s-val"  :text {clock_date ? datestr : clock}))))
 
 (defwidget launcher []
   (button :class "mod iconbtn launcher" :onclick "$DOTFILES_BIN/rofi/launcher &"

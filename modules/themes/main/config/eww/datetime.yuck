@@ -1,0 +1,56 @@
+;; =====================================================================
+;;  Date/Time — calendar + weather popup (right-click the bar clock). Glacial.
+;;  Big time · full date · month calendar · weather (now/today/next). No keybind.
+;; =====================================================================
+
+(defpoll weather :interval "300s"
+  :initial '{"ok":false,"city":"","now":{"temp":"","feels":"","desc":"","icon":"","humidity":"","wind":"","rain":""},"today":{"hi":"","lo":"","maxrain":"","sunrise":"","sunset":"","icon":""},"next":[]}'
+  `python3 $HOME/.config/eww/scripts/weather`)
+
+(defwidget datetime-root []
+  (box :class "qs-root dt-root" :orientation "v" :space-evenly false :spacing 12
+    ;; big time + full date (no close button — close via Escape or right-click the clock)
+    (box :orientation "v" :space-evenly false :spacing 0 :halign "center"
+      (label :class "dt-time" :text clock)
+      (label :class "dt-date" :text fulldate))
+
+    ;; month calendar (today highlighted)
+    (calendar :class "dt-cal")
+
+    ;; weather
+    (box :class "qs-section" :orientation "v" :space-evenly false :spacing 9
+      (label :class "qs-hdr" :halign "start" :text {weather.ok ? "WEATHER · " + weather.city : "WEATHER"})
+      (label :class "qs-todo" :halign "start" :visible {weather.ok == false} :text "weather unavailable")
+      (box :visible {weather.ok} :orientation "v" :space-evenly false :spacing 10
+        ;; NOW
+        (box :class "dt-now" :space-evenly false :spacing 13
+          (label :class "dt-wicon" :text {weather.now.icon})
+          (box :orientation "v" :space-evenly false :spacing 1 :hexpand true :valign "center"
+            (box :space-evenly false :spacing 9
+              (label :class "dt-wtemp" :text "${weather.now.temp}°")
+              (label :class "dt-wdesc" :halign "start" :hexpand true :text {weather.now.desc}))
+            (label :class "dt-wsub" :halign "start"
+                   :text "feels ${weather.now.feels}°    ${weather.now.rain}% rain    ${weather.now.humidity}% hum    ${weather.now.wind} km/h")))
+        ;; TODAY
+        (box :class "dt-today" :space-evenly false :spacing 10
+          (label :class "dt-wtoday" :text "Today")
+          (label :class "dt-wsub" :halign "start" :hexpand true
+                 :text "${weather.today.lo}–${weather.today.hi}°     ${weather.today.maxrain}% rain max")
+          (label :class "dt-wsun" :text "󰖜 ${weather.today.sunrise}   󰖛 ${weather.today.sunset}"))
+        ;; NEXT (2 days)
+        (box :orientation "v" :space-evenly false :spacing 6
+          (for d in {jq(weather, '.next')}
+            (box :class "dt-day" :space-evenly false :spacing 12
+              (label :class "dt-dayname" :text {d.day})
+              (label :class "dt-wicon2" :text {d.icon})
+              (label :class "dt-wsub" :halign "start" :hexpand true :text "${d.hi}° / ${d.lo}°")
+              (label :class "dt-wrain" :text "${d.rain}% rain"))))))))
+
+;; ---------- window (drops under the bar clock — x tuned during build) ----------
+(defwindow datetime
+  :monitor "DP-1"
+  :stacking "overlay"
+  :exclusive false
+  :focusable false
+  :geometry (geometry :x "0" :y "0" :width "380px" :anchor "top right")
+  (datetime-root))

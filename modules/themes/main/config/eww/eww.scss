@@ -38,6 +38,7 @@ $warn:       #E7B872;                  // urgent / warning ONLY
 .mod { padding: 1px 15px; border-radius: 13px; }
 .audio-inner { padding: 1px 15px; }   // eventbox ignores padding; put it on the child
 .media-inner { padding: 1px 15px; }   // media is now an eventbox too (left=play/pause, right=popup)
+.clock-inner { padding: 1px 15px; }   // clock is an eventbox too (left=toggle time/date, right=popup)
 .sensors, .ws, .audio, .net, .clock, .media {
   background-color: $pill;
 }
@@ -84,9 +85,9 @@ $warn:       #E7B872;                  // urgent / warning ONLY
 .m-title  { color: $text; }
 .media.paused .m-title, .media.paused .m-artist, .media.paused .m-icon { color: $text2; }
 
-// ---- interactive bar modules (audio / net / media) — smooth hover, matching the panels ----
-.audio, .net, .media { transition: background-color 150ms ease; }
-.audio:hover, .net:hover, .media:hover { background-color: $pill-hover; }
+// ---- interactive bar modules (audio / net / media / clock) — smooth hover, matching the panels ----
+.audio, .net, .media, .clock { transition: background-color 150ms ease; }
+.audio:hover, .net:hover, .media:hover, .clock:hover { background-color: $pill-hover; }
 
 // =====================================================================
 //  Quick Settings panel (glacial — reuses the tiers above)
@@ -206,7 +207,7 @@ scale.a-slider slider {
 scale.m-seek trough    { background-color: rgba(14, 20, 32, 0.60); border-radius: 999px; min-height: 6px; }
 scale.m-seek highlight { background-color: $accent; border-radius: 999px; }
 scale.m-seek slider    { background-color: $text; border-radius: 999px; min-width: 14px; min-height: 14px; margin: -5px; }
-.m-time { color: $text2; font-size: 12px; }
+.m-time { color: $text2; font-size: 13px; padding-top: 4px; }
 
 // transport
 .m-transport { padding: 2px 0; }
@@ -230,3 +231,32 @@ scale.m-seek slider    { background-color: $text; border-radius: 999px; min-widt
 .m-src-state { font-size: 13px; }
 .m-src-app   { color: $text; }
 .m-src-title { color: $text2; }
+
+// =====================================================================
+//  Date/Time popup (glacial)
+// =====================================================================
+.dt-time { color: $text;  font-size: 36px; }
+.dt-date { color: $text2; font-size: 15px; }
+
+// month calendar (GTK calendar — styling is best-effort)
+.dt-cal { padding: 2px; }
+calendar.dt-cal { color: $text2; }
+calendar.dt-cal:selected {                             // today — no pill: GtkCalendar bakes the digit high in its cell, so a box can't be vertically centered. Emphasize with color + weight instead.
+  color: $accent;
+  font-weight: bold;
+  background-color: transparent;
+}
+calendar.dt-cal.header { color: $text; }               // month/year header
+calendar.dt-cal.highlight { color: $text2; }           // weekday names
+
+// weather
+.dt-now { padding: 2px 0; }
+.dt-wicon  { color: $accent; font-size: 44px; }
+.dt-wtemp  { color: $text;  font-size: 28px; }
+.dt-wdesc  { color: $text2; font-size: 16px; }
+.dt-wsub   { color: $text2; font-size: 15px; }
+.dt-wtoday { color: $text;  font-size: 16px; min-width: 56px; }
+.dt-wsun   { color: $text2; font-size: 15px; }
+.dt-dayname { color: $text; font-size: 16px; min-width: 42px; }
+.dt-wicon2  { color: $accent; font-size: 21px; }
+.dt-wrain   { color: $text2; font-size: 15px; }

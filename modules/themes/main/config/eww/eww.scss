@@ -358,3 +358,39 @@ scale.sm-bar slider    { background-color: transparent; min-width: 0; min-height
 .l-thumb     { border-radius: 5px; }
 .l-clip-icon { color: $text2; font-size: 19px; }
 .l-clip      { color: $text; font-size: 14px; }
+
+// =====================================================================
+//  Notification center (glacial — left-edge mirror of quick-settings)
+// =====================================================================
+.notif-root { padding: 16px; }
+.notif-hdr  { margin-bottom: 2px; }
+.notif-clear {
+  color: $text2; font-size: 13px; padding: 4px 12px; border-radius: 999px;
+  background-color: rgba(14, 20, 32, 0.55);
+  transition: background-color 150ms ease, color 150ms ease;
+}
+.notif-clear:hover { color: $warn; background-color: $pill-hover; }
+
+.notif-scroll { min-height: 500px; }   // pins the scroll height (else GTK collapses it to 0); scrolls past
+
+.notif-row {
+  background-color: $pill; border-radius: 12px; padding: 10px 12px;
+  border-left: 3px solid transparent;         // urgency accent slot (kept even when normal)
+}
+.urgency-critical { border-left-color: $warn; }
+.urgency-critical .notif-summary { color: $accent-br; }
+.urgency-low .notif-app,
+.urgency-low .notif-summary { color: $text2; }   // low = dimmed one step
+
+.notif-lead    { min-width: 40px; }           // fixed lead slot so text left-edges align
+.notif-icon    { }
+.notif-glyph   { color: $text2; font-size: 26px; }
+.notif-app     { color: $text2; font-size: 12px; }
+.notif-summary { color: $text;  font-size: 15px; }
+.notif-body    { color: $text2; font-size: 13px; }
+.notif-x {
+  color: $inactive; font-size: 16px; padding: 2px 6px; border-radius: 999px;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+.notif-x:hover { color: $warn; background-color: $pill-hover; }
+.notif-empty { font-size: 14px; padding: 2px; }

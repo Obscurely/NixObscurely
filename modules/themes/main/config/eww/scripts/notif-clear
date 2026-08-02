@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Clear all: mako has no clear-history API, so record the highest current history id and let
+# notif-list drop everything <= it. New notifications (higher id) still surface. Runtime-only.
+RT="${XDG_RUNTIME_DIR:-/tmp}"
+makoctl history -j 2>/dev/null | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+a = (d.get('data') or [[]])[0] if isinstance(d, dict) else (d[0] if d and isinstance(d[0], list) else d)
+print(max((n.get('id', 0) for n in a), default=0))
+" > "$RT/eww-notif-cleared"
+eww update nresults="$(python3 "$HOME/.config/eww/scripts/notif-list")"

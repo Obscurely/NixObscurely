@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Toggle the notification center (left-edge). Mirrors qs-toggle: while open, Escape is bound
+# (globally, briefly) to re-run this script -> which sees the window open and closes + unbinds.
+# `:focusable false`, so Escape is a sway bind, never a captured keyboard.
+self="$HOME/.config/eww/scripts/notif-toggle"
+H="$HOME/.config/eww/scripts"
+
+if eww active-windows 2>/dev/null | grep -q notifications; then
+  swaymsg unbindsym Escape 2>/dev/null
+  eww close notifications
+else
+  eww update nresults="$(python3 "$H/notif-list")"   # seed so it opens populated (no first-poll wait)
+  eww open notifications
+  swaymsg "bindsym Escape exec bash $self" 2>/dev/null
+fi

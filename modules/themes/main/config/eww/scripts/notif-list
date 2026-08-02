@@ -1,0 +1,119 @@
+#!/usr/bin/env python3
+# Notification-center feed: makoctl history -j -> newest-first JSON for eww, with a runtime
+# filter (clear-all + per-item dismiss) that mako's own API can't do. Emits
+#   [{id, app, summary, body, urgency, icon}]   (icon = "" -> the widget shows a bell glyph)
+# Filter state lives in $XDG_RUNTIME_DIR (resets on reboot, in lockstep with mako's history):
+#   eww-notif-cleared : highest id present at the last "clear all" (drop id <= this)
+#   eww-notif-hidden  : newline-separated individually-dismissed ids
+import glob, json, os, subprocess
+
+RT       = os.environ.get("XDG_RUNTIME_DIR", "/tmp")
+CLEARED  = os.path.join(RT, "eww-notif-cleared")
+HIDDEN   = os.path.join(RT, "eww-notif-hidden")
+ICONIDX  = os.path.join(RT, "eww-iconindex.json")
+HOME     = os.environ["HOME"]
+USER     = os.environ.get("USER", "")
+N        = 50   # render cap
+
+# ---- icon index (stem -> path), cached once per session (glob of Papirus is ~1.7s) ----
+ICON_ROOTS = [
+    f"{HOME}/.local/share/icons", f"{HOME}/.icons",
+    f"/etc/profiles/per-user/{USER}/share/icons",
+    "/run/current-system/sw/share/icons",
+]
+ICON_THEMES = ["Papirus-Dark", "Papirus", "hicolor"]
+PIXMAPS = ["/run/current-system/sw/share/pixmaps", f"/etc/profiles/per-user/{USER}/share/pixmaps"]
+
+
+def build_icon_index():
+    idx = {}
+    for root in ICON_ROOTS:
+        for theme in ICON_THEMES:
+            # one level deep only (<theme>/<size>/apps/) — recursive over Papirus is ~5s
+            for path in glob.glob(f"{root}/{theme}/*/apps/*.svg") + \
+                        glob.glob(f"{root}/{theme}/*/apps/*.png"):
+                stem = os.path.splitext(os.path.basename(path))[0]
+                if stem not in idx or (path.endswith(".svg") and not idx[stem].endswith(".svg")):
+                    idx[stem] = path
+    for pm in PIXMAPS:
+        for path in glob.glob(f"{pm}/*.svg") + glob.glob(f"{pm}/*.png"):
+            idx.setdefault(os.path.splitext(os.path.basename(path))[0], path)
+    return idx
+
+
+def icon_index():
+    try:
+        return json.load(open(ICONIDX))
+    except Exception:
+        idx = build_icon_index()
+        try:
+            json.dump(idx, open(ICONIDX, "w"))
+        except Exception:
+            pass
+        return idx
+
+
+def resolve_icon(entry, idx):
+    ai = entry.get("app_icon") or ""
+    if ai.startswith("/") and os.path.exists(ai):
+        return ai
+    for key in (ai, entry.get("desktop_entry") or "", entry.get("app_name") or ""):
+        if not key:
+            continue
+        k = key.lower()
+        for cand in (k, k.replace(" ", "-"), k.replace(" ", "")):
+            if cand in idx:
+                return idx[cand]
+    return ""
+
+
+def read_int(p):
+    try:
+        return int(open(p).read().strip())
+    except Exception:
+        return -1
+
+
+def read_hidden():
+    try:
+        return {int(x) for x in open(HIDDEN).read().split()}
+    except Exception:
+        return set()
+
+
+def history():
+    try:
+        d = json.loads(subprocess.check_output(["makoctl", "history", "-j"], text=True))
+    except Exception:
+        return []
+    if isinstance(d, dict):                      # {"data": [[ ... ]]}
+        return (d.get("data") or [[]])[0]
+    if d and isinstance(d[0], list):             # [[ ... ]]
+        return d[0]
+    return d                                     # [ ... ]
+
+
+def main():
+    cleared, hidden = read_int(CLEARED), read_hidden()
+    idx, out = None, []
+    # newest first: mako ids are monotonic, but the history array isn't id-ordered — sort explicitly
+    for e in sorted(history(), key=lambda e: e.get("id", 0), reverse=True):
+        i = e.get("id", 0)
+        if i <= cleared or i in hidden:
+            continue
+        if idx is None:
+            idx = icon_index()
+        out.append({
+            "id": i,
+            "app": e.get("app_name") or e.get("desktop_entry") or "Notification",
+            "summary": (e.get("summary") or "").strip(),
+            "body": (e.get("body") or "").strip(),
+            "urgency": e.get("urgency") or "normal",
+            "icon": resolve_icon(e, idx),
+        })
+        if len(out) >= N:
+            break
+    print(json.dumps(out))
+
+
+main()

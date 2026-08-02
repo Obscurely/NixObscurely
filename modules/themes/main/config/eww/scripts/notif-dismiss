@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Dismiss one entry: append its id to the runtime hidden set; notif-list filters it out.
+RT="${XDG_RUNTIME_DIR:-/tmp}"
+id="$1"
+[ -n "$id" ] && printf '%s\n' "$id" >> "$RT/eww-notif-hidden"
+eww update nresults="$(python3 "$HOME/.config/eww/scripts/notif-list")"

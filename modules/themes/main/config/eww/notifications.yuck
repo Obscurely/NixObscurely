@@ -1,0 +1,45 @@
+;; =====================================================================
+;;  Notification center — glacial, left-edge mirror of quick-settings. Reads makoctl
+;;  history via scripts/notif-list (newest-first + runtime clear/dismiss filter). Right-click
+;;  the NixOS logo opens it (notif-toggle). Clear-all + per-item ✕; app icons; urgency colors.
+;;  Bounded height + scroll. defpoll is lazy (polls only while the window is open).
+;; =====================================================================
+
+(defpoll nresults :interval "2s" :initial "[]" `python3 $HOME/.config/eww/scripts/notif-list`)
+
+(defwidget notif-root []
+  (box :class "qs-root notif-root" :orientation "v" :space-evenly false :spacing 12
+    (box :class "notif-hdr" :space-evenly false :valign "center"
+      (label :class "qs-title" :halign "start" :hexpand true
+             :text "Notifications  ·  ${arraylength(nresults)}")
+      (button :class "notif-clear" :halign "end"
+              :onclick "setsid -f bash $HOME/.config/eww/scripts/notif-clear"
+        (label :text "Clear all")))
+
+    (scroll :class "notif-scroll" :vscroll true :hscroll false
+      (box :orientation "v" :space-evenly false :spacing 8
+        (for n in {nresults}
+          (box :class "notif-row urgency-${n.urgency}" :space-evenly false :spacing 12
+            (box :class "notif-lead" :valign "start" :halign "center"
+              (image :class "notif-icon" :visible {n.icon != ""}
+                     :path {n.icon} :image-width 34 :image-height 34)
+              (label :class "notif-glyph" :visible {n.icon == ""} :text "󰂚"))
+            (box :class "notif-text" :orientation "v" :hexpand true :space-evenly false :spacing 2
+              (label :class "notif-app" :halign "start" :text {n.app})
+              (label :class "notif-summary" :halign "start" :limit-width 42 :show-truncated true
+                     :text {n.summary} :visible {n.summary != ""})
+              (label :class "notif-body" :halign "start" :limit-width 52 :show-truncated true
+                     :text {n.body} :visible {n.body != ""}))
+            (button :class "notif-x" :valign "start"
+                    :onclick "setsid -f bash $HOME/.config/eww/scripts/notif-dismiss ${n.id}"
+              (label :text "󰅖"))))
+        (label :class "qs-todo notif-empty" :halign "center" :valign "center"
+               :visible {arraylength(nresults) == 0} :text "No notifications")))))
+
+(defwindow notifications
+  :monitor "DP-1"
+  :stacking "overlay"
+  :exclusive false
+  :focusable false
+  :geometry (geometry :x "0" :y "0" :width "460px" :anchor "top left")
+  (notif-root))

@@ -67,4 +67,9 @@ wins.sort(key=lambda w: (w["wsnum"] != focused_ws, w["wsnum"], w["title"].lower(
 for w in wins:
     w.pop("focused", None)
     w["search"] = f"{w['app']} {w['title']}".lower()
+# record the count for switcher-nav's fast path (initial open seeds sel=0)
+try:
+    open(os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "eww-snav"), "w").write(f"0 {len(wins)}\n")
+except Exception:
+    pass
 print(json.dumps(wins), flush=True)

@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
-exec 9>"${XDG_RUNTIME_DIR:-/tmp}/eww-cnav.lock"; flock 9
-sel=$(eww get csel 2>/dev/null); sel=${sel:-0}
-len=$(eww get cresults 2>/dev/null | python3 -c 'import sys,json
-try: print(len(json.load(sys.stdin)))
-except: print(0)')
-[ "${len:-0}" -eq 0 ] && exit 0
+# Move the clipboard selection (Down/Up/Tab while open). $1 = up|down.
+# Fast path: sel+len from a runtime state file (written by clip-filter / clip-delete), so a held
+# key costs only flock + read + one `eww update` — no `eww get`/python spawn per press.
+f="${XDG_RUNTIME_DIR:-/tmp}/eww-cnav"
+exec 9>"$f.lock"; flock 9
+read -r sel len < "$f" 2>/dev/null; sel=${sel:-0}; len=${len:-0}
+[ "${len:-0}" -le 0 ] && exit 0
 case "$1" in
-  down) sel=$((sel+1)); [ "$sel" -ge "$len" ] && sel=$((len-1)) ;;
-  up)   sel=$((sel-1)); [ "$sel" -lt 0 ] && sel=0 ;;
+  down) sel=$((sel + 1)); [ "$sel" -ge "$len" ] && sel=$((len - 1)) ;;
+  up)   sel=$((sel - 1)); [ "$sel" -lt 0 ] && sel=0 ;;
 esac
+printf '%s %s\n' "$sel" "$len" > "$f"
 eww update csel="$sel"

@@ -24,6 +24,12 @@ def load(path, default):
 def out(apps):
     slim = [{"name": a["name"], "exec": a["exec"], "icon": a.get("icon", ""),
              "generic": a.get("generic", ""), "term": a.get("terminal", False)} for a in apps[:N]]
+    # record the count for launcher-nav's fast path (sel resets to 0 on any new result set)
+    try:
+        nav = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "eww-lnav")
+        open(nav, "w").write(f"0 {len(slim)}\n")
+    except Exception:
+        pass
     sys.stdout.write(json.dumps(slim))
 
 

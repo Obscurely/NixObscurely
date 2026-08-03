@@ -6,9 +6,20 @@ import os
 import subprocess
 import sys
 
-CACHE = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "eww-windows.json")
+RT = os.environ.get("XDG_RUNTIME_DIR", "/tmp")
+CACHE = os.path.join(RT, "eww-windows.json")
 SEP = "\x1f"
 N = 10
+
+
+def emit(result):
+    # record the count for switcher-nav's fast path (sel resets to 0 on any new result set)
+    try:
+        open(os.path.join(RT, "eww-snav"), "w").write(f"0 {len(result)}\n")
+    except Exception:
+        pass
+    print(json.dumps(result))
+
 
 try:
     wins = json.load(open(CACHE))
@@ -17,7 +28,7 @@ except Exception:
 q = " ".join(sys.argv[1:]).strip()
 
 if not q:
-    print(json.dumps(wins[:N]))
+    emit(wins[:N])
     sys.exit()
 
 lines = "".join(f"{i}{SEP}{w['search']}\n" for i, w in enumerate(wins))
@@ -27,4 +38,4 @@ try:
     idx = [int(l.split(SEP, 1)[0]) for l in r.stdout.splitlines() if l]
 except Exception:
     idx = []
-print(json.dumps([wins[i] for i in idx[:N]]))
+emit([wins[i] for i in idx[:N]])

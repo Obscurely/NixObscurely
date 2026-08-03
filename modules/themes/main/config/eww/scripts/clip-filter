@@ -3,17 +3,25 @@
 # picks the fuzzy MATCHES, but results are returned in RECENCY order (clip-list is newest-first),
 # never fzf-relevance order — you want the most recent thing matching your search. Capped at N.
 import json, os, subprocess, sys
-CACHE = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "eww-clips.json")
+RT = os.environ.get("XDG_RUNTIME_DIR", "/tmp")
+CACHE = os.path.join(RT, "eww-clips.json")
 SEP = "\x1f"; N = 8
+
+def emit(result):
+    # record the count for clip-nav's fast path (sel resets to 0 on any new result set)
+    try: open(os.path.join(RT, "eww-cnav"), "w").write(f"0 {len(result)}\n")
+    except Exception: pass
+    print(json.dumps(result))
+
 try: items = json.load(open(CACHE))
 except Exception: items = []
 q = " ".join(sys.argv[1:]).strip()
 if not q:
-    print(json.dumps(items[:N])); sys.exit()
+    emit(items[:N]); sys.exit()
 lines = "".join(f"{i}{SEP}{it['search']}\n" for i, it in enumerate(items))
 try:
     r = subprocess.run(["fzf", "--filter", q, "--delimiter", SEP, "--nth", "2"],
                        input=lines, capture_output=True, text=True, timeout=3)
     idx = sorted(int(l.split(SEP, 1)[0]) for l in r.stdout.splitlines() if l)  # recency, not relevance
 except Exception: idx = []
-print(json.dumps([items[i] for i in idx[:N]]))
+emit([items[i] for i in idx[:N]])

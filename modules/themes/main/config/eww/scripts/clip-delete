@@ -11,3 +11,4 @@ new="$(python3 "$s/clip-filter" "$q")"
 len=$(printf '%s' "$new" | python3 -c 'import sys,json;print(len(json.load(sys.stdin)))')
 [ "$sel" -ge "$len" ] && sel=$((len>0 ? len-1 : 0))
 eww update cresults="$new" csel="$sel"
+printf '%s %s\n' "$sel" "$len" > "$RT/eww-cnav"   # override clip-filter's 0-reset: delete keeps the selection

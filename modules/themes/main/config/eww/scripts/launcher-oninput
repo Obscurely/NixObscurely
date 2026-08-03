@@ -5,6 +5,7 @@ q="$*"
 if [ "${q:0:1}" = "=" ]; then
   res=$(printf 'scale=6; %s\n' "${q#=}" | bc 2>/dev/null | sed 's/0*$//; s/\.$//')
   eww update lmode="calc" lcalc="${res:-…}" lresults="[]" lsel=0
+  printf '0 0\n' > "${XDG_RUNTIME_DIR:-/tmp}/eww-lnav"   # calc mode: no rows to navigate
 else
   eww update lmode="apps" lcalc="" \
     lresults="$(python3 "$HOME/.config/eww/scripts/launcher-filter" "$q")" lsel=0

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Enter/Return on the power menu.
+#   action row  -> open the selected action's confirm view (cursor defaults to Cancel = safe)
+#   confirm view-> sel 1 (Confirm) runs it; sel 0 (Cancel) returns to the row
+s="$HOME/.config/eww/scripts"
+pending=$(eww get power_pending 2>/dev/null)
+sel=$(eww get power_sel 2>/dev/null); sel=${sel:-0}
+
+if [ -z "$pending" ]; then
+  keys=(lock logout reboot poweroff)
+  eww update power_pending="${keys[$sel]:-lock}" power_sel=0
+elif [ "$sel" = 1 ]; then
+  setsid -f bash "$s/power-run" "$pending"     # power-run unbinds keys + closes + executes
+else
+  eww update power_pending="" power_sel=0
+fi

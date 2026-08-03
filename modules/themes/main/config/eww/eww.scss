@@ -404,12 +404,16 @@ scale.sm-bar slider    { background-color: transparent; min-width: 0; min-height
 .pm-row { margin: 4px 0; }
 .pm-btn {
   background-color: $pill; border-radius: 14px; padding: 14px 10px; min-width: 84px;
-  transition: background-color 150ms ease, color 150ms ease;
+  border: 2px solid transparent;   // reserved so the .on focus ring doesn't shift size
+  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
 }
 .pm-btn:hover { background-color: $pill-hover; }
+.pm-btn.on { background-color: rgba(140, 198, 242, 0.20); border-color: $accent; }   // keyboard cursor
 .pm-btn-icon { color: $text; font-size: 30px; }
 .pm-btn-lbl  { color: $text2; font-size: 13px; }
 .pm-btn:hover .pm-btn-lbl { color: $text; }
+.pm-btn.on .pm-btn-icon { color: $accent-br; }
+.pm-btn.on .pm-btn-lbl  { color: $accent; }
 
 // -- confirmation --
 .pm-confirm { padding: 10px 4px 4px 4px; }
@@ -418,10 +422,11 @@ scale.sm-bar slider    { background-color: transparent; min-width: 0; min-height
 .pm-confirm-q { color: $text; font-size: 20px; }
 .pm-cbtn-in { padding: 0 2px; }
 .pm-cancel, .pm-ok {
-  border-radius: 999px; padding: 8px 20px;
-  transition: background-color 150ms ease, color 150ms ease;
+  border-radius: 999px; padding: 8px 20px; border: 2px solid transparent;   // reserved for the ring
+  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
 }
 .pm-cancel { background-color: rgba(14, 20, 32, 0.55); color: $text2; }
-.pm-cancel:hover { background-color: $pill-hover; color: $text; }
+.pm-cancel:hover, .pm-cancel.on { background-color: $pill-hover; color: $text; }
 .pm-ok { background-color: rgba(140, 198, 242, 0.20); color: $accent; }
-.pm-ok:hover { background-color: rgba(140, 198, 242, 0.32); color: $accent-br; }
+.pm-ok:hover, .pm-ok.on { background-color: rgba(140, 198, 242, 0.32); color: $accent-br; }
+.pm-cancel.on, .pm-ok.on { border-color: $accent; }   // keyboard focus ring — unambiguous cursor

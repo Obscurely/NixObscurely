@@ -2,7 +2,8 @@
 # Execute a confirmed power action, then get out of the way. Close the menu first so it
 # doesn't linger, then run the command detached. Unknown key = no-op.
 key="$1"
-swaymsg unbindsym Escape 2>/dev/null
+# unbind the whole nav set (esp. important for `lock`, where the session continues)
+for k in Escape Left Up Right Down Tab Return; do swaymsg unbindsym "$k" 2>/dev/null; done
 eww close power 2>/dev/null
 
 case "$key" in

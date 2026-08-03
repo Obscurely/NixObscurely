@@ -6,9 +6,11 @@
 ;; =====================================================================
 
 (defvar power_pending "")   ; "" | lock | logout | reboot | poweroff
+(defvar power_sel 0)        ; keyboard cursor — action row: 0-3 · confirm: 0=Cancel 1=Confirm
 
-(defwidget pm-action [key icon label]
-  (button :class "pm-btn" :onclick "eww update power_pending=${key}"
+(defwidget pm-action [idx key icon label]
+  (button :class "pm-btn ${power_sel == idx ? "on" : ""}"
+          :onclick "eww update power_pending=${key} power_sel=0"
     (box :class "pm-btn-in" :orientation "v" :space-evenly false :spacing 6 :valign "center"
       (label :class "pm-btn-icon" :text icon)
       (label :class "pm-btn-lbl" :text label))))
@@ -17,10 +19,10 @@
   (box :class "qs-root pm-root" :orientation "v" :space-evenly false
     ;; -- State A: action row --
     (box :class "pm-row" :visible {power_pending == ""} :space-evenly true :spacing 10 :halign "center"
-      (pm-action :key "lock"     :icon "󰌾" :label "Lock")
-      (pm-action :key "logout"   :icon "󰍃" :label "Log out")
-      (pm-action :key "reboot"   :icon "󰜉" :label "Restart")
-      (pm-action :key "poweroff" :icon "󰐥" :label "Power off"))
+      (pm-action :idx 0 :key "lock"     :icon "󰌾" :label "Lock")
+      (pm-action :idx 1 :key "logout"   :icon "󰍃" :label "Log out")
+      (pm-action :idx 2 :key "reboot"   :icon "󰜉" :label "Restart")
+      (pm-action :idx 3 :key "poweroff" :icon "󰐥" :label "Power off"))
 
     ;; -- State B: confirmation --
     (box :class "pm-confirm ${power_pending == "reboot" || power_pending == "poweroff" ? "danger" : ""}"
@@ -34,10 +36,10 @@
                     power_pending == "reboot"   ? "Restart?" :
                     power_pending == "logout"   ? "Log out?" : "Lock the screen?"})
       (box :class "pm-confirm-btns" :space-evenly false :spacing 12 :halign "center"
-        (button :class "pm-cancel" :onclick "eww update power_pending=''"
+        (button :class "pm-cancel ${power_sel == 0 ? "on" : ""}" :onclick "eww update power_pending='' power_sel=0"
           (box :class "pm-cbtn-in" :space-evenly false :spacing 8
             (label :text "󰅖") (label :text "Cancel")))
-        (button :class "pm-ok" :onclick "setsid -f bash $HOME/.config/eww/scripts/power-run ${power_pending}"
+        (button :class "pm-ok ${power_sel == 1 ? "on" : ""}" :onclick "setsid -f bash $HOME/.config/eww/scripts/power-run ${power_pending}"
           (box :class "pm-cbtn-in" :space-evenly false :spacing 8
             (label :text "󰄬") (label :text "Confirm")))))))
 

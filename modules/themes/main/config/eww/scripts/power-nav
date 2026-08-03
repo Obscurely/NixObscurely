@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Move the power-menu keyboard cursor. $1 = prev|next (Left/Up -> prev, Right/Down/Tab -> next).
+# Range depends on state: action row = 4, confirm = 2. Wraps. Tiny menu, not a hot path -> plain eww get.
+pending=$(eww get power_pending 2>/dev/null)
+sel=$(eww get power_sel 2>/dev/null); sel=${sel:-0}
+[ -n "$pending" ] && len=2 || len=4
+case "$1" in
+  next) sel=$(( (sel + 1) % len )) ;;
+  prev) sel=$(( (sel - 1 + len) % len )) ;;
+esac
+eww update power_sel="$sel"

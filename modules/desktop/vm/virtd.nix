@@ -30,7 +30,6 @@ in {
       virt-viewer
       libvirt
       quickemu # fast way to create optimzed vms
-      stable.quickgui # gui for quickemu
       OVMFFull
     ];
 

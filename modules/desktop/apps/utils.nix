@@ -21,18 +21,13 @@ in {
       bleachbit # clean up computer utility
       gnome-calculator # calculator
       gparted # partition manager
-      lxappearance # appearance customization tool
-      kdePackages.kate # notepad++ but for linux
       pavucontrol # audio control utility (universal)
       qbittorrent # torrent downloader utility
       ristretto # photo viewer
-      kdePackages.ark # imo best linux archive manager
-      xfce4-settings # setting manager
-      gnome-pomodoro # pomodor style timer for taking breaks
+      xarchiver # archive manager (GTK, Thunar-integrated)
+      xfce.thunar-archive-plugin # right-click extract/create in Thunar
 	  moonlight-qt # sunshine client
 
-      # My packages
-      my.estash
 
       # libs
       xfce4-exo # this is for xfce shortcuts like open terminal

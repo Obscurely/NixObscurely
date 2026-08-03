@@ -16,7 +16,6 @@ in {
     user.packages = with pkgs; [
       mpv
       mpvc # CLI controller for mpv
-      haruna # a nicer, better front end for mpv
     ];
   };
 }

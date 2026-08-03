@@ -57,6 +57,7 @@ in {
     {
       user.packages = with pkgs; [
         papirus-icon-theme
+        gtk-engine-murrine # GTK2 Murrine engine (libmurrine.so) — flat GTK2 look for Glacial-Dark
       ];
       fonts = {
         packages = with pkgs; [
@@ -86,16 +87,23 @@ in {
             "../.themes/Fluent-Dark".source = ./config/Fluent-Dark;
           }
           {
+            # Glacial-Dark — the glacial GTK theme (gtk 2/3/4), matches the eww desktop.
+            # Installed alongside Fluent for now; NOT yet active. Activation ("the flip")
+            # is a separate, verified step — see
+            # docs/superpowers/specs/2026-08-03-glacial-gtk-theme-design.md §6:
+            #   1. default.nix:20  gtk.theme = "Glacial-Dark"
+            #   2. swap the gtk-4.0 config lever (below) from Fluent to Glacial
+            #   3. base module: add ~/.config/gtk-4.0/settings.ini (prefer-dark)
+            #   4. Qt/Kvantum decision, then remove the Fluent-Dark dir + its entries.
+            "../.themes/Glacial-Dark".source = ./config/Glacial-Dark;
+          }
+          {
             # Make gtk themes work with libadwaita
             "gtk-4.0".source = ./config/Fluent-Dark/gtk-4.0;
           }
           {
             # Installation of the cursor theme
             "../.icons/volantes_cursors".source = ./config/volantes_cursors;
-          }
-          {
-            # Haruna theme
-            "harunarc".source = ./config/harunarc;
           }
           {
             # Kvantum (Qt) theme

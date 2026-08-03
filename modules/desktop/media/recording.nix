@@ -25,7 +25,7 @@ in {
       )
       ++ (
         if cfg.video.enable
-        then [unstable.obs-studio stable.handbrake]
+        then [unstable.obs-studio]
         else []
       );
     home.configFile = with config.modules;

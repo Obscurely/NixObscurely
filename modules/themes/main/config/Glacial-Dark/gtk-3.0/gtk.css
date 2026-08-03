@@ -1,0 +1,605 @@
+/*
+ * ============================================================================
+ *  Glacial-Dark — GTK3 overlay for adw-gtk3-dark
+ * ============================================================================
+ *  Deployed to ~/.config/gtk-3.0/gtk.css (GTK user provider, priority 800).
+ *  The GTK3 theme itself is `adw-gtk3-dark`; this file RECOLORS it to the glacial
+ *  palette (the adw-colors method: redefine the named colors, then a focused layer
+ *  of widget fixes for things adw draws OUTSIDE the named-color system — light
+ *  gradients, bright cell selections, inset highlights, light troughs, .osd, …).
+ *
+ *  Opaque palette (measured from the live eww bar + tuned by eye; the authoritative
+ *  copy lives in docs/glacial-design-language.md §2.1). Apps are opaque — no transparency:
+ *    surfaces:  window #16202B · content/view #141B22 · headerbar #1B2530
+ *               sidebar #1C252E · card/popover/dialog #1E2A38 · hover #263442
+ *               border #2E3B49 · search-entry #212E3B · menu #202A35
+ *    text:      #CBD8EA · dim #90A4BC · disabled #4C5D72
+ *    accent — SPLIT BY ROLE (do not merge):
+ *       small marks (focus ring / links / switch dot / active-tab)  = bright #8CC6F2
+ *       button / switch / menu-highlight FILL                       = #31485D  (fg #D6E3F1)
+ *       file-view SELECTION (rows / rubberband / text)              = #34506B  (fg #D6E3F1)
+ *       progress / level / scale FILL                               = #5E8DB8
+ *    semantic:  warning #E7B872 · error/destructive #E58A8A · success #8FC7B4
+ *
+ *  §1 named colors carry most apps; §2+ are targeted widget fixes. Kept flat, low
+ *  internal contrast (glacial calm). Validated headless: 0 GtkCssProvider errors.
+ * ============================================================================
+ */
+
+/* ============================================================================
+ * 1. NAMED COLORS  (the recolor layer — drives every well-behaved widget)
+ * ==========================================================================*/
+/* -- surface ladder -- */
+@define-color window_bg_color   #16202B;
+@define-color theme_bg_color    #16202B;
+@define-color view_bg_color     #141B22;
+@define-color theme_base_color  #141B22;
+@define-color content_view_bg   #141B22;
+@define-color text_view_bg      #141B22;
+@define-color headerbar_bg_color #1B2530;
+@define-color panel_bg_color    #1B2530;
+@define-color card_bg_color     #1E2A38;
+@define-color dialog_bg_color   #1E2A38;
+@define-color popover_bg_color  #1E2A38;
+@define-color thumbnail_bg_color #1E2A38;
+@define-color sidebar_bg_color  #1C252E;
+@define-color borders           #2E3B49;
+@define-color unfocused_borders #232E3B;
+
+/* -- foreground (opaque) -- */
+@define-color window_fg_color #CBD8EA;
+@define-color view_fg_color   #CBD8EA;
+@define-color theme_fg_color  #CBD8EA;
+@define-color theme_text_color #CBD8EA;
+@define-color headerbar_fg_color #CBD8EA;
+@define-color panel_fg_color #CBD8EA;
+@define-color card_fg_color #CBD8EA;
+@define-color dialog_fg_color #CBD8EA;
+@define-color popover_fg_color #CBD8EA;
+@define-color sidebar_fg_color #CBD8EA;
+@define-color thumbnail_fg_color #CBD8EA;
+
+/* -- accent (see role split in the header) -- */
+@define-color accent_bg_color #31485D;
+@define-color accent_fg_color #D6E3F1;
+@define-color accent_color    #8CC6F2;
+@define-color theme_selected_bg_color #34506B;
+@define-color theme_selected_fg_color #D6E3F1;
+
+/* -- headerbar / sidebar shades + borders -- */
+@define-color headerbar_border_color       #2E3B49;
+@define-color headerbar_backdrop_color     #16202B;
+@define-color headerbar_shade_color        alpha(#000000, 0.26);
+@define-color headerbar_darker_shade_color alpha(#000000, 0.38);
+@define-color sidebar_backdrop_color #141B22;
+@define-color sidebar_border_color   #2E3B49;
+@define-color sidebar_shade_color    alpha(#000000, 0.24);
+@define-color card_shade_color       alpha(#000000, 0.24);
+@define-color popover_shade_color    alpha(#000000, 0.24);
+@define-color shade_color            alpha(#000000, 0.26);
+@define-color scrollbar_outline_color alpha(#000000, 0.36);
+
+/* -- semantic (amber reserved for warning only) -- */
+@define-color destructive_bg_color #E58A8A;
+@define-color destructive_fg_color #2A0E0E;
+@define-color destructive_color    #E58A8A;
+@define-color error_bg_color #E58A8A;
+@define-color error_fg_color #2A0E0E;
+@define-color error_color    #E58A8A;
+@define-color warning_bg_color #E7B872;
+@define-color warning_fg_color #241A0A;
+@define-color warning_color    #E7B872;
+@define-color success_bg_color #8FC7B4;
+@define-color success_fg_color #0C1A15;
+@define-color success_color    #8FC7B4;
+
+/* -- insensitive / disabled -- */
+@define-color insensitive_bg_color   #16202B;
+@define-color insensitive_fg_color   #4C5D72;
+@define-color insensitive_base_color #141B22;
+@define-color unfocused_insensitive_color #4C5D72;
+
+/* -- unfocused / backdrop -- */
+@define-color theme_unfocused_fg_color          #90A4BC;
+@define-color theme_unfocused_text_color        #90A4BC;
+@define-color theme_unfocused_bg_color          #16202B;
+@define-color theme_unfocused_base_color        #141B22;
+@define-color theme_unfocused_selected_bg_color #2C4560;
+@define-color theme_unfocused_selected_fg_color #CBD8EA;
+
+/* -- WM (client-side decoration) -- */
+@define-color wm_title            #CBD8EA;
+@define-color wm_unfocused_title  #90A4BC;
+@define-color wm_bg_a  #1B2530;
+@define-color wm_bg_b  #1B2530;
+@define-color wm_border #2E3B49;
+@define-color wm_borders_edge alpha(#FFFFFF, 0.05);
+@define-color wm_highlight    alpha(#FFFFFF, 0.03);
+@define-color wm_shadow       alpha(#000000, 0.45);
+@define-color wm_button_hover_color_a  #263442;
+@define-color wm_button_hover_color_b  #263442;
+@define-color wm_button_active_color_a #31485D;
+@define-color wm_button_active_color_b #31485D;
+@define-color wm_button_active_color_c #31485D;
+
+/* -- raw blue ramp (some widgets reference these directly) -- */
+@define-color blue_1 #C7E2F7;
+@define-color blue_2 #A6CCEC;
+@define-color blue_3 #8CC6F2;
+@define-color blue_4 #5E8DB8;
+@define-color blue_5 #3E5E80;
+
+/* ============================================================================
+ * 2. SURFACES the named colors don't fully reach — sidebars, entries, menus
+ * ==========================================================================*/
+/* Sidebars: distinct recessed nav tone (else GTK3 apps render the sidebar at the
+   content/base color, identical to the file view). */
+.sidebar, .sidebar .view, .sidebar list, .sidebar row, .sidebar treeview.view,
+placessidebar, placessidebar .view, placessidebar list, .navigation-sidebar,
+scrolledwindow.sidebar, paned > .sidebar,
+.shortcuts-pane, .shortcuts-pane .view {
+  background-color: @sidebar_bg_color;
+}
+
+/* Search / location entry: recessed input. */
+entry, entry.flat, entry.search, spinbutton, spinbutton entry,
+.location-bar entry, .path-bar entry, .toolbar entry, searchbar entry {
+  background-color: #212E3B;
+}
+entry:focus, entry:focus-within, entry.search:focus { background-color: #212E3B; }
+
+/* Menus + popovers: slightly-desaturated card bg + a subtle settled border. */
+menu, .menu, .context-menu, popover.menu, popover.background, popover, popover.menu box {
+  background-color: #202A35;
+}
+menu, .menu, .context-menu, popover.background, .csd popover.background, popover, popover.menu {
+  border: 1px solid #2E3B49;
+}
+
+/* ============================================================================
+ * 3. SELECTION  (file-view rows/cells/text = calm steel #34506B)
+ * ==========================================================================*/
+.view:selected, .view:selected:focus,
+iconview:selected, iconview:selected:focus,
+treeview.view:selected, treeview.view:selected:focus,
+flowboxchild:selected, flowboxchild:selected:focus,
+list row:selected, list row:selected:focus, row:selected,
+gridview child:selected,
+textview text selection, entry selection, label selection {
+  background-color: #34506B;
+  color: #D6E3F1;
+}
+rubberband, .rubberband, treeview.view rubberband, iconview.view rubberband,
+flowbox rubberband, gridview rubberband, .content-view rubberband {
+  background-color: alpha(#34506B, 0.35);
+  border: 1px solid #4E7599;
+}
+/* Extend the same #34506B to the :focus / headerbar-entry / spinbutton / label /
+   grid-tile / DnD selection variants adw paints with a translucent accent wash. */
+textview text selection:focus, textview text:selected, textview text:selected:focus,
+.view text selection, .view text selection:focus, .view text:selected,
+iconview text selection, iconview text selection:focus, iconview text:selected,
+spinbutton:not(.vertical) selection,
+headerbar entry selection, .titlebar entry selection,
+entry selection:focus, label:selected,
+.content-view .tile:selected, .content-view .tile:active,
+treeview.view button.dnd, treeview.view header.button.dnd {
+  background-color: #34506B;
+  color: #D6E3F1;
+}
+
+/* ============================================================================
+ * 4. BUTTONS
+ * ==========================================================================*/
+/* Raised buttons: adw draws a light background-image gradient + inset top
+   highlight (renders white on dialog Help/Close). Flatten to a dark glacial
+   button. Leave .flat / suggested / destructive / links / titlebuttons alone. */
+button {
+  background-image: none;
+  box-shadow: none;
+  text-shadow: none;
+}
+button:not(.flat):not(.suggested-action):not(.destructive-action):not(.link):not(.titlebutton),
+spinbutton button {
+  background-color: #1E2A38;
+  border: 1px solid #2E3B49;
+  color: #CBD8EA;
+  background-image: none;
+  box-shadow: none;
+}
+button:not(.flat):not(.suggested-action):not(.destructive-action):not(.link):hover {
+  background-color: #263442;
+}
+button:not(.flat):not(.suggested-action):not(.destructive-action):not(.link):active,
+button:not(.flat):not(.suggested-action):not(.destructive-action):not(.link):checked {
+  background-color: #2E4054;
+}
+button:disabled { background-color: #182028; color: #4C5D72; }
+
+/* Suggested / destructive: the flatten above excludes them, so adw wins (near-white
+   suggested, translucent pink destructive). Pin to opaque semantic fills. Two
+   families because the headerbar/content family out-specifies the base. */
+button.suggested-action,
+headerbar button.suggested-action:not(.titlebutton),
+.titlebar button.suggested-action:not(.titlebutton),
+popover.background button.suggested-action,
+.content list button.suggested-action,
+list.content button.suggested-action,
+list.view.frame button.suggested-action,
+messagedialog.csd.background button.text-button.suggested-action {
+  background-color: #31485D;
+  background-image: none;
+  color: #D6E3F1;
+  border: 1px solid #2E3B49;
+  box-shadow: none;
+  text-shadow: none;
+}
+button.suggested-action:hover,
+headerbar button.suggested-action:hover:not(.titlebutton),
+.titlebar button.suggested-action:hover:not(.titlebutton),
+popover.background button.suggested-action:hover {
+  background-color: #34506B;
+}
+button.suggested-action:active,
+button.suggested-action:checked,
+headerbar button.suggested-action:checked:not(.titlebutton),
+.titlebar button.suggested-action:checked:not(.titlebutton) {
+  background-color: #2E4054;
+}
+button.destructive-action,
+headerbar button.destructive-action:not(.titlebutton),
+.titlebar button.destructive-action:not(.titlebutton),
+popover.background button.destructive-action,
+.content list button.destructive-action,
+list.content button.destructive-action,
+list.view.frame button.destructive-action,
+messagedialog.csd.background button.text-button.destructive-action {
+  background-color: #E58A8A;
+  background-image: none;
+  color: #2A0E0E;
+  border: 1px solid #2E3B49;
+  box-shadow: none;
+  text-shadow: none;
+}
+/* No lighter/darker pink in the palette + shade() oversaturates, so #E58A8A stands
+   across hover/active for destructive. */
+button.suggested-action:disabled,
+button.destructive-action:disabled,
+headerbar button.suggested-action:disabled:not(.titlebutton),
+headerbar button.destructive-action:disabled:not(.titlebutton),
+.titlebar button.suggested-action:disabled:not(.titlebutton),
+.titlebar button.destructive-action:disabled:not(.titlebutton) {
+  background-color: #182028;
+  color: #4C5D72;
+}
+/* Flat action buttons: transparent bg, tinted TEXT (adw uses the fill as text —
+   steel-on-dark is near-invisible; suggested → bright mark, destructive → readable red). */
+button.suggested-action.flat, button.suggested-action.flat:disabled {
+  color: #8CC6F2; background-color: transparent; background-image: none;
+}
+button.destructive-action.flat, button.destructive-action.flat:disabled {
+  color: #E58A8A; background-color: transparent; background-image: none;
+}
+
+/* Linked groups: the flatten's blanket border re-adds a full box on every linked
+   child (doubled seams on path-bars, spinbuttons, split buttons). Neutralize the
+   inner edges/radii. Seam selectors carry :not(.flat):not(.titlebutton) so they
+   out-specify the raised-button rule. */
+.linked:not(.vertical) > button:not(.flat):not(.titlebutton):not(:first-child),
+.linked:not(.vertical) > combobox:not(:first-child) > box > button.combo,
+.linked:not(.vertical) > entry:not(:first-child),
+.linked:not(.vertical) > spinbutton:not(:first-child) {
+  border-left-color: #2E3B49;
+}
+.linked:not(.vertical) > button:not(.flat):not(.titlebutton):not(:last-child):not(:only-child) {
+  border-right-style: none;
+}
+.linked:not(.vertical) > button:not(.flat):not(.titlebutton):not(:first-child):not(:last-child) {
+  border-radius: 0;
+}
+.linked:not(.vertical) > button:not(.flat):not(.titlebutton):first-child:not(:only-child) {
+  border-top-right-radius: 0; border-bottom-right-radius: 0;
+}
+.linked:not(.vertical) > button:not(.flat):not(.titlebutton):last-child:not(:only-child) {
+  border-top-left-radius: 0; border-bottom-left-radius: 0;
+}
+
+/* ============================================================================
+ * 5. COMBOBOX  (transparent container + single bordered button + transparent
+ *    inner nodes so hover lightens uniformly; dark popup; modern popover.combo)
+ * ==========================================================================*/
+combobox, combobox > box, combobox box.linked {
+  background-color: transparent;
+  background-image: none;
+  border: none;
+  box-shadow: none;
+}
+combobox button, combobox button.combo, combobox .combo {
+  background-color: #1E2A38;
+  color: #CBD8EA;
+  border: 1px solid #2E3B49;
+  border-radius: 6px;
+  background-image: none;
+  box-shadow: none;
+}
+combobox button:hover, combobox button.combo:hover, combobox .combo:hover {
+  background-color: #263442;
+}
+/* inner nodes transparent → inherit the button bg (incl. hover); kills the
+   out-of-theme bright-blue (#4276B2) value cell. */
+combobox button box, combobox button cellview, combobox button .cell,
+combobox button arrow, combobox arrow, combobox button label, combobox button > *,
+combobox cellview, combobox cellview:selected,
+combobox button:active cellview, combobox button:checked cellview {
+  background-color: transparent;
+  background-image: none;
+  color: #CBD8EA;
+}
+/* classic dropdown popup */
+combobox window.popup, combobox window.popup .menu, combobox window.popup menu,
+combobox window.popup decoration, combobox popover, combobox popover contents,
+combobox popover.menu, combobox popover box, combobox popover.background {
+  background-color: #1E2A38;
+  border: 1px solid #2E3B49;
+  box-shadow: none;
+}
+combobox window.popup menuitem, combobox popover modelbutton,
+combobox window.popup .view, combobox window.popup treeview.view, combobox window.popup cellview {
+  background-color: transparent;
+  color: #CBD8EA;
+}
+combobox window.popup menuitem:hover, combobox popover modelbutton:hover,
+combobox window.popup .view:selected, combobox window.popup treeview.view:selected,
+combobox window.popup cellview:selected {
+  background-color: #34506B;
+  color: #D6E3F1;
+}
+/* modern combobox popup (GtkDropDown): GTK reparents it to a TOPLEVEL popover.combo
+   outside the `combobox` subtree, so the rules above miss it. */
+popover.combo, popover.combo.background {
+  background-color: #1E2A38;
+  border: 1px solid #2E3B49;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px 2px alpha(#000000, 0.32);
+}
+popover.combo contents, popover.combo > contents, popover.combo list {
+  background-color: transparent;
+}
+popover.combo list > row:hover,
+popover.combo row.activatable:hover,
+popover.combo row.activatable.has-open-popup {
+  background-color: #263442;
+  color: #CBD8EA;
+}
+popover.combo list > row:selected, popover.combo row.activatable:selected {
+  background-color: #34506B;
+  color: #D6E3F1;
+}
+popover.combo list > row:not(:last-child) { border-bottom: 1px solid #2E3B49; }
+
+/* ============================================================================
+ * 6. MENUS / MENUBAR highlight  (muted steel #31485D; incl. keyboard-selected)
+ * ==========================================================================*/
+menubar > menuitem:hover, menubar > menuitem:selected, menubar > menuitem:active,
+menubar menuitem:hover, menubar menuitem:selected, menubar menuitem:active,
+menu menuitem:hover, .menu menuitem:hover, .context-menu menuitem:hover,
+menuitem:hover, menuitem:selected,
+popover.menu modelbutton:hover, popover.menu modelbutton:focus, modelbutton:hover,
+popover.menu modelbutton:selected, modelbutton.flat:selected, .menuitem.button.flat:selected {
+  background-color: #31485D;
+  background-image: none;
+  box-shadow: none;
+  color: #D6E3F1;
+}
+
+/* ============================================================================
+ * 7. PROGRESS / LEVEL / SCALE  (trough #141B22 · fill #5E8DB8 · knob #8CC6F2)
+ * ==========================================================================*/
+progressbar > trough, levelbar trough, levelbar > trough {
+  background-color: #141B22;
+  border: 1px solid #2E3B49;
+  box-shadow: none;
+}
+progressbar > trough > progress {
+  background-color: #5E8DB8;
+  background-image: none;
+  border: none;
+  box-shadow: none;
+}
+/* levelbar: `.filled` is a GTK3 no-op; the real fill nodes are block.high /
+   block:not(.empty), which adw fills with the button role #31485D. */
+levelbar block.high, levelbar block:not(.empty),
+levelbar trough > block.high, levelbar trough > block:not(.empty) {
+  background-color: #5E8DB8;
+  border-color: #5E8DB8;
+  box-shadow: none;
+}
+levelbar block.empty, levelbar trough > block.empty {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+}
+progressbar text, levelbar text { color: #CBD8EA; }
+
+/* GtkScale (volume/brightness/settings sliders): trough recessed, fill = progress
+   role #5E8DB8, knob = bright mark #8CC6F2 (consistent with the switch dot). */
+scale trough, scale > trough,
+scale.horizontal > trough, scale.vertical > trough {
+  background-color: #141B22;
+  border: 1px solid #2E3B49;
+  box-shadow: none;
+}
+scale highlight, scale > trough > highlight, scale > trough > fill {
+  background-color: #5E8DB8;
+  background-image: none;
+  border: none;
+  box-shadow: none;
+}
+scale slider, scale > trough > slider {
+  background-color: #8CC6F2;
+  background-image: none;
+  min-width: 18px;
+  min-height: 18px;
+  border: 1px solid transparent;
+  border-radius: 100%;
+  box-shadow: none;
+}
+scale slider:disabled, scale > trough > slider:disabled {
+  background-color: #4C5D72;
+  box-shadow: none;
+}
+/* Marked scales swap the CSS knob for a light bitmap on :hover/:active — kill it. */
+scale.marks-before:not(.marks-after) slider,
+scale.marks-after:not(.marks-before) slider,
+scale.marks-before:not(.marks-after) slider:hover,
+scale.marks-after:not(.marks-before) slider:hover,
+scale.marks-before:not(.marks-after) slider:active,
+scale.marks-after:not(.marks-before) slider:active {
+  background-image: none;
+  background-color: #8CC6F2;
+  border: 1px solid transparent;
+  border-radius: 100%;
+  box-shadow: none;
+}
+/* in-cell progress (file-copy/download columns): `.progressbar`/`.trough` class
+   nodes the element-node rule can't reach → fill leaks #31485D. */
+treeview.view.progressbar {
+  background-color: #5E8DB8;
+  background-image: none;
+  box-shadow: none;
+}
+treeview.view.trough { background-color: #141B22; }
+
+/* ============================================================================
+ * 8. SWITCH  (knob = bright mark #8CC6F2; track = accent_bg #31485D via §1)
+ * ==========================================================================*/
+switch slider, switch:hover slider, switch:checked > slider {
+  background-color: #8CC6F2;
+  min-width: 20px;
+  min-height: 20px;
+  border: 1px solid transparent;
+  border-radius: 50%;
+}
+switch:disabled slider { background-color: #4C5D72; box-shadow: none; }
+headerbar switch:backdrop slider, .titlebar switch:backdrop slider,
+headerbar switch:backdrop:checked > slider, .titlebar switch:backdrop:checked > slider {
+  background-color: #90A4BC;
+}
+
+/* ============================================================================
+ * 9. TOOLTIPS  (opaque glacial card)
+ * ==========================================================================*/
+tooltip, tooltip.background {
+  background-color: #1E2A38;
+  color: #CBD8EA;
+  border: 1px solid #2E3B49;
+  border-radius: 8px;
+}
+tooltip.background { background-color: #1E2A38; }
+tooltip box, tooltip label, tooltip image, tooltip * {
+  background-color: transparent;
+  color: #CBD8EA;
+}
+
+/* ============================================================================
+ * 10. NOTEBOOK active-tab underline  (bright mark #8CC6F2, per-edge inset)
+ * ==========================================================================*/
+notebook > header.top > tabs > tab:not(.reorderable-page):checked,
+notebook > header.top > tabs > tab:checked { box-shadow: inset 0 -4px #8CC6F2; }
+notebook > header.bottom > tabs > tab:not(.reorderable-page):checked,
+notebook > header.bottom > tabs > tab:checked { box-shadow: inset 0 4px #8CC6F2; }
+notebook > header.left > tabs > tab:not(.reorderable-page):checked,
+notebook > header.left > tabs > tab:checked { box-shadow: inset -4px 0 #8CC6F2; }
+notebook > header.right > tabs > tab:not(.reorderable-page):checked,
+notebook > header.right > tabs > tab:checked { box-shadow: inset 4px 0 #8CC6F2; }
+
+/* ============================================================================
+ * 11. .osd OVERLAY SURFACES  (adw hardcodes rgba(0,0,0,.7)+white → opaque glacial)
+ *     media/video bars, app-notifications, touch-selection/magnifier, scale-popup.
+ * ==========================================================================*/
+.osd, .osd.background,
+.osd .scale-popup, .scale-popup, popover.scale-popup, popover.background.scale-popup,
+.app-notification, .app-notification.frame,
+.csd popover.background.touch-selection, popover.background.touch-selection,
+.csd popover.background.magnifier, popover.background.magnifier,
+.csd popover.background.osd, popover.background.osd {
+  background-color: #1E2A38;
+  color: #CBD8EA;
+  border: 1px solid #2E3B49;
+}
+toolbar.osd, .osd toolbar { background-color: #1E2A38; }
+button.osd, .osd button, .app-notification button,
+popover.background.touch-selection button, popover.background.magnifier button, .scale-popup button {
+  background-color: #1E2A38;
+  background-image: none;
+  color: #CBD8EA;
+  border: 1px solid #2E3B49;
+  box-shadow: none;
+  text-shadow: none;
+  -gtk-icon-shadow: none;
+}
+button.osd:hover, .osd button:hover, .app-notification button:hover { background-color: #263442; }
+button.osd:active, button.osd:checked, .osd button:active, .osd button:checked,
+.app-notification button:active, .app-notification button:checked { background-color: #2E4054; }
+button.osd:disabled, .osd button:disabled, .app-notification button:disabled {
+  background-color: #182028; color: #4C5D72;
+}
+.osd entry, .osd spinbutton:not(.vertical) {
+  background-color: #212E3B;
+  color: #CBD8EA;
+  border-color: #2E3B49;
+  box-shadow: none;
+  text-shadow: none;
+  -gtk-icon-shadow: none;
+}
+.osd entry:focus, .osd spinbutton:focus:not(.vertical) {
+  border-color: #8CC6F2;
+  box-shadow: inset 0 0 0 1px #8CC6F2;
+}
+.osd scale trough, .osd scale > trough, .osd scale fill, .osd scale > trough > fill,
+.osd progressbar trough { background-color: #141B22; border-color: #2E3B49; }
+.osd scale highlight, .osd scale > trough > highlight { background-color: #5E8DB8; border-color: #2E3B49; }
+.osd scale slider, .osd scale > trough > slider {
+  background-color: #8CC6F2;
+  background-image: none;
+  min-width: 18px;
+  min-height: 18px;
+  border: 1px solid transparent;
+  border-radius: 100%;
+  box-shadow: none;
+}
+
+/* ============================================================================
+ * 12. MISC — entry-tag chips + storage/disk-usage legend (other apps)
+ * ==========================================================================*/
+.entry-tag { color: #D6E3F1; background-color: #31485D; }
+.entry-tag:hover { background-color: #34506B; }
+.entry-tag.button { background-color: transparent; color: alpha(#D6E3F1, 0.8); }
+:not(:backdrop) .entry-tag.button:hover { border: 1px solid #4E7599; color: #D6E3F1; }
+:not(:backdrop) .entry-tag.button:active { background-color: #34506B; color: #D6E3F1; }
+
+/* .storage-bar (GtkFileChooser / Nautilus / GNOME-Disks): a categorical LEGEND —
+   segments stay mutually distinguishable, remapped onto the glacial cool ramp. */
+.storage-bar .app     { background-color: #5E8DB8; border-bottom-color: #3E5E80; }
+.storage-bar .audio   { background-color: #8CC6F2; border-bottom-color: #5E8DB8; }
+.storage-bar .files   { background-color: #34506B; border-bottom-color: #2C4560; }
+.storage-bar .photo   { background-color: #8FC7B4; border-bottom-color: #5E8DB8; }
+.storage-bar .video   { background-color: #A6CCEC; border-bottom-color: #5E8DB8; }
+.storage-bar .disk-bar { background-color: #31485D; }
+.storage-bar .swap    { background-color: #3E5E80; }
+.storage-bar .ext4, .storage-bar .ext3, .storage-bar .ext2 { background-color: #8FC7B4; }
+.storage-bar .fat16, .storage-bar .fat32 { background-color: #E7B872; }
+.storage-bar .btrfs   { background-color: #5E8DB8; }
+.storage-bar .xfs     { background-color: #34506B; }
+.storage-bar .ntfs    { background-color: #A6CCEC; }
+.storage-bar .luks    { background-color: #31485D; }
+.storage-bar .lvm     { background-color: #5E8DB8; }
+.storage-bar .none    { background-color: #34506B; }
+.storage-bar .unused  { background-color: #2E3B49; }
+.storage-bar .app image, .storage-bar .video image, .storage-bar .swap image { color: #D6E3F1; }
+.storage-bar .audio image, .storage-bar .files image, .storage-bar .photo image,
+.storage-bar .empty-block image, .storage-bar .legend image,
+.storage-bar .ext2 image, .storage-bar .ext3 image, .storage-bar .ext4 image,
+.storage-bar .fat16 image, .storage-bar .fat32 image, .storage-bar .btrfs image,
+.storage-bar .xfs image, .storage-bar .ntfs image, .storage-bar .luks image,
+.storage-bar .lvm image, .storage-bar .none image, .storage-bar .unused image { color: #141B22; }

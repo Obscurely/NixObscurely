@@ -30,7 +30,6 @@ in {
       alsa-plugins
       alsa-utils
       alsa-lib
-      alsa-tools
       pulseaudio # for the tools
       playerctl # for media keys
     ];

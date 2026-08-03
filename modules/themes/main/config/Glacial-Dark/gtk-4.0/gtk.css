@@ -1,0 +1,832 @@
+/*
+ * ============================================================================
+ *  Glacial-Dark — GTK4 / libadwaita recolor + conservative flat restyle
+ * ============================================================================
+ *  Deploys to ~/.config/gtk-4.0/gtk.css (GTK user provider, priority 800):
+ *  THE working lever for BOTH libadwaita apps and plain GTK4 apps.
+ *
+ *  ASSET-FREE: no url() / resource:// (the config-dir loader does not resolve
+ *  them). No GTK4-invalid props: dark mode is requested via
+ *  gtk-application-prefer-dark-theme in gtk-4.0/settings.ini (GTK CSS has no
+ *  `color-scheme`); no GTK3-only `-gtk-icontheme()`. Check / radio / switch are
+ *  RECOLORED ONLY — libadwaita keeps rendering their geometry.
+ *
+ *  Strategy (adw-colors method): redefine libadwaita's named colors first (the
+ *  robust ~90% win), then a light, flat, icy restyle layer for the nodes adw
+ *  draws OUTSIDE the named-color system (value fills, dropdown popups, menus,
+ *  .osd, tooltips, switch/scale knobs). Flat everywhere; only popovers/menus
+ *  keep a soft shadow for legibility.
+ *
+ *  Palette (authoritative copy: docs/glacial-design-language.md §2.1 — opaque):
+ *    surfaces:  window #16202B · content/view #141B22 · headerbar #1B2530
+ *               sidebar #1C252E · card/popover/dialog #1E2A38 · hover #263442
+ *               border #2E3B49 · entry #212E3B · menu #202A35
+ *    text:      #CBD8EA · dim #90A4BC · disabled #4C5D72
+ *    accent — SPLIT BY ROLE (do not merge — libadwaita mostly unifies these
+ *             under accent_bg, so where a distinct node exists we override):
+ *       small marks (focus ring / links / switch dot / active glyph) = #8CC6F2
+ *       control + SELECTION fill (buttons, switch track, sel. rows)  = #34506B (fg #D6E3F1)
+ *       value fill (progress / level / scale highlight)              = #5E8DB8
+ *    semantic:  warning #E7B872 (fg #241A0A) · error/destructive #E58A8A (fg #2A0E0E)
+ *               success #8FC7B4 (fg #0C1A15)
+ *    shadows:   alpha(#000000, .24–.45). Everything OPAQUE.
+ * ============================================================================
+ */
+
+/* ============================================================================
+ * 1. NAMED COLORS  (@define-color underscore form — drives every well-behaved
+ *    libadwaita + plain-GTK4 widget. This is the primary recolor layer.)
+ * ==========================================================================*/
+
+/* === CORE SURFACES / TEXT === */
+@define-color window_bg_color #16202B;
+@define-color window_fg_color #CBD8EA;
+@define-color view_bg_color   #141B22;
+@define-color view_fg_color   #CBD8EA;
+
+/* === HEADERBAR === */
+@define-color headerbar_bg_color           #1B2530;
+@define-color headerbar_fg_color           #CBD8EA;
+@define-color headerbar_border_color       #2E3B49;
+@define-color headerbar_backdrop_color     #16202B;
+@define-color headerbar_shade_color        alpha(#000000, 0.26);
+@define-color headerbar_darker_shade_color alpha(#000000, 0.38);
+
+/* === SIDEBAR === */
+@define-color sidebar_bg_color       #1C252E;
+@define-color sidebar_fg_color       #CBD8EA;
+@define-color sidebar_backdrop_color #141B22;
+@define-color sidebar_border_color   #2E3B49;
+@define-color sidebar_shade_color    alpha(#000000, 0.24);
+
+/* === SECONDARY SIDEBAR === */
+@define-color secondary_sidebar_bg_color       #1C252E;
+@define-color secondary_sidebar_fg_color       #CBD8EA;
+@define-color secondary_sidebar_backdrop_color #141B22;
+@define-color secondary_sidebar_border_color   #2E3B49;
+@define-color secondary_sidebar_shade_color    alpha(#000000, 0.24);
+
+/* === CARD / RAISED === */
+@define-color card_bg_color    #1E2A38;
+@define-color card_fg_color    #CBD8EA;
+@define-color card_shade_color alpha(#000000, 0.24);
+
+/* === DIALOG === */
+@define-color dialog_bg_color #1E2A38;
+@define-color dialog_fg_color #CBD8EA;
+
+/* === POPOVER === */
+@define-color popover_bg_color    #1E2A38;
+@define-color popover_fg_color    #CBD8EA;
+@define-color popover_shade_color alpha(#000000, 0.24);
+
+/* === THUMBNAIL / OVERVIEW === */
+@define-color thumbnail_bg_color #1E2A38;
+@define-color thumbnail_fg_color #CBD8EA;
+@define-color overview_bg_color  #16202B;
+@define-color overview_fg_color  #CBD8EA;
+
+/* === TOGGLE (active) === */
+@define-color active_toggle_bg_color #34506B;
+@define-color active_toggle_fg_color #D6E3F1;
+
+/* === MISC SHADES === */
+@define-color shade_color             alpha(#000000, 0.26);
+@define-color scrollbar_outline_color alpha(#000000, 0.36);
+
+/* === ACCENT — role split (see header) ===
+   accent_bg = the CONTROL + SELECTION fill (muted steel), accent = the bright
+   SMALL-MARK color (focus ring / links / switch dot). libadwaita unifies most
+   accented widgets under accent_bg, so setting it steel makes selected rows,
+   switch track, checked check/radio and .suggested-action all read calm. */
+@define-color accent_bg_color #34506B;
+@define-color accent_fg_color #D6E3F1;
+@define-color accent_color    #8CC6F2;
+
+/* === SEMANTIC: DESTRUCTIVE (cool muted red) === */
+@define-color destructive_bg_color #E58A8A;
+@define-color destructive_fg_color #2A0E0E;
+@define-color destructive_color    #E58A8A;
+
+/* === SEMANTIC: SUCCESS (cold teal-green) === */
+@define-color success_bg_color #8FC7B4;
+@define-color success_fg_color #0C1A15;
+@define-color success_color    #8FC7B4;
+
+/* === SEMANTIC: WARNING (amber — the ONLY warm accent, warning only) === */
+@define-color warning_bg_color #E7B872;
+@define-color warning_fg_color #241A0A;
+@define-color warning_color    #E7B872;
+
+/* === SEMANTIC: ERROR (cool muted red) === */
+@define-color error_bg_color #E58A8A;
+@define-color error_fg_color #2A0E0E;
+@define-color error_color    #E58A8A;
+
+/* === DERIVED LOCAL TINTS (define-after core; reused by the flat layer) === */
+@define-color glacial_border        #2E3B49;
+@define-color glacial_border_strong #4E7599;
+@define-color glacial_hover         #263442;
+@define-color glacial_menu_bg       #202A35;
+@define-color glacial_entry_bg      #212E3B;
+@define-color glacial_dim           #90A4BC;
+@define-color glacial_disabled      #4C5D72;
+@define-color glacial_disabled_bg   #182028;
+@define-color glacial_mark          #8CC6F2;
+@define-color glacial_value_fill    #5E8DB8;
+@define-color glacial_accent_soft   alpha(#8CC6F2, 0.28);
+
+/* ============================================================================
+ * 2. GTK-COMPAT ALIASES  (so plain-GTK4 / Adwaita apps that reference the old
+ *    theme_* names track the same ladder)
+ * ==========================================================================*/
+@define-color theme_bg_color          @window_bg_color;
+@define-color theme_fg_color          @window_fg_color;
+@define-color theme_base_color        @view_bg_color;
+@define-color theme_text_color        @view_fg_color;
+@define-color theme_selected_bg_color @accent_bg_color;
+@define-color theme_selected_fg_color @accent_fg_color;
+@define-color borders                 @glacial_border;
+@define-color unfocused_borders       @glacial_border;
+@define-color insensitive_bg_color    @window_bg_color;
+@define-color insensitive_fg_color    @glacial_disabled;
+@define-color insensitive_base_color  @view_bg_color;
+
+/* ============================================================================
+ * 2b. CSS-VARIABLE MIRROR  (current libadwaita 1.6+ resolves colors from
+ *     `--name` custom properties; @define-color above is kept as the broad-
+ *     compat baseline for older adw + plain GTK4. Mirror the accent trio +
+ *     key surfaces so newer libadwaita also lands on the glacial ladder.)
+ * ==========================================================================*/
+:root {
+  --window-bg-color: #16202B;
+  --window-fg-color: #CBD8EA;
+  --view-bg-color: #141B22;
+  --view-fg-color: #CBD8EA;
+  --headerbar-bg-color: #1B2530;
+  --headerbar-fg-color: #CBD8EA;
+  --sidebar-bg-color: #1C252E;
+  --secondary-sidebar-bg-color: #1C252E;
+  --card-bg-color: #1E2A38;
+  --dialog-bg-color: #1E2A38;
+  --popover-bg-color: #1E2A38;
+  --accent-bg-color: #34506B;
+  --accent-fg-color: #D6E3F1;
+  --accent-color: #8CC6F2;
+  --destructive-bg-color: #E58A8A;
+  --destructive-fg-color: #2A0E0E;
+  --destructive-color: #E58A8A;
+  --success-bg-color: #8FC7B4;
+  --success-fg-color: #0C1A15;
+  --success-color: #8FC7B4;
+  --warning-bg-color: #E7B872;
+  --warning-fg-color: #241A0A;
+  --warning-color: #E7B872;
+  --error-bg-color: #E58A8A;
+  --error-fg-color: #2A0E0E;
+  --error-color: #E58A8A;
+}
+
+/*
+ * ============================================================================
+ *  CONSERVATIVE FLAT LAYER
+ *  Light touch, recolor-first. Flat: no gradients, no big shadows. No shade()
+ *  (it oversaturates the cool palette) — explicit palette hexes only. Radii:
+ *  buttons/entries 8; cards/popovers/menus 12. Transitions: 150ms color only.
+ * ============================================================================
+ */
+
+/* === WINDOW / BACKGROUND === */
+window,
+.background {
+  background-color: @window_bg_color;
+  color: @window_fg_color;
+}
+
+window:backdrop,
+.background:backdrop {
+  background-color: @window_bg_color;
+  color: @glacial_dim;
+}
+
+/* === HEADERBAR / TITLEBAR (flat, 1px bottom border, no gradient) === */
+headerbar,
+.titlebar {
+  background-color: @headerbar_bg_color;
+  background-image: none;
+  color: @headerbar_fg_color;
+  border-bottom: 1px solid @headerbar_border_color;
+  box-shadow: none;
+}
+
+headerbar:backdrop,
+.titlebar:backdrop {
+  background-color: @headerbar_backdrop_color;
+  color: @glacial_dim;
+}
+
+/* === BUTTONS ===
+   libadwaita themes most button chrome via named colors already; keep this
+   light. Base = flat glacial card; recolor semantic + disabled explicitly. */
+button {
+  background-color: @card_bg_color;
+  background-image: none;
+  color: @window_fg_color;
+  border: 1px solid @glacial_border;
+  border-radius: 8px;
+  box-shadow: none;
+  transition: background-color 150ms ease, color 150ms ease,
+              border-color 150ms ease;
+}
+
+button:hover {
+  background-color: @glacial_hover;
+}
+
+button:active,
+button:checked {
+  background-color: @accent_bg_color;
+  color: @accent_fg_color;
+}
+
+button:disabled {
+  background-color: @card_bg_color;
+  color: @glacial_disabled;
+  border-color: @glacial_border;
+}
+
+button:backdrop {
+  color: @glacial_dim;
+}
+
+/* flat buttons carry no chrome until interacted with */
+button.flat {
+  background-color: transparent;
+  background-image: none;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+button.flat:hover {
+  background-color: @glacial_hover;
+}
+
+button.flat:active,
+button.flat:checked {
+  background-color: @glacial_hover;
+}
+
+button.flat:disabled {
+  background-color: transparent;
+  color: @glacial_disabled;
+}
+
+/* suggested = accent (steel) fill */
+button.suggested-action {
+  background-color: @accent_bg_color;
+  color: @accent_fg_color;
+  border-color: transparent;
+  background-image: none;
+  box-shadow: none;
+}
+
+button.suggested-action:hover {
+  background-color: @accent_bg_color;
+}
+
+button.suggested-action:disabled {
+  background-color: @glacial_disabled_bg;
+  color: @glacial_disabled;
+}
+
+/* destructive = muted red fill */
+button.destructive-action {
+  background-color: @error_bg_color;
+  color: @error_fg_color;
+  border-color: transparent;
+  background-image: none;
+  box-shadow: none;
+}
+
+button.destructive-action:hover {
+  background-color: @error_bg_color;
+}
+
+button.destructive-action:disabled {
+  background-color: @glacial_disabled_bg;
+  color: @glacial_disabled;
+}
+
+/* flat semantic buttons: transparent bg, tinted TEXT (adw uses the fill as text;
+   steel-on-dark is near-invisible → suggested to bright mark, destructive to red) */
+button.suggested-action.flat,
+button.suggested-action.flat:disabled {
+  color: @glacial_mark;
+  background-color: transparent;
+  background-image: none;
+}
+
+button.destructive-action.flat,
+button.destructive-action.flat:disabled {
+  color: @error_color;
+  background-color: transparent;
+  background-image: none;
+}
+
+/* accent-link style */
+button.link {
+  color: @accent_color;
+  background-color: transparent;
+}
+
+/* === ENTRIES / SPINBUTTONS (recessed input, accent focus) === */
+entry,
+.entry,
+spinbutton {
+  background-color: @glacial_entry_bg;
+  background-image: none;
+  color: @view_fg_color;
+  border: 1px solid @glacial_border;
+  border-radius: 8px;
+  box-shadow: none;
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+
+entry:focus,
+entry:focus-within,
+.entry:focus,
+spinbutton:focus-within {
+  border-color: @accent_color;
+  box-shadow: inset 0 0 0 1px @glacial_accent_soft;
+}
+
+entry:disabled,
+.entry:disabled,
+spinbutton:disabled {
+  background-color: @glacial_disabled_bg;
+  color: @glacial_disabled;
+  border-color: @glacial_border;
+}
+
+entry:backdrop,
+.entry:backdrop,
+spinbutton:backdrop {
+  color: @glacial_dim;
+}
+
+entry > placeholder,
+.entry > placeholder {
+  color: @glacial_dim;
+}
+
+/* spinbutton +/- buttons ride the recessed input */
+spinbutton button {
+  background-color: transparent;
+  background-image: none;
+  border: none;
+  box-shadow: none;
+  color: @window_fg_color;
+}
+
+spinbutton button:hover {
+  background-color: @glacial_hover;
+}
+
+/* === SWITCH / CHECK / RADIO — RECOLOR ONLY (no geometry, no icon-source) ===
+   Track fill comes from accent_bg (steel) via §1. Knob/dot = the bright mark
+   #8CC6F2 (matching the switch dot in the design language). No min-width/height,
+   no redraw. */
+switch:checked {
+  background-color: @accent_bg_color;
+}
+
+switch > slider {
+  background-color: @glacial_mark;
+}
+
+switch:disabled > slider {
+  background-color: @glacial_disabled;
+}
+
+check:checked,
+check:indeterminate,
+radio:checked {
+  color: @accent_fg_color;
+  background-color: @accent_bg_color;
+  border-color: @accent_bg_color;
+}
+
+/* === SCROLLBARS (slim, round, dim → accent on hover) === */
+scrollbar {
+  background-color: transparent;
+  border: none;
+}
+
+scrollbar slider {
+  background-color: @glacial_dim;
+  border: none;
+  border-radius: 999px;
+  min-width: 8px;
+  min-height: 8px;
+  transition: background-color 150ms ease;
+}
+
+scrollbar slider:hover,
+scrollbar slider:active {
+  background-color: @accent_color;
+}
+
+scrollbar slider:disabled {
+  background-color: transparent;
+}
+
+/* === LISTS / ROWS / BOXED-LIST CARDS === */
+list,
+listview,
+.view {
+  background-color: @view_bg_color;
+  color: @view_fg_color;
+}
+
+row {
+  background-color: transparent;
+  color: @view_fg_color;
+  transition: background-color 150ms ease;
+}
+
+row.activatable:hover {
+  background-color: @glacial_hover;
+}
+
+row:selected,
+row:selected.activatable:hover {
+  background-color: @accent_bg_color;
+  color: @accent_fg_color;
+}
+
+/* boxed lists render as cards */
+list.boxed-list,
+.card {
+  background-color: @card_bg_color;
+  color: @card_fg_color;
+  border: 1px solid @glacial_border;
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+list.boxed-list > row {
+  background-color: transparent;
+}
+
+/* === POPOVERS / MENUS (soft shadow allowed here for legibility) ===
+   plain popover = card #1E2A38; popover.menu = menu surface #202A35 (distinct,
+   per the ladder). Menu-item hover = the single accent/control fill #34506B. */
+/* The VISIBLE popover surface is `> contents`. The outer `popover` node is just a
+   positioning/shadow container in GTK4 — putting bg/border on it draws a huge
+   frame around the menu. So the outer node is transparent; contents carries the
+   surface + border + radius + shadow. */
+popover,
+popover.background,
+.popover {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+popover > contents,
+popover.background > contents,
+.popover > contents {
+  background-color: @popover_bg_color;
+  color: @popover_fg_color;
+  border: 1px solid @glacial_border;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px alpha(#000000, 0.45);
+}
+
+popover.menu > contents {
+  background-color: @glacial_menu_bg;
+}
+
+popover > arrow {
+  background-color: @popover_bg_color;
+  border: 1px solid @glacial_border;
+}
+
+popover modelbutton,
+popover.menu modelbutton {
+  background-color: transparent;
+  color: @popover_fg_color;
+  border-radius: 8px;
+  transition: background-color 150ms ease;
+}
+
+popover modelbutton:hover,
+popover modelbutton:focus,
+popover.menu modelbutton:hover,
+popover.menu modelbutton:focus {
+  background-color: @accent_bg_color;
+  color: @accent_fg_color;
+}
+
+popover modelbutton:disabled,
+popover.menu modelbutton:disabled {
+  color: @glacial_disabled;
+}
+
+/* === DROPDOWN (GtkDropDown = node `dropdown`; its popup is a `popover` with a
+ *    `listview` of rows — NOT the GTK3 `combobox` subtree) === */
+dropdown > button {
+  background-color: @card_bg_color;
+  background-image: none;
+  color: @window_fg_color;
+  border: 1px solid @glacial_border;
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+dropdown > button:hover {
+  background-color: @glacial_hover;
+}
+
+dropdown > popover,
+dropdown > popover > contents {
+  background-color: @card_bg_color;
+  border: 1px solid @glacial_border;
+  border-radius: 8px;
+}
+
+dropdown > popover listview {
+  background-color: transparent;
+}
+
+dropdown > popover listview > row {
+  background-color: transparent;
+  color: @window_fg_color;
+  border-radius: 6px;
+}
+
+dropdown > popover listview > row:hover {
+  background-color: @glacial_hover;
+}
+
+dropdown > popover listview > row:selected {
+  background-color: @accent_bg_color;
+  color: @accent_fg_color;
+}
+
+/* === NOTEBOOK / TABS (active underline = bright mark) === */
+notebook > header {
+  background-color: @headerbar_bg_color;
+  border-color: @glacial_border;
+}
+
+notebook > header > tabs > tab {
+  background-color: transparent;
+  color: @glacial_dim;
+  border-color: transparent;
+  transition: color 150ms ease, background-color 150ms ease;
+}
+
+notebook > header > tabs > tab:hover {
+  background-color: @glacial_hover;
+  color: @window_fg_color;
+}
+
+notebook > header > tabs > tab:checked {
+  color: @window_fg_color;
+  box-shadow: inset 0 -2px 0 0 @accent_color;
+}
+
+/* === SCALE / SLIDER — VALUE FILL override (trough recessed · highlight #5E8DB8
+ *    · knob #8CC6F2). These would otherwise inherit accent_bg. === */
+scale > trough {
+  background-color: @view_bg_color;
+  border: 1px solid @glacial_border;
+  box-shadow: none;
+}
+
+scale > trough > highlight {
+  background-color: @glacial_value_fill;
+  background-image: none;
+  border: none;
+  box-shadow: none;
+}
+
+scale > trough > fill {
+  background-color: @glacial_value_fill;
+  background-image: none;
+  border: none;
+}
+
+scale > trough > slider {
+  background-color: @glacial_mark;
+  background-image: none;
+  border: 1px solid transparent;
+  box-shadow: none;
+}
+
+scale:disabled > trough > highlight {
+  background-color: @glacial_disabled;
+}
+
+scale:disabled > trough > slider {
+  background-color: @glacial_disabled;
+}
+
+scale marks,
+scale mark {
+  color: @glacial_dim;
+}
+
+/* === PROGRESSBAR — VALUE FILL override (#5E8DB8) === */
+progressbar > trough {
+  background-color: @view_bg_color;
+  border: 1px solid @glacial_border;
+  box-shadow: none;
+}
+
+progressbar > trough > progress {
+  background-color: @glacial_value_fill;
+  background-image: none;
+  border: none;
+  box-shadow: none;
+}
+
+progressbar > text {
+  color: @glacial_dim;
+}
+
+/* === LEVELBAR — VALUE FILL override (GTK4 real nodes: block.filled/.empty) === */
+levelbar > trough {
+  background-color: @view_bg_color;
+  border: 1px solid @glacial_border;
+  box-shadow: none;
+}
+
+levelbar > trough > block.filled {
+  background-color: @glacial_value_fill;
+  border-color: @glacial_value_fill;
+  box-shadow: none;
+}
+
+levelbar > trough > block.empty {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+/* discrete high/low still map onto the value fill (calm, no red/green leak) */
+levelbar > trough > block.high {
+  background-color: @glacial_value_fill;
+  border-color: @glacial_value_fill;
+}
+
+levelbar > trough > block.low {
+  background-color: @warning_color;
+  border-color: @warning_color;
+}
+
+/* === SEPARATORS === */
+separator {
+  background-color: @glacial_border;
+  min-width: 1px;
+  min-height: 1px;
+}
+
+/* === SIDEBAR PANES / NAVIGATION (named color handles most; recolor sel/hover) === */
+.navigation-sidebar,
+.sidebar-pane,
+.sidebar {
+  background-color: @sidebar_bg_color;
+  color: @sidebar_fg_color;
+}
+
+.navigation-sidebar > row:selected,
+.sidebar > row:selected {
+  background-color: @accent_bg_color;
+  color: @accent_fg_color;
+}
+
+.navigation-sidebar > row.activatable:hover,
+.sidebar > row.activatable:hover {
+  background-color: @glacial_hover;
+}
+
+.navigation-sidebar:backdrop,
+.sidebar:backdrop {
+  background-color: @sidebar_backdrop_color;
+  color: @glacial_dim;
+}
+
+/* === TOOLTIPS (opaque glacial card) === */
+tooltip,
+tooltip.background {
+  background-color: @card_bg_color;
+  color: @window_fg_color;
+  border: 1px solid @glacial_border;
+  border-radius: 8px;
+}
+
+tooltip box,
+tooltip label,
+tooltip image {
+  background-color: transparent;
+  color: @window_fg_color;
+}
+
+/* === .osd OVERLAY SURFACES (adw hardcodes a translucent dark card → opaque) ===
+ *    media/video bars, app-notifications, scale popups. Controls onto the ladder. */
+.osd,
+.osd.background {
+  background-color: @card_bg_color;
+  color: @window_fg_color;
+  border: 1px solid @glacial_border;
+}
+
+.osd button,
+button.osd {
+  background-color: @card_bg_color;
+  background-image: none;
+  color: @window_fg_color;
+  border: 1px solid @glacial_border;
+  box-shadow: none;
+}
+
+.osd button:hover,
+button.osd:hover {
+  background-color: @glacial_hover;
+}
+
+.osd button:active,
+.osd button:checked,
+button.osd:active,
+button.osd:checked {
+  background-color: @accent_bg_color;
+  color: @accent_fg_color;
+}
+
+.osd button:disabled,
+button.osd:disabled {
+  background-color: @glacial_disabled_bg;
+  color: @glacial_disabled;
+}
+
+.osd entry {
+  background-color: @glacial_entry_bg;
+  color: @window_fg_color;
+  border-color: @glacial_border;
+  box-shadow: none;
+}
+
+.osd entry:focus {
+  border-color: @accent_color;
+  box-shadow: inset 0 0 0 1px @glacial_accent_soft;
+}
+
+.osd scale > trough {
+  background-color: @view_bg_color;
+  border-color: @glacial_border;
+}
+
+.osd scale > trough > highlight {
+  background-color: @glacial_value_fill;
+}
+
+.osd scale > trough > slider {
+  background-color: @glacial_mark;
+  background-image: none;
+  border: 1px solid transparent;
+  box-shadow: none;
+}
+
+.osd progressbar > trough {
+  background-color: @view_bg_color;
+  border-color: @glacial_border;
+}
+
+.osd progressbar > trough > progress {
+  background-color: @glacial_value_fill;
+}
+
+/* === DIM / LINK LABELS === */
+label.dim-label {
+  color: @glacial_dim;
+}
+
+*:link,
+*:visited {
+  color: @accent_color;
+}
+
+/* === BROAD DISABLED (recolor-safe icon dimming — GTK4-valid property) === */
+*:disabled {
+  -gtk-icon-filter: opacity(0.55);
+}
+
+/* ============================================================================
+ * === APP-SPECIFIC / FINE GEOMETRY (deferred to visual iteration) ===
+ * Per-app selector fixes (nautilus, gnome-calculator, easyeffects, text
+ * editors, etc.) and any fine geometry tuning belong here, to be done live
+ * with grim iteration on the real display.
+ * ==========================================================================*/

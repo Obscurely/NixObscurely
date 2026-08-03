@@ -32,6 +32,12 @@ in {
         enable = true;
         wrapperFeatures.gtk = true;
 
+        # We install swaylock/swayidle/etc. ourselves (user.packages below), so
+        # empty the module's default extraPackages — this drops `foot` (and the
+        # default menu), which we don't use. swaynag ships inside the sway
+        # package itself, so it's unaffected.
+        extraPackages = [];
+
         # These exports live in the sway *wrapper* the session launches, so they
         # reach sway AND every child it spawns -- even under greetd, which does
         # not source /etc/profile. This is why the Wayland env vars go here and
@@ -107,7 +113,6 @@ in {
         wev # xev equivalent (debug keybinds)
         wtype # xdotool type equivalent
         wlr-randr # one-off output queries
-        imv # image viewer (feh/ristretto)
         libnotify # notify-send
         playerctl
         pavucontrol

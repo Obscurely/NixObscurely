@@ -31,14 +31,12 @@ in {
       ++ (
         if cfg.vector.enable
         then [
-          unstable.inkscape
         ]
         else []
       )
       ++ (
         if cfg.raster.enable
         then [
-          krita
           gimp
           stable.gimpPlugins.resynthesizer # content-aware scaling in gimp
         ]

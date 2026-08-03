@@ -8,7 +8,7 @@
 (defvar ssel 0)
 
 (defwidget switcher-root []
-  (box :class "qs-root l-root" :orientation "v" :space-evenly false :spacing 12
+  (box :class "qs-root l-root l-fixedw-wide" :orientation "v" :space-evenly false :spacing 12
     (box :class "l-search" :space-evenly false :spacing 12
       (label :class "l-search-icon" :text "󰍉")
       (input :class "l-input" :hexpand true

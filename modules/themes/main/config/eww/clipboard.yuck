@@ -9,7 +9,7 @@
 (defvar csel 0)
 
 (defwidget clipboard-root []
-  (box :class "qs-root l-root" :orientation "v" :space-evenly false :spacing 12
+  (box :class "qs-root l-root l-fixedw-xwide" :orientation "v" :space-evenly false :spacing 12
     (box :class "l-search" :space-evenly false :spacing 12
       (label :class "l-search-icon" :text "󰅍")
       (input :class "l-input" :hexpand true

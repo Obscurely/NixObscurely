@@ -336,6 +336,12 @@ scale.sm-bar slider    { background-color: transparent; min-width: 0; min-height
 //  App launcher (glacial — Spotlight/Raycast style)
 // =====================================================================
 .l-root { padding: 16px; }
+// Pin the card width so the layer-shell window (top-center = content-sized) doesn't jitter as
+// results change. Without this the window resizes to the widest row while typing. Value = each
+// window's :width − card margin (2×8). (Switcher/clipboard were only masked by always-wide content.)
+.l-fixedw       { min-width: 544px; }   // launcher  (:width 560)
+.l-fixedw-wide  { min-width: 604px; }   // switcher  (:width 620)
+.l-fixedw-xwide { min-width: 624px; }   // clipboard (:width 640)
 .l-search {
   background-color: rgba(14, 20, 32, 0.55);
   border-radius: 12px; padding: 7px 15px;

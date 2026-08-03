@@ -11,7 +11,7 @@
 (defvar lcalc "")        ; calc result
 
 (defwidget launcher-root []
-  (box :class "qs-root l-root" :orientation "v" :space-evenly false :spacing 12
+  (box :class "qs-root l-root l-fixedw" :orientation "v" :space-evenly false :spacing 12
     ;; search field
     (box :class "l-search" :space-evenly false :spacing 12
       (label :class "l-search-icon" :text "󰍉")
@@ -34,8 +34,8 @@
           (box :class "l-row-in" :space-evenly false :spacing 13
             (image :class "l-icon" :path {entry.icon} :image-width 30 :image-height 30 :visible {entry.icon != ""})
             (label :class "l-icon-ph" :visible {entry.icon == ""} :text "󰀻")
-            (label :class "l-name" :halign "start" :text {entry.name})
-            (label :class "l-generic" :halign "end" :hexpand true :limit-width 24 :show-truncated false :text {entry.generic}))))
+            (label :class "l-name" :halign "start" :limit-width 28 :show-truncated true :text {entry.name})
+            (label :class "l-generic" :halign "end" :hexpand true :limit-width 14 :show-truncated true :text {entry.generic}))))
       (label :class "qs-todo" :halign "start" :visible {arraylength(lresults) == 0} :text "no matches"))
 
     ;; footer hint

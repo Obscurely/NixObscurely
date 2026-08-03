@@ -386,6 +386,7 @@ scale.sm-bar slider    { background-color: transparent; min-width: 0; min-height
 .notif-hdr  { margin-bottom: 2px; }
 .notif-clear {
   color: $text2; font-size: $fs-small; padding: 4px 12px; border-radius: 999px;
+  margin-left: 16px;   // gap between the "· N" count and the button (header box is content-sized)
   background-color: rgba(14, 20, 32, 0.55);
   transition: background-color 150ms ease, color 150ms ease;
 }

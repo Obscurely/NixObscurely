@@ -2,7 +2,21 @@
 //  eww bar — glacial island theme (icy monochrome + amber-for-urgent)
 //  Tune these tiers and re-run `eww reload` to iterate live.
 // =====================================================================
-* { all: unset; font-family: "FiraCode Nerd Font"; font-size: 18px; }
+
+// ---- type scale (single source of truth; see docs/glacial-design-language.md §Typography) ----
+//  Every widget references a tier — never an ad-hoc px. Text floor = $fs-caption.
+$fs-caption:  14px;   // smallest text: hints, badges, dense grid labels (core freq, °C), sub-captions
+$fs-small:    16px;   // secondary text: sub-values, dim body, most captions
+$fs-body:     18px;   // default: labels, values, row titles, input, section headers (= reset base)
+$fs-strong:   21px;   // emphasis: prominent values
+$fs-title:    24px;   // widget titles
+$fs-glyph:    22px;   // inline action glyphs
+$fs-glyph-lg: 30px;   // row / state / button glyphs
+$fs-hero:     36px;   // hero glyph / big number
+$fs-hero-xl:  46px;   // biggest hero: weather / artwork / confirm icon
+//  Structural exceptions (shape, not text): bar separator `.sep` 11px · toggle knob `.qs-dot` 9px.
+
+* { all: unset; font-family: "FiraCode Nerd Font"; font-size: $fs-body; }
 // The GTK theme paints the top-level window (a square, opaque-ish fill) via a
 // `window.background` selector that outranks `* { all: unset }`. Kill it so popups
 // float as just their rounded card (visible on inset popups like the audio one; the
@@ -53,7 +67,7 @@ $warn:       #E7B872;                  // urgent / warning ONLY
 .sensors .statitem:nth-child(2) .s-val { min-width: 54px; }   // memory: reserve 5 chars ("12.4G"=53px) so 10G+ never shifts
 .sensors { padding-right: 10px; }   // trim right padding to visually match the left
 .netspd   { min-width: 46px; }
-.sep { color: $inactive; font-size: 11px; padding: 0 2px; }
+.sep { color: $inactive; font-size: 11px; padding: 0 2px; }   // structural separator glyph (not text)
 
 // ---- round icon buttons (launcher, power) ----
 .iconbtn {
@@ -103,20 +117,20 @@ $warn:       #E7B872;                  // urgent / warning ONLY
   color: $text;
 }
 .qs-titlebar { }
-.qs-title { color: $text; font-size: 22px; }
+.qs-title { color: $text; font-size: $fs-title; }
 .qs-close {
   color: $text2; padding: 4px 10px; border-radius: 999px;
   transition: background-color 150ms ease, color 150ms ease;
 }
 .qs-close:hover { color: $warn; background-color: $pill-hover; }
-.qs-hdr { color: $text2; font-size: 14px; }
+.qs-hdr { color: $text2; font-size: $fs-small; }
 .qs-section { padding: 0 2px; }                 // transparent: header + content
-.qs-todo { color: $inactive; font-size: 13px; }
+.qs-todo { color: $inactive; font-size: $fs-small; }
 
 // -- per-output display card --
 .qs-out { background-color: $pill; border-radius: 12px; padding: 11px 13px; }
-.qs-out-name { color: $text; font-size: 16px; }
-.qs-ctl-lbl { color: $text2; font-size: 14px; }
+.qs-out-name { color: $text; font-size: $fs-body; }
+.qs-ctl-lbl { color: $text2; font-size: $fs-small; }
 
 // -- VRR/HDR row: extra top gap so it sits off the scale row like the title sits off row 1 --
 .qs-vrr-row { margin-top: 5px; }
@@ -136,7 +150,7 @@ $warn:       #E7B872;                  // urgent / warning ONLY
   border-radius: 8px; padding: 5px 12px;
   transition: background-color 150ms ease, color 150ms ease;
 }
-.qs-tgl .qs-dot { font-size: 9px; }
+.qs-tgl .qs-dot { font-size: 9px; }   // structural knob dot (not text)
 .qs-tgl:hover { background-color: $pill-hover; }
 .qs-tgl.off, .qs-tgl.off .qs-dot { color: $inactive; }
 .qs-tgl.on,  .qs-tgl.on  .qs-dot { color: $accent; }
@@ -164,7 +178,7 @@ $warn:       #E7B872;                  // urgent / warning ONLY
 // =====================================================================
 //  Audio popup (glacial — reuses the qs-* tiers + widgets)
 // =====================================================================
-.a-icon { color: $text2; font-size: 20px; }
+.a-icon { color: $text2; font-size: $fs-glyph; }
 .a-app-name { color: $text; }
 .a-pct { color: $text2; min-width: 44px; }   // reserve space so the slider width stays stable
 
@@ -200,26 +214,26 @@ scale.a-slider slider {
   min-width: 92px; min-height: 92px;
 }
 .m-art image { border-radius: 12px; }
-.m-art-ph { color: $text2; font-size: 42px; }
-.m-title2 { color: $text;   font-size: 17px; }
-.m-meta   { color: $text2;  font-size: 14px; }
-.m-meta2  { color: $inactive; font-size: 13px; }
+.m-art-ph { color: $text2; font-size: $fs-hero-xl; }
+.m-title2 { color: $text;   font-size: $fs-body; }
+.m-meta   { color: $text2;  font-size: $fs-small; }
+.m-meta2  { color: $inactive; font-size: $fs-small; }
 
 // seek slider
 scale.m-seek trough    { background-color: rgba(14, 20, 32, 0.60); border-radius: 999px; min-height: 6px; }
 scale.m-seek highlight { background-color: $accent; border-radius: 999px; }
 scale.m-seek slider    { background-color: $text; border-radius: 999px; min-width: 14px; min-height: 14px; margin: -5px; }
-.m-time { color: $text2; font-size: 13px; padding-top: 8px; }
+.m-time { color: $text2; font-size: $fs-small; padding-top: 8px; }
 
 // transport
 .m-transport { padding: 2px 0; }
 .m-btn {
-  color: $text2; font-size: 22px; padding: 4px 8px; border-radius: 999px;
+  color: $text2; font-size: $fs-glyph; padding: 4px 8px; border-radius: 999px;
   transition: background-color 150ms ease, color 150ms ease;
 }
 .m-btn:hover { color: $text; background-color: $pill-hover; }
 .m-btn.on    { color: $accent; }
-.m-play      { color: $accent; font-size: 26px; }
+.m-play      { color: $accent; font-size: $fs-glyph-lg; }
 .m-play:hover { color: $accent-br; }
 
 // source rows
@@ -230,7 +244,7 @@ scale.m-seek slider    { background-color: $text; border-radius: 999px; min-widt
 }
 .m-src:hover { background-color: $pill-hover; color: $text; }
 .m-src.on    { background-color: rgba(140, 198, 242, 0.20); color: $accent; }
-.m-src-state { font-size: 13px; }
+.m-src-state { font-size: $fs-small; }
 .m-src-app   { color: $text; }
 .m-src-title { color: $text2; }
 
@@ -245,8 +259,8 @@ scale.m-seek slider    { background-color: $text; border-radius: 999px; min-widt
 // =====================================================================
 //  Date/Time popup (glacial)
 // =====================================================================
-.dt-time { color: $text;  font-size: 36px; }
-.dt-date { color: $text2; font-size: 15px; }
+.dt-time { color: $text;  font-size: $fs-hero; }
+.dt-date { color: $text2; font-size: $fs-body; }
 
 // month calendar (GTK calendar — styling is best-effort)
 .dt-cal { padding: 2px; }
@@ -261,24 +275,24 @@ calendar.dt-cal.highlight { color: $text2; }           // weekday names
 
 // weather
 .dt-now { padding: 2px 0; }
-.dt-wicon  { color: $accent; font-size: 44px; }
-.dt-wtemp  { color: $text;  font-size: 28px; }
-.dt-wdesc  { color: $text2; font-size: 16px; }
-.dt-wsub   { color: $text2; font-size: 15px; }
-.dt-wtoday { color: $text;  font-size: 16px; min-width: 56px; }
-.dt-wsun   { color: $text2; font-size: 15px; }
-.dt-dayname { color: $text; font-size: 16px; min-width: 42px; }
-.dt-wicon2  { color: $accent; font-size: 21px; }
-.dt-wrain   { color: $text2; font-size: 15px; }
+.dt-wicon  { color: $accent; font-size: $fs-hero-xl; }
+.dt-wtemp  { color: $text;  font-size: $fs-glyph-lg; }
+.dt-wdesc  { color: $text2; font-size: $fs-body; }
+.dt-wsub   { color: $text2; font-size: $fs-body; }
+.dt-wtoday { color: $text;  font-size: $fs-body; min-width: 64px; }
+.dt-wsun   { color: $text2; font-size: $fs-body; }
+.dt-dayname { color: $text; font-size: $fs-body; min-width: 48px; }
+.dt-wicon2  { color: $accent; font-size: $fs-glyph; }
+.dt-wrain   { color: $text2; font-size: $fs-body; }
 
 // =====================================================================
 //  System monitor popup (glacial — reuses the qs-* tiers)
 // =====================================================================
-.sm-sub      { color: $text2; font-size: 13px; }
-.sm-big      { color: $text;  font-size: 19px; }   // no min-width -> left-aligns with the CPU header (minor % jitter is fine)
-.sm-val      { color: $text2; font-size: 14px; }
+.sm-sub      { color: $text2; font-size: $fs-small; }
+.sm-big      { color: $text;  font-size: $fs-strong; }   // no min-width -> left-aligns with the CPU header (minor % jitter is fine)
+.sm-val      { color: $text2; font-size: $fs-small; }
 .sm-val.warn { color: $warn; }
-.sm-detail   { color: $text2; font-size: 13px; margin: 1px 0; }   // override the global -3px so stacked detail rows aren't munched
+.sm-detail   { color: $text2; font-size: $fs-small; margin: 1px 0; }   // override the global -3px so stacked detail rows aren't munched
 
 // generic non-interactive fill bar (scale with the knob hidden)
 scale.sm-bar trough    { background-color: rgba(14, 20, 32, 0.60); border-radius: 999px; min-height: 7px; }
@@ -289,28 +303,28 @@ scale.sm-bar slider    { background-color: transparent; min-width: 0; min-height
 .sm-cores    { margin-top: 2px; }
 .sm-corebar  { min-width: 11px; min-height: 24px; background-color: rgba(14, 20, 32, 0.55); border-radius: 2px; }
 .sm-corefill { min-width: 11px; border-radius: 2px; background-image: linear-gradient(to top, $occupied, $accent-br); }
-.sm-corefreq { color: $text2; font-size: 11px; }
+.sm-corefreq { color: $text2; font-size: $fs-caption; }
 
 // grouped temps
-.sm-temp-val      { color: $text;  font-size: 17px; }
+.sm-temp-val      { color: $text;  font-size: $fs-body; }
 .sm-temp-val.warn { color: $warn; }
-.sm-temp-lbl      { color: $text2; font-size: 11px; }
+.sm-temp-lbl      { color: $text2; font-size: $fs-caption; }
 
 // disks
-.sm-disk-mnt      { color: $text;  font-size: 14px; min-width: 62px; }
-.sm-disk-use      { color: $text2; font-size: 13px; min-width: 96px; }
-.sm-disk-pct      { color: $text2; font-size: 13px; min-width: 40px; }
+.sm-disk-mnt      { color: $text;  font-size: $fs-small; min-width: 70px; }
+.sm-disk-use      { color: $text2; font-size: $fs-small; min-width: 112px; }
+.sm-disk-pct      { color: $text2; font-size: $fs-small; min-width: 46px; }
 .sm-disk-pct.warn { color: $warn; }
 
 // =====================================================================
 //  Network popup (glacial — reuses the qs-* / sm-* tiers)
 // =====================================================================
 .n-root .qs-hdr { margin-bottom: 2px; }   // more gap between LOCAL/PUBLIC/TRAFFIC headers and their rows (counters the global -3px)
-.n-conn      { color: $accent; font-size: 14px; }
+.n-conn      { color: $accent; font-size: $fs-small; }
 .n-conn.warn { color: $warn; }
-.n-key       { color: $text2; font-size: 13px; min-width: 68px; }
-.n-val       { color: $text;  font-size: 13px; }
-.n-thr       { color: $text;  font-size: 15px; }
+.n-key       { color: $text2; font-size: $fs-small; min-width: 80px; }
+.n-val       { color: $text;  font-size: $fs-small; }
+.n-thr       { color: $text;  font-size: $fs-body; }
 .n-run {
   background-color: rgba(140, 198, 242, 0.20);
   color: $accent; border-radius: 8px; padding: 3px 13px;
@@ -326,9 +340,9 @@ scale.sm-bar slider    { background-color: transparent; min-width: 0; min-height
   background-color: rgba(14, 20, 32, 0.55);
   border-radius: 12px; padding: 7px 15px;
 }
-.l-search-icon { color: $accent; font-size: 20px; }
+.l-search-icon { color: $accent; font-size: $fs-glyph; }
 .l-input {
-  color: $text; font-size: 17px;
+  color: $text; font-size: $fs-body;
   background-color: transparent; border: none; box-shadow: none; padding: 0;
   caret-color: $accent;
 }
@@ -341,23 +355,23 @@ scale.sm-bar slider    { background-color: transparent; min-width: 0; min-height
 .l-row:hover { background-color: $pill-hover; }
 .l-row.on   { background-color: rgba(140, 198, 242, 0.20); }
 .l-row.on .l-name { color: $accent; }
-.l-name    { color: $text;     font-size: 15px; }
-.l-generic { color: $inactive; font-size: 13px; }
-.l-icon-ph { color: $text2;    font-size: 24px; }
-.l-hint    { color: $inactive; font-size: 12px; }
-.l-calc-eq { color: $accent;   font-size: 20px; }
-.l-calc-val{ color: $text;     font-size: 23px; }
+.l-name    { color: $text;     font-size: $fs-body; }
+.l-generic { color: $inactive; font-size: $fs-small; }
+.l-icon-ph { color: $text2;    font-size: $fs-glyph-lg; }
+.l-hint    { color: $inactive; font-size: $fs-caption; }
+.l-calc-eq { color: $accent;   font-size: $fs-strong; }
+.l-calc-val{ color: $text;     font-size: $fs-title; }
 
 // window switcher (reuses .l-* launcher styles)
-.l-name  { min-width: 96px; }             // align window titles after the app name
-.l-title { color: $text2; font-size: 13px; }
-.l-ws    { color: $inactive; font-size: 12px; min-width: 16px; }
+.l-name  { min-width: 112px; }             // align window titles after the app name
+.l-title { color: $text2; font-size: $fs-small; }
+.l-ws    { color: $inactive; font-size: $fs-caption; min-width: 19px; }
 
 // clipboard history (reuses .l-* launcher styles)
 .l-lead      { min-width: 56px; }         // fixed lead slot so text + image rows align
 .l-thumb     { border-radius: 5px; }
-.l-clip-icon { color: $text2; font-size: 19px; }
-.l-clip      { color: $text; font-size: 14px; }
+.l-clip-icon { color: $text2; font-size: $fs-glyph; }
+.l-clip      { color: $text; font-size: $fs-small; }
 
 // =====================================================================
 //  Notification center (glacial — left-edge mirror of quick-settings)
@@ -365,7 +379,7 @@ scale.sm-bar slider    { background-color: transparent; min-width: 0; min-height
 .notif-root { padding: 16px; }
 .notif-hdr  { margin-bottom: 2px; }
 .notif-clear {
-  color: $text2; font-size: 13px; padding: 4px 12px; border-radius: 999px;
+  color: $text2; font-size: $fs-small; padding: 4px 12px; border-radius: 999px;
   background-color: rgba(14, 20, 32, 0.55);
   transition: background-color 150ms ease, color 150ms ease;
 }
@@ -384,16 +398,16 @@ scale.sm-bar slider    { background-color: transparent; min-width: 0; min-height
 
 .notif-lead    { min-width: 40px; }           // fixed lead slot so text left-edges align
 .notif-icon    { }
-.notif-glyph   { color: $text2; font-size: 26px; }
-.notif-app     { color: $text2; font-size: 12px; }
-.notif-summary { color: $text;  font-size: 15px; }
-.notif-body    { color: $text2; font-size: 13px; }
+.notif-glyph   { color: $text2; font-size: $fs-glyph-lg; }
+.notif-app     { color: $text2; font-size: $fs-caption; }
+.notif-summary { color: $text;  font-size: $fs-body; }
+.notif-body    { color: $text2; font-size: $fs-small; }
 .notif-x {
-  color: $inactive; font-size: 16px; padding: 2px 6px; border-radius: 999px;
+  color: $inactive; font-size: $fs-body; padding: 2px 6px; border-radius: 999px;
   transition: background-color 150ms ease, color 150ms ease;
 }
 .notif-x:hover { color: $warn; background-color: $pill-hover; }
-.notif-empty { font-size: 14px; padding: 2px; }
+.notif-empty { font-size: $fs-small; padding: 2px; }
 
 // =====================================================================
 //  Power menu (glacial centered modal)
@@ -403,23 +417,23 @@ scale.sm-bar slider    { background-color: transparent; min-width: 0; min-height
 // -- action row --
 .pm-row { margin: 4px 0; }
 .pm-btn {
-  background-color: $pill; border-radius: 14px; padding: 14px 10px; min-width: 84px;
+  background-color: $pill; border-radius: 14px; padding: 14px 10px; min-width: 92px;
   border: 2px solid transparent;   // reserved so the .on focus ring doesn't shift size
   transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
 }
 .pm-btn:hover { background-color: $pill-hover; }
 .pm-btn.on { background-color: rgba(140, 198, 242, 0.20); border-color: $accent; }   // keyboard cursor
-.pm-btn-icon { color: $text; font-size: 30px; }
-.pm-btn-lbl  { color: $text2; font-size: 13px; }
+.pm-btn-icon { color: $text; font-size: $fs-glyph-lg; }
+.pm-btn-lbl  { color: $text2; font-size: $fs-small; }
 .pm-btn:hover .pm-btn-lbl { color: $text; }
 .pm-btn.on .pm-btn-icon { color: $accent-br; }
 .pm-btn.on .pm-btn-lbl  { color: $accent; }
 
 // -- confirmation --
 .pm-confirm { padding: 10px 4px 4px 4px; }
-.pm-confirm-icon { color: $accent; font-size: 46px; }
+.pm-confirm-icon { color: $accent; font-size: $fs-hero-xl; }
 .pm-confirm.danger .pm-confirm-icon { color: $warn; }   // reboot / poweroff
-.pm-confirm-q { color: $text; font-size: 20px; }
+.pm-confirm-q { color: $text; font-size: $fs-strong; }
 .pm-cbtn-in { padding: 0 2px; }
 .pm-cancel, .pm-ok {
   border-radius: 999px; padding: 8px 20px; border: 2px solid transparent;   // reserved for the ring

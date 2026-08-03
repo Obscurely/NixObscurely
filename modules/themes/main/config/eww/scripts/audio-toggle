@@ -1,17 +1,13 @@
 #!/usr/bin/env bash
-# Toggle the audio popup (right-click the bar's audio module). Escape closes it while
-# open; the binding is removed on close so Escape is never captured otherwise. Instant
-# open/close (no animation), :focusable false (never traps keyboard).
-self="$HOME/.config/eww/scripts/audio-toggle"
-
+# Toggle the audio popup (right-click the bar audio module). Closes on Escape, click-away (the
+# backdrop), or re-click; opening it closes any other open bar popup.
+s="$HOME/.config/eww/scripts"
 if eww active-windows 2>/dev/null | grep -q '^audio:'; then
-  swaymsg unbindsym Escape 2>/dev/null
-  eww close audio
+  bash "$s/popup-close"
 else
-  # seed the optimistic slider vars (avol/aivol) from the current volumes before showing
+  # seed the optimistic slider vars from the current volumes before showing
   ov=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{printf "%.0f", $2*100}')
   iv=$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | awk '{printf "%.0f", $2*100}')
-  eww open audio
   eww update avol="${ov:-50}" aivol="${iv:-50}" appvols="{}"
-  swaymsg "bindsym Escape exec bash $self" 2>/dev/null
+  bash "$s/popup-open" audio
 fi

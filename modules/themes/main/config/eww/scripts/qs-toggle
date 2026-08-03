@@ -1,13 +1,9 @@
 #!/usr/bin/env bash
-# Toggle the quick-settings panel (slide in/out). While it's open, Escape is bound
-# (briefly, globally) to close it; the binding is removed again on close — so Escape
-# never stays captured when the panel isn't up.
-self="$HOME/.config/eww/scripts/qs-toggle"
-
-if eww active-windows 2>/dev/null | grep -q quicksettings; then
-  swaymsg unbindsym Escape 2>/dev/null
-  eww close quicksettings
+# Toggle the quick-settings panel (right-click the bar power icon / $mod+comma). Closes on Escape,
+# click-away (the backdrop), or re-click; opening it closes any other open bar popup (sibling-close).
+s="$HOME/.config/eww/scripts"
+if eww active-windows 2>/dev/null | grep -q '^quicksettings:'; then
+  bash "$s/popup-close"
 else
-  eww open quicksettings
-  swaymsg "bindsym Escape exec bash $self" 2>/dev/null
+  bash "$s/popup-open" quicksettings
 fi

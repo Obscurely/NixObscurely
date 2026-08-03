@@ -1,15 +1,14 @@
 #!/usr/bin/env bash
-# Toggle the window switcher ($mod+F12 / double-tap launcher thumb). On open: snapshot the window
-# list, seed, open focused, bind nav keys in sway (letters fall through to the input).
+# Toggle the window switcher ($mod+F12 / $alt+Tab). popup-open handles sibling-close + backdrop +
+# Escape; here we add the switcher's nav keys. Close = popup-close (unbinds all).
 s="$HOME/.config/eww/scripts"
 if eww active-windows 2>/dev/null | grep -q '^switcher:'; then
-  bash "$s/switcher-close"
+  bash "$s/popup-close"
 else
   wins="$(python3 "$s/switcher-list")"
   printf '%s' "$wins" > "${XDG_RUNTIME_DIR:-/tmp}/eww-windows.json"
   eww update sresults="$wins" ssel=0
-  eww open switcher
-  swaymsg "bindsym Escape exec bash $s/switcher-close"        >/dev/null 2>&1
+  bash "$s/popup-open" switcher
   swaymsg "bindsym Return exec setsid -f bash $s/switcher-run" >/dev/null 2>&1
   swaymsg "bindsym Down   exec bash $s/switcher-nav down"     >/dev/null 2>&1
   swaymsg "bindsym Up     exec bash $s/switcher-nav up"       >/dev/null 2>&1

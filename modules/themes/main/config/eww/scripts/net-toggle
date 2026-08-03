@@ -1,12 +1,9 @@
 #!/usr/bin/env bash
-# Toggle the network popup (right-click the bar's network module). Escape closes it while open;
-# the binding is removed on close. Instant, :focusable false.
-self="$HOME/.config/eww/scripts/net-toggle"
-
+# Toggle the network popup (right-click the bar network module). Closes on Escape, click-away
+# (the backdrop), or re-click; opening it closes any other open bar popup.
+s="$HOME/.config/eww/scripts"
 if eww active-windows 2>/dev/null | grep -q '^network:'; then
-  swaymsg unbindsym Escape 2>/dev/null
-  eww close network
+  bash "$s/popup-close"
 else
-  eww open network
-  swaymsg "bindsym Escape exec bash $self" 2>/dev/null
+  bash "$s/popup-open" network
 fi

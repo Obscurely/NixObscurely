@@ -16,6 +16,7 @@
 (include "clipboard.yuck")
 (include "notifications.yuck")
 (include "power.yuck")
+(include "backdrop.yuck")
 
 ;; ------------------------------- data --------------------------------
 (deflisten workspaces :initial "[]" `bash $HOME/.config/eww/scripts/workspaces`)

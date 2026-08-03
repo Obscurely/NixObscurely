@@ -416,6 +416,9 @@ scale.sm-bar slider    { background-color: transparent; min-width: 0; min-height
 .notif-x:hover { color: $warn; background-color: $pill-hover; }
 .notif-empty { font-size: $fs-small; padding: 2px; }
 
+// click-away backdrop — invisible full-screen (minus bar) click catcher behind the bar popups
+.backdrop { background-color: transparent; }
+
 // =====================================================================
 //  Power menu (glacial centered modal)
 // =====================================================================

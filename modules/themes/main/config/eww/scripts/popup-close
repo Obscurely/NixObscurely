@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Universal closer for EVERY eww popup + the click-away backdrop. Called by: the backdrop onclick,
+# the Escape bind (set by popup-open), each toggle's re-click, and every *-close / *-run path.
+# Unbinds the full while-open keyset, stops the media cava, and closes all popup windows. Idempotent.
+RT="${XDG_RUNTIME_DIR:-/tmp}"
+for k in Escape Return Left Right Up Down Tab "Shift+Delete" "Ctrl+Shift+Delete"; do
+  swaymsg "unbindsym $k" >/dev/null 2>&1
+done
+# stop the media visualizer's cava if running (media may be the popup being closed) — idempotent
+[ -f "$RT/eww-cava.pid" ] && kill "$(cat "$RT/eww-cava.pid")" 2>/dev/null
+rm -f "$RT/eww-cava.pid" 2>/dev/null
+eww close backdrop audio media datetime sysmon network quicksettings notifications \
+          launcher switcher clipboard power 2>/dev/null

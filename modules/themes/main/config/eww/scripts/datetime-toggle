@@ -1,12 +1,9 @@
 #!/usr/bin/env bash
-# Toggle the date/time (calendar + weather) popup — right-click the bar clock. Escape
-# closes it while open; the binding is removed on close. Instant, :focusable false.
-self="$HOME/.config/eww/scripts/datetime-toggle"
-
+# Toggle the date/time (calendar + weather) popup — right-click the bar clock. Closes on Escape,
+# click-away (the backdrop), or re-click; opening it closes any other open bar popup.
+s="$HOME/.config/eww/scripts"
 if eww active-windows 2>/dev/null | grep -q '^datetime:'; then
-  swaymsg unbindsym Escape 2>/dev/null
-  eww close datetime
+  bash "$s/popup-close"
 else
-  eww open datetime
-  swaymsg "bindsym Escape exec bash $self" 2>/dev/null
+  bash "$s/popup-open" datetime
 fi

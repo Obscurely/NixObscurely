@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
+# Toggle the clipboard history ($mod+c). popup-open handles sibling-close + backdrop + Escape;
+# here we add the clipboard's nav + delete/wipe keys. Close = popup-close (unbinds all).
 s="$HOME/.config/eww/scripts"; RT="${XDG_RUNTIME_DIR:-/tmp}"
 if eww active-windows 2>/dev/null | grep -q '^clipboard:'; then
-  bash "$s/clip-close"
+  bash "$s/popup-close"
 else
   printf '' > "$RT/eww-clip-query"
   python3 "$s/clip-list" >/dev/null                          # refresh cache (fresh entries + thumbs)
   eww update cresults="$(python3 "$s/clip-filter")" csel=0   # seed with the top-N
-  eww open clipboard
-  swaymsg "bindsym Escape exec bash $s/clip-close"                 >/dev/null 2>&1
-  swaymsg "bindsym Return exec setsid -f bash $s/clip-run"         >/dev/null 2>&1
-  swaymsg "bindsym Down   exec bash $s/clip-nav down"             >/dev/null 2>&1
-  swaymsg "bindsym Up     exec bash $s/clip-nav up"               >/dev/null 2>&1
-  swaymsg "bindsym Tab    exec bash $s/clip-nav down"             >/dev/null 2>&1
-  swaymsg "bindsym Shift+Delete exec bash $s/clip-delete"        >/dev/null 2>&1
-  swaymsg "bindsym Ctrl+Shift+Delete exec bash $s/clip-wipe"     >/dev/null 2>&1
+  bash "$s/popup-open" clipboard
+  swaymsg "bindsym Return exec setsid -f bash $s/clip-run"     >/dev/null 2>&1
+  swaymsg "bindsym Down   exec bash $s/clip-nav down"         >/dev/null 2>&1
+  swaymsg "bindsym Up     exec bash $s/clip-nav up"           >/dev/null 2>&1
+  swaymsg "bindsym Tab    exec bash $s/clip-nav down"         >/dev/null 2>&1
+  swaymsg "bindsym Shift+Delete exec bash $s/clip-delete"      >/dev/null 2>&1
+  swaymsg "bindsym Ctrl+Shift+Delete exec bash $s/clip-wipe"   >/dev/null 2>&1
 fi

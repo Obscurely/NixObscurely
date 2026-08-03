@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Toggle the media popup (right-click the bar's now-playing module). Escape closes it
-# while open; the binding is removed on close. Instant open/close, :focusable false.
+# Toggle the media popup (right-click the bar now-playing module). Closes on Escape, click-away
+# (the backdrop), or re-click; opening it closes any other open bar popup.
 #
-# Also drives the cava visualizer: cava runs ONLY while the popup is open (started here,
-# killed on close) and writes raw frames to the eww-cava fifo, which scripts/visualizer
-# (the `viz` deflisten) reads. Source = the monitor of the sink that's actually playing.
-self="$HOME/.config/eww/scripts/media-toggle"
+# Also drives the cava visualizer: cava runs ONLY while the popup is open. `popup-close` stops it
+# (kills by pidfile on any close path); `start_cava` (here) starts it right after the popup opens.
+# Source = the monitor of the sink that's actually playing.
 cfg="$HOME/.config/eww"
+s="$HOME/.config/eww/scripts"
 fifo="$XDG_RUNTIME_DIR/eww-cava"
 rtconf="$XDG_RUNTIME_DIR/eww-cava.conf"
 pidfile="$XDG_RUNTIME_DIR/eww-cava.pid"
@@ -37,11 +37,8 @@ start_cava() {
 }
 
 if eww active-windows 2>/dev/null | grep -q '^media:'; then
-  swaymsg unbindsym Escape 2>/dev/null
-  stop_cava
-  eww close media
+  bash "$s/popup-close"       # closes media + backdrop, kills cava (pidfile), unbinds Escape
 else
-  eww open media
-  swaymsg "bindsym Escape exec bash $self" 2>/dev/null
+  bash "$s/popup-open" media  # sibling-close + backdrop + open + Escape bind
   start_cava
 fi

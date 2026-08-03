@@ -1,23 +1,17 @@
 #!/usr/bin/env bash
-# Toggle the power menu. Reset to the action row + cursor 0 on open; bind arrow/Tab/Return/Escape
-# nav keys while open (unbound on close). :focusable false, so these are sway binds (no keyboard trap).
-self="$HOME/.config/eww/scripts/power-toggle"
+# Toggle the power menu (left-click the bar power icon). popup-open handles sibling-close + backdrop
+# + Escape; here we add the arrow/Tab/Return nav keys. Close (Escape/click-away/re-click) = popup-close,
+# which unbinds the whole keyset (incl these arrows). Reset to the action row + cursor 0 on open.
 s="$HOME/.config/eww/scripts"
-keys="Escape Left Up Right Down Tab Return"
-
-unbind() { for k in $keys; do swaymsg unbindsym "$k" 2>/dev/null; done; }
-
 if eww active-windows 2>/dev/null | grep -q '^power:'; then
-  unbind
-  eww close power
+  bash "$s/popup-close"
 else
-  eww update power_pending="" power_sel=0    # always open on the action row, cursor on Lock
-  eww open power
-  swaymsg "bindsym Escape exec bash $self"          2>/dev/null   # re-run -> close branch (unbinds)
-  swaymsg "bindsym Left   exec bash $s/power-nav prev" 2>/dev/null
-  swaymsg "bindsym Up     exec bash $s/power-nav prev" 2>/dev/null
-  swaymsg "bindsym Right  exec bash $s/power-nav next" 2>/dev/null
-  swaymsg "bindsym Down   exec bash $s/power-nav next" 2>/dev/null
-  swaymsg "bindsym Tab    exec bash $s/power-nav next" 2>/dev/null
-  swaymsg "bindsym Return exec bash $s/power-select"   2>/dev/null
+  eww update power_pending="" power_sel=0
+  bash "$s/popup-open" power
+  swaymsg "bindsym Left   exec bash $s/power-nav prev" >/dev/null 2>&1
+  swaymsg "bindsym Up     exec bash $s/power-nav prev" >/dev/null 2>&1
+  swaymsg "bindsym Right  exec bash $s/power-nav next" >/dev/null 2>&1
+  swaymsg "bindsym Down   exec bash $s/power-nav next" >/dev/null 2>&1
+  swaymsg "bindsym Tab    exec bash $s/power-nav next" >/dev/null 2>&1
+  swaymsg "bindsym Return exec bash $s/power-select"   >/dev/null 2>&1
 fi

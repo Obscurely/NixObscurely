@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Open a bar "glance" popup with click-away dismissal. $1 = window name. First closes any other
+# open popup (sibling-close) + the backdrop, then raises the backdrop, opens the popup, and binds
+# Escape -> popup-close. The caller (each *-toggle) seeds its data before calling this.
+s="$HOME/.config/eww/scripts"
+name="$1"
+bash "$s/popup-close"                                          # sibling-close + clean state
+eww open backdrop 2>/dev/null
+eww open "$name" 2>/dev/null
+swaymsg "bindsym Escape exec bash $s/popup-close" >/dev/null 2>&1

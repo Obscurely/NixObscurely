@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-# Close the launcher: remove the while-open sway keybinds, then close the window.
-for k in Escape Return Down Up Tab; do swaymsg "unbindsym $k" >/dev/null 2>&1; done
-eww close launcher 2>/dev/null
+# All closing is universal now (unbind keyset + close every popup + backdrop + cava). Kept as a
+# thin alias so launcher-run / older callers keep working.
+exec bash "$HOME/.config/eww/scripts/popup-close"

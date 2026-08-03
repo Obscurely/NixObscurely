@@ -1,0 +1,17 @@
+;; =====================================================================
+;;  Click-away backdrop — a transparent full-screen catcher opened behind the bar popups
+;;  (audio/media/clock/sysmon/network/quick-settings/notifications). Clicking it (i.e. anywhere
+;;  outside the popup) runs popup-close. Sits at `fg` (below the popups' `overlay`, above apps);
+;;  `:exclusive false` so it should fall below the bar's reserved zone -> bar stays clickable.
+;; =====================================================================
+(defwindow backdrop
+  :monitor "DP-1"
+  :stacking "fg"
+  :exclusive false
+  :focusable false
+  ;; anchored bottom, leaving the top ~50px (bar strip) uncovered so bar modules stay clickable
+  ;; (one-click switch + re-click-to-close). DP-1 is 1440 logical tall. `:exclusive false` did NOT
+  ;; fall below the bar on its own, so the gap is explicit.
+  :geometry (geometry :x "0" :y "0" :width "100%" :height "1390px" :anchor "bottom center")
+  (eventbox :class "backdrop" :onclick "bash $HOME/.config/eww/scripts/popup-close"
+    (box)))

@@ -29,7 +29,6 @@ in {
       };
       compression.enable = true;
       apps = {
-        discord.enable = true;
         slack.enable = true;
         element.enable = false;
         utils.enable = true;
@@ -55,7 +54,7 @@ in {
         graphics.enable = true;
         mpv.enable = true;
         recording.enable = true;
-        tidal.enable = true;
+        tidal.enable = false; # disabled — not using tidal right now (re-enable to reinstall)
       };
       term = {
         default = "alacritty";

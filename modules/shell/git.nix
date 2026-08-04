@@ -15,7 +15,6 @@ in {
 
   config = mkIf cfg.enable {
     user.packages = with pkgs; [
-      git-annex
       unstable.gh
       git-open
       diff-so-fancy

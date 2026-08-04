@@ -15,7 +15,7 @@ in {
   config = mkIf cfg.enable {
     user.packages = with pkgs; [
       sonixd # frontend for subsonic compatible servers
-      lollypop # music player (GTK4/libadwaita)
+      lollypop # music player (GTK3)
       sox # sample rate converter and spectrograms generator
     ];
   };

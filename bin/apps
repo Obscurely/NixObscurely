@@ -1,0 +1,188 @@
+#!/usr/bin/env python3
+"""List everything installed on this NixOS system.
+
+Reads the two live Nix profiles directly (no flake eval, so it's instant and
+always reflects what is actually installed right now):
+
+  user    /etc/profiles/per-user/$USER  -- the packages *your* modules chose
+                                           (user.packages): apps + CLI tools.
+                                           This is the list to prune from.
+  system  /run/current-system/sw        -- the base system + whatever NixOS
+                                           modules/services pulled in.
+
+Multi-output packages (foo-bin / foo-man / foo-doc ...) are collapsed to one
+line per package, versions merged. Package name parsing mirrors nix's own
+parseDrvName (split at the first '-' that is followed by a digit).
+
+Usage:
+  apps            complete list -- user section then system section
+  apps -u         user profile only (your chosen apps/tools)
+  apps -s         system profile only
+  apps -g         GUI apps only (from .desktop entries), the "launcher" view
+  apps -c         just the counts
+  apps <text>     filter: show only packages whose name contains <text>
+  apps -h         this help
+"""
+import os
+import re
+import sys
+import glob
+import subprocess
+
+USER = os.environ.get("USER") or os.environ.get("LOGNAME") or "netrunner"
+USER_PROFILE = f"/etc/profiles/per-user/{USER}"
+if not os.path.exists(USER_PROFILE):
+    USER_PROFILE = os.path.expanduser("~/.nix-profile")
+SYSTEM_PROFILE = "/run/current-system/sw"
+
+# nix's parseDrvName: name = everything before the first '-' followed by a digit.
+DRV = re.compile(r"^(.+?)-([0-9].*)$")
+
+
+def is_tty():
+    return sys.stdout.isatty()
+
+
+def bold(s):
+    return f"\033[1m{s}\033[0m" if is_tty() else s
+
+
+def dim(s):
+    return f"\033[2m{s}\033[0m" if is_tty() else s
+
+
+def profile_packages(profile):
+    """Return {pname: version} for the top-level packages of a profile."""
+    if not os.path.exists(profile):
+        return {}
+    try:
+        out = subprocess.run(
+            ["nix-store", "-q", "--references", profile],
+            capture_output=True, text=True, check=True,
+        ).stdout
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return {}
+
+    versions = {}  # pname -> set of version strings
+    for path in out.splitlines():
+        base = os.path.basename(path.strip())
+        # strip the 32-char store hash + dash
+        name = re.sub(r"^[a-z0-9]{32}-", "", base)
+        if not name:
+            continue
+        m = DRV.match(name)
+        pname, ver = (m.group(1), m.group(2)) if m else (name, "")
+        versions.setdefault(pname, set()).add(ver)
+
+    result = {}
+    for pname, vers in versions.items():
+        vers = {v for v in vers if v}
+        if vers:
+            # the cleanest version = fewest dashes (the base 'out', not '-man' etc.)
+            result[pname] = min(vers, key=lambda v: (v.count("-"), len(v)))
+        else:
+            result[pname] = ""
+    return result
+
+
+def gui_apps():
+    """Return sorted [(Name, desktop-id)] of visible GUI apps across profiles."""
+    dirs = [
+        f"{USER_PROFILE}/share/applications",
+        f"{SYSTEM_PROFILE}/share/applications",
+        os.path.expanduser("~/.local/share/applications"),
+    ]
+    found = {}  # Name -> desktop id
+    for d in dirs:
+        for f in sorted(glob.glob(os.path.join(d, "*.desktop"))):
+            name = None
+            hidden = False
+            try:
+                with open(f, encoding="utf-8", errors="replace") as fh:
+                    in_main = False
+                    for line in fh:
+                        line = line.rstrip("\n")
+                        if line.startswith("["):
+                            in_main = line == "[Desktop Entry]"
+                            continue
+                        if not in_main:
+                            continue
+                        if line.startswith("Name=") and name is None:
+                            name = line[5:].strip()
+                        elif line.startswith(("NoDisplay=true", "Hidden=true")):
+                            hidden = True
+            except OSError:
+                continue
+            if name and not hidden:
+                found.setdefault(name, os.path.basename(f)[:-8])
+    return sorted(found.items(), key=lambda kv: kv[0].lower())
+
+
+def print_section(title, pkgs, filt):
+    items = sorted(pkgs.items())
+    if filt:
+        items = [(n, v) for n, v in items if filt in n.lower()]
+    print(f"{bold(title)}  {dim(f'({len(items)})')}")
+    if not items:
+        print(dim("  (none)"))
+        print()
+        return
+    width = min(max((len(n) for n, _ in items), default=0), 40)
+    for name, ver in items:
+        print(f"  {name.ljust(width)}  {dim(ver)}")
+    print()
+
+
+def main():
+    args = sys.argv[1:]
+    mode = None
+    filt = None
+    for a in args:
+        if a in ("-h", "--help"):
+            print(__doc__)
+            return
+        elif a in ("-u", "--user"):
+            mode = "user"
+        elif a in ("-s", "--system"):
+            mode = "system"
+        elif a in ("-g", "--gui"):
+            mode = "gui"
+        elif a in ("-c", "--count"):
+            mode = "count"
+        elif a.startswith("-"):
+            print(f"apps: unknown option {a!r} (try -h)", file=sys.stderr)
+            return 1
+        else:
+            filt = a.lower()
+
+    user = profile_packages(USER_PROFILE)
+    system = profile_packages(SYSTEM_PROFILE)
+
+    if mode == "count":
+        gui = gui_apps()
+        print(f"user   {len(user)} packages   ({USER_PROFILE})")
+        print(f"system {len(system)} packages   ({SYSTEM_PROFILE})")
+        print(f"gui    {len(gui)} desktop apps")
+        return
+
+    if mode == "gui":
+        gui = gui_apps()
+        if filt:
+            gui = [(n, i) for n, i in gui if filt in n.lower() or filt in i.lower()]
+        print(f"{bold('GUI apps')}  {dim(f'({len(gui)})')}")
+        width = min(max((len(n) for n, _ in gui), default=0), 40)
+        for name, ident in gui:
+            print(f"  {name.ljust(width)}  {dim(ident)}")
+        return
+
+    if mode == "user":
+        print_section(f"USER  {dim(USER_PROFILE)}", user, filt)
+    elif mode == "system":
+        print_section(f"SYSTEM  {dim(SYSTEM_PROFILE)}", system, filt)
+    else:
+        print_section(f"USER  ({USER_PROFILE}) — your chosen apps/tools", user, filt)
+        print_section(f"SYSTEM  ({SYSTEM_PROFILE}) — base system + modules", system, filt)
+
+
+if __name__ == "__main__":
+    sys.exit(main() or 0)

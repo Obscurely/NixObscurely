@@ -57,7 +57,6 @@ in {
     {
       user.packages = with pkgs; [
         papirus-icon-theme
-        gtk-engine-murrine # GTK2 Murrine engine (libmurrine.so) — flat GTK2 look for Glacial-Dark
       ];
       fonts = {
         packages = with pkgs; [

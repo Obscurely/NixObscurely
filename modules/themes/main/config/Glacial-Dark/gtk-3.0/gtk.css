@@ -335,12 +335,34 @@ combobox button:active cellview, combobox button:checked cellview {
   background-image: none;
   color: #CBD8EA;
 }
-/* classic dropdown popup */
-combobox window.popup, combobox window.popup .menu, combobox window.popup menu,
-combobox window.popup decoration, combobox popover, combobox popover contents,
-combobox popover.menu, combobox popover box, combobox popover.background {
+/* Dropdown popup — the square-corner-behind-rounded artifact: bg+border were set on
+   EVERY nested node (window.popup / decoration / menu / contents / box) but the
+   rounding lived on only one, so the outer squares poked their sharp corners past
+   the rounded corner. Fix: draw bg+border+RADIUS on the ONE frame node per popup
+   type, keep all inner nodes transparent. (Cross-app: Thunar/Lollypop combos.) */
+/* classic combo popup (window.popup > decoration > menu): frame = window.popup */
+combobox window.popup {
   background-color: #1E2A38;
   border: 1px solid #2E3B49;
+  border-radius: 8px;
+  box-shadow: none;
+}
+combobox window.popup decoration, combobox window.popup .menu, combobox window.popup menu {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+}
+/* modern combo popup (popover > contents): frame = contents, outer popover stays
+   transparent (styling the outer node would draw a huge frame — the popover rule). */
+combobox popover, combobox popover.background {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+}
+combobox popover contents, combobox popover.menu, combobox popover box {
+  background-color: #1E2A38;
+  border: 1px solid #2E3B49;
+  border-radius: 8px;
   box-shadow: none;
 }
 combobox window.popup menuitem, combobox popover modelbutton,
@@ -603,3 +625,16 @@ button.osd:disabled, .osd button:disabled, .app-notification button:disabled {
 .storage-bar .fat16 image, .storage-bar .fat32 image, .storage-bar .btrfs image,
 .storage-bar .xfs image, .storage-bar .ntfs image, .storage-bar .luks image,
 .storage-bar .lvm image, .storage-bar .none image, .storage-bar .unused image { color: #141B22; }
+
+/* ============================================================================
+ * 13. LOLLYPOP — NOT themeable via this overlay (documented; do NOT retry)
+ *   Lollypop loads its own application.css at PRIORITY_USER *and* PRIORITY_USER+1
+ *   (application.py:134,143), registered after our user gtk.css (also 800). GTK breaks
+ *   equal-priority ties by provider order, not specificity — verified: neither plain
+ *   nor doubled-class (`.banner-button.banner-button`) overrides took. So its banner
+ *   gradient (.default-banner) + alpha(black) play/shuffle buttons (.banner-button)
+ *   can ONLY be changed by patching Lollypop's own application.css via a nixpkgs
+ *   `lollypop.overrideAttrs` (rebuild). Judged not worth it — one app's banner strip;
+ *   everything else in Lollypop themes fine via adw-gtk3. Same lesson as gnome-calc:
+ *   apps that ship/compile their own CSS are app quirks, not theme-layer bugs.
+ * ==========================================================================*/

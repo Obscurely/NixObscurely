@@ -175,7 +175,7 @@ _yt_fzf() {
   local out key sel url
   out="$(fzf --delimiter='\t' --with-nth=1 --height=90% --reverse --no-multi --expect=ctrl-a \
     --header='enter: watch now · ctrl-a: add to watch-later' \
-    --preview 'curl -sL "https://i.ytimg.com/vi/{2}/hqdefault.jpg" | chafa -f symbols -s "${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}" - 2>/dev/null' \
+    --preview 'curl -sL https://i.ytimg.com/vi/{2}/hqdefault.jpg | chafa -f symbols -s "${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}" - 2>/dev/null' \
     --preview-window=up,45%)" || return 0
   key="$(printf '%s' "$out" | head -1)"
   sel="$(printf '%s' "$out" | sed -n 2p)"

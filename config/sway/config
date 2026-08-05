@@ -98,7 +98,7 @@ client.focused_inactive $c_unfocus $c_unfocus $c_text $c_unfocus $c_unfocus
 client.unfocused        $c_unfocus $c_bg      $c_text $c_unfocus $c_unfocus
 client.urgent           $c_urgent  $c_urgent  $c_text $c_urgent  $c_urgent
 
-focus_follows_mouse yes
+focus_follows_mouse no
 mouse_warping none
 
 ### Window rules

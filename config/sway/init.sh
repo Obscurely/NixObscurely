@@ -6,12 +6,15 @@
 # cursor/font from gsettings, NOT gtk-3.0/settings.ini — so on a GNOME-less
 # Wayland session they fall back to Adwaita/no icons. Push the theme here to
 # match. (settings.ini still covers pure GTK2/3 apps.)
-gsettings set org.gnome.desktop.interface gtk-theme 'Fluent-Dark' 2>/dev/null
+gsettings set org.gnome.desktop.interface gtk-theme 'Mont-Blanc-Dark' 2>/dev/null
 gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark' 2>/dev/null
 gsettings set org.gnome.desktop.interface cursor-theme 'volantes_cursors' 2>/dev/null
 gsettings set org.gnome.desktop.interface cursor-size 32 2>/dev/null
 gsettings set org.gnome.desktop.interface font-name 'Fira Code 15' 2>/dev/null
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' 2>/dev/null
+# Tiling WM: drop client-side window controls (min/max/close) from GTK/libadwaita
+# header bars — sway owns window management, so the CSD buttons are just clutter.
+gsettings set org.gnome.desktop.wm.preferences button-layout ':' 2>/dev/null
 
 # Lift the kernel's `video=HDMI-A-2:d` DRM force now that sway owns KMS (past the greeter),
 # so the 1080p (HDMI-A-2) hotplugs normally and appears in the quick-settings panel as a

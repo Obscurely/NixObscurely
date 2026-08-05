@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=Mont-Blanc-Dark
+Comment=Flat, icy-blue dark theme — matches the Mont-Blanc (glacial) eww desktop (bar + widgets)
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=Mont-Blanc-Dark
+IconTheme=Papirus-Dark
+CursorTheme=volantes_cursors
+ButtonLayout=close,minimize,maximize:menu

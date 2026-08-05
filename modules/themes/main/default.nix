@@ -9,6 +9,21 @@ with lib;
 with lib.my; let
   cfg = config.modules.theme;
   inherit (config.dotfiles) configDir;
+
+  # Mont-Blanc-Dark GTK3 = adw-gtk3-dark (the proven Adwaita-for-GTK3) recolored to the
+  # glacial palette. Shipped as a NAMED THEME (priority 200), NOT a ~/.config/gtk-3.0
+  # user overlay (@800) — @200 is what keeps eww (itself a GTK3 app whose reset is @600)
+  # immune while ordinary GTK3 apps still get fully themed. Built by copying adw-gtk3-dark's
+  # gtk-3.0 (css + assets) and APPENDING our overlay to BOTH gtk.css and gtk-dark.css
+  # (prefer-dark loads gtk-dark.css). See spec §12.
+  montBlancGtk3 = pkgs.runCommand "Mont-Blanc-Dark" {} ''
+    mkdir -p $out/gtk-3.0
+    cp -r ${pkgs.adw-gtk3}/share/themes/adw-gtk3-dark/gtk-3.0/. $out/gtk-3.0/
+    chmod -R u+w $out
+    cat ${./config/Mont-Blanc-Dark/gtk-3.0/gtk.css} >> $out/gtk-3.0/gtk.css
+    cat ${./config/Mont-Blanc-Dark/gtk-3.0/gtk.css} >> $out/gtk-3.0/gtk-dark.css
+    cp ${./config/Mont-Blanc-Dark/index.theme} $out/index.theme
+  '';
 in {
   config = mkIf (cfg.active == "main") (mkMerge [
     # Desktop-agnostic configuration
@@ -17,7 +32,7 @@ in {
         theme = {
           wallpaper = mkDefault ./config/wallpaper.png;
           gtk = {
-            theme = "Fluent-Dark";
+            theme = "Mont-Blanc-Dark";
             iconTheme = "Papirus-Dark";
             cursorTheme = "volantes_cursors";
           };
@@ -69,50 +84,47 @@ in {
         ];
       };
 
-      # Qt theming: platformTheme "gtk2" makes Qt pull palette/fonts/icons from
-      # the GTK (Fluent-Dark) theme; style "kvantum" makes Qt widgets use the
-      # installed Kvantum Fluent-Dark theme (QT_STYLE_OVERRIDE=kvantum + the
-      # qtstyleplugin-kvantum plugins for qt5 & qt6). The Kvantum theme files are
-      # installed to ~/.config/Kvantum below.
+      # Qt theming. platformTheme "qt5ct" installs BOTH the qt5ct + qt6ct plugins and sets
+      # QT_QPA_PLATFORMTHEME=qt5ct; the qt6ct plugin also answers the "qt5ct" key, so Qt6
+      # apps use it (there is no "qt6ct" platformTheme value in this nixpkgs). style
+      # "kvantum" installs the qt5 + qt6 kvantum style plugins, sets QT_STYLE_OVERRIDE=
+      # kvantum, and Kvantum itself drives the app PALETTE (not just widget rendering).
+      # The Mont-Blanc-Dark Kvantum theme is installed to ~/.config/Kvantum below. (The old
+      # "gtk2" platformTheme is dead — it needed a GTK2 palette, and the GTK2 layer was
+      # dropped.) See spec §13.
       qt.enable = true;
-      qt.platformTheme = "gtk2";
+      qt.platformTheme = "qt5ct";
       qt.style = "kvantum";
 
       # Other dotfiles
       home.configFile = with config.modules;
         mkMerge [
           {
-            # Installation of the gtk theme
-            "../.themes/Fluent-Dark".source = ./config/Fluent-Dark;
+            # Mont-Blanc-Dark GTK3 named theme (adw-gtk3-dark + glacial overlay, built
+            # above). Deployed to ~/.themes/Mont-Blanc-Dark at THEME priority 200 so eww
+            # stays immune. gtk-theme-name is set to "Mont-Blanc-Dark" by the base module
+            # (gtk-*/settings.ini) + config/sway/init.sh (gsettings). See spec §12/§16.
+            "../.themes/Mont-Blanc-Dark".source = montBlancGtk3;
           }
           {
-            # Glacial-Dark — the glacial GTK theme (gtk 2/3/4), matches the eww desktop.
-            # Installed alongside Fluent for now; NOT yet active. Activation ("the flip")
-            # is a separate, verified step — see
-            # docs/superpowers/specs/2026-08-03-glacial-gtk-theme-design.md §6:
-            #   1. default.nix:20  gtk.theme = "Glacial-Dark"
-            #   2. swap the gtk-4.0 config lever (below) from Fluent to Glacial
-            #   3. base module: add ~/.config/gtk-4.0/settings.ini (prefer-dark)
-            #   4. Qt/Kvantum decision, then remove the Fluent-Dark dir + its entries.
-            "../.themes/Glacial-Dark".source = ./config/Glacial-Dark;
-          }
-          {
-            # Make gtk themes work with libadwaita
-            "gtk-4.0".source = ./config/Fluent-Dark/gtk-4.0;
+            # GTK4 / libadwaita recolor — the single-file config-dir lever (libadwaita
+            # ignores ~/.themes, so ~/.config/gtk-4.0/gtk.css @800 is the only reliable GTK4
+            # lever). Per-file (not a whole-dir source) so nothing else under gtk-4.0 clashes.
+            "gtk-4.0/gtk.css".source = ./config/Mont-Blanc-Dark/gtk-4.0/gtk.css;
           }
           {
             # Installation of the cursor theme
             "../.icons/volantes_cursors".source = ./config/volantes_cursors;
           }
           {
-            # Kvantum (Qt) theme
-            "Fluent-Dark-kvantum" = {
+            # Kvantum (Qt) theme — Mont-Blanc-Dark (.kvconfig colors + .svg widget art).
+            "Mont-Blanc-Dark-kvantum" = {
               recursive = true;
-              source = ./config/Fluent-Dark/kde/kvantum/Fluent-Dark;
-              target = "Kvantum/Fluent-Dark";
+              source = ./config/Mont-Blanc-Dark/kde/kvantum/Mont-Blanc-Dark;
+              target = "Kvantum/Mont-Blanc-Dark";
             };
             "kvantum.kvconfig" = {
-              source = ./config/Fluent-Dark/kde/kvantum.kvconfig;
+              source = ./config/Mont-Blanc-Dark/kde/kvantum.kvconfig;
               target = "Kvantum/kvantum.kvconfig";
             };
           }

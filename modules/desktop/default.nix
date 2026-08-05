@@ -31,8 +31,10 @@ in {
       ];
 
       user.packages = with pkgs; [
-        qgnomeplatform # QPlatformTheme for better Qt integration
-        kdePackages.qtstyleplugin-kvantum # SVG-based Qt theme engine
+        # Qt platform theme + Kvantum style plugins are provided declaratively by
+        # `qt.platformTheme = "qt5ct"` and `qt.style = "kvantum"` (modules/themes/main),
+        # so they are NOT listed here. qt5ct pulls qt5ct+qt6ct; kvantum pulls the qt5+qt6
+        # style plugins.
         dialog # display dialog boxes from shell
         newt
         sqlite # database

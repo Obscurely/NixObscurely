@@ -17,11 +17,19 @@ with lib.my; let
   # gtk-3.0 (css + assets) and APPENDING our overlay to BOTH gtk.css and gtk-dark.css
   # (prefer-dark loads gtk-dark.css). See spec §12.
   montBlancGtk3 = pkgs.runCommand "Mont-Blanc-Dark" {} ''
-    mkdir -p $out/gtk-3.0
-    cp -r ${pkgs.adw-gtk3}/share/themes/adw-gtk3-dark/gtk-3.0/. $out/gtk-3.0/
+    # Copy the WHOLE adw-gtk3-dark theme — gtk-3.0 AND gtk-4.0. The gtk-4.0 (adw-gtk3's
+    # Adwaita/libadwaita GTK4 stylesheet) is the BASE that PLAIN-GTK4 apps need — e.g.
+    # pavucontrol, which does NOT link libadwaita: without a gtk-4.0 in the named theme,
+    # GTK4 falls back to "Adwaita-empty" (no widget geometry → block sliders, unstyled
+    # content). libadwaita apps (gnome-calculator) ignore the named theme and are unaffected;
+    # plain-GTK4 apps rely on it. The glacial RECOLOR for GTK4 comes from the separate
+    # ~/.config/gtk-4.0/gtk.css overlay (@800, deployed below). See spec §22.
+    cp -r ${pkgs.adw-gtk3}/share/themes/adw-gtk3-dark/. $out/
     chmod -R u+w $out
+    # Append our glacial recolor to the GTK3 css (both variants; prefer-dark loads gtk-dark.css)
     cat ${./config/Mont-Blanc-Dark/gtk-3.0/gtk.css} >> $out/gtk-3.0/gtk.css
     cat ${./config/Mont-Blanc-Dark/gtk-3.0/gtk.css} >> $out/gtk-3.0/gtk-dark.css
+    # Our index.theme (names the theme Mont-Blanc-Dark; overwrites adw-gtk3-dark's)
     cp ${./config/Mont-Blanc-Dark/index.theme} $out/index.theme
   '';
 in {

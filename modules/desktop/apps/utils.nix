@@ -42,17 +42,16 @@ in {
       xfce4-exo # this is for xfce shortcuts like open terminal
     ];
 
-    # GParted (and any polkit pkexec GUI) needs a setuid `pkexec` to escalate.
-    # NixOS auto-wraps `sudo`/`mount` but NOT `pkexec`, so /run/wrappers/bin/pkexec
-    # is absent → "pkexec must be setuid root". polkitd + the lxqt polkit agent
-    # already run; pkexec preserves DISPLAY/XAUTHORITY, so once it can escalate,
-    # gparted opens as root on Xwayland (its launcher xhost-grants root itself).
-    security.wrappers.pkexec = {
-      setuid = true;
-      owner = "root";
-      group = "root";
-      source = "${pkgs.polkit.bin}/bin/pkexec";
-    };
+    # GParted (and any polkit pkexec GUI) needs a SETUID pkexec to escalate. This
+    # nixpkgs' polkit module gates its own setuid-pkexec wrapper behind
+    # `security.polkit.enablePkexecWrapper` (mkEnableOption, default FALSE) — so
+    # /run/wrappers/bin/pkexec is absent → "pkexec must be setuid root". Just flip that
+    # option on. (Defining our own `security.wrappers.pkexec` does NOT work: it merges
+    # with polkit's block, whose `enable = cfg.enablePkexecWrapper` wins and keeps it
+    # disabled.) pkexec preserves DISPLAY/XAUTHORITY, so gparted then opens as root on
+    # Xwayland (its launcher xhost-grants root itself); `bleachbit-root` calls the same
+    # /run/wrappers/bin/pkexec.
+    security.polkit.enablePkexecWrapper = true;
 
     # Get in dotfiles for utils
     home.configFile = with config.modules;

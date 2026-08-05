@@ -108,6 +108,20 @@ in {
           gtk-xft-rgba=none
           gtk-cursor-theme-size=32
         '';
+        # GTK4 settings — mirrors prefer-dark for PLAIN GTK4 apps (e.g. pavucontrol).
+        # libadwaita apps read dark from the gsettings color-scheme (set in
+        # sway/init.sh), but non-libadwaita GTK4 apps only honor
+        # gtk-application-prefer-dark-theme from HERE — without it they render in LIGHT
+        # mode (white content) even though our ~/.config/gtk-4.0/gtk.css recolor is
+        # loaded. (No gtk-theme-name: GTK4 uses its built-in Default base + our overlay;
+        # the named Mont-Blanc-Dark theme only ships a gtk-3.0.) This coexists with the
+        # gtk-4.0/gtk.css deployed per-file by modules/themes/main.
+        "gtk-4.0/settings.ini".text = ''
+          [Settings]
+          gtk-application-prefer-dark-theme=true
+          gtk-font-name=${cfg.fonts.sans.name} ${toString cfg.fonts.sans.size}
+          gtk-cursor-theme-size=32
+        '';
         # GTK2 global theme (widget and icon theme)
         "gtk-2.0/gtkrc".text = ''
           ${optionalString (cfg.gtk.theme != "")

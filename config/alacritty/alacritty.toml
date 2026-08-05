@@ -11,7 +11,7 @@ position = "None"
 padding = { x = 20, y = 20 }
 dynamic_padding = false
 decorations = "None"
-opacity = 0.5
+opacity = 0.6
 blur = false
 startup_mode = "Maximized"
 title = "Alacritty"
@@ -31,7 +31,7 @@ offset = { x = 0, y = 0 }
 builtin_box_drawing = false
 
 [colors.primary]
-background = "#141B22"
+background = "#1A1F27"
 foreground = "#CBD8EA"
 dim_foreground = "None"    # It gets automatically calculated
 bright_foreground = "None"

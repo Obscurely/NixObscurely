@@ -1610,6 +1610,30 @@
   # really need it.
   typeset -g POWERLEVEL9K_DISABLE_HOT_RELOAD=true
 
+  # ---- Glacial recolor (Mont-Blanc-Dark) ----
+  # Override the lean-style colors above with the glacial palette
+  # (docs/glacial-design-language.md). Placed before `p10k reload` so it's picked up.
+  # Only the segments that actually render are recolored.
+  typeset -g POWERLEVEL9K_OS_ICON_FOREGROUND='#90A4BC'
+  typeset -g POWERLEVEL9K_DIR_FOREGROUND='#8FB8DE'
+  typeset -g POWERLEVEL9K_DIR_SHORTENED_FOREGROUND='#5B6E85'
+  typeset -g POWERLEVEL9K_DIR_ANCHOR_FOREGROUND='#B4D3EE'
+  typeset -g POWERLEVEL9K_VCS_CLEAN_FOREGROUND='#8FC7B4'
+  typeset -g POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND='#8FC7B4'
+  typeset -g POWERLEVEL9K_VCS_MODIFIED_FOREGROUND='#E7B872'
+  typeset -g POWERLEVEL9K_VCS_CONFLICTED_FOREGROUND='#E58A8A'
+  typeset -g POWERLEVEL9K_VCS_LOADING_FOREGROUND='#5B6E85'
+  typeset -g POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND='#90A4BC'
+  typeset -g POWERLEVEL9K_BACKGROUND_JOBS_FOREGROUND='#8CC6F2'
+  typeset -g POWERLEVEL9K_STATUS_OK_FOREGROUND='#8FC7B4'
+  typeset -g POWERLEVEL9K_STATUS_OK_PIPE_FOREGROUND='#8FC7B4'
+  typeset -g POWERLEVEL9K_STATUS_ERROR_FOREGROUND='#E58A8A'
+  typeset -g POWERLEVEL9K_STATUS_ERROR_SIGNAL_FOREGROUND='#E58A8A'
+  typeset -g POWERLEVEL9K_STATUS_ERROR_PIPE_FOREGROUND='#E58A8A'
+  # prompt symbol: glacial green on success, glacial red on failure (all vi-mode states)
+  typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND='#8FC7B4'
+  typeset -g POWERLEVEL9K_PROMPT_CHAR_ERROR_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND='#E58A8A'
+
   # If p10k is already loaded, reload configuration.
   # This works even with POWERLEVEL9K_DISABLE_HOT_RELOAD=true.
   (( ! $+functions[p10k] )) || p10k reload

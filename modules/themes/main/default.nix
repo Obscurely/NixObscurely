@@ -32,6 +32,19 @@ with lib.my; let
     # Our index.theme (names the theme Mont-Blanc-Dark; overwrites adw-gtk3-dark's)
     cp ${./config/Mont-Blanc-Dark/index.theme} $out/index.theme
   '';
+
+  # Mont-Blanc-Dark ICON theme = Papirus-Dark recolored to the glacial palette. config/
+  # recolor-icons.py does a curated hex remap of Papirus's shared icon palette (line-art +
+  # blue/orange/red/green accents + folder blues -> glacial), leaving apps/ untouched so brand
+  # icons stay recognizable (inherited from stock Papirus-Dark). Inherits=Papirus-Dark,hicolor,
+  # so papirus-icon-theme MUST stay in user.packages (apps + any un-recolored fallback). See
+  # docs/superpowers/specs glacial-icon-theme design.
+  montBlancIcons = pkgs.runCommand "Mont-Blanc-Dark-icons" {
+    nativeBuildInputs = [pkgs.python3 pkgs.gtk3];
+  } ''
+    python3 ${./config/recolor-icons.py} ${pkgs.papirus-icon-theme}/share/icons/Papirus-Dark $out
+    gtk-update-icon-cache -q -t -f $out || true
+  '';
 in {
   config = mkIf (cfg.active == "main") (mkMerge [
     # Desktop-agnostic configuration
@@ -41,7 +54,7 @@ in {
           wallpaper = mkDefault ./config/wallpaper.png;
           gtk = {
             theme = "Mont-Blanc-Dark";
-            iconTheme = "Papirus-Dark";
+            iconTheme = "Mont-Blanc-Dark";
             cursorTheme = "volantes_cursors";
           };
           fonts = {
@@ -123,6 +136,12 @@ in {
           {
             # Installation of the cursor theme
             "../.icons/volantes_cursors".source = ./config/volantes_cursors;
+          }
+          {
+            # Mont-Blanc-Dark icon theme (glacial recolor of Papirus-Dark; see montBlancIcons).
+            # Deployed at ~/.icons/Mont-Blanc-Dark; papirus-icon-theme stays installed for the
+            # inherited apps/ + fallback. gtk-icon-theme-name + gsettings icon-theme both name it.
+            "../.icons/Mont-Blanc-Dark".source = montBlancIcons;
           }
           {
             # Kvantum (Qt) theme — Mont-Blanc-Dark (.kvconfig colors + .svg widget art).

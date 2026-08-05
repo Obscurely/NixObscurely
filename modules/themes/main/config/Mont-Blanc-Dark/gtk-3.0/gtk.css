@@ -218,6 +218,11 @@ button:not(.flat):not(.suggested-action):not(.destructive-action):not(.link):che
   background-color: #2E4054;
 }
 button:disabled { background-color: #182028; color: #4C5D72; }
+/* Flat/toolbar icon buttons stay transparent when insensitive — otherwise a disabled
+   toolbar icon gets a filled #182028 box behind it (the "background on inactive icons").
+   The rule above lacks a :not(.flat) guard (unlike the raised-button rules), so exempt
+   flat here. Mirrors the GTK4 `button.flat:disabled` rule. */
+button.flat:disabled { background-color: transparent; }
 
 /* Suggested / destructive: the flatten above excludes them, so adw wins (near-white
    suggested, translucent pink destructive). Pin to opaque semantic fills. Two

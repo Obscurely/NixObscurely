@@ -7,7 +7,7 @@
 # Wayland session they fall back to Adwaita/no icons. Push the theme here to
 # match. (settings.ini still covers pure GTK2/3 apps.)
 gsettings set org.gnome.desktop.interface gtk-theme 'Mont-Blanc-Dark' 2>/dev/null
-gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark' 2>/dev/null
+gsettings set org.gnome.desktop.interface icon-theme 'Mont-Blanc-Dark' 2>/dev/null
 gsettings set org.gnome.desktop.interface cursor-theme 'volantes_cursors' 2>/dev/null
 gsettings set org.gnome.desktop.interface cursor-size 32 2>/dev/null
 gsettings set org.gnome.desktop.interface font-name 'Fira Code 15' 2>/dev/null

@@ -11,12 +11,12 @@ set $alt Mod1
 set $term alacritty
 set $shots $HOME/Pictures/screenshots
 
-# Dracula-ish colours (border bg text indicator child_border)
-set $c_focus   #bd93f9
-set $c_unfocus #44475a
-set $c_bg      #282a36
-set $c_text    #f8f8f2
-set $c_urgent  #ff5555
+# Glacial colours (border bg text indicator child_border)
+set $c_focus   #8CC6F2
+set $c_unfocus #2E3B49
+set $c_bg      #16202B
+set $c_text    #CBD8EA
+set $c_urgent  #E7B872
 
 ### Outputs
 # Connector names from `swaymsg -t get_outputs`:
@@ -88,8 +88,8 @@ default_orientation horizontal
 gaps inner 8
 gaps outer 2
 smart_gaps off
-default_border pixel 2
-default_floating_border pixel 2
+default_border pixel 1
+default_floating_border pixel 1
 titlebar_padding 1
 font pango:FiraCode Nerd Font 10
 

@@ -45,6 +45,15 @@ with lib.my; let
     python3 ${./config/recolor-icons.py} ${pkgs.papirus-icon-theme}/share/icons/Papirus-Dark $out
     gtk-update-icon-cache -q -t -f $out || true
   '';
+
+  # volantes cursor, glacially tinted: config/recolor-cursor.py multiplies the white body toward
+  # icy #CCDEF2 (dark outline + alpha preserved -> still high-contrast, just integrated). Keeps the
+  # theme name "volantes_cursors" so no reference (sway/gtk/gsettings) changes. See the cursor spec.
+  volantesGlacial = pkgs.runCommand "volantes_cursors-glacial" {
+    nativeBuildInputs = [pkgs.python3];
+  } ''
+    python3 ${./config/recolor-cursor.py} ${./config/volantes_cursors} $out
+  '';
 in {
   config = mkIf (cfg.active == "main") (mkMerge [
     # Desktop-agnostic configuration
@@ -135,7 +144,7 @@ in {
           }
           {
             # Installation of the cursor theme
-            "../.icons/volantes_cursors".source = ./config/volantes_cursors;
+            "../.icons/volantes_cursors".source = volantesGlacial;
           }
           {
             # Mont-Blanc-Dark icon theme (glacial recolor of Papirus-Dark; see montBlancIcons).

@@ -79,7 +79,7 @@ input type:keyboard {
     repeat_rate 45
 }
 seat * {
-    xcursor_theme volantes_cursors 24
+    xcursor_theme volantes_cursors 32
     hide_cursor when-typing enable
 }
 

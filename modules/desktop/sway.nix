@@ -60,9 +60,9 @@ in {
             export MOZ_ENABLE_WAYLAND=1
             export _JAVA_AWT_WM_NONREPARENTING=1
 
-            # Cursor for Xwayland clients. Base 24 — sway multiplies by each
-            # output's scale (24 -> 36 on the 4K@1.5), so do NOT pre-scale here.
-            export XCURSOR_SIZE=24
+            # Cursor for Xwayland clients. Base 32 — sway multiplies by each
+            # output's scale (32 -> 48 on the 4K@1.5), so do NOT pre-scale here.
+            export XCURSOR_SIZE=32
             export XCURSOR_THEME=volantes_cursors
           ''
           + optionalString cfg.hdr.enable ''

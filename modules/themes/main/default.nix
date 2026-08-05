@@ -46,13 +46,16 @@ with lib.my; let
     gtk-update-icon-cache -q -t -f $out || true
   '';
 
-  # volantes cursor, glacially tinted: config/recolor-cursor.py multiplies the white body toward
-  # icy #CCDEF2 (dark outline + alpha preserved -> still high-contrast, just integrated). Keeps the
-  # theme name "volantes_cursors" so no reference (sway/gtk/gsettings) changes. See the cursor spec.
+  # volantes cursor, glacially tinted + downscaled. config/recolor-cursor.py (a) multiplies the
+  # white body toward icy #CCDEF2 (dark outline + alpha preserved -> still high-contrast, just
+  # integrated), and (b) shrinks every cursor image by 0.875 (32->28). volantes has only fixed
+  # native sizes (24/32/48/64) that snap on a fractional scale, so this baked-in downscale is how
+  # we get an in-between size: with the theme pre-shrunk, base size 32 renders ~42px on the 4K@1.5.
+  # Keeps the theme name "volantes_cursors" so no reference (sway/gtk/gsettings) changes. See the spec.
   volantesGlacial = pkgs.runCommand "volantes_cursors-glacial" {
-    nativeBuildInputs = [pkgs.python3];
+    nativeBuildInputs = [pkgs.python3 pkgs.imagemagick];
   } ''
-    python3 ${./config/recolor-cursor.py} ${./config/volantes_cursors} $out
+    python3 ${./config/recolor-cursor.py} ${./config/volantes_cursors} $out 0.875
   '';
 in {
   config = mkIf (cfg.active == "main") (mkMerge [

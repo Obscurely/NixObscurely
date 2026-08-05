@@ -363,17 +363,17 @@
     if (( $1 )); then
       # Styling for up-to-date Git status.
       local       meta='%f'     # default foreground
-      local      clean='%76F'   # green foreground
-      local   modified='%178F'  # yellow foreground
-      local  untracked='%39F'   # blue foreground
-      local conflicted='%196F'  # red foreground
+      local      clean='%F{#8FC7B4}'   # glacial green  (branch, sync, stashes)
+      local   modified='%F{#E7B872}'   # glacial amber  (staged/unstaged/wip)
+      local  untracked='%F{#8CC6F2}'   # glacial accent (untracked / new)
+      local conflicted='%F{#E58A8A}'   # glacial red    (conflicts / merge)
     else
       # Styling for incomplete and stale Git status.
-      local       meta='%244F'  # grey foreground
-      local      clean='%244F'  # grey foreground
-      local   modified='%244F'  # grey foreground
-      local  untracked='%244F'  # grey foreground
-      local conflicted='%244F'  # grey foreground
+      local       meta='%F{#5B6E85}'  # glacial dim (loading / stale git status)
+      local      clean='%F{#5B6E85}'
+      local   modified='%F{#5B6E85}'
+      local  untracked='%F{#5B6E85}'
+      local conflicted='%F{#5B6E85}'
     fi
 
     local res

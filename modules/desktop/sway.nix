@@ -60,8 +60,10 @@ in {
             export MOZ_ENABLE_WAYLAND=1
             export _JAVA_AWT_WM_NONREPARENTING=1
 
-            # Cursor for Xwayland clients. Base 32 — sway multiplies by each
-            # output's scale (32 -> 48 on the 4K@1.5), so do NOT pre-scale here.
+            # Cursor for Xwayland clients. The glacial volantes theme is pre-shrunk 0.875 in its
+            # derivation (volantes ships only fixed native sizes that snap on a fractional scale,
+            # so a baked-in downscale is the only way to a real in-between size). With that, base
+            # 32 renders ~42px on the 4K@1.5 — the "28 equivalent". sway rescales per output.
             export XCURSOR_SIZE=32
             export XCURSOR_THEME=volantes_cursors
           ''

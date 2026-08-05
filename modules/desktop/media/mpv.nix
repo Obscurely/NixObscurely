@@ -13,10 +13,13 @@ with lib.my; let
   #   thumbfast — hover thumbnails on the timeline + in the browser (uosc integrates it)
   #   autoload  — opening one file populates the playlist with the rest of that folder
   #   mpris     — mpv registers as an MPRIS player -> the eww media widget shows/controls it
+  #   sponsorblock — live SponsorBlock skipping for STREAMED YouTube URLs (search/preview). Downloaded
+  #                  files instead carry SB segments as embedded chapters (yt-dlp) that config/mpv/scripts/
+  #                  sponsorskip.lua skips offline. See the youtube-workflow specs.
   # Theming + keybinds + the native-picker glue live in config/mpv (deployed below). See
   # docs/superpowers/specs/2026-08-05-mpv-glacial-design.md.
   mpvGlacial = pkgs.mpv.override {
-    scripts = with pkgs.mpvScripts; [uosc thumbfast autoload mpris];
+    scripts = with pkgs.mpvScripts; [uosc thumbfast autoload mpris sponsorblock];
   };
 in {
   options.modules.desktop.media.mpv = {

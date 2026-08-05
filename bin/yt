@@ -1,0 +1,273 @@
+#!/usr/bin/env bash
+# yt --- private, intentional, terminal-only YouTube workflow.
+# Design/phases: docs/superpowers/specs/2026-08-05-youtube-workflow-overview.md
+# Deps (on PATH via modules/desktop/media/youtube.nix): yt-dlp mpv fzf jq newsboat chafa ungoogled-chromium.
+# Principle: no recommendations / related / autoplay / rabbit-holes. You see only your subs and your lists.
+set -euo pipefail
+
+YT_ROOT="${YT_ROOT:-/data/youtube}"          # big disk
+STATE="$YT_ROOT/.state"                        # runtime state (not git)
+WL_DIR="$YT_ROOT/watchlater"
+GOLD_DIR="$YT_ROOT/gold"
+MUSIC_DIR="$YT_ROOT/music"
+PL_STATE="$STATE/playlists"
+NB_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/newsboat"
+FMT='bestvideo[vcodec!*=av01]+bestaudio/best'  # VP9 over AV1 (Turing has no AV1 HW decode)
+
+die() { printf 'yt: %s\n' "$*" >&2; exit 1; }
+
+# --- core download pipeline: single video OR playlist url ---
+# usage: yt get <url> [destdir] [--cut] [--audio]
+# --cut   physically remove ad segments (default: mark as skippable chapters)
+# --audio audio-only (for pure-music playlists)
+cmd_get() {
+  [ $# -ge 1 ] || die "usage: yt get <url> [destdir] [--cut] [--audio]"
+  local url="$1"; shift
+  local dest="$YT_ROOT" cut=0 audio=0 a
+  for a in "$@"; do
+    case "$a" in
+      --cut) cut=1 ;;
+      --audio) audio=1 ;;
+      -*) die "unknown flag '$a'" ;;
+      *) dest="$a" ;;
+    esac
+  done
+  mkdir -p "$dest"
+
+  # SponsorBlock: default = mark the skippable categories as chapters (offline skip via sponsorskip.lua);
+  # --cut = physically remove the ad-like ones, mark the rest.
+  local sb=(--sponsorblock-mark sponsor,intro,outro,selfpromo,interaction)
+  [ "$cut" = 1 ] && sb=(--sponsorblock-remove sponsor,selfpromo,interaction --sponsorblock-mark intro,outro)
+
+  local fmt=(-f "$FMT" --merge-output-format mkv)
+  [ "$audio" = 1 ] && fmt=(-f bestaudio -x --audio-format opus)
+
+  # Escape hatch for YouTube throttling (SABR/PO-token): `YT_COOKIES=chromium yt ...` reuses your
+  # browser cookies. Off by default (cookieless); pre-approved for the rare case it's ever needed.
+  local ck=(); [ -n "${YT_COOKIES:-}" ] && ck=(--cookies-from-browser "$YT_COOKIES")
+
+  yt-dlp \
+    "${fmt[@]}" "${ck[@]}" \
+    "${sb[@]}" --embed-chapters --embed-metadata --embed-thumbnail \
+    --download-archive "$dest/.archive" \
+    --no-overwrites --continue \
+    -o "$dest/%(uploader)s - %(title)s [%(id)s].%(ext)s" \
+    "$url"
+}
+
+# usage: yt comments <url>  --- deliberate, on-demand (slow; may rate-limit)
+cmd_comments() {
+  [ $# -ge 1 ] || die "usage: yt comments <url>"
+  local url="$1" tmp
+  tmp="$(mktemp -d)"; trap 'rm -rf "$tmp"' RETURN
+  yt-dlp --skip-download --write-comments \
+    --extractor-args 'youtube:max_comments=100;comment_sort=top' \
+    -o "$tmp/%(id)s" "$url" >/dev/null 2>&1 || die "couldn't fetch comments (rate-limited / changed?)"
+  local j; j="$(find "$tmp" -name '*.info.json' | head -1)"
+  [ -n "$j" ] && [ -f "$j" ] || die "no comments available for this video"
+  jq -r '.comments[]? | "\(.author) [\(.like_count // 0)]:\n\(.text)\n"' "$j" | ${PAGER:-less -R}
+}
+
+# --- subscriptions feed (newsboat) ---
+# yt subs import <subscriptions.csv>   (Google Takeout: YouTube -> subscriptions.csv)
+cmd_subs() {
+  [ "${1:-}" = import ] || die "usage: yt subs import <subscriptions.csv>"
+  local csv="${2:?usage: yt subs import <subscriptions.csv>}"
+  [ -f "$csv" ] || die "no such file: $csv"
+  mkdir -p "$NB_DIR"
+  local prio="$NB_DIR/priority.txt"; [ -f "$prio" ] || prio=/dev/null
+  # Takeout CSV: header row then "Channel Id,Channel Url,Channel Title" (title may contain commas).
+  awk -F, -v prio="$prio" '
+    BEGIN { while ((getline p < prio) > 0) { gsub(/\r/,"",p); sub(/^[ \t]+/,"",p);
+            if (p !~ /^#/ && p != "") pri[tolower(p)] = 1 } }
+    NR == 1 { next }
+    NF >= 3 {
+      id = $1; gsub(/\r/,"",id);
+      title = $3; for (i = 4; i <= NF; i++) title = title "," $i;
+      gsub(/\r/,"",title); gsub(/"/,"",title);
+      star = ((tolower(id) in pri) || (tolower(title) in pri)) ? "\342\230\205 " : "";
+      printf "https://www.youtube.com/feeds/videos.xml?channel_id=%s \"~%s%s\"\n", id, star, title;
+    }' "$csv" > "$NB_DIR/urls"
+  printf 'yt: imported %s subscriptions -> %s\n' "$(wc -l < "$NB_DIR/urls")" "$NB_DIR/urls"
+  command -v newsboat >/dev/null 2>&1 && newsboat -x reload >/dev/null 2>&1 || true
+}
+
+cmd_feed() { exec newsboat "$@"; }
+
+# extract an 11-char youtube id from a url/string (empty if none)
+_ytid() {
+  case "$1" in
+    *watch?v=*) printf '%s' "${1#*watch?v=}" | sed 's/[&#].*//' ;;
+    *youtu.be/*) printf '%s' "${1##*youtu.be/}" | sed 's/[?&#].*//' ;;
+    *shorts/*) printf '%s' "${1##*shorts/}" | sed 's/[?&#].*//' ;;
+    *) [ "${#1}" -eq 11 ] && printf '%s' "$1" ;;
+  esac
+}
+
+# yt add <url> [--force]  --- download into watch-later (skips already-watched unless --force)
+cmd_add() {
+  [ $# -ge 1 ] || die "usage: yt add <url> [--force]"
+  local url="$1" force=0 a; shift
+  for a in "$@"; do [ "$a" = --force ] && force=1; done
+  local id; id="$(_ytid "$url")"
+  if [ "$force" = 0 ] && [ -n "$id" ] && grep -qxF "$id" "$STATE/watched" 2>/dev/null; then
+    printf 'yt: already watched (%s) — skipping. `yt add %s --force` to re-add.\n' "$id" "$url" >&2
+    return 0
+  fi
+  cmd_get "$url" "$WL_DIR"
+}
+
+# pick a media file from a dir (newest first); prints the full path or nothing
+_pick_media() {
+  local dir="$1" prompt="$2" pick
+  mkdir -p "$dir"
+  pick="$(cd "$dir" && ls -1t -- *.mkv *.webm *.mp4 *.opus *.mp3 2>/dev/null \
+    | fzf --prompt="$prompt" --height=80% --reverse --no-multi)" || return 1
+  [ -n "$pick" ] && printf '%s/%s' "$dir" "$pick"
+}
+
+# yt wl  --- pick + watch a watch-later video (no autoplay; auto-removes when finished)
+cmd_wl() { local f; f="$(_pick_media "$WL_DIR" 'watch-later> ')" || return 0; [ -n "$f" ] && mpv --script-opts=yt-mode=wl "$f"; }
+
+# yt gold  --- pick + watch a saved "gold" video (non-deleting, no autoplay)
+cmd_gold() { local f; f="$(_pick_media "$GOLD_DIR" 'gold> ')" || return 0; [ -n "$f" ] && mpv --script-opts=yt-mode=keep "$f"; }
+
+# yt music [name] [--shuffle]  --- play a persistent music playlist (plays through, non-deleting)
+cmd_music() {
+  local shuffle="" name="" a
+  for a in "$@"; do case "$a" in --shuffle) shuffle="--shuffle" ;; *) name="$a" ;; esac; done
+  if [ -z "$name" ]; then
+    printf 'music playlists:\n'; ls -1 "$MUSIC_DIR" 2>/dev/null | sed 's/^/  /' || true
+    printf '(play: yt music <name>; import: yt playlist add <name> <url>)\n'; return 0
+  fi
+  [ -d "$MUSIC_DIR/$name" ] || die "no such music playlist '$name' (run: yt music)"
+  # shellcheck disable=SC2086
+  mpv $shuffle "$MUSIC_DIR/$name"
+}
+
+# yt playlist add|sync|list  --- mirror a YouTube playlist locally (incremental sync via .archive)
+cmd_playlist() {
+  local action="${1:-list}"; shift || true
+  case "$action" in
+    add)
+      local name="${1:?usage: yt playlist add <name> <url> [--audio]}"
+      local url="${2:?usage: yt playlist add <name> <url> [--audio]}"; shift 2 || true
+      local audio="" a; for a in "$@"; do [ "$a" = --audio ] && audio="--audio"; done
+      mkdir -p "$PL_STATE"; printf '%s\n%s\n' "$url" "$audio" > "$PL_STATE/$name"
+      # shellcheck disable=SC2086
+      cmd_get "$url" "$MUSIC_DIR/$name" $audio ;;
+    sync)
+      local name="${1:?usage: yt playlist sync <name|all>}"
+      if [ "$name" = all ]; then
+        local f; for f in "$PL_STATE"/*; do [ -f "$f" ] && cmd_playlist sync "$(basename "$f")"; done; return 0
+      fi
+      [ -f "$PL_STATE/$name" ] || die "no such playlist '$name' (yt playlist list)"
+      local url audio; url="$(sed -n 1p "$PL_STATE/$name")"; audio="$(sed -n 2p "$PL_STATE/$name")"
+      # shellcheck disable=SC2086
+      cmd_get "$url" "$MUSIC_DIR/$name" $audio ;;
+    list) ls -1 "$PL_STATE" 2>/dev/null || printf '(no playlists — yt playlist add <name> <url>)\n' ;;
+    *) die "usage: yt playlist add|sync|list" ;;
+  esac
+}
+
+# shared result picker: reads tsv "display<TAB>id<TAB>url"; Enter=stream, ctrl-a=add-to-watch-later
+_yt_fzf() {
+  local out key sel url
+  out="$(fzf --delimiter='\t' --with-nth=1 --height=90% --reverse --no-multi --expect=ctrl-a \
+    --header='enter: watch now · ctrl-a: add to watch-later' \
+    --preview 'curl -sL "https://i.ytimg.com/vi/{2}/hqdefault.jpg" | chafa -f symbols -s "${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}" - 2>/dev/null' \
+    --preview-window=up,45%)" || return 0
+  key="$(printf '%s' "$out" | head -1)"
+  sel="$(printf '%s' "$out" | sed -n 2p)"
+  url="$(printf '%s' "$sel" | cut -f3)"; [ -n "$url" ] || return 0
+  if [ "$key" = ctrl-a ]; then cmd_add "$url"; else mpv "$url"; fi
+}
+
+# yt search <query>
+cmd_search() {
+  [ $# -ge 1 ] || die "usage: yt search <query>"
+  yt-dlp "ytsearch20:$*" --flat-playlist -j 2>/dev/null \
+    | jq -r '"\(.title) — \(.channel // .uploader) (\(.duration_string // "?"))\t\(.id)\thttps://youtu.be/\(.id)"' \
+    | _yt_fzf
+}
+
+# yt channel <name|@handle|url> [popular]
+cmd_channel() {
+  [ $# -ge 1 ] || die "usage: yt channel <name|@handle|url> [popular]"
+  local q="$1"; shift; local sort=latest a; for a in "$@"; do [ "$a" = popular ] && sort=popular; done
+  local chan
+  case "$q" in
+    http* | *youtube.com/*) chan="$q" ;;
+    @*) chan="https://www.youtube.com/$q" ;;
+    *) chan="$(yt-dlp "ytsearch1:$q" --print channel_url 2>/dev/null | head -1)" ;;
+  esac
+  [ -n "$chan" ] || die "couldn't resolve channel '$q'"
+  chan="${chan%/}"; case "$chan" in */videos) : ;; *) chan="$chan/videos" ;; esac
+  if [ "$sort" = popular ]; then
+    printf 'yt: fetching popular (most-viewed of the last 25; slower)...\n' >&2
+    yt-dlp "$chan" --playlist-end 25 -j 2>/dev/null \
+      | jq -rs 'sort_by(-(.view_count // 0)) | .[] | "\(.title) — \(.view_count // 0) views\t\(.id)\thttps://youtu.be/\(.id)"' \
+      | _yt_fzf
+  else
+    yt-dlp "$chan" --flat-playlist --playlist-end 30 -j 2>/dev/null \
+      | jq -r '"\(.title) — \(.duration_string // "?")\t\(.id)\thttps://youtu.be/\(.id)"' \
+      | _yt_fzf
+  fi
+}
+
+# yt browser <url|id>  --- open in ungoogled-chromium (detached)
+cmd_browser() {
+  [ $# -ge 1 ] || die "usage: yt browser <url|id>"
+  local u="$1"
+  case "$u" in http*) : ;; *) [ "${#u}" -eq 11 ] && u="https://youtu.be/$u" ;; esac
+  setsid -f chromium --new-window "$u" >/dev/null 2>&1
+}
+
+cmd_help() {
+  cat <<'EOF'
+yt --- private terminal YouTube workflow
+
+  yt subs import <csv>                   import Google Takeout subscriptions.csv -> newsboat feed
+  yt feed                                open the subscriptions feed (newsboat)
+  yt add <url>                           download a video into watch-later
+  yt wl                                  pick + watch a watch-later video (auto-removes when finished)
+  yt get <url> [dir] [--cut] [--audio]   download video/playlist -> /data/youtube
+                                         (SponsorBlock + chapters baked in; --cut removes ads,
+                                          --audio = audio-only)
+  yt gold                                pick + watch a saved "gold" video (non-deleting)
+  yt music [name] [--shuffle]            play a persistent music playlist (plays through)
+  yt playlist add <name> <url> [--audio] mirror a YouTube playlist locally
+  yt playlist sync <name|all>            fetch only new items from a mirrored playlist
+  yt playlist list                       list mirrored playlists
+  yt search <query>                      search videos (enter=watch, ctrl-a=add to watch-later)
+  yt channel <name|@handle|url> [popular] list a channel's videos (latest, or most-viewed of last 25)
+  yt comments <url>                      show top comments in a pager
+  yt browser <url|id>                    open in ungoogled-chromium
+  yt help                                this help
+
+In the feed (newsboat):  a = add to watch-later   c = comments   o = open in browser
+In mpv (uosc menu):      Mark watched · Promote to gold · Open in browser
+EOF
+}
+
+main() {
+  local sub="${1:-help}"; shift || true
+  case "$sub" in
+    get) cmd_get "$@" ;;
+    comments) cmd_comments "$@" ;;
+    subs) cmd_subs "$@" ;;
+    feed) cmd_feed "$@" ;;
+    add) cmd_add "$@" ;;
+    wl) cmd_wl "$@" ;;
+    gold) cmd_gold "$@" ;;
+    music) cmd_music "$@" ;;
+    playlist) cmd_playlist "$@" ;;
+    search) cmd_search "$@" ;;
+    channel) cmd_channel "$@" ;;
+    browser) cmd_browser "$@" ;;
+    help | -h | --help | '') cmd_help ;;
+    *) die "unknown subcommand '$sub' (try: yt help)" ;;
+  esac
+}
+
+main "$@"

@@ -1,0 +1,7 @@
+# Priority channels --- one per line, either the exact Channel Title or the Channel ID (UC...).
+# `yt subs import` prefixes these channels' feed titles with ★ and newsboat highlights them, so you
+# never glance past them. Lines starting with # are ignored. Edit here, then re-run `yt subs import`.
+#
+# examples:
+# Some Channel I Never Want To Miss
+# UCxxxxxxxxxxxxxxxxxxxxxx

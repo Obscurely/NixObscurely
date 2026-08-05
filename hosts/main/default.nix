@@ -53,6 +53,7 @@ in {
         documents.enable = true;
         graphics.enable = true;
         mpv.enable = true;
+        youtube.enable = true; # private terminal YouTube workflow (yt suite) — see youtube-workflow specs
         recording.enable = true;
         tidal.enable = false; # disabled — not using tidal right now (re-enable to reinstall)
       };

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Preview pane for `yt feed` (invoked by fzf). Renders the channel thumbnail, then stacks the video
+# name / channel / upload date+time below it. Important channels (prio=1) get the whole text block in
+# bold yellow --- matching the yellow highlight of their row in the list.
+# usage: yt-feed-preview <video-id> <prio 0|1> <name> <channel> <datetime>
+id="$1"; prio="$2"; name="$3"; channel="$4"; when="$5"
+
+cols="${FZF_PREVIEW_COLUMNS:-40}"; lines="${FZF_PREVIEW_LINES:-24}"
+th=$((lines - 6)); [ "$th" -lt 1 ] && th=1   # leave room for the 3 text lines + a blank + slack
+
+curl -sL "https://i.ytimg.com/vi/$id/hqdefault.jpg" \
+  | chafa -f symbols -s "${cols}x${th}" - 2>/dev/null
+
+if [ "$prio" = 1 ]; then c=$'\033[1;33m'; r=$'\033[0m'; else c=""; r=""; fi
+# lead with a reset so chafa's trailing colour can't bleed into the text; then colour if important
+printf '\n\033[0m%s%s\n%s\n%s%s\n' "$c" "$name" "$channel" "$when" "$r"

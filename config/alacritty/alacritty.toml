@@ -37,16 +37,15 @@ dim_foreground = "None"    # It gets automatically calculated
 bright_foreground = "None"
 
 [colors]
-cursor = { text = "#141B22", cursor = "#8CC6F2" }
-selection = { text = "CellForeground", background = "#34506B" }
 transparent_background_colors = false
 draw_bold_text_with_bright_colors = false
 
-# ANSI palette: intentionally the alacritty DEFAULTS (the familiar high-contrast set), NOT the muted
-# glacial palette. The terminal is a transparent, all-day working surface where color is functional
-# (ls / git / syntax / errors), so legibility beats theme purity. The cool background + accent cursor
-# keep it in-family while the working colors stay punchy. (Removing [colors.normal]/[colors.bright]
-# restores alacritty's built-in palette.)
+# ANSI palette, cursor AND selection: intentionally the alacritty DEFAULTS, NOT the glacial recolor. The
+# terminal is a transparent, all-day working surface where color is functional (ls / git / syntax / errors /
+# caret / selection), so legibility and familiarity beat theme purity — the glacial touches read as out of
+# place once the rest was restored, so the whole palette is back to default. The cool background is the only
+# in-family cue kept. (Omitting [colors.cursor]/[colors.selection]/[colors.normal]/[colors.bright] restores
+# alacritty's built-ins.)
 
 [bell]
 duration = 0

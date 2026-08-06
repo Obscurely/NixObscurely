@@ -1,9 +1,14 @@
 #!/usr/bin/env python3
 # yt-feed --- unified subscriptions feed for the `yt` workflow. Reads ~/.config/yt/subscriptions
 # (tab-separated: channel_id <TAB> title <TAB> priority[0/1]), fetches every channel's YouTube RSS
-# concurrently, keeps videos published in the last 14 days AND after the last-checked timestamp,
-# sorts oldest -> latest, and prints one fzf row per video:  <display>\t<id>\t<url>
-# Priority channels are ANSI-highlighted (fzf --ansi). No API, no login. See the youtube-workflow specs.
+# concurrently, drops Shorts, keeps videos published in the last 14 days AND after the last-checked
+# timestamp, sorts oldest -> latest, and prints one fzf row per video:
+#     <row>\t<id>\t<url>\t<prio>\t<name>\t<channel>\t<datetime>
+# row      = what the list shows (name + channel; important channels are bold-yellow, ANSI, fzf --ansi)
+# prio     = 0/1 so the preview (yt-feed-preview) can colour important channels' text yellow too
+# name/channel/datetime = clean fields for the preview pane (channel + upload time under the name)
+# Shorts are excluded via the RSS <link> href: shorts link to /shorts/<id>, real videos to /watch?v=<id>
+# (a free, reliable signal --- no extra request). No API, no login. See the youtube-workflow specs.
 import os
 import sys
 import time
@@ -19,6 +24,11 @@ NS = {
     'a': 'http://www.w3.org/2005/Atom',
     'yt': 'http://www.youtube.com/xml/schemas/2015',
 }
+
+
+def clean(s):
+    # keep the TSV intact --- titles/channels are single-line but be defensive
+    return (s or '').replace('\t', ' ').replace('\n', ' ').strip()
 
 
 def channels():
@@ -56,13 +66,18 @@ def fetch(ch):
         vid = e.find('yt:videoId', NS)
         pub = e.find('a:published', NS)
         ttl = e.find('a:title', NS)
+        link = e.find('a:link', NS)
         if vid is None or pub is None:
+            continue
+        # exclude Shorts: their alternate link is /shorts/<id> (real videos are /watch?v=<id>)
+        href = link.get('href') if link is not None else ''
+        if '/shorts/' in href:
             continue
         try:
             ts = datetime.fromisoformat(pub.text).timestamp()
         except ValueError:
             continue
-        vids.append((ts, (ttl.text or '').strip(), title, vid.text, prio))
+        vids.append((ts, clean(ttl.text if ttl is not None else ''), clean(title), vid.text, prio))
     return vids
 
 
@@ -82,11 +97,14 @@ def main():
     allv = [v for v in allv if v[0] > cutoff]
     allv.sort(key=lambda v: v[0])  # oldest -> latest (like scrolling down a subs page)
 
-    for _ts, ttl, chan, vid, prio in allv:
-        disp = ('★ ' if prio else '  ') + ttl + '  ·  ' + chan
+    for ts, ttl, chan, vid, prio in allv:
+        # datetime.fromtimestamp() (no tz) renders the absolute instant in the local wall clock
+        when = datetime.fromtimestamp(ts).strftime('%a %-d %b · %H:%M')
+        row = ('★ ' if prio else '') + ttl + '  ·  ' + chan
         if prio:
-            disp = '\x1b[1;33m' + disp + '\x1b[0m'  # bold amber for priority channels
-        sys.stdout.write('%s\t%s\thttps://youtu.be/%s\n' % (disp, vid, vid))
+            row = '\x1b[1;33m' + row + '\x1b[0m'  # bold yellow for important channels
+        sys.stdout.write('%s\t%s\thttps://youtu.be/%s\t%s\t%s\t%s\t%s\n'
+                         % (row, vid, vid, '1' if prio else '0', ttl, chan, when))
 
 
 if __name__ == '__main__':

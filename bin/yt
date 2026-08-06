@@ -70,27 +70,85 @@ cmd_comments() {
 }
 
 # --- subscriptions ---
-# yt subs import <subscriptions.csv>   (Google Takeout: YouTube -> subscriptions.csv)
-# Writes ~/.config/yt/subscriptions  (tab-separated:  channel_id <TAB> title <TAB> priority[0/1]).
+# The subscriptions file (~/.config/yt/subscriptions) is the source of truth:
+#   tab-separated  channel_id <TAB> title <TAB> important[0/1]
+# Importance (the 3rd column) drives the ★ + yellow highlight in the feed (list AND preview).
+#   yt subs                 list channels (★ = important)
+#   yt subs import <csv>    import Google Takeout subscriptions.csv (keeps existing ★)
+#   yt subs important [q]   toggle importance (no arg = fzf picker; q = toggle matching channels)
 cmd_subs() {
-  [ "${1:-}" = import ] || die "usage: yt subs import <subscriptions.csv>"
-  local csv="${2:?usage: yt subs import <subscriptions.csv>}"
+  local action="${1:-list}"; [ $# -gt 0 ] && shift
+  case "$action" in
+    import)         _subs_import "$@" ;;
+    important|star) _subs_important "$@" ;;
+    list)           _subs_list ;;
+    *) die "usage: yt subs [list | import <csv> | important [query]]" ;;
+  esac
+}
+
+# yt subs import <subscriptions.csv>  (Google Takeout: YouTube -> subscriptions.csv)
+# A channel is marked important if it's listed in priority.txt OR was already starred (so a re-import
+# never wipes toggles made with `yt subs important`). priority.txt = an optional declarative floor.
+_subs_import() {
+  local csv="${1:?usage: yt subs import <subscriptions.csv>}"
   [ -f "$csv" ] || die "no such file: $csv"
   mkdir -p "$YT_CFG"
+  local subs="$YT_CFG/subscriptions"
   local prio="$YT_CFG/priority.txt"; [ -f "$prio" ] || prio=/dev/null
+  local existing="$subs"; [ -f "$existing" ] || existing=/dev/null
   # Takeout CSV: header row then "Channel Id,Channel Url,Channel Title" (title may contain commas).
-  awk -F, -v prio="$prio" '
-    BEGIN { while ((getline p < prio) > 0) { gsub(/\r/,"",p); sub(/^[ \t]+/,"",p);
-            if (p !~ /^#/ && p != "") pri[tolower(p)] = 1 } }
+  awk -F, -v prio="$prio" -v existing="$existing" '
+    BEGIN {
+      while ((getline p < prio) > 0) { gsub(/\r/,"",p); sub(/^[ \t]+/,"",p); sub(/[ \t]+$/,"",p);
+        if (p !~ /^#/ && p != "") pri[tolower(p)] = 1 }
+      while ((getline e < existing) > 0) { sub(/\r/,"",e); n = split(e, f, "\t");
+        if (n >= 3 && f[3] == "1") starred[f[1]] = 1 }
+    }
     NR == 1 { next }
     NF >= 3 {
       id = $1; gsub(/\r/,"",id);
       title = $3; for (i = 4; i <= NF; i++) title = title "," $i;
       gsub(/\r/,"",title); gsub(/"/,"",title);
-      pr = ((tolower(id) in pri) || (tolower(title) in pri)) ? "1" : "0";
+      pr = ((tolower(id) in pri) || (tolower(title) in pri) || (id in starred)) ? "1" : "0";
       printf "%s\t%s\t%s\n", id, title, pr;
-    }' "$csv" > "$YT_CFG/subscriptions"
-  printf 'yt: imported %s subscriptions -> %s\n' "$(wc -l < "$YT_CFG/subscriptions")" "$YT_CFG/subscriptions"
+    }' "$csv" > "$subs.tmp" && mv "$subs.tmp" "$subs"
+  local n; n="$(awk -F'\t' '$3=="1"' "$subs" | wc -l)"
+  printf 'yt: imported %s subscriptions (%s important) -> %s\n' "$(wc -l < "$subs")" "$n" "$subs"
+}
+
+# yt subs important [query]  --- toggle the important flag on channels (persists in the subs file)
+_subs_important() {
+  local subs="$YT_CFG/subscriptions"
+  [ -f "$subs" ] || die "no subscriptions yet — run: yt subs import <csv>"
+  local ids
+  if [ $# -ge 1 ]; then
+    local q="$*"
+    ids="$(awk -F'\t' -v q="${q,,}" 'index(tolower($2), q){print $1}' "$subs")"
+    [ -n "$ids" ] || die "no channel title matches '$q'"
+  else
+    ids="$(awk -F'\t' '{printf "%s\t%s %s\n", $1, ($3=="1"?"★":" "), $2}' "$subs" \
+      | fzf --multi --delimiter='\t' --with-nth=2.. --reverse --height=90% \
+            --header='tab: pick channels to toggle importance · enter: apply' | cut -f1)" || return 0
+    [ -n "$ids" ] || return 0
+  fi
+  local tmp; tmp="$(mktemp)"
+  awk -F'\t' -v ids="$ids" '
+    BEGIN { n = split(ids, a, "\n"); for (i=1;i<=n;i++) if (a[i] != "") flip[a[i]] = 1 }
+    { if ($1 in flip) $3 = ($3=="1" ? "0" : "1"); printf "%s\t%s\t%s\n", $1, $2, $3 }
+  ' "$subs" > "$tmp" && mv "$tmp" "$subs"
+  awk -F'\t' -v ids="$ids" '
+    BEGIN { n = split(ids, a, "\n"); for (i=1;i<=n;i++) if (a[i] != "") want[a[i]] = 1 }
+    ($1 in want) { printf "  %s  %s\n", ($3=="1" ? "★ important" : "· normal   "), $2 }
+  ' "$subs" >&2
+}
+
+# yt subs  --- list channels (★ = important)
+_subs_list() {
+  local subs="$YT_CFG/subscriptions"
+  [ -f "$subs" ] || die "no subscriptions yet — run: yt subs import <csv>"
+  awk -F'\t' '{ printf "%s  %s\n", ($3=="1" ? "★" : " "), $2 }' "$subs" | ${PAGER:-less -R}
+  printf 'yt: %s channels, %s important\n' \
+    "$(wc -l < "$subs")" "$(awk -F'\t' '$3=="1"' "$subs" | wc -l)" >&2
 }
 
 _feed_mark() { mkdir -p "$STATE"; date +%s > "$FEED_LAST"; printf 'yt: feed marked seen — only newer videos show next time\n' >&2; }
@@ -105,7 +163,7 @@ cmd_feed() {
   out="$(printf '%s\n' "$rows" | fzf --ansi --delimiter='\t' --with-nth=1 --multi --reverse --height=100% \
     --header='tab: pick · enter: add to watch-later · ctrl-o: browser · ctrl-y: comments · ctrl-x: mark all seen' \
     --expect=ctrl-o,ctrl-y,ctrl-x \
-    --preview 'curl -sL https://i.ytimg.com/vi/{2}/hqdefault.jpg | chafa -f symbols -s "${FZF_PREVIEW_COLUMNS}x$((FZF_PREVIEW_LINES-3))" - 2>/dev/null; printf "\n%s\n" {1}' \
+    --preview 'yt-feed-preview {2} {4} {5} {6} {7}' \
     --preview-window=right,45%)" || return 0
   key="$(printf '%s\n' "$out" | head -1)"
   sel="$(printf '%s\n' "$out" | tail -n +2)"
@@ -254,8 +312,10 @@ cmd_help() {
   cat <<'EOF'
 yt --- private terminal YouTube workflow
 
-  yt subs import <csv>                   import Google Takeout subscriptions.csv
-  yt feed                                unified feed: all subs' new videos (oldest→latest, 14d, unseen, thumbs)
+  yt subs                                list subscribed channels (★ = important)
+  yt subs import <csv>                   import Google Takeout subscriptions.csv (keeps ★)
+  yt subs important [query]              toggle important channels (no arg = picker; query = match)
+  yt feed                                unified feed: all subs' new videos (oldest→latest, 14d, unseen, no shorts, thumbs)
   yt add <url>                           download a video into watch-later
   yt wl                                  pick + watch a watch-later video (auto-removes when finished)
   yt get <url> [dir] [--cut] [--audio]   download video/playlist -> /data/youtube

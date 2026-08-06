@@ -363,17 +363,17 @@
     if (( $1 )); then
       # Styling for up-to-date Git status.
       local       meta='%f'     # default foreground
-      local      clean='%F{#8FC7B4}'   # glacial green  (branch, sync, stashes)
-      local   modified='%F{#E7B872}'   # glacial amber  (staged/unstaged/wip)
-      local  untracked='%F{#8CC6F2}'   # glacial accent (untracked / new)
-      local conflicted='%F{#E58A8A}'   # glacial red    (conflicts / merge)
+      local      clean='%76F'   # green foreground
+      local   modified='%178F'  # yellow foreground
+      local  untracked='%39F'   # blue foreground
+      local conflicted='%196F'  # red foreground
     else
       # Styling for incomplete and stale Git status.
-      local       meta='%F{#5B6E85}'  # glacial dim (loading / stale git status)
-      local      clean='%F{#5B6E85}'
-      local   modified='%F{#5B6E85}'
-      local  untracked='%F{#5B6E85}'
-      local conflicted='%F{#5B6E85}'
+      local       meta='%244F'  # grey foreground
+      local      clean='%244F'  # grey foreground
+      local   modified='%244F'  # grey foreground
+      local  untracked='%244F'  # grey foreground
+      local conflicted='%244F'  # grey foreground
     fi
 
     local res
@@ -1610,32 +1610,8 @@
   # really need it.
   typeset -g POWERLEVEL9K_DISABLE_HOT_RELOAD=true
 
-  # ---- Glacial recolor (Mont-Blanc-Dark) ----
-  # Override the lean-style colors above with the glacial palette
-  # (docs/glacial-design-language.md). Placed before `p10k reload` so it's picked up.
-  # Only the segments that actually render are recolored.
-  typeset -g POWERLEVEL9K_OS_ICON_FOREGROUND='#90A4BC'
-  typeset -g POWERLEVEL9K_DIR_FOREGROUND='#8FB8DE'
-  typeset -g POWERLEVEL9K_DIR_SHORTENED_FOREGROUND='#5B6E85'
-  typeset -g POWERLEVEL9K_DIR_ANCHOR_FOREGROUND='#B4D3EE'
-  typeset -g POWERLEVEL9K_VCS_CLEAN_FOREGROUND='#8FC7B4'
-  typeset -g POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND='#8FC7B4'
-  typeset -g POWERLEVEL9K_VCS_MODIFIED_FOREGROUND='#E7B872'
-  typeset -g POWERLEVEL9K_VCS_CONFLICTED_FOREGROUND='#E58A8A'
-  typeset -g POWERLEVEL9K_VCS_LOADING_FOREGROUND='#5B6E85'
-  # the standalone git segment ICON was hardcoded to green 76 (line ~476) -> glacial accent
-  typeset -g POWERLEVEL9K_VCS_VISUAL_IDENTIFIER_COLOR='#8CC6F2'
-  typeset -g POWERLEVEL9K_VCS_LOADING_VISUAL_IDENTIFIER_COLOR='#5B6E85'
-  typeset -g POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND='#90A4BC'
-  typeset -g POWERLEVEL9K_BACKGROUND_JOBS_FOREGROUND='#8CC6F2'
-  typeset -g POWERLEVEL9K_STATUS_OK_FOREGROUND='#8FC7B4'
-  typeset -g POWERLEVEL9K_STATUS_OK_PIPE_FOREGROUND='#8FC7B4'
-  typeset -g POWERLEVEL9K_STATUS_ERROR_FOREGROUND='#E58A8A'
-  typeset -g POWERLEVEL9K_STATUS_ERROR_SIGNAL_FOREGROUND='#E58A8A'
-  typeset -g POWERLEVEL9K_STATUS_ERROR_PIPE_FOREGROUND='#E58A8A'
-  # prompt symbol: glacial green on success, glacial red on failure (all vi-mode states)
-  typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND='#8FC7B4'
-  typeset -g POWERLEVEL9K_PROMPT_CHAR_ERROR_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND='#E58A8A'
+  # Prompt colors: p10k lean DEFAULTS (the glacial recolor was reverted per the user — the prompt is a
+  # working surface read all day, so familiarity/legibility win; the terminal ANSI + syntax are default too).
 
   # If p10k is already loaded, reload configuration.
   # This works even with POWERLEVEL9K_DISABLE_HOT_RELOAD=true.

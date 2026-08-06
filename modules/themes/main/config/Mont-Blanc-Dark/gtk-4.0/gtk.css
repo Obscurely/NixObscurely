@@ -21,7 +21,7 @@
  *    surfaces:  window #16202B · content/view #141B22 · headerbar #1B2530
  *               sidebar #1C252E · card/popover/dialog #1E2A38 · hover #263442
  *               border #2E3B49 · entry #212E3B · menu #202A35
- *    text:      #CBD8EA · dim #90A4BC · disabled #4C5D72
+ *    text:      #F0F3F8 · dim #90A4BC · disabled #4C5D72
  *    accent — SPLIT BY ROLE (do not merge — libadwaita mostly unifies these
  *             under accent_bg, so where a distinct node exists we override):
  *       small marks (focus ring / links / switch dot / active glyph) = #8CC6F2
@@ -40,13 +40,13 @@
 
 /* === CORE SURFACES / TEXT === */
 @define-color window_bg_color #16202B;
-@define-color window_fg_color #CBD8EA;
+@define-color window_fg_color #F0F3F8;
 @define-color view_bg_color   #141B22;
-@define-color view_fg_color   #CBD8EA;
+@define-color view_fg_color   #F0F3F8;
 
 /* === HEADERBAR === */
 @define-color headerbar_bg_color           #1B2530;
-@define-color headerbar_fg_color           #CBD8EA;
+@define-color headerbar_fg_color           #F0F3F8;
 @define-color headerbar_border_color       #2E3B49;
 @define-color headerbar_backdrop_color     #16202B;
 @define-color headerbar_shade_color        alpha(#000000, 0.26);
@@ -54,37 +54,37 @@
 
 /* === SIDEBAR === */
 @define-color sidebar_bg_color       #1C252E;
-@define-color sidebar_fg_color       #CBD8EA;
+@define-color sidebar_fg_color       #F0F3F8;
 @define-color sidebar_backdrop_color #141B22;
 @define-color sidebar_border_color   #2E3B49;
 @define-color sidebar_shade_color    alpha(#000000, 0.24);
 
 /* === SECONDARY SIDEBAR === */
 @define-color secondary_sidebar_bg_color       #1C252E;
-@define-color secondary_sidebar_fg_color       #CBD8EA;
+@define-color secondary_sidebar_fg_color       #F0F3F8;
 @define-color secondary_sidebar_backdrop_color #141B22;
 @define-color secondary_sidebar_border_color   #2E3B49;
 @define-color secondary_sidebar_shade_color    alpha(#000000, 0.24);
 
 /* === CARD / RAISED === */
 @define-color card_bg_color    #1E2A38;
-@define-color card_fg_color    #CBD8EA;
+@define-color card_fg_color    #F0F3F8;
 @define-color card_shade_color alpha(#000000, 0.24);
 
 /* === DIALOG === */
 @define-color dialog_bg_color #1E2A38;
-@define-color dialog_fg_color #CBD8EA;
+@define-color dialog_fg_color #F0F3F8;
 
 /* === POPOVER === */
 @define-color popover_bg_color    #1E2A38;
-@define-color popover_fg_color    #CBD8EA;
+@define-color popover_fg_color    #F0F3F8;
 @define-color popover_shade_color alpha(#000000, 0.24);
 
 /* === THUMBNAIL / OVERVIEW === */
 @define-color thumbnail_bg_color #1E2A38;
-@define-color thumbnail_fg_color #CBD8EA;
+@define-color thumbnail_fg_color #F0F3F8;
 @define-color overview_bg_color  #16202B;
-@define-color overview_fg_color  #CBD8EA;
+@define-color overview_fg_color  #F0F3F8;
 
 /* === TOGGLE (active) === */
 @define-color active_toggle_bg_color #34506B;
@@ -160,11 +160,11 @@
  * ==========================================================================*/
 :root {
   --window-bg-color: #16202B;
-  --window-fg-color: #CBD8EA;
+  --window-fg-color: #F0F3F8;
   --view-bg-color: #141B22;
-  --view-fg-color: #CBD8EA;
+  --view-fg-color: #F0F3F8;
   --headerbar-bg-color: #1B2530;
-  --headerbar-fg-color: #CBD8EA;
+  --headerbar-fg-color: #F0F3F8;
   --sidebar-bg-color: #1C252E;
   --secondary-sidebar-bg-color: #1C252E;
   --card-bg-color: #1E2A38;

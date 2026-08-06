@@ -16,7 +16,7 @@
  *    surfaces:  window #16202B · content/view #141B22 · headerbar #1B2530
  *               sidebar #1C252E · card/popover/dialog #1E2A38 · hover #263442
  *               border #2E3B49 · search-entry #212E3B · menu #202A35
- *    text:      #CBD8EA · dim #90A4BC · disabled #4C5D72
+ *    text:      #F0F3F8 · dim #90A4BC · disabled #4C5D72
  *    accent — SPLIT BY ROLE (do not merge):
  *       small marks (focus ring / links / switch dot / active-tab)  = bright #8CC6F2
  *       button / switch / menu-highlight FILL                       = #31485D  (fg #D6E3F1)
@@ -50,17 +50,17 @@
 @define-color unfocused_borders #232E3B;
 
 /* -- foreground (opaque) -- */
-@define-color window_fg_color #CBD8EA;
-@define-color view_fg_color   #CBD8EA;
-@define-color theme_fg_color  #CBD8EA;
-@define-color theme_text_color #CBD8EA;
-@define-color headerbar_fg_color #CBD8EA;
-@define-color panel_fg_color #CBD8EA;
-@define-color card_fg_color #CBD8EA;
-@define-color dialog_fg_color #CBD8EA;
-@define-color popover_fg_color #CBD8EA;
-@define-color sidebar_fg_color #CBD8EA;
-@define-color thumbnail_fg_color #CBD8EA;
+@define-color window_fg_color #F0F3F8;
+@define-color view_fg_color   #F0F3F8;
+@define-color theme_fg_color  #F0F3F8;
+@define-color theme_text_color #F0F3F8;
+@define-color headerbar_fg_color #F0F3F8;
+@define-color panel_fg_color #F0F3F8;
+@define-color card_fg_color #F0F3F8;
+@define-color dialog_fg_color #F0F3F8;
+@define-color popover_fg_color #F0F3F8;
+@define-color sidebar_fg_color #F0F3F8;
+@define-color thumbnail_fg_color #F0F3F8;
 
 /* -- accent (see role split in the header) -- */
 @define-color accent_bg_color #31485D;
@@ -108,10 +108,10 @@
 @define-color theme_unfocused_bg_color          #16202B;
 @define-color theme_unfocused_base_color        #141B22;
 @define-color theme_unfocused_selected_bg_color #2C4560;
-@define-color theme_unfocused_selected_fg_color #CBD8EA;
+@define-color theme_unfocused_selected_fg_color #F0F3F8;
 
 /* -- WM (client-side decoration) -- */
-@define-color wm_title            #CBD8EA;
+@define-color wm_title            #F0F3F8;
 @define-color wm_unfocused_title  #90A4BC;
 @define-color wm_bg_a  #1B2530;
 @define-color wm_bg_b  #1B2530;
@@ -206,7 +206,7 @@ button:not(.flat):not(.suggested-action):not(.destructive-action):not(.link):not
 spinbutton button {
   background-color: #1E2A38;
   border: 1px solid #2E3B49;
-  color: #CBD8EA;
+  color: #F0F3F8;
   background-image: none;
   box-shadow: none;
 }
@@ -324,7 +324,7 @@ combobox, combobox > box, combobox box.linked {
 }
 combobox button, combobox button.combo, combobox .combo {
   background-color: #1E2A38;
-  color: #CBD8EA;
+  color: #F0F3F8;
   border: 1px solid #2E3B49;
   border-radius: 6px;
   background-image: none;
@@ -341,7 +341,7 @@ combobox cellview, combobox cellview:selected,
 combobox button:active cellview, combobox button:checked cellview {
   background-color: transparent;
   background-image: none;
-  color: #CBD8EA;
+  color: #F0F3F8;
 }
 /* Combobox dropdown — adw makes the popup WINDOW transparent (`.background.popup`) and
    draws the bg on the INNER menu / popover.background (which it rounds). So fill + round
@@ -359,7 +359,7 @@ combobox popover.background, combobox popover > contents {
 combobox window.popup menuitem, combobox popover modelbutton,
 combobox window.popup .view, combobox window.popup treeview.view, combobox window.popup cellview {
   background-color: transparent;
-  color: #CBD8EA;
+  color: #F0F3F8;
 }
 combobox window.popup menuitem:hover, combobox popover modelbutton:hover,
 combobox window.popup .view:selected, combobox window.popup treeview.view:selected,
@@ -382,7 +382,7 @@ popover.combo list > row:hover,
 popover.combo row.activatable:hover,
 popover.combo row.activatable.has-open-popup {
   background-color: #263442;
-  color: #CBD8EA;
+  color: #F0F3F8;
 }
 popover.combo list > row:selected, popover.combo row.activatable:selected {
   background-color: #34506B;
@@ -432,7 +432,7 @@ levelbar block.empty, levelbar trough > block.empty {
   border: none;
   box-shadow: none;
 }
-progressbar text, levelbar text { color: #CBD8EA; }
+progressbar text, levelbar text { color: #F0F3F8; }
 
 /* GtkScale (volume/brightness/settings sliders): trough recessed, fill = progress
    role #5E8DB8, knob = bright mark #8CC6F2 (consistent with the switch dot). */
@@ -504,14 +504,14 @@ headerbar switch:backdrop:checked > slider, .titlebar switch:backdrop:checked > 
  * ==========================================================================*/
 tooltip, tooltip.background {
   background-color: #1E2A38;
-  color: #CBD8EA;
+  color: #F0F3F8;
   border: 1px solid #2E3B49;
   border-radius: 8px;
 }
 tooltip.background { background-color: #1E2A38; }
 tooltip box, tooltip label, tooltip image, tooltip * {
   background-color: transparent;
-  color: #CBD8EA;
+  color: #F0F3F8;
 }
 
 /* ============================================================================
@@ -537,7 +537,7 @@ notebook > header.right > tabs > tab:checked { box-shadow: inset 4px 0 #8CC6F2; 
 .csd popover.background.magnifier, popover.background.magnifier,
 .csd popover.background.osd, popover.background.osd {
   background-color: #1E2A38;
-  color: #CBD8EA;
+  color: #F0F3F8;
   border: 1px solid #2E3B49;
 }
 toolbar.osd, .osd toolbar { background-color: #1E2A38; }
@@ -545,7 +545,7 @@ button.osd, .osd button, .app-notification button,
 popover.background.touch-selection button, popover.background.magnifier button, .scale-popup button {
   background-color: #1E2A38;
   background-image: none;
-  color: #CBD8EA;
+  color: #F0F3F8;
   border: 1px solid #2E3B49;
   box-shadow: none;
   text-shadow: none;
@@ -559,7 +559,7 @@ button.osd:disabled, .osd button:disabled, .app-notification button:disabled {
 }
 .osd entry, .osd spinbutton:not(.vertical) {
   background-color: #212E3B;
-  color: #CBD8EA;
+  color: #F0F3F8;
   border-color: #2E3B49;
   box-shadow: none;
   text-shadow: none;

@@ -32,7 +32,7 @@ builtin_box_drawing = false
 
 [colors.primary]
 background = "#1A1F27"
-foreground = "#CBD8EA"
+foreground = "#F0F3F8"
 dim_foreground = "None"    # It gets automatically calculated
 bright_foreground = "None"
 
@@ -42,27 +42,11 @@ selection = { text = "CellForeground", background = "#34506B" }
 transparent_background_colors = false
 draw_bold_text_with_bright_colors = false
 
-# Glacial ANSI palette — icy blues, with semantic red/green/amber kept usable
-# (matches the GTK/icon theme's semantic colors). See docs/glacial-design-language.md.
-[colors.normal]
-black   = "#1B2530"
-red     = "#E58A8A"
-green   = "#8FC7B4"
-yellow  = "#E7B872"
-blue    = "#5E8DB8"
-magenta = "#8C9BD8"
-cyan    = "#79C0E8"
-white   = "#CBD8EA"
-
-[colors.bright]
-black   = "#4C5D72"
-red     = "#EDA3A3"
-green   = "#A6D4B0"
-yellow  = "#EBD4A0"
-blue    = "#8CC6F2"
-magenta = "#B79BD8"
-cyan    = "#A6CCEC"
-white   = "#E8F0F8"
+# ANSI palette: intentionally the alacritty DEFAULTS (the familiar high-contrast set), NOT the muted
+# glacial palette. The terminal is a transparent, all-day working surface where color is functional
+# (ls / git / syntax / errors), so legibility beats theme purity. The cool background + accent cursor
+# keep it in-family while the working colors stay punchy. (Removing [colors.normal]/[colors.bright]
+# restores alacritty's built-in palette.)
 
 [bell]
 duration = 0

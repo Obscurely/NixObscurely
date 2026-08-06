@@ -105,7 +105,7 @@ cmd_feed() {
   out="$(printf '%s\n' "$rows" | fzf --ansi --delimiter='\t' --with-nth=1 --multi --reverse --height=100% \
     --header='tab: pick · enter: add to watch-later · ctrl-o: browser · ctrl-y: comments · ctrl-x: mark all seen' \
     --expect=ctrl-o,ctrl-y,ctrl-x \
-    --preview 'curl -sL https://i.ytimg.com/vi/{2}/hqdefault.jpg | chafa -f symbols -s "${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}" - 2>/dev/null' \
+    --preview 'curl -sL https://i.ytimg.com/vi/{2}/hqdefault.jpg | chafa -f symbols -s "${FZF_PREVIEW_COLUMNS}x$((FZF_PREVIEW_LINES-3))" - 2>/dev/null; printf "\n%s\n" {1}' \
     --preview-window=right,45%)" || return 0
   key="$(printf '%s\n' "$out" | head -1)"
   sel="$(printf '%s\n' "$out" | tail -n +2)"
@@ -202,7 +202,7 @@ _yt_fzf() {
   local out key sel url
   out="$(fzf --delimiter='\t' --with-nth=1 --height=90% --reverse --no-multi --expect=ctrl-a \
     --header='enter: watch now · ctrl-a: add to watch-later' \
-    --preview 'curl -sL https://i.ytimg.com/vi/{2}/hqdefault.jpg | chafa -f symbols -s "${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}" - 2>/dev/null' \
+    --preview 'curl -sL https://i.ytimg.com/vi/{2}/hqdefault.jpg | chafa -f symbols -s "${FZF_PREVIEW_COLUMNS}x$((FZF_PREVIEW_LINES-3))" - 2>/dev/null; printf "\n%s\n" {1}' \
     --preview-window=up,45%)" || return 0
   key="$(printf '%s' "$out" | head -1)"
   sel="$(printf '%s' "$out" | sed -n 2p)"

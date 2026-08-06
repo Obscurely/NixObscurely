@@ -153,30 +153,24 @@ _subs_list() {
 
 _feed_mark() { mkdir -p "$STATE"; date +%s > "$FEED_LAST"; printf 'yt: feed marked seen — only newer videos show next time\n' >&2; }
 
-# yt feed  --- ONE unified feed of all subs' new videos (oldest->latest, last 14 days, unseen), with
-# thumbnails. tab: pick · enter: add picks to watch-later · ctrl-o: browser · ctrl-y: comments · ctrl-x: mark seen
+# yt feed  --- ONE unified feed of all subs' new videos (oldest->latest, last 14 days, unseen, no shorts),
+# with thumbnails. The feed STAYS OPEN so you can add several in one sitting; each video you add drops out
+# of the list immediately (via fzf exclude-multi) and won't come back on the next refresh (yt-feed skips
+# ids in wl-added/watched). Add = current row, or Tab-select several first. Keys:
+#   enter: add to watch-later · ctrl-o: browser · ctrl-y: comments · ctrl-x: mark all seen + close · esc: close
 cmd_feed() {
   printf 'yt: fetching your subscriptions feed...\n' >&2
   local rows; rows="$(yt-feed)" || return 1
   [ -n "$rows" ] || { printf 'yt: all caught up (nothing new in the last 14 days)\n' >&2; return 0; }
-  local out key sel
-  out="$(printf '%s\n' "$rows" | fzf --ansi --delimiter='\t' --with-nth=1 --multi --reverse --height=100% \
-    --header='tab: pick · enter: add to watch-later · ctrl-o: browser · ctrl-y: comments · ctrl-x: mark all seen' \
-    --expect=ctrl-o,ctrl-y,ctrl-x \
+  printf '%s\n' "$rows" | fzf --ansi --delimiter='\t' --with-nth=1 --multi --reverse --height=100% \
+    --header='enter: add to watch-later (stays open) · ctrl-o: browser · ctrl-y: comments · ctrl-x: mark all seen · esc: close' \
     --preview 'yt-feed-preview {2} {4} {5} {6} {7}' \
-    --preview-window=right,45%)" || return 0
-  key="$(printf '%s\n' "$out" | head -1)"
-  sel="$(printf '%s\n' "$out" | tail -n +2)"
-  case "$key" in
-    ctrl-x) _feed_mark ;;
-    ctrl-o) [ -n "$sel" ] && cmd_browser "$(printf '%s\n' "$sel" | head -1 | cut -f3)" ;;
-    ctrl-y) [ -n "$sel" ] && cmd_comments "$(printf '%s\n' "$sel" | head -1 | cut -f3)" ;;
-    *) # enter: add all picked to watch-later (downloads run sequentially in the background)
-      local urls; urls="$(printf '%s\n' "$sel" | cut -f3 | grep .)" || true
-      [ -n "$urls" ] || return 0
-      ( printf '%s\n' "$urls" | while IFS= read -r u; do cmd_add "$u"; done ) >/dev/null 2>&1 &
-      printf 'yt: queued %s download(s) to watch-later (running in background)\n' "$(printf '%s\n' "$urls" | wc -l)" ;;
-  esac
+    --preview-window=right,45% \
+    --bind 'enter:execute-silent(yt-wl-add {+3})+exclude-multi' \
+    --bind 'ctrl-o:execute-silent(yt browser {3})' \
+    --bind 'ctrl-y:execute(yt comments {3})' \
+    --bind 'ctrl-x:execute-silent(yt _feedmark)+abort' \
+    || true
 }
 
 # extract an 11-char youtube id from a url/string (empty if none)
@@ -202,12 +196,18 @@ cmd_add() {
   cmd_get "$url" "$WL_DIR"
 }
 
-# pick a media file from a dir (newest first); prints the full path or nothing
+# pick a media file from a dir (newest first); prints the full path or nothing.
+# NOTE: uses find, NOT `ls -1t -- *.glob` — an unmatched glob makes ls exit non-zero, and under
+# `set -o pipefail` that failure sinks the whole command substitution, so the pick was silently
+# discarded (the "yt wl opens then closes without playing" bug). find exits 0 with the real matches.
 _pick_media() {
-  local dir="$1" prompt="$2" pick
+  local dir="$1" prompt="$2" pick files
   mkdir -p "$dir"
-  pick="$(cd "$dir" && ls -1t -- *.mkv *.webm *.mp4 *.opus *.mp3 2>/dev/null \
-    | fzf --prompt="$prompt" --height=80% --reverse --no-multi)" || return 1
+  files="$(cd "$dir" && find . -maxdepth 1 -type f \
+      \( -name '*.mkv' -o -name '*.webm' -o -name '*.mp4' -o -name '*.opus' -o -name '*.mp3' \) \
+      -printf '%T@\t%P\n' 2>/dev/null | sort -rn | cut -f2-)"
+  [ -n "$files" ] || { printf 'yt: nothing in %s yet\n' "$(basename "$dir")" >&2; return 1; }
+  pick="$(printf '%s\n' "$files" | fzf --prompt="$prompt" --height=80% --reverse --no-multi)" || return 1
   [ -n "$pick" ] && printf '%s/%s' "$dir" "$pick"
 }
 
@@ -332,7 +332,8 @@ yt --- private terminal YouTube workflow
   yt browser <url|id>                    open in ungoogled-chromium
   yt help                                this help
 
-In the feed:  tab = pick · enter = add picks to watch-later · ctrl-o = browser · ctrl-y = comments · ctrl-x = mark seen
+In the feed (stays open — add several in a row; added videos drop out and don't return):
+  enter = add to watch-later · ctrl-o = browser · ctrl-y = comments · ctrl-x = mark all seen + close · esc = close
 In mpv (uosc menu):  Mark watched · Promote to gold · Open in browser
 EOF
 }
@@ -344,6 +345,7 @@ main() {
     comments) cmd_comments "$@" ;;
     subs) cmd_subs "$@" ;;
     feed) cmd_feed "$@" ;;
+    _feedmark) _feed_mark ;;   # internal: called by the feed's ctrl-x bind (mark everything seen)
     add) cmd_add "$@" ;;
     wl) cmd_wl "$@" ;;
     gold) cmd_gold "$@" ;;

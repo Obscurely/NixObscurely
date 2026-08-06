@@ -18,7 +18,10 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 
 SUBS = os.environ.get('YT_SUBS') or os.path.expanduser('~/.config/yt/subscriptions')
-LAST = os.environ.get('YT_FEED_LAST') or '/data/youtube/.state/feed-last-checked'
+STATE = os.environ.get('YT_STATE') or '/data/youtube/.state'
+LAST = os.environ.get('YT_FEED_LAST') or os.path.join(STATE, 'feed-last-checked')
+WATCHED = os.environ.get('YT_WATCHED') or os.path.join(STATE, 'watched')
+WL_ADDED = os.environ.get('YT_WL_ADDED') or os.path.join(STATE, 'wl-added')
 WINDOW = 14 * 86400
 NS = {
     'a': 'http://www.w3.org/2005/Atom',
@@ -29,6 +32,16 @@ NS = {
 def clean(s):
     # keep the TSV intact --- titles/channels are single-line but be defensive
     return (s or '').replace('\t', ' ').replace('\n', ' ').strip()
+
+
+def load_ids(path):
+    # ids already in watch-later (added) or watched-and-removed --- excluded from the feed so a video
+    # you've dealt with never reappears. Both files are one 11-char id per line (may not exist yet).
+    try:
+        with open(path, encoding='utf-8') as fh:
+            return {ln.strip() for ln in fh if ln.strip()}
+    except OSError:
+        return set()
 
 
 def channels():
@@ -88,13 +101,14 @@ def main():
     except (OSError, ValueError):
         pass
     cutoff = max(last, time.time() - WINDOW)
+    exclude = load_ids(WATCHED) | load_ids(WL_ADDED)
 
     chs = channels()
     allv = []
     with ThreadPoolExecutor(max_workers=16) as ex:
         for vids in ex.map(fetch, chs):
             allv.extend(vids)
-    allv = [v for v in allv if v[0] > cutoff]
+    allv = [v for v in allv if v[0] > cutoff and v[3] not in exclude]
     allv.sort(key=lambda v: v[0])  # oldest -> latest (like scrolling down a subs page)
 
     for ts, ttl, chan, vid, prio in allv:

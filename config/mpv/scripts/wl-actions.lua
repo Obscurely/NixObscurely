@@ -76,3 +76,14 @@ mp.add_key_binding(nil, 'open-browser', function()
         args = {'yt', 'browser', url}})
     mp.osd_message('opened in browser')
 end)
+
+-- menu: read the current video's comments in a terminal (yt comments -> pager). alacritty is the host
+-- terminal; the fetch takes a few seconds (yt-dlp) before the pager fills, same as the feed's ctrl-y.
+mp.add_key_binding(nil, 'comments', function()
+    if not current then return end
+    local id = idof(current)
+    local url = id and ('https://youtu.be/' .. id) or current
+    mp.command_native({name = 'subprocess', playback_only = false, detach = true,
+        args = {'alacritty', '-e', 'yt', 'comments', url}})
+    mp.osd_message('opening comments…')
+end)

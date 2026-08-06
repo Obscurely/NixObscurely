@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# yt-wl-add <url>...  --- queue one or more videos into watch-later from the `yt feed` picker.
+# Each download runs DETACHED (so the feed stays responsive) and logs to wl-downloads.log; a desktop
+# notification fires when each finishes. A video's id is written to wl-added (which the feed excludes)
+# only AFTER a successful download, so a download that fails reappears in the feed to retry.
+set -euo pipefail
+
+YT_ROOT="${YT_ROOT:-/data/youtube}"
+STATE="$YT_ROOT/.state"
+LOG="$STATE/wl-downloads.log"
+mkdir -p "$STATE"
+
+ytid() {
+  case "$1" in
+    *watch?v=*)  printf '%s' "${1#*watch?v=}" | sed 's/[&#].*//' ;;
+    *youtu.be/*) printf '%s' "${1##*youtu.be/}" | sed 's/[?&#].*//' ;;
+    *shorts/*)   printf '%s' "${1##*shorts/}" | sed 's/[?&#].*//' ;;
+    *)           [ "${#1}" -eq 11 ] && printf '%s' "$1" ;;
+  esac
+}
+
+n=0
+for u in "$@"; do
+  [ -n "$u" ] || continue
+  id="$(ytid "$u" || true)"
+  setsid -f bash -c '
+    u="$1"; id="$2"; state="$3"; log="$4"
+    { printf "=== %s  queue %s ===\n" "$(date +%H:%M:%S)" "$u"
+      if yt add "$u"; then
+        [ -n "$id" ] && ! grep -qxF "$id" "$state/wl-added" 2>/dev/null && printf "%s\n" "$id" >> "$state/wl-added"
+        notify-send "watch-later" "Downloaded — ready in \`yt wl\`" 2>/dev/null || true
+      else
+        notify-send -u critical "watch-later" "Download FAILED (will show again in the feed)" 2>/dev/null || true
+      fi
+    } >>"$log" 2>&1
+  ' _ "$u" "$id" "$STATE" "$LOG"
+  n=$((n + 1))
+done
+
+[ "$n" -gt 0 ] && notify-send "watch-later" "Queued $n download(s)…" 2>/dev/null || true
+printf 'yt: queued %s to watch-later (downloading in background; `yt wl` when done)\n' "$n" >&2

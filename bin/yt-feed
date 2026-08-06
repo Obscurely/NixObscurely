@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+# yt-feed --- unified subscriptions feed for the `yt` workflow. Reads ~/.config/yt/subscriptions
+# (tab-separated: channel_id <TAB> title <TAB> priority[0/1]), fetches every channel's YouTube RSS
+# concurrently, keeps videos published in the last 14 days AND after the last-checked timestamp,
+# sorts oldest -> latest, and prints one fzf row per video:  <display>\t<id>\t<url>
+# Priority channels are ANSI-highlighted (fzf --ansi). No API, no login. See the youtube-workflow specs.
+import os
+import sys
+import time
+import urllib.request
+import xml.etree.ElementTree as ET
+from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime
+
+SUBS = os.environ.get('YT_SUBS') or os.path.expanduser('~/.config/yt/subscriptions')
+LAST = os.environ.get('YT_FEED_LAST') or '/data/youtube/.state/feed-last-checked'
+WINDOW = 14 * 86400
+NS = {
+    'a': 'http://www.w3.org/2005/Atom',
+    'yt': 'http://www.youtube.com/xml/schemas/2015',
+}
+
+
+def channels():
+    out = []
+    try:
+        with open(SUBS, encoding='utf-8') as fh:
+            for line in fh:
+                p = line.rstrip('\n').split('\t')
+                if len(p) >= 2 and p[0]:
+                    out.append((p[0], p[1], len(p) > 2 and p[2] == '1'))
+    except FileNotFoundError:
+        sys.stderr.write('yt: no subscriptions yet — run `yt subs import <takeout.csv>`\n')
+        sys.exit(1)
+    return out
+
+
+def fetch(ch):
+    cid, title, prio = ch
+    url = 'https://www.youtube.com/feeds/videos.xml?channel_id=' + cid
+    try:
+        with urllib.request.urlopen(url, timeout=12) as r:
+            data = r.read()
+    except Exception:
+        return []
+    # Security: YouTube Atom feeds carry no DTD/entities. Rejecting any neutralizes XXE +
+    # billion-laughs with the stdlib parser (both require <!DOCTYPE>/<!ENTITY> declarations).
+    if b'<!DOCTYPE' in data or b'<!ENTITY' in data:
+        return []
+    try:
+        root = ET.fromstring(data)
+    except ET.ParseError:
+        return []
+    vids = []
+    for e in root.findall('a:entry', NS):
+        vid = e.find('yt:videoId', NS)
+        pub = e.find('a:published', NS)
+        ttl = e.find('a:title', NS)
+        if vid is None or pub is None:
+            continue
+        try:
+            ts = datetime.fromisoformat(pub.text).timestamp()
+        except ValueError:
+            continue
+        vids.append((ts, (ttl.text or '').strip(), title, vid.text, prio))
+    return vids
+
+
+def main():
+    last = 0.0
+    try:
+        last = float(open(LAST, encoding='utf-8').read().strip())
+    except (OSError, ValueError):
+        pass
+    cutoff = max(last, time.time() - WINDOW)
+
+    chs = channels()
+    allv = []
+    with ThreadPoolExecutor(max_workers=16) as ex:
+        for vids in ex.map(fetch, chs):
+            allv.extend(vids)
+    allv = [v for v in allv if v[0] > cutoff]
+    allv.sort(key=lambda v: v[0])  # oldest -> latest (like scrolling down a subs page)
+
+    for _ts, ttl, chan, vid, prio in allv:
+        disp = ('★ ' if prio else '  ') + ttl + '  ·  ' + chan
+        if prio:
+            disp = '\x1b[1;33m' + disp + '\x1b[0m'  # bold amber for priority channels
+        sys.stdout.write('%s\t%s\thttps://youtu.be/%s\n' % (disp, vid, vid))
+
+
+if __name__ == '__main__':
+    main()

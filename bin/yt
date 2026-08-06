@@ -11,7 +11,8 @@ WL_DIR="$YT_ROOT/watchlater"
 GOLD_DIR="$YT_ROOT/gold"
 MUSIC_DIR="$YT_ROOT/music"
 PL_STATE="$STATE/playlists"
-NB_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/newsboat"
+YT_CFG="${XDG_CONFIG_HOME:-$HOME/.config}/yt"
+FEED_LAST="$STATE/feed-last-checked"
 FMT='bestvideo[vcodec!*=av01]+bestaudio/best'  # VP9 over AV1 (Turing has no AV1 HW decode)
 
 die() { printf 'yt: %s\n' "$*" >&2; exit 1; }
@@ -68,14 +69,15 @@ cmd_comments() {
   jq -r '.comments[]? | "\(.author) [\(.like_count // 0)]:\n\(.text)\n"' "$j" | ${PAGER:-less -R}
 }
 
-# --- subscriptions feed (newsboat) ---
+# --- subscriptions ---
 # yt subs import <subscriptions.csv>   (Google Takeout: YouTube -> subscriptions.csv)
+# Writes ~/.config/yt/subscriptions  (tab-separated:  channel_id <TAB> title <TAB> priority[0/1]).
 cmd_subs() {
   [ "${1:-}" = import ] || die "usage: yt subs import <subscriptions.csv>"
   local csv="${2:?usage: yt subs import <subscriptions.csv>}"
   [ -f "$csv" ] || die "no such file: $csv"
-  mkdir -p "$NB_DIR"
-  local prio="$NB_DIR/priority.txt"; [ -f "$prio" ] || prio=/dev/null
+  mkdir -p "$YT_CFG"
+  local prio="$YT_CFG/priority.txt"; [ -f "$prio" ] || prio=/dev/null
   # Takeout CSV: header row then "Channel Id,Channel Url,Channel Title" (title may contain commas).
   awk -F, -v prio="$prio" '
     BEGIN { while ((getline p < prio) > 0) { gsub(/\r/,"",p); sub(/^[ \t]+/,"",p);
@@ -85,14 +87,39 @@ cmd_subs() {
       id = $1; gsub(/\r/,"",id);
       title = $3; for (i = 4; i <= NF; i++) title = title "," $i;
       gsub(/\r/,"",title); gsub(/"/,"",title);
-      star = ((tolower(id) in pri) || (tolower(title) in pri)) ? "\342\230\205 " : "";
-      printf "https://www.youtube.com/feeds/videos.xml?channel_id=%s \"~%s%s\"\n", id, star, title;
-    }' "$csv" > "$NB_DIR/urls"
-  printf 'yt: imported %s subscriptions -> %s\n' "$(wc -l < "$NB_DIR/urls")" "$NB_DIR/urls"
-  command -v newsboat >/dev/null 2>&1 && newsboat -x reload >/dev/null 2>&1 || true
+      pr = ((tolower(id) in pri) || (tolower(title) in pri)) ? "1" : "0";
+      printf "%s\t%s\t%s\n", id, title, pr;
+    }' "$csv" > "$YT_CFG/subscriptions"
+  printf 'yt: imported %s subscriptions -> %s\n' "$(wc -l < "$YT_CFG/subscriptions")" "$YT_CFG/subscriptions"
 }
 
-cmd_feed() { exec newsboat "$@"; }
+_feed_mark() { mkdir -p "$STATE"; date +%s > "$FEED_LAST"; printf 'yt: feed marked seen — only newer videos show next time\n' >&2; }
+
+# yt feed  --- ONE unified feed of all subs' new videos (oldest->latest, last 14 days, unseen), with
+# thumbnails. tab: pick · enter: add picks to watch-later · ctrl-o: browser · ctrl-y: comments · ctrl-x: mark seen
+cmd_feed() {
+  printf 'yt: fetching your subscriptions feed...\n' >&2
+  local rows; rows="$(yt-feed)" || return 1
+  [ -n "$rows" ] || { printf 'yt: all caught up (nothing new in the last 14 days)\n' >&2; return 0; }
+  local out key sel
+  out="$(printf '%s\n' "$rows" | fzf --ansi --delimiter='\t' --with-nth=1 --multi --reverse --height=100% \
+    --header='tab: pick · enter: add to watch-later · ctrl-o: browser · ctrl-y: comments · ctrl-x: mark all seen' \
+    --expect=ctrl-o,ctrl-y,ctrl-x \
+    --preview 'curl -sL https://i.ytimg.com/vi/{2}/hqdefault.jpg | chafa -f symbols -s "${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}" - 2>/dev/null' \
+    --preview-window=right,45%)" || return 0
+  key="$(printf '%s\n' "$out" | head -1)"
+  sel="$(printf '%s\n' "$out" | tail -n +2)"
+  case "$key" in
+    ctrl-x) _feed_mark ;;
+    ctrl-o) [ -n "$sel" ] && cmd_browser "$(printf '%s\n' "$sel" | head -1 | cut -f3)" ;;
+    ctrl-y) [ -n "$sel" ] && cmd_comments "$(printf '%s\n' "$sel" | head -1 | cut -f3)" ;;
+    *) # enter: add all picked to watch-later (downloads run sequentially in the background)
+      local urls; urls="$(printf '%s\n' "$sel" | cut -f3 | grep .)" || true
+      [ -n "$urls" ] || return 0
+      ( printf '%s\n' "$urls" | while IFS= read -r u; do cmd_add "$u"; done ) >/dev/null 2>&1 &
+      printf 'yt: queued %s download(s) to watch-later (running in background)\n' "$(printf '%s\n' "$urls" | wc -l)" ;;
+  esac
+}
 
 # extract an 11-char youtube id from a url/string (empty if none)
 _ytid() {
@@ -227,8 +254,8 @@ cmd_help() {
   cat <<'EOF'
 yt --- private terminal YouTube workflow
 
-  yt subs import <csv>                   import Google Takeout subscriptions.csv -> newsboat feed
-  yt feed                                open the subscriptions feed (newsboat)
+  yt subs import <csv>                   import Google Takeout subscriptions.csv
+  yt feed                                unified feed: all subs' new videos (oldest→latest, 14d, unseen, thumbs)
   yt add <url>                           download a video into watch-later
   yt wl                                  pick + watch a watch-later video (auto-removes when finished)
   yt get <url> [dir] [--cut] [--audio]   download video/playlist -> /data/youtube
@@ -245,8 +272,8 @@ yt --- private terminal YouTube workflow
   yt browser <url|id>                    open in ungoogled-chromium
   yt help                                this help
 
-In the feed (newsboat):  a = add to watch-later   c = comments   o = open in browser
-In mpv (uosc menu):      Mark watched · Promote to gold · Open in browser
+In the feed:  tab = pick · enter = add picks to watch-later · ctrl-o = browser · ctrl-y = comments · ctrl-x = mark seen
+In mpv (uosc menu):  Mark watched · Promote to gold · Open in browser
 EOF
 }
 

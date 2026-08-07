@@ -584,13 +584,9 @@ in {
           ${cfg.extraConfig}
         '';
       };
-
-      # Glacial (Mont-Blanc-Dark) chrome theme. Symlinked ALONGSIDE the profile's existing
-      # chrome/zen-themes.css + chrome/zen-themes/ mod files (home-manager manages only this one file).
-      # Requires toolkit.legacyUserProfileCustomizations.stylesheets=true (set above). See the design at
-      # docs/superpowers/specs/2026-08-07-zen-glacial-theme-design.md.
-      "${cfgPath}/${cfg.profileName}.default/chrome/userChrome.css".source =
-        ../../themes/main/config/zen/userChrome.css;
+      # NOTE: no userChrome.css is deployed — Zen's UI is left 100% stock on purpose. A partial glacial
+      # theme (top bar + menus) clashed with the un-themeable sidebar; full-default is more coherent. The
+      # functional prefs above (dark theme, fonts, devPixelsPerPx, privacy, workspaces) are the customization.
     };
   };
 }

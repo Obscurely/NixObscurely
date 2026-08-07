@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "version": "1.0.0",
+  "name": "Glacial — Mont-Blanc-Dark",
+  "description": "Icy-blue glacial browser theme matching the Mont-Blanc-Dark desktop (see docs/glacial-design-language.md).",
+  "theme": {
+    "colors": {
+      "frame": [22, 32, 43],
+      "frame_inactive": [20, 27, 34],
+      "frame_incognito": [14, 20, 32],
+      "frame_incognito_inactive": [14, 20, 32],
+      "toolbar": [27, 37, 48],
+      "toolbar_text": [240, 243, 248],
+      "toolbar_button_icon": [240, 243, 248],
+      "tab_text": [240, 243, 248],
+      "tab_background_text": [144, 164, 188],
+      "tab_background_text_inactive": [144, 164, 188],
+      "tab_background_text_incognito": [144, 164, 188],
+      "tab_background_text_incognito_inactive": [144, 164, 188],
+      "bookmark_text": [240, 243, 248],
+      "omnibox_background": [33, 46, 59],
+      "omnibox_text": [240, 243, 248],
+      "ntp_background": [20, 27, 34],
+      "ntp_header": [27, 37, 48],
+      "ntp_text": [240, 243, 248],
+      "ntp_link": [140, 198, 242],
+      "button_background": [49, 72, 93]
+    },
+    "tints": { "buttons": [-1, -1, -1] },
+    "properties": { "ntp_logo_alternate": 1 }
+  }
+}

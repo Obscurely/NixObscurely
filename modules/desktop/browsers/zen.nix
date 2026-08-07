@@ -523,8 +523,8 @@ in {
       # New tab button
       "zen.tabs.show-newtab-vertical" = false;
       "zen.view.show-newtab-button-top" = false;
-      # Accent color
-      "zen.theme.accent-color" = "#aac7ff";
+      # Accent color — glacial ice-blue (Mont-Blanc-Dark $accent); Zen tints its UI from this
+      "zen.theme.accent-color" = "#8CC6F2";
       "zen.theme.color-prefs.use-workspace-colors" = false;
       # Compact mode
       "zen.view.compact.hide-tabbar" = true;
@@ -582,6 +582,13 @@ in {
           ${cfg.extraConfig}
         '';
       };
+
+      # Glacial (Mont-Blanc-Dark) chrome theme. Symlinked ALONGSIDE the profile's existing
+      # chrome/zen-themes.css + chrome/zen-themes/ mod files (home-manager manages only this one file).
+      # Requires toolkit.legacyUserProfileCustomizations.stylesheets=true (set above). See the design at
+      # docs/superpowers/specs/2026-08-07-zen-glacial-theme-design.md.
+      "${cfgPath}/${cfg.profileName}.default/chrome/userChrome.css".source =
+        ../../themes/main/config/zen/userChrome.css;
     };
   };
 }

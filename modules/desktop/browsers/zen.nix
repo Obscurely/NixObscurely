@@ -53,9 +53,11 @@ in {
       "font.name.serif.x-western" = "Roboto";
       "font.name.monospace.x-western" = "FiraCode Nerd Font Mono";
       "font.name.sans-serif.x-western" = "Noto Sans";
-      # NOTE: removed `layout.css.devPixelsPerPx = 1.5`. Under Wayland, Firefox/
-      # zen scale from the compositor's per-output scale; a global 1.5 here
-      # double-scales. Breaks multi res setup
+      # Zen UI scale. Restored to 1.2 (the value from git before it was removed) — without it the UI
+      # renders too small on the 4K@1.5 DP-1. This is a GLOBAL override, so on a differently-scaled
+      # monitor it won't be per-output-correct; 1.2 is the accepted tradeoff for the main display.
+      # Fine-tune live in about:config (`layout.css.devPixelsPerPx`, applies instantly) if 1.2 is off.
+      "layout.css.devPixelsPerPx" = "1.8";
       "browser.contentblocking.category" = "strict";
       "privacy.donottrackheader.enabled" = true;
       "privacy.donottrackheader.value" = 1;

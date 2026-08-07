@@ -1,112 +1,48 @@
 /* Glacial (Mont-Blanc-Dark) — Zen browser userChrome.css
- * Matches the glacial desktop (docs/glacial-design-language.md §2.1, opaque ladder).
- * Strategy: override the reliable standard Firefox chrome variables at :root (they cascade to most
- * surfaces), plus the verified Zen vars, plus targeted !important rules for surfaces that tend to be
- * hardcoded (urlbar, menus, tabs, dialogs). The ACCENT itself comes from the `zen.theme.accent-color`
- * pref (#8CC6F2) set in zen.nix — this file paints the BACKGROUND/text surfaces to the exact palette.
- * userChrome theming is iterative: this is a strong first pass; refine per-surface after eyeballing.
- *
- * Palette (opaque §2.1): window #16202B · view #141B22 · header/toolbar #1B2530 · sidebar #1C252E ·
- *   card/popover/dialog #1E2A38 · menu #202A35 · urlbar field #212E3B · hover #263442 · border #2E3B49
- *   · accent #8CC6F2 · text #F0F3F8 · dim #90A4BC · selection #34506B
+ * SCOPE: ONLY the top bar (nav-bar + url bar) and the menus/popups. Nothing else — the sidebar, tabs and
+ * window are left 100% at Zen's default.
+ * IMPORTANT: the top bar is coloured on the #nav-bar ELEMENT, NOT via the global --toolbar-bgcolor var —
+ * that variable is shared with the tab sidebar, so setting it at :root bled the color into the sidebar
+ * (the whole reason the sidebar kept looking themed). Element-scoped = top bar only.
+ * Colours: docs/glacial-design-language.md §2.1; text white per the legibility pass.
  */
 
-/* ── 1. Theme variables (standard Firefox LWT + verified Zen vars) ───────────────────────────── */
+/* ── Accent — force the EXACT glacial hex on every workspace ──────────────────────────────────── */
+/* Zen sets --zen-primary-color inline on each <zen-workspace> element (ZenSpace.mjs), WITHOUT !important,
+   and its own getMostDominantColor() DISCARDS custom hex colors (substituting the OS accent) — which is why
+   the picker / show-custom-colors / a DB hex all did nothing and why it varied per workspace. A stylesheet
+   !important on the zen-workspace TAG beats that inline value, so this pins the accent to an exact, solid,
+   consistent #8CC6F2 on every workspace, bypassing all of Zen's colour logic. Change this one hex to retint. */
+zen-workspace {
+  --zen-primary-color: #8CC6F2 !important;
+}
+
 :root {
-  /* frame / window */
-  --lwt-accent-color: #16202B !important;
-  --lwt-accent-color-inactive: #141B22 !important;
-  --toolbar-color: #F0F3F8 !important;
-  --lwt-text-color: #F0F3F8 !important;
-
-  /* toolbar / nav-bar */
-  --toolbar-bgcolor: #1B2530 !important;
-  --lwt-selected-tab-background-color: #1B2530 !important;
-
-  /* url bar field */
+  /* url bar field (part of the top bar) — these vars are urlbar-only, they don't touch the sidebar */
   --toolbar-field-background-color: #212E3B !important;
   --toolbar-field-color: #F0F3F8 !important;
   --toolbar-field-focus-background-color: #263442 !important;
   --toolbar-field-focus-color: #F0F3F8 !important;
   --toolbar-field-border-color: #2E3B49 !important;
 
-  /* sidebar / vertical tabs */
-  --lwt-sidebar-background-color: #1C252E !important;
-  --lwt-sidebar-text-color: #F0F3F8 !important;
-  --sidebar-background-color: #1C252E !important;
-  --sidebar-text-color: #F0F3F8 !important;
-
-  /* menus + arrowpanels (extensions / bookmarks / downloads / site-info popovers) */
+  /* menus + popups */
   --arrowpanel-background: #1E2A38 !important;
   --arrowpanel-color: #F0F3F8 !important;
   --arrowpanel-border-color: #2E3B49 !important;
   --panel-background: #202A35 !important;
   --panel-color: #F0F3F8 !important;
-
-  /* verified Zen vars (accent derives from the pref; we set surfaces + border) */
-  --zen-colors-border: #2E3B49 !important;
-  --zen-dialog-background: #1E2A38 !important;
-  --zen-main-browser-background: #16202B !important;   /* (unverified name — selector fallbacks below) */
-  --zen-themed-toolbar-bg: #1B2530 !important;         /* (unverified name — selector fallbacks below) */
-
-  /* text selection inside the chrome */
-  --lwt-selection-background-color: #34506B !important;
-  --lwt-selection-text-color: #F0F3F8 !important;
 }
 
-/* ── 2. Main window / toolbox (frame) ────────────────────────────────────────────────────────── */
-:root,
-#main-window,
-#zen-main-app-wrapper,
-#browser {
+/* ── Top bar — the #nav-bar element ONLY (never the shared --toolbar-bgcolor var) ─────────────── */
+#nav-bar {
   background-color: #16202B !important;
-}
-#navigator-toolbox {
-  background-color: #16202B !important;
-  border-color: #2E3B49 !important;
-}
-
-/* ── 3. Toolbar / nav-bar ────────────────────────────────────────────────────────────────────── */
-#nav-bar,
-#PersonalToolbar,
-.browser-toolbar {
-  background-color: #1B2530 !important;
   color: #F0F3F8 !important;
 }
 
-/* ── 4. Sidebar / vertical tabs (Zen) ────────────────────────────────────────────────────────── */
-#TabsToolbar,
-#sidebar-box,
-#sidebar,
-.zen-sidebar,
-#zen-sidebar-splitter + *,
-#zen-workspaces-button,
-.zen-current-workspace-indicator {
-  background-color: #1C252E !important;
-  color: #F0F3F8 !important;
-}
-
-/* ── 5. Tabs ─────────────────────────────────────────────────────────────────────────────────── */
-/* active/selected tab surface + a glacial accent edge */
-.tabbrowser-tab[selected] .tab-background,
-.tabbrowser-tab[visuallyselected] .tab-background {
-  background-color: #1B2530 !important;
-  border-color: #2E3B49 !important;
-}
-.tabbrowser-tab[selected] .tab-content,
-.tabbrowser-tab[visuallyselected] .tab-content {
-  color: #F0F3F8 !important;
-}
-/* inactive tab text = dim */
-.tabbrowser-tab:not([selected]):not([visuallyselected]) .tab-label {
-  color: #90A4BC !important;
-}
-
-/* ── 6. URL bar (normal + focused/floating) ──────────────────────────────────────────────────── */
+/* ── URL bar (normal + focused) + results dropdown ───────────────────────────────────────────── */
 #urlbar,
 #urlbar-background,
-#urlbar-input-container,
-#searchbar {
+#urlbar-input-container {
   background-color: #212E3B !important;
   color: #F0F3F8 !important;
 }
@@ -116,7 +52,6 @@
   background-color: #263442 !important;
   border-color: #8CC6F2 !important;
 }
-/* urlbar results dropdown */
 .urlbarView,
 .urlbarView-row {
   background-color: #1E2A38 !important;
@@ -127,17 +62,15 @@
   background-color: #263442 !important;
 }
 
-/* ── 7. Context menus ────────────────────────────────────────────────────────────────────────── */
-menupopup,
-menu,
-menuitem,
-.menupopup-arrowscrollbox {
-  background-color: #202A35 !important;
-  color: #F0F3F8 !important;
+/* ── Context menus — via --panel-* so the rounded native surface is coloured (no square box) ──── */
+menupopup {
   --panel-background: #202A35 !important;
+  --panel-color: #F0F3F8 !important;
+  --panel-border-color: #2E3B49 !important;
+  --panel-border-radius: 8px !important;
 }
-menuitem[_moz-menuactive],
-menu[_moz-menuactive] {
+menuitem[_moz-menuactive="true"],
+menu[_moz-menuactive="true"] {
   background-color: #263442 !important;
   color: #F0F3F8 !important;
 }
@@ -145,35 +78,16 @@ menuseparator {
   border-color: #2E3B49 !important;
 }
 
-/* ── 8. Arrowpanels / popovers (extensions, bookmarks, downloads, site-info) ─────────────────── */
+/* ── Arrowpanels / popovers (extensions, bookmarks, downloads, site-info) ────────────────────── */
 panel,
-.panel-arrowcontent,
-#widget-overflow,
 #appMenu-popup,
 #identity-popup,
 #permission-popup,
 #unified-extensions-panel,
-#downloadsPanel {
-  background-color: #1E2A38 !important;
-  color: #F0F3F8 !important;
+#downloadsPanel,
+#widget-overflow {
   --panel-background: #1E2A38 !important;
-  border-color: #2E3B49 !important;
-}
-
-/* ── 9. Dialogs / modals ─────────────────────────────────────────────────────────────────────── */
-dialog,
-#dialogBox,
-.dialogBox,
-#zen-dialog,
-.zen-dialog {
-  background-color: #1E2A38 !important;
-  color: #F0F3F8 !important;
-  border-color: #2E3B49 !important;
-}
-
-/* ── 10. Find bar ────────────────────────────────────────────────────────────────────────────── */
-.findbar-container,
-findbar {
-  background-color: #1B2530 !important;
-  color: #F0F3F8 !important;
+  --panel-color: #F0F3F8 !important;
+  --panel-border-color: #2E3B49 !important;
+  --panel-border-radius: 8px !important;
 }

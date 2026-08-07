@@ -196,23 +196,57 @@ cmd_add() {
   cmd_get "$url" "$WL_DIR"
 }
 
-# pick a media file from a dir (newest first); prints the full path or nothing.
-# NOTE: uses find, NOT `ls -1t -- *.glob` — an unmatched glob makes ls exit non-zero, and under
+# list media files in a dir, newest first (bare filenames).
+# NOTE: find, NOT `ls -1t -- *.glob` — an unmatched glob makes ls exit non-zero, and under
 # `set -o pipefail` that failure sinks the whole command substitution, so the pick was silently
 # discarded (the "yt wl opens then closes without playing" bug). find exits 0 with the real matches.
+_media_files() {
+  (cd "$1" && find . -maxdepth 1 -type f \
+      \( -name '*.mkv' -o -name '*.webm' -o -name '*.mp4' -o -name '*.opus' -o -name '*.mp3' \) \
+      -printf '%T@\t%P\n' 2>/dev/null | sort -rn | cut -f2-)
+}
+
+# pick a media file from a dir (newest first); prints the full path or nothing.
 _pick_media() {
   local dir="$1" prompt="$2" pick files
   mkdir -p "$dir"
-  files="$(cd "$dir" && find . -maxdepth 1 -type f \
-      \( -name '*.mkv' -o -name '*.webm' -o -name '*.mp4' -o -name '*.opus' -o -name '*.mp3' \) \
-      -printf '%T@\t%P\n' 2>/dev/null | sort -rn | cut -f2-)"
+  files="$(_media_files "$dir")"
   [ -n "$files" ] || { printf 'yt: nothing in %s yet\n' "$(basename "$dir")" >&2; return 1; }
   pick="$(printf '%s\n' "$files" | fzf --prompt="$prompt" --height=80% --reverse --no-multi)" || return 1
   [ -n "$pick" ] && printf '%s/%s' "$dir" "$pick"
 }
 
-# yt wl  --- pick + watch a watch-later video (no autoplay; auto-removes when finished)
-cmd_wl() { local f; f="$(_pick_media "$WL_DIR" 'watch-later> ')" || return 0; [ -n "$f" ] && mpv --script-opts=yt-mode=wl "$f"; }
+# internal: delete a watch-later file (from the wl picker's ctrl-d) + keep it out of the feed
+# (append its id to wl-added, which yt-feed excludes — so a deleted video never reappears).
+_wl_delete() {
+  local id="$1" path="${2:-}"
+  [ -n "$path" ] && rm -f "$path"
+  mkdir -p "$STATE"
+  [ -n "$id" ] && ! grep -qxF "$id" "$STATE/wl-added" 2>/dev/null && printf '%s\n' "$id" >> "$STATE/wl-added"
+}
+
+# yt wl  --- pick a watch-later video and act on it WITHOUT having to play it.
+#   enter: watch (no autoplay; auto-removes when finished) · ctrl-o: open in browser ·
+#   ctrl-y: view comments · ctrl-d: delete (drops it from the list + stays out of the feed) · esc: close.
+# Rows are "filename<TAB>id<TAB>fullpath"; fzf shows the filename, binds use the id/path fields.
+cmd_wl() {
+  mkdir -p "$WL_DIR"
+  local rows fn id
+  rows="$(_media_files "$WL_DIR" | while IFS= read -r fn; do
+    id="$(printf '%s' "$fn" | sed -n 's/.*\[\([A-Za-z0-9_-]\{11\}\)\]\.[^.]*$/\1/p')"
+    printf '%s\t%s\t%s/%s\n' "$fn" "$id" "$WL_DIR" "$fn"
+  done)"
+  [ -n "$rows" ] || { printf 'yt: nothing in watch-later yet\n' >&2; return 0; }
+  local out path
+  out="$(printf '%s\n' "$rows" | fzf --delimiter='\t' --with-nth=1 --height=90% --reverse --no-multi \
+    --prompt='watch-later> ' \
+    --header='enter: watch · ctrl-o: browser · ctrl-y: comments · ctrl-d: delete · esc: close' \
+    --bind 'ctrl-o:execute-silent(yt browser {2})' \
+    --bind 'ctrl-y:execute(yt comments https://youtu.be/{2})' \
+    --bind 'ctrl-d:execute-silent(yt _wldelete {2} {3})+exclude')" || return 0
+  path="$(printf '%s' "$out" | cut -f3)"
+  [ -n "$path" ] && [ -f "$path" ] && mpv --script-opts=yt-mode=wl "$path"
+}
 
 # yt gold  --- pick + watch a saved "gold" video (non-deleting, no autoplay)
 cmd_gold() { local f; f="$(_pick_media "$GOLD_DIR" 'gold> ')" || return 0; [ -n "$f" ] && mpv --script-opts=yt-mode=keep "$f"; }
@@ -317,7 +351,7 @@ yt --- private terminal YouTube workflow
   yt subs important [query]              toggle important channels (no arg = picker; query = match)
   yt feed                                unified feed: all subs' new videos (oldest→latest, 14d, unseen, no shorts, thumbs)
   yt add <url>                           download a video into watch-later
-  yt wl                                  pick + watch a watch-later video (auto-removes when finished)
+  yt wl                                  watch-later picker (watch / browser / comments / delete — see keys below)
   yt get <url> [dir] [--cut] [--audio]   download video/playlist -> /data/youtube
                                          (SponsorBlock + chapters baked in; --cut removes ads,
                                           --audio = audio-only)
@@ -334,6 +368,8 @@ yt --- private terminal YouTube workflow
 
 In the feed (stays open — add several in a row; added videos drop out and don't return):
   enter = add to watch-later · ctrl-o = browser · ctrl-y = comments · ctrl-x = mark all seen + close · esc = close
+In watch-later (yt wl):
+  enter = watch · ctrl-o = browser · ctrl-y = comments · ctrl-d = delete (drops it + hides from feed) · esc = close
 In mpv (uosc menu):  Mark watched · Promote to gold · Open in browser
 EOF
 }
@@ -346,6 +382,7 @@ main() {
     subs) cmd_subs "$@" ;;
     feed) cmd_feed "$@" ;;
     _feedmark) _feed_mark ;;   # internal: called by the feed's ctrl-x bind (mark everything seen)
+    _wldelete) _wl_delete "$@" ;;   # internal: called by the wl picker's ctrl-d bind (delete + hide)
     add) cmd_add "$@" ;;
     wl) cmd_wl "$@" ;;
     gold) cmd_gold "$@" ;;

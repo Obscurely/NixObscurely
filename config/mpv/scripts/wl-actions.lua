@@ -1,7 +1,8 @@
 -- ~/.config/mpv/scripts/wl-actions.lua
 -- Playback behavior + menu actions for the `yt` workflow. Driven by --script-opts=yt-mode=<wl|keep>
 -- (yt wl / yt gold set it; music leaves it unset -> normal autoplay). See youtube-phase3-extras spec.
---   yt-mode=wl   : single video (no autoplay), and on eof -> record watched id + delete (watch-later)
+--   yt-mode=wl   : single video (no autoplay); on eof -> record watched + stay on last frame; delete the
+--                  file on mpv close (watch-later) so seek-back / gold / comments work the whole session
 --   yt-mode=keep : single video (no autoplay), never delete (gold)
 --   unset        : nothing (autoload builds the folder playlist and plays through — music)
 -- Menu actions (uosc): mark-watched (delete+record), promote-gold (hardlink), open-browser.
@@ -31,18 +32,35 @@ local function delete(p)
     if p then os.remove(p) end
 end
 
+local finished = false
+
 mp.register_event('file-loaded', function()
     current = mp.get_property('path')
+    finished = false
     if o.mode == 'wl' or o.mode == 'keep' then
-        mp.commandv('playlist-clear')      -- single video: no autoplay to siblings
-        mp.set_property('keep-open', 'no')  -- so end-file/eof fires despite the global keep-open=yes
+        mp.commandv('playlist-clear')  -- single video: no autoplay to siblings
+        -- NOTE: we deliberately keep the global keep-open=yes (do NOT force it to 'no'). At eof mpv then
+        -- rests on the last frame instead of quitting, so the uosc menu (Comments / Open in browser) is
+        -- still reachable. The end is detected via the eof-reached property below (end-file's eof reason
+        -- does not fire while keep-open=yes).
     end
 end)
 
-mp.register_event('end-file', function(ev)
-    if ev.reason == 'eof' and o.mode == 'wl' and under(current, WL) then
+-- Watch-later: mark it watched the moment it plays through, but KEEP the file — mpv rests on the last frame
+-- (keep-open=yes) so you can seek back, view comments, or Promote-to-gold. The file is removed on shutdown
+-- (below), i.e. when you actually close mpv — it survives the whole session yet still auto-cleans after.
+mp.observe_property('eof-reached', 'native', function(_, eof)
+    if eof == true and not finished and o.mode == 'wl' and under(current, WL) then
+        finished = true
         record_watched(current)
-        delete(current) -- watched to the end -> remove from watch-later
+    end
+end)
+
+-- Remove the finished watch-later file when mpv CLOSES (not at eof), so seek-back / Promote-to-gold /
+-- comments all keep working during the session. A video quit before the end (never finished) is kept.
+mp.register_event('shutdown', function()
+    if finished and o.mode == 'wl' and under(current, WL) then
+        delete(current)
     end
 end)
 

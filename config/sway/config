@@ -192,7 +192,7 @@ for_window [app_id="NeoVim"]                           move container to workspa
 for_window [app_id="zen-beta"]                         move container to workspace number 3,  workspace number 3
 # 4 secondary browsers (chromium + firefox + tor)
 for_window [app_id="chromium-browser"]                move container to workspace number 4,  workspace number 4
-for_window [app_id="firefox"]                          move container to workspace number 4,  workspace number 4
+for_window [app_id="^firefox$"]                        move container to workspace number 4,  workspace number 4
 for_window [app_id="Tor Browser"]                      move container to workspace number 4,  workspace number 4
 # 5 utilities
 for_window [app_id="bruno"]                            move container to workspace number 5,  workspace number 5
@@ -213,7 +213,7 @@ for_window [class="Audacity"]                          move container to workspa
 for_window [class="ONLYOFFICE"]                        move container to workspace number 6,  workspace number 6
 for_window [app_id="YouTube"]                          move container to workspace number 6,  workspace number 6
 # 7 dev / reference (dev terminal + Firefox Dev Edition)
-for_window [app_id="Dev"]                              move container to workspace number 7,  workspace number 7
+for_window [app_id="^Dev$"]                            move container to workspace number 7,  workspace number 7
 for_window [app_id="firefox-devedition"]              move container to workspace number 7,  workspace number 7
 # 8 files
 for_window [app_id="thunar"]                           move container to workspace number 8,  workspace number 8
@@ -221,6 +221,7 @@ for_window [app_id="Thunar"]                           move container to workspa
 for_window [app_id="xarchiver"]                        move container to workspace number 8,  workspace number 8
 # 9 active-secondary (calc / monitoring) - assign: opens on the 2nd screen, keeps your main view
 for_window [app_id="org.gnome.Calculator"]            move container to workspace number 9, workspace number 9
+for_window [app_id="sysmon-btop"]                     move container to workspace number 9, workspace number 9
 # 10 music
 for_window [app_id="lollypop"]                         move container to workspace number 10, workspace number 10
 for_window [class="Sonixd"]                            move container to workspace number 10, workspace number 10

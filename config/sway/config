@@ -216,11 +216,16 @@ bindsym XF86AudioPrev        exec bash $XDG_CONFIG_HOME/eww/scripts/mpris previo
 bindsym $mod+Return exec $term # TODO: configure nvim properly
 # bindsym $mod+v exec $term --class NeoVim --title NeoVim -e nvim
 
+# browsers
+bindsym $mod+q exec zen-beta
+bindsym $mod+shift+q exec chromium
+
 # apps
 bindsym $mod+e exec thunar
 bindsym $mod+c exec gnome-calculator
 bindsym $mod+x exec lollypop
 bindsym $mod+shift+x exec sonixd
+bindsym $mod+shift+v exec virt-manager
 
 # media
 bindsym $mod+m exec umpv

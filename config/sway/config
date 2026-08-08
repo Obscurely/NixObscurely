@@ -116,19 +116,16 @@ for_window [app_id="satty"] floating enable
 
 ### Keybindings
 ## session
-bindsym $mod+Return exec $term
-bindsym $mod+v exec $term --class NeoVim --title NeoVim -e nvim
-bindsym $mod+Escape reload
 bindsym $mod+$alt+r reload
 bindsym $mod+$alt+q exit
 bindsym $alt+Shift+x exec swaylock -f
 
 ## windows
 bindsym $mod+w kill
-bindsym $mod+f fullscreen toggle
-bindsym $mod+s floating toggle
-bindsym $mod+t floating disable
-bindsym $mod+Shift+t sticky toggle
+bindsym $mod+Shift+w exec swaymsg -t get_tree | jq -r '.. | objects | select(.focused==true).pid // empty' | xargs -r kill -9
+bindsym $mod+f fullscreen enable, floating disable
+bindsym $mod+s fullscreen disable, floating enable
+bindsym $mod+t fullscreen disable, floating disable
 
 ## focus (hjkl)
 bindsym $mod+h focus left
@@ -139,9 +136,6 @@ bindsym $mod+Shift+h move left
 bindsym $mod+Shift+j move down
 bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
-bindsym $mod+Tab workspace back_and_forth
-bindsym $mod+bracketleft workspace prev_on_output
-bindsym $mod+bracketright workspace next_on_output
 
 ## split direction (was bspwm preselect)
 bindsym $mod+Ctrl+h split horizontal
@@ -151,10 +145,10 @@ bindsym $mod+Ctrl+k split vertical
 
 ## resize mode
 mode "resize" {
-    bindsym h resize shrink width 40px
-    bindsym l resize grow width 40px
-    bindsym j resize grow height 40px
-    bindsym k resize shrink height 40px
+    bindsym Left  resize shrink width 40px
+    bindsym Right resize grow width 40px
+    bindsym Down  resize grow height 40px
+    bindsym Up    resize shrink height 40px
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
@@ -182,9 +176,10 @@ bindsym $mod+Shift+8 move container to workspace number 8
 bindsym $mod+Shift+9 move container to workspace number 9
 bindsym $mod+Shift+0 move container to workspace number 10
 
-## HDR toggle on the QD-OLED (DP-1). Needs the Vulkan renderer (sway.hdr.enable).
+## HDR Toggle on DP-1 
 bindsym $mod+F9 exec $XDG_CONFIG_HOME/sway/hdr-toggle.sh
-## VRR / adaptive-sync (GSYNC) toggle on the QD-OLED (DP-1) — for gaming.
+
+## VRR toggle on DP-1
 bindsym $mod+F10 exec $XDG_CONFIG_HOME/sway/vrr-toggle.sh
 
 ## Quick Settings panel (eww) — right-edge slide-out (displays/audio/system/modes)
@@ -193,12 +188,12 @@ bindsym $mod+comma exec bash $XDG_CONFIG_HOME/eww/scripts/qs-toggle
 ## apps
 bindsym $mod+F11 exec setsid -f bash $HOME/.config/eww/scripts/launcher-toggle   # single-tap launcher thumb -> eww app launcher
 bindsym $mod+F12 exec setsid -f bash $HOME/.config/eww/scripts/switcher-toggle   # double-tap launcher thumb -> window switcher
+
 # clipboard history -> $mod+c (see below); $mod+v is nvim
 bindsym $alt+Tab exec setsid -f bash $HOME/.config/eww/scripts/switcher-toggle
-bindsym $mod+e exec thunar
 
 ## clipboard history
-bindsym $mod+c exec setsid -f bash $HOME/.config/eww/scripts/clip-toggle   # eww clipboard history (replaces rofi)
+bindsym $mod+shift+c exec setsid -f bash $HOME/.config/eww/scripts/clip-toggle   # eww clipboard history (replaces rofi)
 
 ## screenshots (grim/slurp/satty)
 bindsym Print       exec grim - | wl-copy
@@ -214,6 +209,22 @@ bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -2%
 bindsym XF86AudioPlay        exec bash $XDG_CONFIG_HOME/eww/scripts/mpris play-pause
 bindsym XF86AudioNext        exec bash $XDG_CONFIG_HOME/eww/scripts/mpris next
 bindsym XF86AudioPrev        exec bash $XDG_CONFIG_HOME/eww/scripts/mpris previous
+
+## application shortcuts
+
+# terminal
+bindsym $mod+Return exec $term # TODO: configure nvim properly
+# bindsym $mod+v exec $term --class NeoVim --title NeoVim -e nvim
+
+# apps
+bindsym $mod+e exec thunar
+bindsym $mod+c exec gnome-calculator
+bindsym $mod+x exec lollypop
+bindsym $mod+shift+x exec sonixd
+
+# media
+bindsym $mod+m exec umpv
+bindsym $mod+shift+m exec $term --class YouTube --title YouTube
 
 ### Bar — eww "glacial island", one window per monitor (config from the theme module).
 # Single `exec` (not exec_always) so sway reloads don't stack eww daemons; the daemon

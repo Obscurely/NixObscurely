@@ -16,6 +16,9 @@ in {
   };
 
   config = mkIf cfg.enable {
+    # ZSA keyboard udev rules (uaccess) — flash the Moonlander without sudo; needed by keymapp.
+    hardware.keyboard.zsa.enable = true;
+
     user.packages = with pkgs; [
       ncdu
       speedtest-cli # internet speed test in shell
@@ -30,7 +33,8 @@ in {
       fontconfig # a dependency for some stuff
       psmisc # a set of small utils like killall, fuser, pstree
       onefetch # information about repo in neofetch style
-      wally-cli # tool to flash the firmware on my zsa moonlander keyboard
+      wally-cli # legacy ZSA flasher (deprecated — rejects current Oryx firmware; kept as fallback)
+      keymapp # current ZSA flasher (GUI) — flashes the new ZSA-VID firmware wally-cli can't
       btop # better htop
       poppler-utils # pdf utils like pdf to text
       tesseract # ocr tool

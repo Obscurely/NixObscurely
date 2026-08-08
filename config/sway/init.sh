@@ -26,5 +26,6 @@ sudo -n /run/current-system/sw/bin/clear-hdmi-force 2>/dev/null || true
 # Setup tmux sessions
 tmux new-session -d -s main &
 tmux new-session -d -s code &
+tmux new-session -d -s dev &
 
 exit 0

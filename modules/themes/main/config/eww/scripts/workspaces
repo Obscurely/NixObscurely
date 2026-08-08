@@ -4,7 +4,7 @@
 # Two verified sway gotchas this handles:
 #   * `swaymsg -t subscribe` REQUIRES -m (otherwise it exits after the first event).
 #   * `get_workspaces` OMITS empty workspaces, so pinned-but-empty ones would vanish.
-# So we template the full 1..10 set (with per-workspace output + icon) and left-join
+# So we template the full 1..12 set (with per-workspace output + icon) and left-join
 # the live state by workspace number.
 #
 # Icons are emitted from codepoints ($'\U...') so the source stays pure ASCII and the
@@ -12,19 +12,22 @@
 set -u
 
 declare -A PIN=(
-  [1]=DP-1 [2]=DP-1 [3]=DP-1 [4]=DP-1 [5]=DP-1
-  [6]=HDMI-A-1 [7]=HDMI-A-1 [8]=HDMI-A-1 [9]=HDMI-A-1
-  [10]=HDMI-A-2
+  [1]=DP-1 [2]=DP-1 [3]=DP-1 [4]=DP-1 [5]=DP-1 [6]=DP-1
+  [7]=HDMI-A-1 [8]=HDMI-A-1 [9]=HDMI-A-1 [10]=HDMI-A-1 [11]=HDMI-A-1
+  [12]=HDMI-A-2
 )
+# 1 terminal · 2 neovim · 3 primary-browser · 4 secondary-browser · 5 utilities · 6 media
+# 7 dev/reference · 8 files · 9 active-secondary(calc/monitor) · 10 music · 11 background · 12 (1080p)
 declare -A ICON=(
-  [1]=$'\U000f018d' [2]=$'\U000f0610' [3]=$'\U0000f269' [4]=$'\U0000f11b' [5]=$'\U000f0254'
-  [6]=$'\U000f066f' [7]=$'\U000f024b' [8]=$'\U0000f1c0' [9]=$'\U0000f15c' [10]=$'\U0000f013'
+  [1]=$'\U000f018d' [2]=$'\U0000e6ae' [3]=$'\U0000f269' [4]=$'\U000f059f' [5]=$'\U000f1064' [6]=$'\U000f0254'
+  [7]=$'\U0000f1cb' [8]=$'\U000f024b' [9]=$'\U000f0128' [10]=$'\U000f075a' [11]=$'\U000f0687'
+  [12]=$'\U0000f013'
 )
 
 emit() {
   local live pin
   live=$(swaymsg -t get_workspaces -r)
-  pin=$(for n in $(seq 1 10); do
+  pin=$(for n in $(seq 1 12); do
           printf '{"num":%d,"output":"%s","icon":"%s"}\n' "$n" "${PIN[$n]}" "${ICON[$n]}"
         done | jq -cs '.')
   jq -cn --argjson live "$live" --argjson pin "$pin" '

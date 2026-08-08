@@ -109,7 +109,6 @@ focus_follows_mouse no
 mouse_warping none
 
 ### Window rules
-for_window [app_id="pavucontrol"] floating enable, resize set 900 600
 for_window [app_id="lxqt-policykit-agent"] floating enable
 for_window [window_role="pop-up"] floating enable
 for_window [window_role="dialog"] floating enable
@@ -220,15 +219,15 @@ for_window [app_id="firefox-devedition"]              move container to workspac
 for_window [app_id="thunar"]                           move container to workspace number 8,  workspace number 8
 for_window [app_id="xarchiver"]                        move container to workspace number 8,  workspace number 8
 # 9 active-secondary (calc / monitoring) - assign: opens on the 2nd screen, keeps your main view
-assign     [app_id="org.gnome.Calculator"]            workspace number 9
+for_window [app_id="org.gnome.Calculator"]            move container to workspace number 9, workspace number 9
 # 10 music
 for_window [app_id="lollypop"]                         move container to workspace number 10, workspace number 10
 for_window [class="Sonixd"]                            move container to workspace number 10, workspace number 10
 # 11 background (ardour is GTK2/Xwayland -> both app_id+class hedged) + manual catch-all
-assign     [app_id="Ardour"]                           workspace number 11
-assign     [class="Ardour"]                            workspace number 11
-assign     [app_id="org.qbittorrent.qBittorrent"]     workspace number 11
-assign     [app_id="slack"]                            workspace number 11
+for_window [app_id="Ardour"]                           move container to workspace number 11, workspace number 11
+for_window [class="Ardour"]                            move container to workspace number 11, workspace number 11
+for_window [app_id="org.qbittorrent.qBittorrent"]      move container to workspace number 11, workspace number 11
+for_window [app_id="slack"]                            move container to workspace number 11, workspace number 11
 
 ## HDR Toggle on DP-1
 bindsym $mod+F9 exec $XDG_CONFIG_HOME/sway/hdr-toggle.sh

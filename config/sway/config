@@ -217,6 +217,7 @@ for_window [app_id="Dev"]                              move container to workspa
 for_window [app_id="firefox-devedition"]              move container to workspace number 7,  workspace number 7
 # 8 files
 for_window [app_id="thunar"]                           move container to workspace number 8,  workspace number 8
+for_window [app_id="Thunar"]                           move container to workspace number 8,  workspace number 8
 for_window [app_id="xarchiver"]                        move container to workspace number 8,  workspace number 8
 # 9 active-secondary (calc / monitoring) - assign: opens on the 2nd screen, keeps your main view
 for_window [app_id="org.gnome.Calculator"]            move container to workspace number 9, workspace number 9

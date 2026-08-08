@@ -176,6 +176,36 @@ bindsym $mod+Shift+8 move container to workspace number 8
 bindsym $mod+Shift+9 move container to workspace number 9
 bindsym $mod+Shift+0 move container to workspace number 10
 
+## Workspace rules
+# follow on
+for_window [app_id="zen-beta"]                     move container to workspace number 3,  workspace number 3
+for_window [app_id="chromium-browser"]             move container to workspace number 3,  workspace number 3
+for_window [app_id="thunar"]                       move container to workspace number 7,  workspace number 7
+for_window [app_id="xarchiver"]                    move container to workspace number 7,  workspace number 7
+for_window [app_id="org.qbittorrent.qBittorrent"]  move container to workspace number 8,  workspace number 8
+for_window [app_id="org.gnome.Calculator"]         move container to workspace number 9,  workspace number 9
+for_window [class="ONLYOFFICE"]                    move container to workspace number 5,  workspace number 5
+for_window [app_id="mpv"]                          move container to workspace number 5,  workspace number 5
+for_window [app_id="org.kde.kdenlive"]             move container to workspace number 5,  workspace number 5
+for_window [app_id="com.obsproject.Studio"]        move container to workspace number 5,  workspace number 5
+for_window [app_id="gimp"]                         move container to workspace number 5,  workspace number 5
+for_window [app_id="org.xfce.ristretto"]           move container to workspace number 5,  workspace number 5
+for_window [app_id="org.gnome.Lollypop"]           move container to workspace number 8,  workspace number 8
+for_window [app_id="sonixd"]                       move container to workspace number 8,  workspace number 8
+for_window [class="Audacity"]                      move container to workspace number 5,  workspace number 5
+for_window [app_id="virt-manager"]                 move container to workspace number 5,  workspace number 5
+for_window [app_id="bruno"]                        move container to workspace number 4,  workspace number 4
+for_window [app_id="com.github.wwmm.easyeffects"]  move container to workspace number 5, workspace number 5
+for_window [app_id="org.pulseaudio.pavucontrol"]   move container to workspace number 5, workspace number 5
+for_window [class="GParted"]                       move container to workspace number 5, workspace number 5
+for_window [class="bleachbit"]                     move container to workspace number 5, workspace number 5
+for_window [app_id="NeoVim"]                       move container to workspace number 2, workspace number 2
+for_window [app_id="YouTube"]                      move container to workspace number 5, workspace number 5
+for_window [app_id="^Alacritty$"]                  move container to workspace number 1, workspace number 1
+# follow off
+assign     [app_id="slack"]                        workspace number 6
+assign     [class="Ardour"]                        workspace number 8
+
 ## HDR Toggle on DP-1 
 bindsym $mod+F9 exec $XDG_CONFIG_HOME/sway/hdr-toggle.sh
 
@@ -213,8 +243,8 @@ bindsym XF86AudioPrev        exec bash $XDG_CONFIG_HOME/eww/scripts/mpris previo
 ## application shortcuts
 
 # terminal
-bindsym $mod+Return exec $term # TODO: configure nvim properly
-# bindsym $mod+v exec $term --class NeoVim --title NeoVim -e nvim
+bindsym $mod+Return exec $term --class Alacritty --title Alacritty --working-directory $HOME --command tmux new-session -A -s main
+bindsym $mod+v exec $term --class NeoVim --title NeoVim --working-directory $HOME/Code --option window.padding.x=0 --option window.padding.y=0 --command tmux new-session -A -s code
 
 # browsers
 bindsym $mod+q exec zen-beta

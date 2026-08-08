@@ -23,4 +23,8 @@ gsettings set org.gnome.desktop.wm.preferences button-layout ':' 2>/dev/null
 # `-n` never prompts; harmless no-op on hosts/sessions without the rule.
 sudo -n /run/current-system/sw/bin/clear-hdmi-force 2>/dev/null || true
 
+# Setup tmux sessions
+tmux new-session -d -s main &
+tmux new-session -d -s code &
+
 exit 0

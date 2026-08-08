@@ -50,7 +50,7 @@
     (box :space-evenly false :spacing 5
       (for r in {d.resolutions}
         (qs-chip :text {r.label} :active {d.res == r.res}
-                 :onclick "swaymsg output ${d.name} mode ${r.res}@${r.max}Hz")))
+                 :onclick "swaymsg output ${d.name} mode ${r.res}@${r.max}Hz ; python3 $HOME/.config/eww/scripts/relayout")))
     (box :space-evenly false :spacing 5
       (for hz in {d.refreshes}
         (qs-chip :text "${hz}" :active {d.refresh == hz}
@@ -58,7 +58,7 @@
     (box :space-evenly false :spacing 5
       (for s in {d.scales}
         (qs-chip :text "${s}" :active {d.scale == s}
-                 :onclick "swaymsg output ${d.name} scale ${s}")))
+                 :onclick "swaymsg output ${d.name} scale ${s} ; python3 $HOME/.config/eww/scripts/relayout")))
     (box :class "qs-vrr-row" :space-evenly false :spacing 8 :halign "end" :visible {d.hdr_cap}
       (qs-toggle :text "VRR" :on {d.vrr}
                  :onclick "swaymsg output ${d.name} adaptive_sync ${d.vrr ? "off" : "on"}")

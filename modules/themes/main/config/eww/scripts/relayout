@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+# Re-tile the outputs edge-to-edge (no gaps) so the pointer can cross between them.
+#
+# WHY: output positions are absolute. Tiling them flush assumes each monitor's LOGICAL
+# width. A scale (or resolution) change resizes the logical width, so a fixed position
+# opens a gap before the neighbour — and the pointer can't cross an inter-output gap, so
+# that monitor becomes unreachable ("cursor stuck, as if the display is off"). Run this
+# after any scale/mode change to close the gap.
+#
+# Physical order left->right: HDMI-A-2 | DP-1 | HDMI-A-1. Anchored on DP-1's LIVE position
+# (DP-1 is the main, always-on middle monitor); the side monitors are placed flush to it,
+# vertically centred. Sizes come from get_outputs `rect` (the post-scale logical size sway
+# actually applied) so the math stays exact + integer even at fractional scales (1.75).
+import json, subprocess
+
+outs = {o["name"]: o for o in
+        json.loads(subprocess.check_output(["swaymsg", "-t", "get_outputs", "-r"]))}
+
+dp1 = outs.get("DP-1")
+if not dp1 or not dp1.get("active"):
+    raise SystemExit(0)  # DP-1 is the anchor; nothing sensible to tile against without it
+
+ax, ay = dp1["rect"]["x"], dp1["rect"]["y"]
+aw, ah = dp1["rect"]["width"], dp1["rect"]["height"]
+
+
+def place(name, x, y):
+    subprocess.run(["swaymsg", "output", name, "position", str(x), str(y)], check=False)
+
+
+# left neighbour: flush to DP-1's left edge, centred on DP-1's height
+left = outs.get("HDMI-A-2")
+if left and left.get("active"):
+    lw, lh = left["rect"]["width"], left["rect"]["height"]
+    place("HDMI-A-2", ax - lw, ay + (ah - lh) // 2)
+
+# right neighbour: flush to DP-1's right edge, centred on DP-1's height
+right = outs.get("HDMI-A-1")
+if right and right.get("active"):
+    rw, rh = right["rect"]["width"], right["rect"]["height"]
+    place("HDMI-A-1", ax + aw, ay + (ah - rh) // 2)

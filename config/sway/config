@@ -28,10 +28,15 @@ set $mon_main  DP-1
 set $mon_right HDMI-A-1
 set $mon_left  HDMI-A-2
 
+# 1080p side monitor: scale 1.25 (it sits further away — bigger UI). At 1.25 its
+# logical size is 1536x864, so it must sit flush to DP-1's left edge (1920-1536=384)
+# and centred ((1440-864)/2=288); otherwise a gap opens and the pointer can't reach it
+# ("cursor stuck, as if off"). The quick-settings `relayout` script recomputes this
+# from live sizes whenever the scale changes (and on enable), so this is just the default.
 output $mon_left {
     mode 1920x1080@60Hz
-    scale 1
-    position 0 180
+    scale 1.25
+    position 384 288
 }
 # 1080p side monitor OFF by default (Work default) — enable it from the quick-settings panel.
 # (The kernel's `video=HDMI-A-2:d` force is lifted post-greeter in sway/init.sh.)

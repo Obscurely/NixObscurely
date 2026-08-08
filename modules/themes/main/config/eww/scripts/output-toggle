@@ -26,6 +26,9 @@ if [ "$action" = on ]; then
   swaymsg output "$name" enable
   [ "$name" = DP-1 ] && swaymsg output "$name" render_bit_depth 10
   for _ in $(seq 1 12); do is_active && break; sleep 0.15; done
+  # Re-tile so a non-default scale on the enabled monitor can't leave a gap that
+  # strands the pointer (relayout reads live sizes, so it's the source of truth).
+  python3 "$HOME/.config/eww/scripts/relayout"
   if [ -n "$id" ]; then
     for _ in $(seq 1 12); do
       bar_open && break

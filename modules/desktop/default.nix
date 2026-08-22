@@ -75,6 +75,7 @@ in {
           noto-fonts-color-emoji
           stable.SDL_ttf
           comfortaa
+          fira # Fira Sans — system UI/sans font (proportional humanist sans; sibling of the Fira Code coding font)
           # Nerd fonts
           nerd-fonts.fira-code
           nerd-fonts.fira-mono

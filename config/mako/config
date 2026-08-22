@@ -1,6 +1,6 @@
 # ~/.config/mako/config — glacial (matches the eww bar + quick-settings panel).
 # Palette mirrors modules/themes/main/config/eww/eww.scss.
-font=FiraCode Nerd Font 11
+font=Fira Sans 11
 width=380
 height=140
 background-color=#0E1420F2

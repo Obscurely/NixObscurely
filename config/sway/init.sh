@@ -10,7 +10,7 @@ gsettings set org.gnome.desktop.interface gtk-theme 'Mont-Blanc-Dark' 2>/dev/nul
 gsettings set org.gnome.desktop.interface icon-theme 'Mont-Blanc-Dark' 2>/dev/null
 gsettings set org.gnome.desktop.interface cursor-theme 'volantes_cursors' 2>/dev/null
 gsettings set org.gnome.desktop.interface cursor-size 32 2>/dev/null
-gsettings set org.gnome.desktop.interface font-name 'Fira Code 15' 2>/dev/null
+gsettings set org.gnome.desktop.interface font-name 'Fira Sans 17' 2>/dev/null
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' 2>/dev/null
 # Tiling WM: drop client-side window controls (min/max/close) from GTK/libadwaita
 # header bars — sway owns window management, so the CSD buttons are just clutter.

@@ -51,7 +51,7 @@ in {
       "layout.css.prefers-color-scheme.content-override" = 0;
       # Set browser font to Roboto
       "font.name.serif.x-western" = "Roboto";
-      "font.name.monospace.x-western" = "FiraCode Nerd Font Mono";
+      "font.name.monospace.x-western" = "FiraMono Nerd Font Mono";
       "font.name.sans-serif.x-western" = "Noto Sans";
       # Zen UI scale. Restored to 1.2 (the value from git before it was removed) — without it the UI
       # renders too small on the 4K@1.5 DP-1. This is a GLOBAL override, so on a differently-scaled

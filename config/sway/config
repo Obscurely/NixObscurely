@@ -98,7 +98,7 @@ smart_gaps off
 default_border pixel 2
 default_floating_border pixel 2
 titlebar_padding 1
-font pango:FiraCode Nerd Font 10
+font pango:Fira Sans 10
 
 client.focused          $c_focus   $c_focus   $c_text $c_focus   $c_focus
 client.focused_inactive $c_unfocus $c_unfocus $c_text $c_unfocus $c_unfocus

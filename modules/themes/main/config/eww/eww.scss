@@ -16,7 +16,7 @@ $fs-hero:     36px;   // hero glyph / big number
 $fs-hero-xl:  46px;   // biggest hero: weather / artwork / confirm icon
 //  Structural exceptions (shape, not text): bar separator `.sep` 11px · toggle knob `.qs-dot` 9px.
 
-* { all: unset; font-family: "FiraCode Nerd Font"; font-size: $fs-body; }
+* { all: unset; font-family: "FiraMono Nerd Font"; font-size: $fs-body; }
 // The GTK theme paints the top-level window (a square, opaque-ish fill) via a
 // `window.background` selector that outranks `* { all: unset }`. Kill it so popups
 // float as just their rounded card (visible on inset popups like the audio one; the

@@ -70,9 +70,9 @@ in {
             cursorTheme = "volantes_cursors";
           };
           fonts = {
-            sans.name = "Fira Code";
-            sans.size = 15;
-            mono.name = "Fira Code";
+            sans.name = "Fira Sans"; # proportional UI font (sibling of the Fira Code coding font)
+            sans.size = 17;
+            mono.name = "FiraMono Nerd Font Mono"; # coding/terminal font — Fira Code's ligature-free base, Nerd-patched, single-width icons
             mono.size = 18;
           };
           colors = {

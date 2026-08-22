@@ -25,10 +25,10 @@ history = 10000
 multiplier = 3
 
 [font]
-normal = { family = "FiraCode Nerd Font Mono Med", style = "Medium,Regular" }
+normal = { family = "FiraMono Nerd Font Mono Medium", style = "Medium,Regular" }
 size = 17
 offset = { x = 0, y = 0 }
-builtin_box_drawing = false
+builtin_box_drawing = true
 
 [colors.primary]
 background = "#1A1F27"

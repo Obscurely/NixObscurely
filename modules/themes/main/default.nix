@@ -181,6 +181,7 @@ in {
               [Appearance]
               color_scheme_path=${config.user.home}/.config/qt5ct/style-colors.conf
               custom_palette=true
+              icon_theme=${cfg.gtk.iconTheme}
               standard_dialogs=gtk3
               style=kvantum
 
@@ -211,6 +212,7 @@ in {
               [Appearance]
               color_scheme_path=${config.user.home}/.config/qt6ct/style-colors.conf
               custom_palette=true
+              icon_theme=${cfg.gtk.iconTheme}
               standard_dialogs=gtk3
               style=kvantum
 

@@ -167,6 +167,79 @@ in {
               target = "Kvantum/kvantum.kvconfig";
             };
           }
+          {
+            # qt5ct / qt6ct — declaratively pin the Qt FONTS (general = sans/UI, fixed = mono)
+            # so they track cfg.fonts and reproduce on a fresh install. This file was previously
+            # STATEFUL (seeded once by qt5ct, never in the repo), which is how the font got
+            # orphaned at "Fira Code" while everything else moved to Fira Sans/Fira Mono.
+            # Kvantum still drives widget rendering; these carry the fonts + the glacial system
+            # palette (custom_palette → style-colors.conf). Read-only symlinks — the qt5ct GUI
+            # can't rewrite them (unused here). NOTE: on first apply, remove the pre-existing
+            # stateful ~/.config/qt{5,6}ct/{qt*ct,style-colors}.conf or activation will refuse
+            # to clobber them.
+            "qt5ct/qt5ct.conf".text = ''
+              [Appearance]
+              color_scheme_path=${config.user.home}/.config/qt5ct/style-colors.conf
+              custom_palette=true
+              standard_dialogs=gtk3
+              style=kvantum
+
+              [Fonts]
+              fixed="${cfg.fonts.mono.name},12,-1,5,50,0,0,0,0,0"
+              general="${cfg.fonts.sans.name},${toString cfg.fonts.sans.size},-1,5,50,0,0,0,0,0"
+
+              [Interface]
+              activate_item_on_single_click=1
+              buttonbox_layout=0
+              cursor_flash_time=1000
+              dialog_buttons_have_icons=1
+              double_click_interval=400
+              gui_effects=@Invalid()
+              keyboard_scheme=2
+              menus_have_icons=true
+              show_shortcuts_in_context_menus=true
+              stylesheets=@Invalid()
+              toolbutton_style=4
+              underline_shortcut=1
+              wheel_scroll_lines=3
+
+              [Troubleshooting]
+              force_raster_widgets=1
+              ignored_applications=@Invalid()
+            '';
+            "qt6ct/qt6ct.conf".text = ''
+              [Appearance]
+              color_scheme_path=${config.user.home}/.config/qt6ct/style-colors.conf
+              custom_palette=true
+              standard_dialogs=gtk3
+              style=kvantum
+
+              [Fonts]
+              fixed="${cfg.fonts.mono.name},12,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0"
+              general="${cfg.fonts.sans.name},${toString cfg.fonts.sans.size},-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0"
+
+              [Interface]
+              activate_item_on_single_click=1
+              buttonbox_layout=0
+              cursor_flash_time=1000
+              dialog_buttons_have_icons=1
+              double_click_interval=400
+              gui_effects=@Invalid()
+              keyboard_scheme=2
+              menus_have_icons=true
+              show_shortcuts_in_context_menus=true
+              stylesheets=@Invalid()
+              toolbutton_style=4
+              underline_shortcut=1
+              wheel_scroll_lines=3
+
+              [Troubleshooting]
+              force_raster_widgets=1
+              ignored_applications=@Invalid()
+            '';
+            "qt5ct/style-colors.conf".source = ./config/qt5ct-style-colors.conf;
+            "qt6ct/style-colors.conf".source = ./config/qt6ct-style-colors.conf;
+          }
           (mkIf desktop.sway.bar.enable {
             # eww "glacial island" bar — eww.yuck + eww.scss + scripts/
             "eww" = {

@@ -141,6 +141,46 @@ in {
         }
         {"mako/config".source = "${configDir}/mako/config";}
         {"satty/config.toml".source = "${configDir}/satty/config.toml";}
+        {
+          # Glacial swaylock — themed lock: the deployed lockscreen photo + a Mont-Blanc-Dark
+          # indicator (accent-blue ring, translucent glacial inside, amber for wrong/caps).
+          # Inline (not a static file) so the image path can use ${config.user.home}.
+          "swaylock/config".text = ''
+            image=${config.user.home}/.local/share/lockscreen.jpg
+            scaling=fill
+            show-failed-attempts
+
+            font=Fira Sans
+            indicator
+            indicator-radius=110
+            indicator-thickness=8
+
+            ring-color=8cc6f2
+            inside-color=0e1420cc
+            line-color=00000000
+            separator-color=00000000
+            text-color=cbd8ea
+            key-hl-color=a6ccec
+            bs-hl-color=ffb86c
+
+            ring-ver-color=a6ccec
+            inside-ver-color=0e1420cc
+            text-ver-color=cbd8ea
+
+            ring-clear-color=a6ccec
+            inside-clear-color=0e1420cc
+            text-clear-color=cbd8ea
+
+            ring-wrong-color=ffb86c
+            inside-wrong-color=0e1420cc
+            text-wrong-color=ffb86c
+
+            ring-caps-lock-color=ffb86c
+            caps-lock-key-hl-color=a6ccec
+            caps-lock-bs-hl-color=ffb86c
+            text-caps-lock-color=cbd8ea
+          '';
+        }
       ];
     }
 

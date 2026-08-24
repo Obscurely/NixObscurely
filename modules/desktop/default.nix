@@ -50,7 +50,8 @@ in {
         packages = with pkgs; [
           ubuntu-classic
           symbola
-          corefonts
+          corefonts # real MS core web fonts: Times New Roman, Arial, Courier New, Georgia, Verdana…
+          vistafonts # ClearType/Office collection: Calibri, Cambria, Candara, Consolas, Constantia, Corbel (modern Word/Excel defaults)
           liberation_ttf
           ttf_bitstream_vera
           dejavu_fonts

@@ -49,10 +49,14 @@ in {
       "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org";
       # set default perefered color scheme to dark
       "layout.css.prefers-color-scheme.content-override" = 0;
-      # Set browser font to Roboto
-      "font.name.serif.x-western" = "Roboto";
+      # Web-content default fonts — all Fira, per preference. The Fira family has NO serif face
+      # (Sans + Mono/Code only), so the serif slot also maps to Fira Sans → pages that request a
+      # generic serif render in Fira Sans. Most sites ship their own fonts, so these only apply to
+      # pages using the generic serif/sans-serif/monospace families. user.js enforces them each
+      # launch, overriding whatever Zen's Fonts UI shows.
+      "font.name.serif.x-western" = "Fira Sans";
       "font.name.monospace.x-western" = "FiraMono Nerd Font Mono";
-      "font.name.sans-serif.x-western" = "Noto Sans";
+      "font.name.sans-serif.x-western" = "Fira Sans";
       # Zen UI scale. Restored to 1.2 (the value from git before it was removed) — without it the UI
       # renders too small on the 4K@1.5 DP-1. This is a GLOBAL override, so on a differently-scaled
       # monitor it won't be per-output-correct; 1.2 is the accepted tradeoff for the main display.

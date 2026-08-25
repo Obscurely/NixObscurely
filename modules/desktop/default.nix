@@ -51,7 +51,7 @@ in {
           ubuntu-classic
           symbola
           corefonts # real MS core web fonts: Times New Roman, Arial, Courier New, Georgia, Verdana…
-          vistafonts # ClearType/Office collection: Calibri, Cambria, Candara, Consolas, Constantia, Corbel (modern Word/Excel defaults)
+          vista-fonts # ClearType/Office collection: Calibri, Cambria, Candara, Consolas, Constantia, Corbel (modern Word/Excel defaults)
           liberation_ttf
           ttf_bitstream_vera
           dejavu_fonts

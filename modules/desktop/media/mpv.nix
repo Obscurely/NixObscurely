@@ -20,6 +20,11 @@ with lib.my; let
   # docs/superpowers/specs/2026-08-05-mpv-glacial-design.md.
   mpvGlacial = pkgs.mpv.override {
     scripts = with pkgs.mpvScripts; [uosc thumbfast autoload mpris sponsorblock];
+    # ffmpeg-full → libmysofa → the `sofalizer` filter (SOFA/HRTF binaural), used by
+    # config/mpv/scripts/hrtf.lua to spatialize multichannel TrueHD over headphones. mpv.override
+    # forwards `mpv-unwrapped` to the wrapped build, so we swap the unwrapped mpv's ffmpeg here.
+    # (Heavier than the default ffmpeg: ffmpeg-full pulls from cache, mpv recompiles against it.)
+    mpv-unwrapped = pkgs.mpv-unwrapped.override {ffmpeg = pkgs.ffmpeg-full;};
   };
 in {
   options.modules.desktop.media.mpv = {

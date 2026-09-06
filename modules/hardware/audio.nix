@@ -23,6 +23,18 @@ in {
       wireplumber.enable = true;
     };
 
+    # Dynamic sample-rate switching: let PipeWire retune the DAC to the source's native rate
+    # (e.g. TIDAL hi-res) instead of resampling everything to 48k. Both the 44.1kHz family
+    # (most music) and the 48kHz family are allowed, so each track plays at — or cleanly near —
+    # its native rate; the graph idles back to 48k. A switch only happens when nothing else is
+    # holding a different rate (all streams share one hardware rate at a time).
+    services.pipewire.extraConfig.pipewire."10-clock-allowed-rates" = {
+      "context.properties" = {
+        "default.clock.rate" = 48000;
+        "default.clock.allowed-rates" = [44100 48000 88200 96000 176400 192000];
+      };
+    };
+
     security.rtkit.enable = true;
 
     environment.systemPackages = with pkgs; [

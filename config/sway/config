@@ -87,7 +87,7 @@ input type:keyboard {
 }
 seat * {
     xcursor_theme volantes_cursors 32
-    hide_cursor when-typing enable
+    hide_cursor when-typing disable
 }
 
 ### Appearance

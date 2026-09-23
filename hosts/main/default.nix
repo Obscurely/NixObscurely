@@ -47,6 +47,7 @@ in {
         bottles.enable = false;
         steam.enable = false;
         wine.enable = false;
+        prismlauncher.enable = true;
       };
       media = {
         audio.enable = true;
